@@ -1,4 +1,9 @@
+using System.Collections.Immutable;
+using System.Data.Common;
+using MediMove.Server.Data;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,7 +12,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
+IConfiguration config = new ConfigurationBuilder()
+    .AddJsonFile("credentials.json", optional: true, reloadOnChange: true)
+    .Build();
+
+var connectionString = config.GetSection("ConnectionStrings")["MediMoveConnection"];
+
+builder.Services.AddDbContextPool<MediMoveDbContext>(options =>
+    options.UseSqlServer(connectionString));
+
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
