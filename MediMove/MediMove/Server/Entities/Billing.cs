@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace MediMove.Shared.Entities
 {
-    public class Dispatcher
+    public class Billing
     {
         public int Id { get; set; }
         public int PersonalInfoId { get; set; }
-        public string PhoneNumber { get; set; }
-        public float Salary { get; set; }
+        public string InvoiceNumber { get; set; }
+        public DateTime InvoiceDate { get; set; }
         public string BankAccountNumber { get; set; }
+        public decimal Cost { get; set; }
     }
 }

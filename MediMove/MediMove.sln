@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediMove.Server", "MediMove\Server\MediMove.Server.csproj", "{6FF635A7-7E3B-448A-9455-235E301A1B73}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediMove.Server", "MediMove\Server\MediMove.Server.csproj", "{6FF635A7-7E3B-448A-9455-235E301A1B73}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediMove.Client", "MediMove\Client\MediMove.Client.csproj", "{113140DB-6335-43DC-804C-08B7A1F8AF77}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediMove.Client", "MediMove\Client\MediMove.Client.csproj", "{113140DB-6335-43DC-804C-08B7A1F8AF77}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediMove.Shared", "MediMove\Shared\MediMove.Shared.csproj", "{AD52F7F8-6627-413C-8716-0362FE80DB35}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediMove.Shared", "MediMove\Shared\MediMove.Shared.csproj", "{AD52F7F8-6627-413C-8716-0362FE80DB35}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
