@@ -14,14 +14,23 @@ namespace MediMove.Server.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<Transport>> GetTransports()
+        public async Task<List<Transport>> GetTransportsForParamedic(int id, DateTime date)
         {
-            return await _dbContext.Transports.ToListAsync();
+            var transports = await _dbContext.Transports//.Include( t => t.Patient) -  Ten Include możliwe że będzie potrzebny jak będziemy tworzyć mapper
+                .Where(t => t.Team.ParamedicId == id && t.StartTime.Day == date.Day)
+                .ToListAsync();
+
+            
+            return transports;
         }
 
-        public async Task<Transport> GetTransport(int id)
+        public async Task<List<Transport>> GetTransportsForDay(DateTime date)
         {
-            return await _dbContext.Transports.FindAsync(id);
+            var transports = await _dbContext.Transports
+                .Where(t => t.StartTime.Day == date.Day)
+                .ToListAsync();
+
+            return transports;
         }
     }
 }

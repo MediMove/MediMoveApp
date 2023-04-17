@@ -1,6 +1,9 @@
 using System.Collections.Immutable;
 using System.Data.Common;
 using MediMove.Server.Data;
+using MediMove.Server.Repositories;
+using MediMove.Server.Repositories.Contracts;
+using MediMove.Server.Services.TransportService;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -20,6 +23,9 @@ var connectionString = config.GetSection("ConnectionStrings")["MediMoveConnectio
 
 builder.Services.AddDbContextPool<MediMoveDbContext>(options =>
     options.UseSqlServer(connectionString));
+
+builder.Services.AddScoped<ITransportRepository, TransportsRepository>(); // Nie powinno byæ TransportRepository w liczbie pojedynczej?
+builder.Services.AddScoped<ITransportService, TransportService>();
 
 var app = builder.Build();
 
