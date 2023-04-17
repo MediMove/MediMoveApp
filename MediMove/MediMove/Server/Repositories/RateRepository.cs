@@ -19,9 +19,9 @@ namespace MediMove.Server.Repositories
             return await _dbContext.Rates.ToListAsync();
         }
 
-        public Task<Rate> GetRate(int id)
+        public async Task<Rate> GetRate(int id)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Rates.FindAsync(id);
         }
     }
 }

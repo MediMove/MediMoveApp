@@ -19,9 +19,9 @@ namespace MediMove.Server.Repositories
             return await _dbContext.Transports.ToListAsync();
         }
 
-        public Task<Transport> GetTransport(int id)
+        public async Task<Transport> GetTransport(int id)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Transports.FindAsync(id);
         }
     }
 }

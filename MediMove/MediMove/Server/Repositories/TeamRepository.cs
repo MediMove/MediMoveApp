@@ -19,9 +19,9 @@ namespace MediMove.Server.Repositories
             return await _dbContext.Teams.ToListAsync();
         }
 
-        public Task<Team> GetTeam(int id)
+        public async Task<Team> GetTeam(int id)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Teams.FindAsync(id);
         }
     }
 }

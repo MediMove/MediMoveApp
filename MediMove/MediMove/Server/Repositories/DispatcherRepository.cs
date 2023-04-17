@@ -19,9 +19,9 @@ namespace MediMove.Server.Repositories
             return await _dbContext.Dispatchers.ToListAsync();
         }
 
-        public Task<Dispatcher> GetDispatcher(int id)
+        public async Task<Dispatcher> GetDispatcher(int id)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Dispatchers.FindAsync(id);
         }
     }
 }

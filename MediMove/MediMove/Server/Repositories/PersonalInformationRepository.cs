@@ -19,9 +19,9 @@ namespace MediMove.Server.Repositories
             return await _dbContext.PersonalInformations.ToListAsync();
         }
 
-        public Task<PersonalInformation> GetPersonalInformation(int id)
+        public async Task<PersonalInformation> GetPersonalInformation(int id)
         {
-            throw new NotImplementedException();
+            return await _dbContext.PersonalInformations.FindAsync(id);
         }
     }
 }

@@ -19,9 +19,9 @@ namespace MediMove.Server.Repositories
             return await _dbContext.Availabilities.ToListAsync();
         }
 
-        public Task<Availability> GetAvailability(int id)
+        public async Task<Availability> GetAvailability(int id)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Availabilities.FindAsync(id);
         }
     }
 }

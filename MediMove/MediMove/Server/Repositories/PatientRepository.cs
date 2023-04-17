@@ -19,9 +19,9 @@ namespace MediMove.Server.Repositories
             return await _dbContext.Patients.ToListAsync();
         }
 
-        public Task<Patient> GetPatient(int id)
+        public async Task<Patient> GetPatient(int id)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Patients.FindAsync(id);
         }
     }
 }
