@@ -1,4 +1,4 @@
-using MediMove.Shared;
+using MediMove.Shared.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MediMove.Server.Controllers

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MediMove.Shared
+namespace MediMove.Shared.Entities
 {
     public class PersonalInformation
     {
@@ -14,7 +14,7 @@ namespace MediMove.Shared
         public int HouseNumber { get; set; }
         public int ApartmentNumber { get; set; }
         public string PostalCode { get; set; }
-        public string StateProvince { get; set; }      
+        public string StateProvince { get; set; }
         public string Country { get; set; }
 
     }

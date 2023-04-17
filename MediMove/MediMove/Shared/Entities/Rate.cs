@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MediMove.Shared
+namespace MediMove.Shared.Entities
 {
     public class Rate
     {

@@ -1,4 +1,4 @@
-namespace MediMove.Shared
+namespace MediMove.Shared.Entities
 {
     public class WeatherForecast
     {
