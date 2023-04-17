@@ -1,4 +1,4 @@
-﻿using MediMove.Server.Entities;
+using MediMove.Server.Entities;
 using MediMove.Shared.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,6 +25,7 @@ namespace MediMove.Server.Data
         }
 
         public DbSet<Patient> Patients { get; set; }
+
         public DbSet<Availability> Availabilities { get; set; }
 
         public DbSet<Dispatcher> Dispatchers { get; set; }
@@ -39,6 +40,6 @@ namespace MediMove.Server.Data
 
         public DbSet<Transport> Transports { get; set; }
 
-
+        public DbSet<Billing> Billings { get; set; }
     }
 }
