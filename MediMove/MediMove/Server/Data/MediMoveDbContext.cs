@@ -25,15 +25,15 @@ namespace MediMove.Server.Data
         }
 
         public DbSet<Patient> Patients { get; set; }
-        public DbSet<Availability> Availabilit { get; set; }
+        public DbSet<Availability> Availabilities { get; set; }
 
         public DbSet<Dispatcher> Dispatchers { get; set; }
 
-        public DbSet<Paramedic> Paramedic { get; set; }
+        public DbSet<Paramedic> Paramedics { get; set; }
 
         public DbSet<PersonalInformation> PersonalInformations { get; set; }
 
-        public DbSet<Rate>  Rates { get; set; }
+        public DbSet<Rate> Rates { get; set; }
 
         public DbSet<Team> Teams { get; set; }
 
