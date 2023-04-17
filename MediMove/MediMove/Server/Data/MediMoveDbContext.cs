@@ -1,4 +1,4 @@
-﻿using MediMove.Server.Entities;
+using MediMove.Server.Entities;
 using MediMove.Shared.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -34,7 +34,7 @@ namespace MediMove.Server.Data
 
         public DbSet<PersonalInformation> PersonalInformations { get; set; }
 
-        public DbSet<Rate>  Rates { get; set; }
+        public DbSet<Rate> Rates { get; set; }
 
         public DbSet<Team> Teams { get; set; }
 
