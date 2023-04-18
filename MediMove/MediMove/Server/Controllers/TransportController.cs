@@ -25,7 +25,7 @@ namespace MediMove.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Transport>>> GetAllForDay([FromBody] DateTime date)
+        public async Task<ActionResult<List<Transport>>> GetAllForDay([FromQuery] DateTime date)
         {
             var result = await _transportService.GetByDay(date);
 
