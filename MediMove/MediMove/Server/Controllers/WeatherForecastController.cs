@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MediMove.Server.Controllers
 {
-    [ApiController]
+[ApiController]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
