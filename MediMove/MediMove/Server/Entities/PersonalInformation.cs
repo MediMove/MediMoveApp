@@ -12,7 +12,7 @@ namespace MediMove.Shared.Entities
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string StreetAddres { get; set; }
-        public int HouseNumber { get; set; }
+        public string HouseNumber { get; set; }  
         public int ApartmentNumber { get; set; }
         public string PostalCode { get; set; }
         public string StateProvince { get; set; }
