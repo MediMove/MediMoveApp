@@ -22,6 +22,47 @@ namespace MediMove.Server.Data
                 Weight = 40
             }
             );
+
+            modelBuilder.Entity<PersonalInformation>().HasData(new PersonalInformation
+            {
+                Id = 2,
+                FirstName = "Pan",
+                LastName = "Panowski",
+                StreetAddres = "Kwiatowa",
+                HouseNumber = 1,
+                ApartmentNumber = 1,
+                PostalCode = "41-100",
+                StateProvince = "slask",
+                Country = "Polska"
+            });
+
+            modelBuilder.Entity<Paramedic>().HasData(new Paramedic
+            {
+                Id = 1,
+                PersonalInfoId = 2,
+                BankAccountNumber = "123123",
+                IsDriver = true,
+                PhoneNumber = "123123123"
+            });
+
+            modelBuilder.Entity<Team>().HasData(new Team
+            {
+                Id=1,
+                DriverId = 1,
+                ParamedicId = 1,
+                Day = DateTime.Today
+            });
+
+            modelBuilder.Entity<Transport>().HasData(new Transport
+            {
+                Id = 1,
+                TeamId = 1,
+                PatientId = 1,
+                PatientPosition = PatientPosition.Walking,
+                Financing = Financing.FullyFunded,
+                StartTime = DateTime.Today,
+                Destination = "Morawy"
+            });
         }
 
         public DbSet<Patient> Patients { get; set; }
