@@ -10,7 +10,7 @@ namespace MediMove.Shared.Models.DTOs
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string StreetAddres { get; set; }
+        public string StreetAddress { get; set; }
         public string HouseNumber { get; set; }
         public int ApartmentNumber { get; set; }
         public string PostalCode { get; set; }
