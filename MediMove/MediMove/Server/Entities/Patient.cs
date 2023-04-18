@@ -11,5 +11,6 @@ namespace MediMove.Shared.Entities
         public int Id { get; set; }
         public int PersonalInfoId { get; set; }
         public int Weight { get; set; }
+        public virtual PersonalInformation PersonalInformation { get; set; }
     }
 }

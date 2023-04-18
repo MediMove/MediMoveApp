@@ -32,11 +32,15 @@ namespace MediMove.Shared.Entities
         public int Id { get; set; }
         public int TeamId { get; set; }
         public int PatientId { get; set; }
-        public int BillingId { get; set; }
+        public int? BillingId { get; set; } // Chyba z ? bo to nie obowiązkowe?
         public PatientPosition PatientPosition { get; set; }
         public Financing Financing { get; set; }
         public DateTime StartTime { get; set; }
         public string Destination { get; set; }
+
+        public virtual Team Team { get; set; }
+        public virtual Patient Patient { get; set; }
+        public virtual Billing Billing { get; set; }
 
     }
 }
