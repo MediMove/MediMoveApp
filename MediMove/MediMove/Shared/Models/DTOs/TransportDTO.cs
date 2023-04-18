@@ -1,47 +1,21 @@
-﻿using Microsoft.VisualBasic;
+﻿using MediMove.Shared.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MediMove.Shared.Models.Enums;
 
 namespace MediMove.Shared.Models.DTOs
 {
-    //public enum PatientPosition
-    //{
-    //    Walking,
-    //    Sitting,
-    //    Lying
-    //
-    //}
-    //
-    //public enum Financing
-    //{
-    //    FullyFunded,
-    //    PartiallyFunded,
-    //    FullyPaid
-    //}
-    //
-    //public enum TransportType
-    //{
-    //    Visit,
-    //    Handover
-    //}
-
-    public class TransportsDTO
+    public class TransportDTO
     {
-        public DateTime StartTime { get; set; }
-        public string PatientInfoFirstName { get; set; }
-        public string PatientLastName { get; set; }
-        public string PatientPhoneNumber { get; set; }
-        public string PatientStreetAddress { get; set; }
-        public string PatientHouseNumber { get; set; }
-        public string PatientApartamentNumber { get; set; }
-        public string PatientPostalCode { get; set; }
+        public int TeamId { get; set; }
+        public int PatientId { get; set; }
+        public int BillingId { get; set; }
         public PatientPosition PatientPosition { get; set; }
-        public string Destination { get; set; }
+        public Financing Financing { get; set; }
         public TransportType TransportType { get; set; }
-        
+        public DateTime StartTime { get; set; }
+        public string Destination { get; set; }
     }
 }
