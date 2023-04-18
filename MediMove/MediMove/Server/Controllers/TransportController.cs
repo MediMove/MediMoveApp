@@ -16,7 +16,7 @@ namespace MediMove.Server.Controllers
             _transportService = transportService;
         }
 
-        [HttpGet("id")] // Nw czy tak możemy to brać, tutaj wrzucał bym w link id paramedica dla którego pokazane były by transporty
+        [HttpGet("paramedic/{id}")] 
         public async Task<ActionResult<List<Transport>>> GetAllForParamedicDay([FromRoute] int id, [FromQuery] DateTime date)
         {
             var result = await _transportService.GetByParamedicId(id, date);

@@ -9,7 +9,7 @@ namespace MediMove.Shared.Entities
     public class Paramedic
     {
         public int Id { get; set; }
-        public int PersonalInfoId { get; set; }
+        public int PersonalInformationId { get; set; }
         public string BankAccountNumber { get; set; }
         public bool IsDriver { get; set; }
         public string PhoneNumber { get; set; }

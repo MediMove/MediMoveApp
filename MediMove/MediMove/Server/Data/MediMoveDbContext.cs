@@ -18,18 +18,18 @@ namespace MediMove.Server.Data
             modelBuilder.Entity<Patient>().HasData(new Patient
             {
                 Id = 1,
-                PersonalInfoId = 1,
+                PersonalInformationId = 77,
                 Weight = 40
             }
             );
 
             modelBuilder.Entity<PersonalInformation>().HasData(new PersonalInformation
             {
-                Id = 2,
+                Id = 77,
                 FirstName = "Pan",
                 LastName = "Panowski",
                 StreetAddres = "Kwiatowa",
-                HouseNumber = 1,
+                HouseNumber = "1",
                 ApartmentNumber = 1,
                 PostalCode = "41-100",
                 StateProvince = "slask",
@@ -39,10 +39,23 @@ namespace MediMove.Server.Data
             modelBuilder.Entity<Paramedic>().HasData(new Paramedic
             {
                 Id = 1,
-                PersonalInfoId = 2,
+                PersonalInformationId = 88,
                 BankAccountNumber = "123123",
                 IsDriver = true,
                 PhoneNumber = "123123123"
+            });
+
+            modelBuilder.Entity<PersonalInformation>().HasData(new PersonalInformation
+            {
+                Id = 88,
+                FirstName = "Grzegorz",
+                LastName = "Kowalski",
+                StreetAddres = "Stara",
+                HouseNumber = "3",
+                ApartmentNumber = 4,
+                PostalCode = "42-400",
+                StateProvince = "slask",
+                Country = "Polska"
             });
 
             modelBuilder.Entity<Team>().HasData(new Team

@@ -25,7 +25,7 @@ var connectionString = config.GetSection("ConnectionStrings")["MediMoveConnectio
 builder.Services.AddDbContextPool<MediMoveDbContext>(options =>
     options.UseSqlServer(connectionString));
 
-builder.Services.AddScoped<ITransportRepository, TransportsRepository>(); // Nie powinno byæ TransportRepository w liczbie pojedynczej?
+builder.Services.AddScoped<ITransportRepository, TransportRepository>();
 builder.Services.AddScoped<ITransportService, TransportService>();
 
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
