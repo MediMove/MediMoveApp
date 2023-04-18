@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MediMove.Shared.Models
+namespace MediMove.Shared.Models.Enums
 {
-    internal class Enums
+    public enum ShiftType
     {
+        Morning,
+        Evening
     }
 }
