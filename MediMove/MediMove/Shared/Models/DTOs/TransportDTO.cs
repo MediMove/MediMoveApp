@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MediMove.Shared.DTOs
+namespace MediMove.Shared.Models.DTOs
 {
     public enum PatientPosition
     {
@@ -27,7 +27,8 @@ namespace MediMove.Shared.DTOs
         Visit,
         Handover
     }
-    public class TransportsDto
+
+    public class TransportsDTO
     {
         public DateTime StartTime { get; set; }
         public string PatientInfoFirstName { get; set; }
