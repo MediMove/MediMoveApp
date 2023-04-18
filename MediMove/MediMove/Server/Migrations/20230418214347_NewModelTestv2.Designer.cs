@@ -4,6 +4,7 @@ using MediMove.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MediMove.Server.Migrations
 {
     [DbContext(typeof(MediMoveDbContext))]
-    partial class MediMoveDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230418214347_NewModelTestv2")]
+    partial class NewModelTestv2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -123,6 +126,15 @@ namespace MediMove.Server.Migrations
                     b.HasIndex("PersonalInformationId");
 
                     b.ToTable("Paramedics");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            BankAccountNumber = "123123",
+                            IsDriver = true,
+                            PersonalInformationId = 88
+                        });
                 });
 
             modelBuilder.Entity("MediMove.Server.Entities.Patient", b =>
@@ -204,6 +216,36 @@ namespace MediMove.Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PersonalInformations");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 77,
+                            ApartmentNumber = 1,
+                            City = "Krakow",
+                            Country = "Polska",
+                            FirstName = "Pan",
+                            HouseNumber = "1",
+                            LastName = "Panowski",
+                            PhoneNumber = "123123123",
+                            PostalCode = "41-100",
+                            StateProvince = "slask",
+                            StreetAddress = "Kwiatowa"
+                        },
+                        new
+                        {
+                            Id = 88,
+                            ApartmentNumber = 4,
+                            City = "Krakow",
+                            Country = "Polska",
+                            FirstName = "Grzegorz",
+                            HouseNumber = "3",
+                            LastName = "Kowalski",
+                            PhoneNumber = "123123123",
+                            PostalCode = "42-400",
+                            StateProvince = "slask",
+                            StreetAddress = "Stara"
+                        });
                 });
 
             modelBuilder.Entity("MediMove.Server.Entities.Rate", b =>
@@ -278,6 +320,15 @@ namespace MediMove.Server.Migrations
                     b.HasIndex("ParamedicId");
 
                     b.ToTable("Teams");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Day = new DateTime(2023, 4, 18, 0, 0, 0, 0, DateTimeKind.Local),
+                            DriverId = 1,
+                            ParamedicId = 1
+                        });
                 });
 
             modelBuilder.Entity("MediMove.Server.Entities.Transport", b =>
@@ -322,6 +373,19 @@ namespace MediMove.Server.Migrations
                     b.HasIndex("TeamId");
 
                     b.ToTable("Transports");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Destination = "Morawy",
+                            Financing = 0,
+                            PatientId = 1,
+                            PatientPosition = 0,
+                            StartTime = new DateTime(2023, 4, 18, 0, 0, 0, 0, DateTimeKind.Local),
+                            TeamId = 1,
+                            TransportType = 0
+                        });
                 });
 
             modelBuilder.Entity("MediMove.Server.Entities.Availability", b =>

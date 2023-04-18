@@ -1,4 +1,5 @@
-﻿using MediMove.Shared.Entities;
+﻿using MediMove.Server.Entities;
+
 
 namespace MediMove.Server.Repositories.Contracts
 {

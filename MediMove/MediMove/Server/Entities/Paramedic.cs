@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MediMove.Server.Entities;
 
-namespace MediMove.Shared.Entities
+namespace MediMove.Server.Entities
 {
     public class Paramedic
     {
