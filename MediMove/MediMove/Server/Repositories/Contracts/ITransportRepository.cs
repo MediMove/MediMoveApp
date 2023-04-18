@@ -4,7 +4,7 @@ namespace MediMove.Server.Repositories.Contracts
 {
     public interface ITransportRepository
     {
-        Task<IEnumerable<Transport>> GetTransports();
-        Task<Transport> GetTransport(int id);
+        Task<List<Transport>> GetTransportsForParamedic(int id, DateTime date);
+        Task<List<Transport>> GetTransportsForDay(DateTime date);
     }
 }
