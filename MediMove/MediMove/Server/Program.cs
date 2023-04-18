@@ -1,6 +1,7 @@
 using System.Collections.Immutable;
 using System.Data.Common;
 using MediMove.Server.Data;
+using MediMove.Server.Middleware;
 using MediMove.Server.Repositories;
 using MediMove.Server.Repositories.Contracts;
 using MediMove.Server.Services.TransportService;
@@ -27,6 +28,8 @@ builder.Services.AddDbContextPool<MediMoveDbContext>(options =>
 builder.Services.AddScoped<ITransportRepository, TransportsRepository>(); // Nie powinno byæ TransportRepository w liczbie pojedynczej?
 builder.Services.AddScoped<ITransportService, TransportService>();
 
+builder.Services.AddScoped<ErrorHandlingMiddleware>();
+
 var app = builder.Build();
 
 
@@ -41,7 +44,7 @@ else
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
+app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseHttpsRedirection();
 
 app.UseBlazorFrameworkFiles();
