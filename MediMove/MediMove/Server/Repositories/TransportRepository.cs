@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MediMove.Server.Repositories
 {
-    public class TransportsRepository : ITransportRepository
+    public class TransportRepository : ITransportRepository
     {
         private readonly MediMoveDbContext _dbContext;
 
-        public TransportsRepository(MediMoveDbContext dbContext)
+        public TransportRepository(MediMoveDbContext dbContext)
         {
             _dbContext = dbContext;
         }
