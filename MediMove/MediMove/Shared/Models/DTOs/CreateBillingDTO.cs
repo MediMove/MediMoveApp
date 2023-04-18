@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MediMove.Shared.Models.DTOs
 {
-    public class CreateBilling
+    public class CreateBillingDTO
     {
         public int PersonalInformationId { get; set; }
         public string InvoiceNumber { get; set; }
