@@ -16,7 +16,7 @@ namespace MediMove.Shared.Models.DTOs
         public string PostalCode { get; set; }
         public string StateProvince { get; set; }
         public string Country { get; set; }
-        public decimal Salary { get; set; }
         public string BankAccountNumber { get; set; }
+        public decimal Salary { get; set; }
     }
 }

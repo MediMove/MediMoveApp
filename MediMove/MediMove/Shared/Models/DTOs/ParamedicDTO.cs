@@ -18,6 +18,6 @@ namespace MediMove.Shared.Models.DTOs
         public string Country { get; set; }
         public string BankAccountNumber { get; set; }
         public bool IsDriver { get; set; }
-        public string PhoneNumber { get; set; }
+        public decimal PayPerHour { get; set; }
     }
 }
