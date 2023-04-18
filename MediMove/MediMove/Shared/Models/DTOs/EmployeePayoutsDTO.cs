@@ -9,6 +9,6 @@ namespace MediMove.Shared.Models.DTOs
     public class EmployeePayoutsDTO
     {
         public DateOnly Month { get; set; }
-        public decimal Salary { get; set; }
+        public decimal Payout { get; set; }
     }
 }
