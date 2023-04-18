@@ -37,6 +37,6 @@ namespace MediMove.Shared.Entities
         public Financing Financing { get; set; }
         public DateTime StartTime { get; set; }
         public string Destination { get; set; }
-
+        public TransportType TransportType { get; set; }   
     }
 }
