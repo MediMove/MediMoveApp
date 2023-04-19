@@ -4,6 +4,7 @@ using MediMove.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MediMove.Server.Migrations
 {
     [DbContext(typeof(MediMoveDbContext))]
-    partial class MediMoveDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230419170554_mockup")]
+    partial class mockup
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -411,7 +414,7 @@ namespace MediMove.Server.Migrations
                             Financing = 2,
                             PatientId = 1,
                             PatientPosition = 1,
-                            StartTime = new DateTime(2023, 4, 20, 0, 0, 0, 0, DateTimeKind.Local),
+                            StartTime = new DateTime(2023, 4, 19, 2, 0, 0, 0, DateTimeKind.Local),
                             TeamId = 1,
                             TransportType = 0
                         },
@@ -422,7 +425,7 @@ namespace MediMove.Server.Migrations
                             Financing = 1,
                             PatientId = 1,
                             PatientPosition = 2,
-                            StartTime = new DateTime(2023, 4, 21, 0, 0, 0, 0, DateTimeKind.Local),
+                            StartTime = new DateTime(2023, 4, 19, 5, 0, 0, 0, DateTimeKind.Local),
                             TeamId = 1,
                             TransportType = 1
                         });

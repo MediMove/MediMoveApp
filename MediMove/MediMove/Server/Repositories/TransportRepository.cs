@@ -33,5 +33,13 @@ namespace MediMove.Server.Repositories
 
             return transports;
         }
+
+        public async Task<List<Transport>> GetTransports()
+        {
+            var transports = await _dbContext.Transports
+                .ToListAsync();
+
+            return transports;
+        }
     }
 }

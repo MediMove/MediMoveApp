@@ -121,6 +121,30 @@ namespace MediMove.Server.Data
                 StartTime = DateTime.Today,
                 Destination = "Morawy"
             });
+
+            modelBuilder.Entity<Transport>().HasData(new Transport
+            {
+                Id = 2,
+                TeamId = 1,
+                PatientId = 1,
+                PatientPosition = PatientPosition.Sitting,
+                TransportType = TransportType.Visit,
+                Financing = Financing.FullyPaid,
+                StartTime = DateTime.Today.AddDays(1),
+                Destination = "Katowice"
+            });
+
+            modelBuilder.Entity<Transport>().HasData(new Transport
+            {
+                Id = 3,
+                TeamId = 1,
+                PatientId = 1,
+                PatientPosition = PatientPosition.Lying,
+                TransportType = TransportType.Handover,
+                Financing = Financing.PartiallyFunded,
+                StartTime = DateTime.Today.AddDays(2),
+                Destination = "Bytom"
+            });
         }
 
         public DbSet<Patient> Patients { get; set; }
