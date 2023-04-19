@@ -1,5 +1,6 @@
 using MediMove.Server.Entities;
 using Microsoft.EntityFrameworkCore;
+using MediMove.Shared.Models.Enums;
 
 namespace MediMove.Server.Data
 {
