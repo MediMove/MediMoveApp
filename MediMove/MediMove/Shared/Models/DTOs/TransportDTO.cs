@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MediMove.Shared.Models.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,7 @@ namespace MediMove.Shared.Models.DTOs
 {
     public class TransportDTO
     {
+
         public string PatientFirstName { get; set; }
         public string PatientLastName { get; set; }
         public string PatientPhoneNumber { get; set; }
@@ -22,6 +24,7 @@ namespace MediMove.Shared.Models.DTOs
         public PatientPosition PatientPosition { get; set; }
         public string Destination { get; set; }
         public TransportType TransportType { get; set; }
+
     }
 
     public enum PatientPosition

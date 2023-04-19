@@ -1,4 +1,5 @@
 ﻿using MediMove.Server.Data;
+using MediMove.Server.Entities;
 using MediMove.Server.Repositories.Contracts;
 using MediMove.Shared.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +17,7 @@ namespace MediMove.Server.Repositories
 
         public async Task<List<Transport>> GetTransportsForParamedic(int id, DateTime date)
         {
-            var transports = await _dbContext.Transports//.Include( t => t.Patient) -  Ten Include możliwe że będzie potrzebny jak będziemy tworzyć mapper
+            var transports = await _dbContext.Transports
                 .Where(t => t.Team.ParamedicId == id && t.StartTime.Day == date.Day)
                 .ToListAsync();
 

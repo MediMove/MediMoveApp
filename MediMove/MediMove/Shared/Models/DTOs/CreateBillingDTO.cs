@@ -4,18 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MediMove.Server.Entities
+namespace MediMove.Shared.Models.DTOs
 {
-    public class Billing
+    public class CreateBillingDTO
     {
-        public int Id { get; set; }
-
+        public int PersonalInformationId { get; set; }
         public string InvoiceNumber { get; set; }
         public DateTime InvoiceDate { get; set; }
         public string BankAccountNumber { get; set; }
         public decimal Cost { get; set; }
-
-        public int PersonalInformationId { get; set; }
-        public PersonalInformation PersonalInformation { get; set; }
     }
 }
