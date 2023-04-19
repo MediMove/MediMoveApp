@@ -123,6 +123,22 @@ namespace MediMove.Server.Migrations
                     b.HasIndex("PersonalInformationId");
 
                     b.ToTable("Paramedics");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            BankAccountNumber = "123123",
+                            IsDriver = true,
+                            PersonalInformationId = 88
+                        },
+                        new
+                        {
+                            Id = 2,
+                            BankAccountNumber = "123123",
+                            IsDriver = true,
+                            PersonalInformationId = 99
+                        });
                 });
 
             modelBuilder.Entity("MediMove.Server.Entities.Patient", b =>
@@ -204,6 +220,50 @@ namespace MediMove.Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PersonalInformations");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 77,
+                            ApartmentNumber = 1,
+                            City = "Krakow",
+                            Country = "Polska",
+                            FirstName = "Pan",
+                            HouseNumber = "1",
+                            LastName = "Panowski",
+                            PhoneNumber = "123123123",
+                            PostalCode = "41-100",
+                            StateProvince = "slask",
+                            StreetAddress = "Kwiatowa"
+                        },
+                        new
+                        {
+                            Id = 99,
+                            ApartmentNumber = 5,
+                            City = "Katowice",
+                            Country = "Polska",
+                            FirstName = "Michal",
+                            HouseNumber = "13",
+                            LastName = "Jakistam",
+                            PhoneNumber = "888888888",
+                            PostalCode = "42-800",
+                            StateProvince = "slask",
+                            StreetAddress = "Sadowa"
+                        },
+                        new
+                        {
+                            Id = 88,
+                            ApartmentNumber = 4,
+                            City = "Krakow",
+                            Country = "Polska",
+                            FirstName = "Grzegorz",
+                            HouseNumber = "3",
+                            LastName = "Kowalski",
+                            PhoneNumber = "123123123",
+                            PostalCode = "42-400",
+                            StateProvince = "slask",
+                            StreetAddress = "Stara"
+                        });
                 });
 
             modelBuilder.Entity("MediMove.Server.Entities.Rate", b =>
@@ -265,10 +325,10 @@ namespace MediMove.Server.Migrations
                     b.Property<DateTime>("Day")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DriverId")
+                    b.Property<int?>("DriverId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ParamedicId")
+                    b.Property<int?>("ParamedicId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -278,6 +338,15 @@ namespace MediMove.Server.Migrations
                     b.HasIndex("ParamedicId");
 
                     b.ToTable("Teams");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Day = new DateTime(2023, 4, 19, 0, 0, 0, 0, DateTimeKind.Local),
+                            DriverId = 2,
+                            ParamedicId = 1
+                        });
                 });
 
             modelBuilder.Entity("MediMove.Server.Entities.Transport", b =>
@@ -322,6 +391,19 @@ namespace MediMove.Server.Migrations
                     b.HasIndex("TeamId");
 
                     b.ToTable("Transports");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Destination = "Morawy",
+                            Financing = 0,
+                            PatientId = 1,
+                            PatientPosition = 0,
+                            StartTime = new DateTime(2023, 4, 19, 0, 0, 0, 0, DateTimeKind.Local),
+                            TeamId = 1,
+                            TransportType = 0
+                        });
                 });
 
             modelBuilder.Entity("MediMove.Server.Entities.Availability", b =>
@@ -405,15 +487,11 @@ namespace MediMove.Server.Migrations
                 {
                     b.HasOne("MediMove.Server.Entities.Paramedic", "Driver")
                         .WithMany()
-                        .HasForeignKey("DriverId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DriverId");
 
                     b.HasOne("MediMove.Server.Entities.Paramedic", "Paramedic")
                         .WithMany()
-                        .HasForeignKey("ParamedicId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ParamedicId");
 
                     b.Navigation("Driver");
 

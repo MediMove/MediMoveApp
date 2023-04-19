@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MediMove.Server.Migrations
 {
     [DbContext(typeof(MediMoveDbContext))]
-    [Migration("20230418215904_NewModelTestv3")]
-    partial class NewModelTestv3
+    [Migration("20230419122631_newTest")]
+    partial class newTest
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -134,6 +134,13 @@ namespace MediMove.Server.Migrations
                             BankAccountNumber = "123123",
                             IsDriver = true,
                             PersonalInformationId = 88
+                        },
+                        new
+                        {
+                            Id = 2,
+                            BankAccountNumber = "123123",
+                            IsDriver = true,
+                            PersonalInformationId = 99
                         });
                 });
 
@@ -234,6 +241,20 @@ namespace MediMove.Server.Migrations
                         },
                         new
                         {
+                            Id = 99,
+                            ApartmentNumber = 5,
+                            City = "Katowice",
+                            Country = "Polska",
+                            FirstName = "Michal",
+                            HouseNumber = "13",
+                            LastName = "Jakistam",
+                            PhoneNumber = "888888888",
+                            PostalCode = "42-800",
+                            StateProvince = "slask",
+                            StreetAddress = "Sadowa"
+                        },
+                        new
+                        {
                             Id = 88,
                             ApartmentNumber = 4,
                             City = "Krakow",
@@ -307,10 +328,10 @@ namespace MediMove.Server.Migrations
                     b.Property<DateTime>("Day")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DriverId")
+                    b.Property<int?>("DriverId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ParamedicId")
+                    b.Property<int?>("ParamedicId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -325,8 +346,8 @@ namespace MediMove.Server.Migrations
                         new
                         {
                             Id = 1,
-                            Day = new DateTime(2023, 4, 18, 0, 0, 0, 0, DateTimeKind.Local),
-                            DriverId = 1,
+                            Day = new DateTime(2023, 4, 19, 0, 0, 0, 0, DateTimeKind.Local),
+                            DriverId = 2,
                             ParamedicId = 1
                         });
                 });
@@ -382,7 +403,7 @@ namespace MediMove.Server.Migrations
                             Financing = 0,
                             PatientId = 1,
                             PatientPosition = 0,
-                            StartTime = new DateTime(2023, 4, 18, 0, 0, 0, 0, DateTimeKind.Local),
+                            StartTime = new DateTime(2023, 4, 19, 0, 0, 0, 0, DateTimeKind.Local),
                             TeamId = 1,
                             TransportType = 0
                         });
@@ -469,15 +490,11 @@ namespace MediMove.Server.Migrations
                 {
                     b.HasOne("MediMove.Server.Entities.Paramedic", "Driver")
                         .WithMany()
-                        .HasForeignKey("DriverId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DriverId");
 
                     b.HasOne("MediMove.Server.Entities.Paramedic", "Paramedic")
                         .WithMany()
-                        .HasForeignKey("ParamedicId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ParamedicId");
 
                     b.Navigation("Driver");
 

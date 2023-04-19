@@ -63,6 +63,29 @@ namespace MediMove.Server.Data
                 IsDriver = true,
             });
 
+            modelBuilder.Entity<Paramedic>().HasData(new Paramedic
+            {
+                Id = 2,
+                PersonalInformationId = 99,
+                BankAccountNumber = "123123",
+                IsDriver = true,
+            });
+
+            modelBuilder.Entity<PersonalInformation>().HasData(new PersonalInformation
+            {
+                Id = 99,
+                FirstName = "Michal",
+                LastName = "Jakistam",
+                StreetAddress = "Sadowa",
+                HouseNumber = "13",
+                ApartmentNumber = 5,
+                PostalCode = "42-800",
+                StateProvince = "slask",
+                Country = "Polska",
+                PhoneNumber = "888888888",
+                City = "Katowice"
+            });
+
             modelBuilder.Entity<PersonalInformation>().HasData(new PersonalInformation
             {
                 Id = 88,
@@ -81,7 +104,7 @@ namespace MediMove.Server.Data
             modelBuilder.Entity<Team>().HasData(new Team
             {
                 Id = 1,
-                DriverId = 1,
+                DriverId = 2,
                 ParamedicId = 1,
                 Day = DateTime.Today
             });

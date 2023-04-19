@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MediMove.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class NewModelTest : Migration
+    public partial class newTest : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -52,6 +52,22 @@ namespace MediMove.Server.Migrations
                 type: "int",
                 nullable: false,
                 defaultValue: 0);
+
+            migrationBuilder.AlterColumn<int>(
+                name: "ParamedicId",
+                table: "Teams",
+                type: "int",
+                nullable: true,
+                oldClrType: typeof(int),
+                oldType: "int");
+
+            migrationBuilder.AlterColumn<int>(
+                name: "DriverId",
+                table: "Teams",
+                type: "int",
+                nullable: true,
+                oldClrType: typeof(int),
+                oldType: "int");
 
             migrationBuilder.AlterColumn<string>(
                 name: "HouseNumber",
@@ -117,12 +133,29 @@ namespace MediMove.Server.Migrations
                 columns: new[] { "City", "HouseNumber", "PhoneNumber" },
                 values: new object[] { "Krakow", "3", "123123123" });
 
+            migrationBuilder.InsertData(
+                table: "PersonalInformations",
+                columns: new[] { "Id", "ApartmentNumber", "City", "Country", "FirstName", "HouseNumber", "LastName", "PhoneNumber", "PostalCode", "StateProvince", "StreetAddress" },
+                values: new object[] { 99, 5, "Katowice", "Polska", "Michal", "13", "Jakistam", "888888888", "42-800", "slask", "Sadowa" });
+
+            migrationBuilder.UpdateData(
+                table: "Teams",
+                keyColumn: "Id",
+                keyValue: 1,
+                columns: new[] { "Day", "DriverId" },
+                values: new object[] { new DateTime(2023, 4, 19, 0, 0, 0, 0, DateTimeKind.Local), 2 });
+
             migrationBuilder.UpdateData(
                 table: "Transports",
                 keyColumn: "Id",
                 keyValue: 1,
-                column: "TransportType",
-                value: 0);
+                columns: new[] { "StartTime", "TransportType" },
+                values: new object[] { new DateTime(2023, 4, 19, 0, 0, 0, 0, DateTimeKind.Local), 0 });
+
+            migrationBuilder.InsertData(
+                table: "Paramedics",
+                columns: new[] { "Id", "BankAccountNumber", "IsDriver", "PersonalInformationId" },
+                values: new object[] { 2, "123123", true, 99 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Teams_DriverId",
@@ -209,16 +242,14 @@ namespace MediMove.Server.Migrations
                 table: "Teams",
                 column: "DriverId",
                 principalTable: "Paramedics",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Teams_Paramedics_ParamedicId",
                 table: "Teams",
                 column: "ParamedicId",
                 principalTable: "Paramedics",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                principalColumn: "Id");
         }
 
         /// <inheritdoc />
@@ -283,6 +314,16 @@ namespace MediMove.Server.Migrations
                 name: "IX_Availabilities_ParamedicId",
                 table: "Availabilities");
 
+            migrationBuilder.DeleteData(
+                table: "Paramedics",
+                keyColumn: "Id",
+                keyValue: 2);
+
+            migrationBuilder.DeleteData(
+                table: "PersonalInformations",
+                keyColumn: "Id",
+                keyValue: 99);
+
             migrationBuilder.DropColumn(
                 name: "TransportType",
                 table: "Transports");
@@ -313,6 +354,26 @@ namespace MediMove.Server.Migrations
                 name: "Day",
                 table: "Availabilities",
                 newName: "InvoiceDate");
+
+            migrationBuilder.AlterColumn<int>(
+                name: "ParamedicId",
+                table: "Teams",
+                type: "int",
+                nullable: false,
+                defaultValue: 0,
+                oldClrType: typeof(int),
+                oldType: "int",
+                oldNullable: true);
+
+            migrationBuilder.AlterColumn<int>(
+                name: "DriverId",
+                table: "Teams",
+                type: "int",
+                nullable: false,
+                defaultValue: 0,
+                oldClrType: typeof(int),
+                oldType: "int",
+                oldNullable: true);
 
             migrationBuilder.AlterColumn<int>(
                 name: "HouseNumber",
@@ -377,6 +438,20 @@ namespace MediMove.Server.Migrations
                 keyValue: 88,
                 column: "HouseNumber",
                 value: 3);
+
+            migrationBuilder.UpdateData(
+                table: "Teams",
+                keyColumn: "Id",
+                keyValue: 1,
+                columns: new[] { "Day", "DriverId" },
+                values: new object[] { new DateTime(2023, 4, 18, 0, 0, 0, 0, DateTimeKind.Local), 1 });
+
+            migrationBuilder.UpdateData(
+                table: "Transports",
+                keyColumn: "Id",
+                keyValue: 1,
+                column: "StartTime",
+                value: new DateTime(2023, 4, 18, 0, 0, 0, 0, DateTimeKind.Local));
         }
     }
 }
