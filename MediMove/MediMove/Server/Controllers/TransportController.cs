@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MediMove.Server.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("Api/[controller]")]
     [ApiController]
     public class TransportController : ControllerBase
     {
@@ -17,7 +17,7 @@ namespace MediMove.Server.Controllers
             _transportService = transportService;
         }
 
-        [HttpGet("paramedic/{id}")] 
+        [HttpGet("Paramedic/{id}")] 
         public async Task<ActionResult<List<Transport>>> GetAllForParamedicDay([FromRoute] int id, [FromQuery] DateTime date)
         {
             var result = await _transportService.GetByParamedicId(id, date);
@@ -25,10 +25,18 @@ namespace MediMove.Server.Controllers
             return result;
         }
 
-        [HttpGet]
+        [HttpGet("Day")]
         public async Task<ActionResult<List<Transport>>> GetAllForDay([FromQuery] DateTime date)
         {
             var result = await _transportService.GetByDay(date);
+
+            return result;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<List<Transport>>> GetAll([FromQuery] DateTime date)
+        {
+            var result = await _transportService.GetAll();
 
             return result;
         }

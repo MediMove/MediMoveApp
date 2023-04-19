@@ -7,5 +7,6 @@ namespace MediMove.Server.Repositories.Contracts
     {
         Task<List<Transport>> GetTransportsForParamedic(int id, DateTime date);
         Task<List<Transport>> GetTransportsForDay(DateTime date);
+        Task<List<Transport>> GetTransports();
     }
 }

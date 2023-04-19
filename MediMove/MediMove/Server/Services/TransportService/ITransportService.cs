@@ -6,5 +6,6 @@ namespace MediMove.Server.Services.TransportService
     {
         Task<List<Transport>> GetByDay(DateTime date);
         Task<List<Transport>> GetByParamedicId(int id, DateTime date);
+        Task<List<Transport>> GetAll();
     }
 }
