@@ -1,5 +1,4 @@
 using MediMove.Server.Entities;
-using MediMove.Shared.Entities;
 using Microsoft.EntityFrameworkCore;
 using MediMove.Shared.Models.Enums;
 
@@ -16,6 +15,24 @@ namespace MediMove.Server.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            //modelBuilder.Entity<Transport>()
+            //    .HasOne(e => e.Patient)
+            //    .WithMany(e => e.Transports)
+            //    .HasForeignKey(e => e.PatientId);
+
+            //modelBuilder.Entity<Transport>()
+            //    .HasOne(e => e.Team)
+            //    .WithMany(e => e.Transports)
+            //    .HasForeignKey(e => e.TeamId);
+
+            //modelBuilder.Entity<Transport>()
+            //    .HasOne(e => e.Billing)
+            //    .WithOne(e => e.)
+            //    .HasForeignKey(e => e.TeamId);
+
+
+
+
             modelBuilder.Entity<Patient>().HasData(new Patient
             {
                 Id = 1,
@@ -29,12 +46,14 @@ namespace MediMove.Server.Data
                 Id = 77,
                 FirstName = "Pan",
                 LastName = "Panowski",
-                StreetAddres = "Kwiatowa",
+                StreetAddress = "Kwiatowa",
                 HouseNumber = "1",
                 ApartmentNumber = 1,
                 PostalCode = "41-100",
                 StateProvince = "slask",
-                Country = "Polska"
+                Country = "Polska",
+                PhoneNumber = "123123123",
+                City = "Krakow"
             });
 
             modelBuilder.Entity<Paramedic>().HasData(new Paramedic
@@ -43,7 +62,29 @@ namespace MediMove.Server.Data
                 PersonalInformationId = 88,
                 BankAccountNumber = "123123",
                 IsDriver = true,
-                PhoneNumber = "123123123"
+            });
+
+            modelBuilder.Entity<Paramedic>().HasData(new Paramedic
+            {
+                Id = 2,
+                PersonalInformationId = 99,
+                BankAccountNumber = "123123",
+                IsDriver = true,
+            });
+
+            modelBuilder.Entity<PersonalInformation>().HasData(new PersonalInformation
+            {
+                Id = 99,
+                FirstName = "Michal",
+                LastName = "Jakistam",
+                StreetAddress = "Sadowa",
+                HouseNumber = "13",
+                ApartmentNumber = 5,
+                PostalCode = "42-800",
+                StateProvince = "slask",
+                Country = "Polska",
+                PhoneNumber = "888888888",
+                City = "Katowice"
             });
 
             modelBuilder.Entity<PersonalInformation>().HasData(new PersonalInformation
@@ -51,18 +92,20 @@ namespace MediMove.Server.Data
                 Id = 88,
                 FirstName = "Grzegorz",
                 LastName = "Kowalski",
-                StreetAddres = "Stara",
+                StreetAddress = "Stara",
                 HouseNumber = "3",
                 ApartmentNumber = 4,
                 PostalCode = "42-400",
                 StateProvince = "slask",
-                Country = "Polska"
+                Country = "Polska",
+                PhoneNumber = "123123123",
+                City = "Krakow"
             });
 
             modelBuilder.Entity<Team>().HasData(new Team
             {
-                Id=1,
-                DriverId = 1,
+                Id = 1,
+                DriverId = 2,
                 ParamedicId = 1,
                 Day = DateTime.Today
             });
@@ -73,6 +116,7 @@ namespace MediMove.Server.Data
                 TeamId = 1,
                 PatientId = 1,
                 PatientPosition = PatientPosition.Walking,
+                TransportType = TransportType.Visit,
                 Financing = Financing.FullyFunded,
                 StartTime = DateTime.Today,
                 Destination = "Morawy"

@@ -1,4 +1,5 @@
 ﻿using MediMove.Server.Data;
+using MediMove.Server.Entities;
 using MediMove.Server.Repositories.Contracts;
 using MediMove.Shared.Entities;
 using Microsoft.EntityFrameworkCore;

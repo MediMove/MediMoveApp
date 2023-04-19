@@ -1,4 +1,5 @@
-﻿using MediMove.Server.Services.TransportService;
+﻿using MediMove.Server.Entities;
+using MediMove.Server.Services.TransportService;
 using MediMove.Shared.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
