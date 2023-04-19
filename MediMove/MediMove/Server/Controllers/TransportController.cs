@@ -1,4 +1,5 @@
-﻿using MediMove.Server.Services.TransportService;
+﻿using MediMove.Server.Entities;
+using MediMove.Server.Services.TransportService;
 using MediMove.Shared.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +26,7 @@ namespace MediMove.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Transport>>> GetAllForDay([FromBody] DateTime date)
+        public async Task<ActionResult<List<Transport>>> GetAllForDay([FromQuery] DateTime date)
         {
             var result = await _transportService.GetByDay(date);
 
