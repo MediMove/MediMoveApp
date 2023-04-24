@@ -8,7 +8,7 @@ using MediMove.Shared.Models.Enums;
 
 namespace MediMove.Shared.Models.DTOs
 {
-    public class DisplayTransportsDTO
+    public class DisplayTransportsDTO // DTO do usunięcia jeśli dobrze rozumiem, TransportDTO to będą transporty wyświetlane, są tam wszystkie informacje potrzebne do wyświetlenia.
     {
         public string PatientInfoFirstName { get; set; }
         public string PatientLastName { get; set; }

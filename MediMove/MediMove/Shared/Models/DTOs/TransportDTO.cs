@@ -17,6 +17,8 @@ namespace MediMove.Shared.Models.DTOs
         public string PatientStreetAddress { get; set; }
         public string PatientHouseNumber { get; set; }
         public int PatientApartmentNumber { get; set; }
+        public string PatientPostalCode { get; set; }
+        public string PatientCity { get; set; }
         public int PatientWeight { get; set; }
 
         public DateTime StartTime { get; set; }
