@@ -17,11 +17,7 @@ namespace MediMove.Server.Controllers
             _transportService = transportService;
         }
 
-<<<<<<< HEAD
-        [HttpGet("{id}")] // Nw czy tak możemy to brać, tutaj wrzucał bym w link id paramedica dla którego pokazane były by transporty
-=======
-        [HttpGet("Paramedic/{id}")] 
->>>>>>> e8565836ed26a16d64d3f1844040c9702e5ea3de
+        [HttpGet("Paramedic/{id}")] // Nw czy tak możemy to brać, tutaj wrzucał bym w link id paramedica dla którego pokazane były by transporty
         public async Task<ActionResult<List<Transport>>> GetAllForParamedicDay([FromRoute] int id, [FromQuery] DateTime date)
         {
             var result = await _transportService.GetByParamedicId(id, date);
@@ -34,7 +30,7 @@ namespace MediMove.Server.Controllers
         {
             var result = await _transportService.GetByDay(date);
 
-            return Ok(result);
+            return result;
         }
 
         [HttpGet]
@@ -42,7 +38,7 @@ namespace MediMove.Server.Controllers
         {
             var result = await _transportService.GetAll();
 
-            return result;
+            return Ok(result);
         }
 
     }
