@@ -1,12 +1,19 @@
-﻿namespace MediMove.Server.Entities
+﻿using MediMove.Shared.Entities;
+
+namespace MediMove.Server.Entities
 {
+    public enum ShiftType
+    {
+        Morning,
+        Evening
+    }
     public class Availability
     {
         public int Id { get; set; }
-        public int PersonalInfoId { get; set; }
-        public DateTime InvoiceDate { get; set; }
-        public string BankAccountNumber { get; set; }
-        public decimal Cost { get; set; }
+        public DateTime Day { get; set; }
+        public ShiftType ShiftType { get; set; }
 
+        public int ParamedicId { get; set; }
+        public Paramedic Paramedic { get; set; }
     }
 }

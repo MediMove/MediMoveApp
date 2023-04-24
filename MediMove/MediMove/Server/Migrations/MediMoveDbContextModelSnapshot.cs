@@ -30,25 +30,23 @@ namespace MediMove.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("BankAccountNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Cost")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("InvoiceDate")
+                    b.Property<DateTime>("Day")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("PersonalInfoId")
+                    b.Property<int>("ParamedicId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ShiftType")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ParamedicId");
+
                     b.ToTable("Availabilities");
                 });
 
-            modelBuilder.Entity("MediMove.Shared.Entities.Dispatcher", b =>
+            modelBuilder.Entity("MediMove.Server.Entities.Billing", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -60,22 +58,49 @@ namespace MediMove.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PersonalInfoId")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Cost")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("PhoneNumber")
+                    b.Property<DateTime>("InvoiceDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("InvoiceNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Salary")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("PersonalInformationId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PersonalInformationId");
+
+                    b.ToTable("Billings");
+                });
+
+            modelBuilder.Entity("MediMove.Server.Entities.Dispatcher", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("BankAccountNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PersonalInformationId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PersonalInformationId");
 
                     b.ToTable("Dispatchers");
                 });
 
-            modelBuilder.Entity("MediMove.Shared.Entities.Paramedic", b =>
+            modelBuilder.Entity("MediMove.Server.Entities.Paramedic", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -90,19 +115,33 @@ namespace MediMove.Server.Migrations
                     b.Property<bool>("IsDriver")
                         .HasColumnType("bit");
 
-                    b.Property<int>("PersonalInfoId")
+                    b.Property<int>("PersonalInformationId")
                         .HasColumnType("int");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("PersonalInformationId");
+
                     b.ToTable("Paramedics");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            BankAccountNumber = "123123",
+                            IsDriver = true,
+                            PersonalInformationId = 88
+                        },
+                        new
+                        {
+                            Id = 2,
+                            BankAccountNumber = "123123",
+                            IsDriver = true,
+                            PersonalInformationId = 99
+                        });
                 });
 
-            modelBuilder.Entity("MediMove.Shared.Entities.Patient", b =>
+            modelBuilder.Entity("MediMove.Server.Entities.Patient", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -110,7 +149,7 @@ namespace MediMove.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("PersonalInfoId")
+                    b.Property<int>("PersonalInformationId")
                         .HasColumnType("int");
 
                     b.Property<int>("Weight")
@@ -118,18 +157,20 @@ namespace MediMove.Server.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("PersonalInformationId");
+
                     b.ToTable("Patients");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            PersonalInfoId = 1,
+                            PersonalInformationId = 77,
                             Weight = 40
                         });
                 });
 
-            modelBuilder.Entity("MediMove.Shared.Entities.PersonalInformation", b =>
+            modelBuilder.Entity("MediMove.Server.Entities.PersonalInformation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -140,6 +181,10 @@ namespace MediMove.Server.Migrations
                     b.Property<int>("ApartmentNumber")
                         .HasColumnType("int");
 
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Country")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -148,10 +193,15 @@ namespace MediMove.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("HouseNumber")
-                        .HasColumnType("int");
+                    b.Property<string>("HouseNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -163,16 +213,60 @@ namespace MediMove.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("StreetAddres")
+                    b.Property<string>("StreetAddress")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.ToTable("PersonalInformations");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 77,
+                            ApartmentNumber = 1,
+                            City = "Krakow",
+                            Country = "Polska",
+                            FirstName = "Pan",
+                            HouseNumber = "1",
+                            LastName = "Panowski",
+                            PhoneNumber = "123123123",
+                            PostalCode = "41-100",
+                            StateProvince = "slask",
+                            StreetAddress = "Kwiatowa"
+                        },
+                        new
+                        {
+                            Id = 99,
+                            ApartmentNumber = 5,
+                            City = "Katowice",
+                            Country = "Polska",
+                            FirstName = "Michal",
+                            HouseNumber = "13",
+                            LastName = "Jakistam",
+                            PhoneNumber = "888888888",
+                            PostalCode = "42-800",
+                            StateProvince = "slask",
+                            StreetAddress = "Sadowa"
+                        },
+                        new
+                        {
+                            Id = 88,
+                            ApartmentNumber = 4,
+                            City = "Krakow",
+                            Country = "Polska",
+                            FirstName = "Grzegorz",
+                            HouseNumber = "3",
+                            LastName = "Kowalski",
+                            PhoneNumber = "123123123",
+                            PostalCode = "42-400",
+                            StateProvince = "slask",
+                            StreetAddress = "Stara"
+                        });
                 });
 
-            modelBuilder.Entity("MediMove.Shared.Entities.Rate", b =>
+            modelBuilder.Entity("MediMove.Server.Entities.Rate", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -191,10 +285,36 @@ namespace MediMove.Server.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ParamedicId");
+
                     b.ToTable("Rates");
                 });
 
-            modelBuilder.Entity("MediMove.Shared.Entities.Team", b =>
+            modelBuilder.Entity("MediMove.Server.Entities.Salary", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DispatcherId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Income")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DispatcherId");
+
+                    b.ToTable("Salary");
+                });
+
+            modelBuilder.Entity("MediMove.Server.Entities.Team", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -205,18 +325,31 @@ namespace MediMove.Server.Migrations
                     b.Property<DateTime>("Day")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DriverId")
+                    b.Property<int?>("DriverId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ParamedicId")
+                    b.Property<int?>("ParamedicId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DriverId");
+
+                    b.HasIndex("ParamedicId");
+
                     b.ToTable("Teams");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Day = new DateTime(2023, 4, 19, 0, 0, 0, 0, DateTimeKind.Local),
+                            DriverId = 2,
+                            ParamedicId = 1
+                        });
                 });
 
-            modelBuilder.Entity("MediMove.Shared.Entities.Transport", b =>
+            modelBuilder.Entity("MediMove.Server.Entities.Transport", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -224,7 +357,7 @@ namespace MediMove.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BillingId")
+                    b.Property<int?>("BillingId")
                         .HasColumnType("int");
 
                     b.Property<string>("Destination")
@@ -246,9 +379,192 @@ namespace MediMove.Server.Migrations
                     b.Property<int>("TeamId")
                         .HasColumnType("int");
 
+                    b.Property<int>("TransportType")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("BillingId");
+
+                    b.HasIndex("PatientId");
+
+                    b.HasIndex("TeamId");
+
                     b.ToTable("Transports");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Destination = "Morawy",
+                            Financing = 0,
+                            PatientId = 1,
+                            PatientPosition = 0,
+                            StartTime = new DateTime(2023, 4, 19, 0, 0, 0, 0, DateTimeKind.Local),
+                            TeamId = 1,
+                            TransportType = 0
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Destination = "Katowice",
+                            Financing = 2,
+                            PatientId = 1,
+                            PatientPosition = 1,
+                            StartTime = new DateTime(2023, 4, 20, 0, 0, 0, 0, DateTimeKind.Local),
+                            TeamId = 1,
+                            TransportType = 0
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Destination = "Bytom",
+                            Financing = 1,
+                            PatientId = 1,
+                            PatientPosition = 2,
+                            StartTime = new DateTime(2023, 4, 21, 0, 0, 0, 0, DateTimeKind.Local),
+                            TeamId = 1,
+                            TransportType = 1
+                        });
+                });
+
+            modelBuilder.Entity("MediMove.Server.Entities.Availability", b =>
+                {
+                    b.HasOne("MediMove.Server.Entities.Paramedic", "Paramedic")
+                        .WithMany("Availabilities")
+                        .HasForeignKey("ParamedicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Paramedic");
+                });
+
+            modelBuilder.Entity("MediMove.Server.Entities.Billing", b =>
+                {
+                    b.HasOne("MediMove.Server.Entities.PersonalInformation", "PersonalInformation")
+                        .WithMany()
+                        .HasForeignKey("PersonalInformationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PersonalInformation");
+                });
+
+            modelBuilder.Entity("MediMove.Server.Entities.Dispatcher", b =>
+                {
+                    b.HasOne("MediMove.Server.Entities.PersonalInformation", "PersonalInformation")
+                        .WithMany()
+                        .HasForeignKey("PersonalInformationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PersonalInformation");
+                });
+
+            modelBuilder.Entity("MediMove.Server.Entities.Paramedic", b =>
+                {
+                    b.HasOne("MediMove.Server.Entities.PersonalInformation", "PersonalInformation")
+                        .WithMany()
+                        .HasForeignKey("PersonalInformationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PersonalInformation");
+                });
+
+            modelBuilder.Entity("MediMove.Server.Entities.Patient", b =>
+                {
+                    b.HasOne("MediMove.Server.Entities.PersonalInformation", "PersonalInformation")
+                        .WithMany()
+                        .HasForeignKey("PersonalInformationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PersonalInformation");
+                });
+
+            modelBuilder.Entity("MediMove.Server.Entities.Rate", b =>
+                {
+                    b.HasOne("MediMove.Server.Entities.Paramedic", "Paramedic")
+                        .WithMany("Rates")
+                        .HasForeignKey("ParamedicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Paramedic");
+                });
+
+            modelBuilder.Entity("MediMove.Server.Entities.Salary", b =>
+                {
+                    b.HasOne("MediMove.Server.Entities.Dispatcher", "Dispatcher")
+                        .WithMany("Salaries")
+                        .HasForeignKey("DispatcherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Dispatcher");
+                });
+
+            modelBuilder.Entity("MediMove.Server.Entities.Team", b =>
+                {
+                    b.HasOne("MediMove.Server.Entities.Paramedic", "Driver")
+                        .WithMany()
+                        .HasForeignKey("DriverId");
+
+                    b.HasOne("MediMove.Server.Entities.Paramedic", "Paramedic")
+                        .WithMany()
+                        .HasForeignKey("ParamedicId");
+
+                    b.Navigation("Driver");
+
+                    b.Navigation("Paramedic");
+                });
+
+            modelBuilder.Entity("MediMove.Server.Entities.Transport", b =>
+                {
+                    b.HasOne("MediMove.Server.Entities.Billing", "Billing")
+                        .WithMany()
+                        .HasForeignKey("BillingId");
+
+                    b.HasOne("MediMove.Server.Entities.Patient", "Patient")
+                        .WithMany("Transports")
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MediMove.Server.Entities.Team", "Team")
+                        .WithMany("Transports")
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Billing");
+
+                    b.Navigation("Patient");
+
+                    b.Navigation("Team");
+                });
+
+            modelBuilder.Entity("MediMove.Server.Entities.Dispatcher", b =>
+                {
+                    b.Navigation("Salaries");
+                });
+
+            modelBuilder.Entity("MediMove.Server.Entities.Paramedic", b =>
+                {
+                    b.Navigation("Availabilities");
+
+                    b.Navigation("Rates");
+                });
+
+            modelBuilder.Entity("MediMove.Server.Entities.Patient", b =>
+                {
+                    b.Navigation("Transports");
+                });
+
+            modelBuilder.Entity("MediMove.Server.Entities.Team", b =>
+                {
+                    b.Navigation("Transports");
                 });
 #pragma warning restore 612, 618
         }

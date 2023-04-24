@@ -1,4 +1,4 @@
-﻿using MediMove.Shared.Entities;
+﻿using MediMove.Server.Entities;
 
 namespace MediMove.Server.Services.TransportService
 {
@@ -6,5 +6,6 @@ namespace MediMove.Server.Services.TransportService
     {
         Task<List<Transport>> GetByDay(DateTime date);
         Task<List<Transport>> GetByParamedicId(int id, DateTime date);
+        Task<List<Transport>> GetAll();
     }
 }

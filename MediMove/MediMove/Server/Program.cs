@@ -1,12 +1,14 @@
 using System.Collections.Immutable;
 using System.Data.Common;
 using MediMove.Server.Data;
+using MediMove.Server.Middleware;
 using MediMove.Server.Repositories;
 using MediMove.Server.Repositories.Contracts;
 using MediMove.Server.Services.TransportService;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+});
 
 IConfiguration config = new ConfigurationBuilder()
     .AddJsonFile("credentials.json", optional: true, reloadOnChange: true)
@@ -24,8 +30,10 @@ var connectionString = config.GetSection("ConnectionStrings")["MediMoveConnectio
 builder.Services.AddDbContextPool<MediMoveDbContext>(options =>
     options.UseSqlServer(connectionString));
 
-builder.Services.AddScoped<ITransportRepository, TransportsRepository>(); // Nie powinno byæ TransportRepository w liczbie pojedynczej?
+builder.Services.AddScoped<ITransportRepository, TransportRepository>();
 builder.Services.AddScoped<ITransportService, TransportService>();
+
+builder.Services.AddScoped<ErrorHandlingMiddleware>();
 
 var app = builder.Build();
 
@@ -34,6 +42,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseWebAssemblyDebugging();
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+    });
 }
 else
 {
@@ -41,7 +54,7 @@ else
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
+app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseHttpsRedirection();
 
 app.UseBlazorFrameworkFiles();
