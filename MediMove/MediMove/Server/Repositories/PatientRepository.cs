@@ -24,5 +24,16 @@ namespace MediMove.Server.Repositories
         {
             return await _dbContext.Patients.FindAsync(id);
         }
+
+        public async Task<int> Create(Patient dto)
+        {
+            throw new NotImplementedException(); // trzeba zwrócić id 
+        }
+
+        public async Task Update(Patient dto)
+        {
+            throw new NotImplementedException();
+
+        }
     }
 }

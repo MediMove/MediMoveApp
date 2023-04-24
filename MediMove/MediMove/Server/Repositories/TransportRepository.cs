@@ -2,6 +2,7 @@
 using MediMove.Server.Entities;
 using MediMove.Server.Repositories.Contracts;
 using MediMove.Shared.Entities;
+using MediMove.Shared.Models.DTOs;
 using Microsoft.EntityFrameworkCore;
 
 namespace MediMove.Server.Repositories
@@ -15,7 +16,7 @@ namespace MediMove.Server.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<List<Transport>> GetTransportsForParamedic(int id, DateTime date)
+        public async Task<IEnumerable<Transport>> GetTransportsForParamedic(int id, DateTime date)
         {
             var transports = await _dbContext.Transports
                 .Where(t => t.Team.ParamedicId == id && t.StartTime.Day == date.Day)
@@ -25,21 +26,35 @@ namespace MediMove.Server.Repositories
             return transports;
         }
 
-        public async Task<List<Transport>> GetTransportsForDay(DateTime date)
+        public async Task<IEnumerable<Transport>> GetTransportsForDay(DateTime date)
         {
             var transports = await _dbContext.Transports
-                .Where(t => t.StartTime.Day == date.Day)
-                .ToListAsync();
+                .Where(t => t.StartTime.Day == date.Day).ToListAsync();
 
             return transports;
         }
 
-        public async Task<List<Transport>> GetTransports()
+        public async Task<IEnumerable<Transport>> GetTransports()
         {
-            var transports = await _dbContext.Transports
-                .ToListAsync();
+            var transports = await _dbContext.Transports.ToListAsync();
 
             return transports;
         }
+
+        public async Task<Transport> GetTransport(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task Create(Transport dto)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task Update(Transport dto)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

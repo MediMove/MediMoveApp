@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MediMove.Shared.Models.DTOs
+namespace MediMove.Shared.Models.DTOs.temp
 {
-    public class CreateDispatcherDTO
+    public class CreateParamedicDTO
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -18,6 +18,7 @@ namespace MediMove.Shared.Models.DTOs
         public string StateProvince { get; set; }
         public string Country { get; set; }
         public string BankAccountNumber { get; set; }
-        public decimal Salary { get; set; }
+        public bool IsDriver { get; set; }
+        public decimal PayPerHour { get; set; }
     }
 }

@@ -29,25 +29,4 @@ namespace MediMove.Shared.Models.DTOs
 
     }
 
-    public enum PatientPosition
-    {
-        Walking,
-        Sitting,
-        Lying
-
-    }
-
-    public enum Financing
-    {
-        FullyFunded,
-        PartiallyFunded,
-        FullyPaid
-    }
-
-    public enum TransportType
-    {
-        Visit,
-        Handover
-    }
-
 }
