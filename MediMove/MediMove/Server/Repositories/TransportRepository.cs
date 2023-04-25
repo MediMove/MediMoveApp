@@ -16,20 +16,29 @@ namespace MediMove.Server.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<Transport>> GetTransportsForParamedic(int id, DateTime date)
+        public async Task<IEnumerable<Transport>> GetTransportsForParamedic(int id, DateOnly date)
         {
             var transports = await _dbContext.Transports
-                .Where(t => t.Team.ParamedicId == id && t.StartTime.Day == date.Day)
+                .Where(t => 
+                    t.Team.ParamedicId == id &&
+                    t.StartTime.Day == date.Day &&
+                    t.StartTime.Month == date.Month &&              // bez sensu było szukanie po samym dniu
+                    t.StartTime.Year == date.Year
+                    )
                 .ToListAsync();
 
             
             return transports;
         }
 
-        public async Task<IEnumerable<Transport>> GetTransportsForDay(DateTime date)
+        public async Task<IEnumerable<Transport>> GetTransportsForDay(DateOnly date)
         {
             var transports = await _dbContext.Transports
-                .Where(t => t.StartTime.Day == date.Day).ToListAsync();
+                .Where(t => 
+                    t.StartTime.Day == date.Day &&
+                    t.StartTime.Month == date.Month &&              // bez sensu było szukanie po samym dniu
+                    t.StartTime.Year == date.Year
+                ).ToListAsync();
 
             return transports;
         }

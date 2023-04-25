@@ -20,7 +20,7 @@ namespace MediMove.Server.Services.TransportService
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<TransportDTO>> GetByParamedicId(int id, DateTime date)
+        public async Task<IEnumerable<TransportDTO>> GetByParamedicId(int id, DateOnly date)
         {
 
             var transports = await _transportRepository.GetTransportsForParamedic(id,date);
@@ -35,7 +35,7 @@ namespace MediMove.Server.Services.TransportService
 
         }
 
-        public async Task<IEnumerable<TransportDTO>> GetByDay(DateTime date)
+        public async Task<IEnumerable<TransportDTO>> GetByDay(DateOnly date)
         {
             var transports = await _transportRepository.GetTransportsForDay(date);
 

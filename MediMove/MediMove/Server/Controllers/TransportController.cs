@@ -27,17 +27,25 @@ namespace MediMove.Server.Controllers
 
 
         [HttpGet("Paramedic/{id}")]
-        public async Task<ActionResult<IEnumerable<TransportDTO>>> GetAllForParamedicDay([FromRoute] int id, [FromQuery] DateTime date)
+        public async Task<ActionResult<IEnumerable<TransportDTO>>> GetAllForParamedicDay([FromRoute] int id, [FromQuery] int day, [FromQuery] int month, [FromQuery] int year)
         {
-            var result = await _transportService.GetByParamedicId(id, date);
+
+            var result = await _transportService.GetByParamedicId
+                (
+                    id, 
+                    new DateOnly().AddDays(day - 1).AddMonths(month - 1).AddYears(year - 1)
+                );
 
             return Ok(result);
         }
 
-        [HttpGet("Day")]
-        public async Task<ActionResult<List<Transport>>> GetAllForDay([FromQuery] DateTime date)
+        [HttpGet("Date")]
+        public async Task<ActionResult<List<Transport>>> GetAllForDay([FromQuery] int day, [FromQuery] int month, [FromQuery] int year) // zmieniłem z DateTime żeby łatwiej przekazywać przez query
         {
-            var result = await _transportService.GetByDay(date);
+            var result = await _transportService.GetByDay
+            (
+                new DateOnly().AddDays(day - 1).AddMonths(month - 1).AddYears(year - 1)
+            ); 
 
             return Ok(result);
         }
