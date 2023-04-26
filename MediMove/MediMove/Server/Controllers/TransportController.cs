@@ -40,7 +40,7 @@ namespace MediMove.Server.Controllers
         }
 
         [HttpGet("Date")]
-        public async Task<ActionResult<List<Transport>>> GetAllForDay([FromQuery] int day, [FromQuery] int month, [FromQuery] int year) // zmieniłem z DateTime żeby łatwiej przekazywać przez query
+        public async Task<ActionResult<IEnumerable<Transport>>> GetAllForDay([FromQuery] int day, [FromQuery] int month, [FromQuery] int year) // zmieniłem z DateTime żeby łatwiej przekazywać przez query
         {
             var result = await _transportService.GetByDay
             (
