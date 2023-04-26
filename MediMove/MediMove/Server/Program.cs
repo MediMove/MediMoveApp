@@ -1,9 +1,12 @@
 using System.Collections.Immutable;
 using System.Data.Common;
+using AutoMapper;
+using MediMove.Server;
 using MediMove.Server.Data;
 using MediMove.Server.Middleware;
 using MediMove.Server.Repositories;
 using MediMove.Server.Repositories.Contracts;
+using MediMove.Server.Services.PatientService;
 using MediMove.Server.Services.TransportService;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
@@ -33,6 +36,12 @@ builder.Services.AddDbContextPool<MediMoveDbContext>(options =>
 builder.Services.AddScoped<ITransportRepository, TransportRepository>();
 builder.Services.AddScoped<ITransportService, TransportService>();
 
+builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+builder.Services.AddScoped<IPatientService, PatientService>();
+
+builder.Services.AddScoped<IPersonalInformationRepository, PersonalInformationRepository>();
+
+builder.Services.AddAutoMapper(typeof(MediMoveMappingProfile));
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 
 var app = builder.Build();

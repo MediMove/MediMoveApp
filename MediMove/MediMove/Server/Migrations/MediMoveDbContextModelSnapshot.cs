@@ -46,60 +46,6 @@ namespace MediMove.Server.Migrations
                     b.ToTable("Availabilities");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Entities.Billing", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("BankAccountNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Cost")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("InvoiceDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("InvoiceNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PersonalInformationId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PersonalInformationId");
-
-                    b.ToTable("Billings");
-                });
-
-            modelBuilder.Entity("MediMove.Server.Entities.Dispatcher", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("BankAccountNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PersonalInformationId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PersonalInformationId");
-
-                    b.ToTable("Dispatchers");
-                });
-
             modelBuilder.Entity("MediMove.Server.Entities.Paramedic", b =>
                 {
                     b.Property<int>("Id")
@@ -128,16 +74,37 @@ namespace MediMove.Server.Migrations
                         new
                         {
                             Id = 1,
-                            BankAccountNumber = "123123",
+                            BankAccountNumber = "1203987908127474",
                             IsDriver = true,
-                            PersonalInformationId = 88
+                            PersonalInformationId = 1
                         },
                         new
                         {
                             Id = 2,
-                            BankAccountNumber = "123123",
+                            BankAccountNumber = "124341763465609",
                             IsDriver = true,
-                            PersonalInformationId = 99
+                            PersonalInformationId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            BankAccountNumber = "121234124123109",
+                            IsDriver = false,
+                            PersonalInformationId = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            BankAccountNumber = "123456780123109",
+                            IsDriver = false,
+                            PersonalInformationId = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            BankAccountNumber = "982301231238812",
+                            IsDriver = true,
+                            PersonalInformationId = 3
                         });
                 });
 
@@ -165,8 +132,26 @@ namespace MediMove.Server.Migrations
                         new
                         {
                             Id = 1,
-                            PersonalInformationId = 77,
-                            Weight = 40
+                            PersonalInformationId = 6,
+                            Weight = 60
+                        },
+                        new
+                        {
+                            Id = 2,
+                            PersonalInformationId = 7,
+                            Weight = 78
+                        },
+                        new
+                        {
+                            Id = 3,
+                            PersonalInformationId = 8,
+                            Weight = 55
+                        },
+                        new
+                        {
+                            Id = 4,
+                            PersonalInformationId = 9,
+                            Weight = 93
                         });
                 });
 
@@ -178,7 +163,7 @@ namespace MediMove.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ApartmentNumber")
+                    b.Property<int?>("ApartmentNumber")
                         .HasColumnType("int");
 
                     b.Property<string>("City")
@@ -224,35 +209,35 @@ namespace MediMove.Server.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 77,
+                            Id = 1,
                             ApartmentNumber = 1,
                             City = "Krakow",
                             Country = "Polska",
                             FirstName = "Pan",
                             HouseNumber = "1",
                             LastName = "Panowski",
-                            PhoneNumber = "123123123",
+                            PhoneNumber = "645839002",
                             PostalCode = "41-100",
-                            StateProvince = "slask",
+                            StateProvince = "śląsk",
                             StreetAddress = "Kwiatowa"
                         },
                         new
                         {
-                            Id = 99,
+                            Id = 2,
                             ApartmentNumber = 5,
                             City = "Katowice",
                             Country = "Polska",
                             FirstName = "Michal",
                             HouseNumber = "13",
                             LastName = "Jakistam",
-                            PhoneNumber = "888888888",
+                            PhoneNumber = "854888145",
                             PostalCode = "42-800",
-                            StateProvince = "slask",
+                            StateProvince = "śląsk",
                             StreetAddress = "Sadowa"
                         },
                         new
                         {
-                            Id = 88,
+                            Id = 3,
                             ApartmentNumber = 4,
                             City = "Krakow",
                             Country = "Polska",
@@ -261,8 +246,90 @@ namespace MediMove.Server.Migrations
                             LastName = "Kowalski",
                             PhoneNumber = "123123123",
                             PostalCode = "42-400",
-                            StateProvince = "slask",
+                            StateProvince = "wielkopolskie",
                             StreetAddress = "Stara"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            City = "Krakow",
+                            Country = "Polska",
+                            FirstName = "Marek",
+                            HouseNumber = "44",
+                            LastName = "Zygmunt",
+                            PhoneNumber = "888888888",
+                            PostalCode = "23-213",
+                            StateProvince = "wielkopolskie",
+                            StreetAddress = "Kwiatowa"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            City = "Kraków",
+                            Country = "Polska",
+                            FirstName = "Kamil",
+                            HouseNumber = "10",
+                            LastName = "Nowak",
+                            PhoneNumber = "555777888",
+                            PostalCode = "30-062",
+                            StateProvince = "małopolskie",
+                            StreetAddress = "Rynek"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            ApartmentNumber = 7,
+                            City = "Gdańsk",
+                            Country = "Polska",
+                            FirstName = "Anna",
+                            HouseNumber = "12",
+                            LastName = "Kowalczyk",
+                            PhoneNumber = "789232737",
+                            PostalCode = "80-850",
+                            StateProvince = "pomorskie",
+                            StreetAddress = "Polna"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            ApartmentNumber = 2,
+                            City = "Warszawa",
+                            Country = "Polska",
+                            FirstName = "Marek",
+                            HouseNumber = "34",
+                            LastName = "Michalski",
+                            PhoneNumber = "444555666",
+                            PostalCode = "01-001",
+                            StateProvince = "mazowieckie",
+                            StreetAddress = "Jana Pawła II"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            ApartmentNumber = 5,
+                            City = "Katowice",
+                            Country = "Polska",
+                            FirstName = "Magdalena",
+                            HouseNumber = "17",
+                            LastName = "Jankowska",
+                            PhoneNumber = "777888999",
+                            PostalCode = "40-005",
+                            StateProvince = "śląskie",
+                            StreetAddress = "Mickiewicza"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            ApartmentNumber = 12,
+                            City = "Wrocław",
+                            Country = "Polska",
+                            FirstName = "Paweł",
+                            HouseNumber = "7",
+                            LastName = "Wójcik",
+                            PhoneNumber = "222333444",
+                            PostalCode = "50-049",
+                            StateProvince = "dolnośląskie",
+                            StreetAddress = "Słowackiego"
                         });
                 });
 
@@ -288,30 +355,6 @@ namespace MediMove.Server.Migrations
                     b.HasIndex("ParamedicId");
 
                     b.ToTable("Rates");
-                });
-
-            modelBuilder.Entity("MediMove.Server.Entities.Salary", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DispatcherId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Income")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DispatcherId");
-
-                    b.ToTable("Salary");
                 });
 
             modelBuilder.Entity("MediMove.Server.Entities.Team", b =>
@@ -343,9 +386,23 @@ namespace MediMove.Server.Migrations
                         new
                         {
                             Id = 1,
-                            Day = new DateTime(2023, 4, 19, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 4, 26, 0, 0, 0, 0, DateTimeKind.Local),
                             DriverId = 2,
-                            ParamedicId = 1
+                            ParamedicId = 3
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Day = new DateTime(2023, 4, 27, 0, 0, 0, 0, DateTimeKind.Local),
+                            DriverId = 5,
+                            ParamedicId = 4
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Day = new DateTime(2023, 4, 28, 0, 0, 0, 0, DateTimeKind.Local),
+                            DriverId = 1,
+                            ParamedicId = 5
                         });
                 });
 
@@ -376,15 +433,13 @@ namespace MediMove.Server.Migrations
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("TeamId")
+                    b.Property<int?>("TeamId")
                         .HasColumnType("int");
 
                     b.Property<int>("TransportType")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BillingId");
 
                     b.HasIndex("PatientId");
 
@@ -396,22 +451,22 @@ namespace MediMove.Server.Migrations
                         new
                         {
                             Id = 1,
-                            Destination = "Morawy",
+                            Destination = "Rybnik",
                             Financing = 0,
                             PatientId = 1,
                             PatientPosition = 0,
-                            StartTime = new DateTime(2023, 4, 19, 0, 0, 0, 0, DateTimeKind.Local),
+                            StartTime = new DateTime(2023, 4, 26, 0, 0, 0, 0, DateTimeKind.Local),
                             TeamId = 1,
                             TransportType = 0
                         },
                         new
                         {
                             Id = 2,
-                            Destination = "Katowice",
+                            Destination = "Mysłowice",
                             Financing = 2,
-                            PatientId = 1,
+                            PatientId = 2,
                             PatientPosition = 1,
-                            StartTime = new DateTime(2023, 4, 20, 0, 0, 0, 0, DateTimeKind.Local),
+                            StartTime = new DateTime(2023, 4, 26, 0, 0, 0, 0, DateTimeKind.Local),
                             TeamId = 1,
                             TransportType = 0
                         },
@@ -420,11 +475,44 @@ namespace MediMove.Server.Migrations
                             Id = 3,
                             Destination = "Bytom",
                             Financing = 1,
-                            PatientId = 1,
-                            PatientPosition = 2,
-                            StartTime = new DateTime(2023, 4, 21, 0, 0, 0, 0, DateTimeKind.Local),
+                            PatientId = 3,
+                            PatientPosition = 1,
+                            StartTime = new DateTime(2023, 4, 26, 0, 0, 0, 0, DateTimeKind.Local),
                             TeamId = 1,
                             TransportType = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Destination = "Zabrze",
+                            Financing = 1,
+                            PatientId = 1,
+                            PatientPosition = 0,
+                            StartTime = new DateTime(2023, 4, 27, 0, 0, 0, 0, DateTimeKind.Local),
+                            TeamId = 2,
+                            TransportType = 1
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Destination = "Chorzów",
+                            Financing = 0,
+                            PatientId = 4,
+                            PatientPosition = 0,
+                            StartTime = new DateTime(2023, 4, 27, 0, 0, 0, 0, DateTimeKind.Local),
+                            TeamId = 2,
+                            TransportType = 0
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Destination = "Rybnik",
+                            Financing = 0,
+                            PatientId = 4,
+                            PatientPosition = 0,
+                            StartTime = new DateTime(2023, 4, 28, 0, 0, 0, 0, DateTimeKind.Local),
+                            TeamId = 3,
+                            TransportType = 0
                         });
                 });
 
@@ -437,28 +525,6 @@ namespace MediMove.Server.Migrations
                         .IsRequired();
 
                     b.Navigation("Paramedic");
-                });
-
-            modelBuilder.Entity("MediMove.Server.Entities.Billing", b =>
-                {
-                    b.HasOne("MediMove.Server.Entities.PersonalInformation", "PersonalInformation")
-                        .WithMany()
-                        .HasForeignKey("PersonalInformationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PersonalInformation");
-                });
-
-            modelBuilder.Entity("MediMove.Server.Entities.Dispatcher", b =>
-                {
-                    b.HasOne("MediMove.Server.Entities.PersonalInformation", "PersonalInformation")
-                        .WithMany()
-                        .HasForeignKey("PersonalInformationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PersonalInformation");
                 });
 
             modelBuilder.Entity("MediMove.Server.Entities.Paramedic", b =>
@@ -494,17 +560,6 @@ namespace MediMove.Server.Migrations
                     b.Navigation("Paramedic");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Entities.Salary", b =>
-                {
-                    b.HasOne("MediMove.Server.Entities.Dispatcher", "Dispatcher")
-                        .WithMany("Salaries")
-                        .HasForeignKey("DispatcherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Dispatcher");
-                });
-
             modelBuilder.Entity("MediMove.Server.Entities.Team", b =>
                 {
                     b.HasOne("MediMove.Server.Entities.Paramedic", "Driver")
@@ -522,10 +577,6 @@ namespace MediMove.Server.Migrations
 
             modelBuilder.Entity("MediMove.Server.Entities.Transport", b =>
                 {
-                    b.HasOne("MediMove.Server.Entities.Billing", "Billing")
-                        .WithMany()
-                        .HasForeignKey("BillingId");
-
                     b.HasOne("MediMove.Server.Entities.Patient", "Patient")
                         .WithMany("Transports")
                         .HasForeignKey("PatientId")
@@ -534,20 +585,11 @@ namespace MediMove.Server.Migrations
 
                     b.HasOne("MediMove.Server.Entities.Team", "Team")
                         .WithMany("Transports")
-                        .HasForeignKey("TeamId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Billing");
+                        .HasForeignKey("TeamId");
 
                     b.Navigation("Patient");
 
                     b.Navigation("Team");
-                });
-
-            modelBuilder.Entity("MediMove.Server.Entities.Dispatcher", b =>
-                {
-                    b.Navigation("Salaries");
                 });
 
             modelBuilder.Entity("MediMove.Server.Entities.Paramedic", b =>

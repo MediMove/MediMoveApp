@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using MediMove.Server.Entities;
 
 namespace MediMove.Server.Entities
 {
+    [NotMapped]
     public class Dispatcher
     {
         public int Id { get; set; }

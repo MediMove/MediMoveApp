@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MediMove.Shared.Models.DTOs
+namespace MediMove.Shared.Models.DTOs.temp
 {
     public class ParamedicsForShiftDTO
     {

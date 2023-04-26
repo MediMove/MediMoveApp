@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MediMove.Shared.Models.DTOs
+namespace MediMove.Shared.Models.DTOs.temp
 {
-    public class CreateTeamDTO
+    public class AvailabilityDTO
     {
-        public (int, int) Paramedics { get; set; }
         public DateOnly Day { get; set; }
+        public ShiftType ShiftType { get; set; }
     }
 }
