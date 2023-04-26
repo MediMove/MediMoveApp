@@ -20,10 +20,7 @@ namespace MediMove.Server.Repositories
             var transports = await _dbContext.Transports
                 .Where(t => 
                     (t.Team.ParamedicId == id || t.Team.DriverId == id) &&
-                    t.StartTime.Day == date.Day &&
-                    t.StartTime.Month == date.Month &&              // bez sensu było szukanie po samym dniu
-                    t.StartTime.Year == date.Year
-                    )
+                    DateOnly.FromDateTime(t.StartTime.Date) == date)
                 .ToListAsync();
 
             
@@ -33,11 +30,9 @@ namespace MediMove.Server.Repositories
         public async Task<IEnumerable<Transport>> GetTransportsForDay(DateOnly date)
         {
             var transports = await _dbContext.Transports
-                .Where(t => 
-                    t.StartTime.Day == date.Day &&
-                    t.StartTime.Month == date.Month &&              // bez sensu było szukanie po samym dniu
-                    t.StartTime.Year == date.Year
-                ).ToListAsync();
+                .Where(t =>
+                    DateOnly.FromDateTime(t.StartTime) == date)
+                .ToListAsync();
 
             return transports;
         }
