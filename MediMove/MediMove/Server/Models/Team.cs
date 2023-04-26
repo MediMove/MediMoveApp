@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MediMove.Server.Entities
+namespace MediMove.Server.Models
 {
     public class Team
     {
-
         public int Id { get; set; }
         public DateTime Day { get; set; }
-
         virtual public ICollection<Transport> Transports { get; set; }
 
         [ForeignKey("DriverId")]

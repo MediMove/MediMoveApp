@@ -1,7 +1,6 @@
 ﻿using MediMove.Server.Data;
-using MediMove.Server.Entities;
+using MediMove.Server.Models;
 using MediMove.Server.Repositories.Contracts;
-using MediMove.Shared.Entities;
 using MediMove.Shared.Models.DTOs;
 using Microsoft.EntityFrameworkCore;
 

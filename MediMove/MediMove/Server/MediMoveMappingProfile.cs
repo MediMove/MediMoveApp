@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using MediMove.Server.Entities;
+using MediMove.Server.Models;
 using MediMove.Shared.Models.DTOs;
 using MediMove.Shared.Models.DTOs.temp;
 

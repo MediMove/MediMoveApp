@@ -1,6 +1,5 @@
-﻿using MediMove.Server.Entities;
+﻿using MediMove.Server.Models;
 using MediMove.Server.Services.TransportService;
-using MediMove.Shared.Entities;
 using MediMove.Shared.Models.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;

@@ -1,4 +1,4 @@
-﻿using MediMove.Server.Entities;
+﻿using MediMove.Server.Models;
 using MediMove.Shared.Models.DTOs;
 
 namespace MediMove.Server.Services.TransportService
