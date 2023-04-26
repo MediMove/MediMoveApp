@@ -8,7 +8,7 @@ using MediMove.Server.Entities;
 
 namespace MediMove.Server.Entities
 {
-    [NotMapped]
+    
     public class Dispatcher
     {
         public int Id { get; set; }

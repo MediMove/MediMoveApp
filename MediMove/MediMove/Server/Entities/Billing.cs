@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MediMove.Server.Entities
 {
-    [NotMapped]
+    
     public class Billing
     {
         public int Id { get; set; }
