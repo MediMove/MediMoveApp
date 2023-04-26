@@ -1,43 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MediMove.Shared.Models.Enums;
+﻿using MediMove.Shared.Models.Enums;
 
-namespace MediMove.Server.Entities
+namespace MediMove.Server.Models
 {
-    //public enum PatientPosition
-    //{
-    //    Walking,
-    //    Sitting,
-    //    Lying
-    //
-    //}
-    //
-    //public enum Financing
-    //{
-    //    FullyFunded,
-    //    PartiallyFunded,
-    //    FullyPaid
-    //}
-    //
-    //public enum TransportType
-    //{
-    //    Visit,
-    //    Handover
-    //}
-
     public class Transport
     {
         public int Id { get; set; }
-
         public PatientPosition PatientPosition { get; set; }
         public Financing Financing { get; set; }
         public DateTime StartTime { get; set; }
         public string Destination { get; set; }
         public TransportType TransportType { get; set; }
-
 
         public int? TeamId { get; set; }
         public virtual Team Team { get; set; }
@@ -47,6 +19,5 @@ namespace MediMove.Server.Entities
 
         public int? BillingId { get; set; }
         public virtual Billing? Billing { get; set; }
-
     }
 }

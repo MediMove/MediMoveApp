@@ -1,6 +1,5 @@
-﻿using MediMove.Server.Entities;
+﻿using MediMove.Server.Models;
 using MediMove.Server.Services.TransportService;
-using MediMove.Shared.Entities;
 using MediMove.Shared.Models.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -8,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MediMove.Server.Controllers
 {
-    [Route("Api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class TransportController : ControllerBase
     {
@@ -27,24 +26,24 @@ namespace MediMove.Server.Controllers
 
 
         [HttpGet("Paramedic/{id}")]
-        public async Task<ActionResult<IEnumerable<TransportDTO>>> GetAllForParamedicDay([FromRoute] int id, [FromQuery] int day, [FromQuery] int month, [FromQuery] int year)
+        public async Task<ActionResult<IEnumerable<TransportDTO>>> GetByParamedicAndDay([FromRoute] int id, [FromQuery] int day, [FromQuery] int month, [FromQuery] int year)
         {
 
-            var result = await _transportService.GetByParamedicId
+            var result = await _transportService.GetByParamedicAndDay
                 (
-                    id, 
-                    new DateOnly().AddDays(day - 1).AddMonths(month - 1).AddYears(year - 1)
+                    id,
+                    new DateOnly(year, month, day)
                 );
 
             return Ok(result);
         }
 
         [HttpGet("Date")]
-        public async Task<ActionResult<List<Transport>>> GetAllForDay([FromQuery] int day, [FromQuery] int month, [FromQuery] int year) // zmieniłem z DateTime żeby łatwiej przekazywać przez query
+        public async Task<ActionResult<IEnumerable<Transport>>> GetAllForDay([FromQuery] int day, [FromQuery] int month, [FromQuery] int year) // zmieniłem z DateTime żeby łatwiej przekazywać przez query
         {
             var result = await _transportService.GetByDay
             (
-                new DateOnly().AddDays(day - 1).AddMonths(month - 1).AddYears(year - 1)
+                new DateOnly(year, month, day)
             ); 
 
             return Ok(result);
@@ -60,7 +59,7 @@ namespace MediMove.Server.Controllers
 
 
         [HttpPost] 
-        public async Task<ActionResult> Create([FromBody] CreateTransportDTO dto )
+        public async Task<ActionResult> Create([FromBody] CreateTransportDTO dto)
         {
             await _transportService.Create(dto);// Czy to id jest potrzebne?
 

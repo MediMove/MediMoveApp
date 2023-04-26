@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
 using MediMove.Server.Data;
-using MediMove.Server.Entities;
+using MediMove.Server.Models;
 using MediMove.Server.Exceptions;
 using MediMove.Server.Repositories.Contracts;
 using MediMove.Shared.Models.DTOs;
-using Microsoft.AspNetCore.Mvc;
 
 namespace MediMove.Server.Services.PatientService
 {
@@ -40,7 +39,7 @@ namespace MediMove.Server.Services.PatientService
             return patientsNameDTO; 
         }
 
-        public async Task<PatientDTO> Get(int id)
+        public async Task<PatientDTO> GetById(int id)
         {
             var patient = await _patientRepository.GetPatient(id);
 
