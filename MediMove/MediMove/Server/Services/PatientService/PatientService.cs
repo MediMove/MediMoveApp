@@ -22,11 +22,7 @@ namespace MediMove.Server.Services.PatientService
 
         public async Task<IEnumerable<PatientNameDTO>> GetAll()
         {
-            var patients = await _patientRepository.GetPatients();
-
-            if (patients is null)
-                throw new NotFoundException($"No patients found.");
-
+            var patients = await _patientRepository.GetPatients() ?? throw new NotFoundException($"No patients found.");
             foreach (var patient in patients)
             {
                 patient.PersonalInformation =

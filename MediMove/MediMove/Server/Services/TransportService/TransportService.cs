@@ -26,11 +26,7 @@ namespace MediMove.Server.Services.TransportService
         public async Task<IEnumerable<TransportDTO>> GetByParamedicAndDay(int id, DateOnly date)
         {
 
-            var transports = await _transportRepository.GetByParamedicAndDay(id,date);
-
-            if (transports is null)
-                throw new NotFoundException($"Transports with id :{id} and date: {date}, were not found.");
-
+            var transports = await _transportRepository.GetByParamedicAndDay(id,date) ?? throw new NotFoundException($"Transports with id :{id} and date: {date}, were not found.");
             foreach (var transport in transports)       //tymaczasowo
             {
                 transport.Patient = await _patientRepository.GetPatient(transport.PatientId);
@@ -46,11 +42,7 @@ namespace MediMove.Server.Services.TransportService
 
         public async Task<IEnumerable<TransportDTO>> GetByDay(DateOnly date)
         {
-            var transports = await _transportRepository.GetTransportsForDay(date);
-
-            if (transports is null)
-                throw new NotFoundException($"Transports with date: {date}, were not found.");
-
+            var transports = await _transportRepository.GetTransportsForDay(date) ?? throw new NotFoundException($"Transports with date: {date}, were not found.");
             foreach (var transport in transports)       //tymaczasowo
             {
                 transport.Patient = await _patientRepository.GetPatient(transport.PatientId);
@@ -65,10 +57,7 @@ namespace MediMove.Server.Services.TransportService
 
         public async Task<IEnumerable<TransportDTO>> GetAll()
         {
-            var transports = await _transportRepository.GetTransports();
-            if (transports is null)
-                throw new NotFoundException($"No transports found.");
-
+            var transports = await _transportRepository.GetTransports() ?? throw new NotFoundException($"No transports found.");
             foreach (var transport in transports)       //tymaczasowo
             {
                 transport.Patient = await _patientRepository.GetPatient(transport.PatientId);
