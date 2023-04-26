@@ -32,8 +32,8 @@ namespace MediMove.Server.Controllers
 
             var result = await _transportService.GetByParamedicId
                 (
-                    id, 
-                    new DateOnly().AddDays(day - 1).AddMonths(month - 1).AddYears(year - 1)
+                    id,
+                    new DateOnly(year, month, day)
                 );
 
             return Ok(result);
@@ -44,7 +44,7 @@ namespace MediMove.Server.Controllers
         {
             var result = await _transportService.GetByDay
             (
-                new DateOnly().AddDays(day - 1).AddMonths(month - 1).AddYears(year - 1)
+                new DateOnly(year, month, day)
             ); 
 
             return Ok(result);
