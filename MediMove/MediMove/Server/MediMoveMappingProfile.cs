@@ -42,6 +42,8 @@ namespace MediMove.Server
                 .ForMember(m => m.StateProvince, c => c.MapFrom(s => s.PersonalInformation.StateProvince))
                 .ForMember(m => m.Country, c => c.MapFrom(s => s.PersonalInformation.Country));
 
+
+
             CreateMap<Patient, PatientNameDTO>()
                 //.ForMember(m => m.Id, c => c.MapFrom(s => s.Id))
                 .ForMember(m => m.FirstName, c => c.MapFrom(s => s.PersonalInformation.FirstName))

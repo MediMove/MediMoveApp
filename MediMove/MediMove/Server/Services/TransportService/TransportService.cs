@@ -12,12 +12,16 @@ namespace MediMove.Server.Services.TransportService
     public class TransportService : ITransportService
     {
         private readonly ITransportRepository _transportRepository;
+        private readonly IPatientRepository _patientRepository;
+        private readonly IPersonalInformationRepository _personalInformationRepository;
         private readonly IMapper _mapper;
 
-        public TransportService(ITransportRepository transportRepository, IMapper mapper)
+        public TransportService(ITransportRepository transportRepository, IMapper mapper, IPatientRepository patientRepository, IPersonalInformationRepository personalInformationRepository)
         {
             _transportRepository = transportRepository;
             _mapper = mapper;
+            _patientRepository = patientRepository;
+            _personalInformationRepository = personalInformationRepository;
         }
 
         public async Task<IEnumerable<TransportDTO>> GetByParamedicId(int id, DateOnly date)
@@ -27,6 +31,12 @@ namespace MediMove.Server.Services.TransportService
 
             if (transports is null)
                 throw new NotFoundException($"Transports with id :{id} and date: {date}, were not found.");
+
+            foreach (var transport in transports)       //tymaczasowo
+            {
+                transport.Patient = await _patientRepository.GetPatient(transport.PatientId);
+                transport.Patient.PersonalInformation = await _personalInformationRepository.GetPersonalInformation(transport.PatientId);
+            }
 
             var transportsDTO = _mapper.Map<IEnumerable<TransportDTO>>(transports);
 
@@ -42,6 +52,12 @@ namespace MediMove.Server.Services.TransportService
             if (transports is null)
                 throw new NotFoundException($"Transports with date: {date}, were not found.");
 
+            foreach (var transport in transports)       //tymaczasowo
+            {
+                transport.Patient = await _patientRepository.GetPatient(transport.PatientId);
+                transport.Patient.PersonalInformation = await _personalInformationRepository.GetPersonalInformation(transport.PatientId);
+            }
+
             var transportsDTO = _mapper.Map<IEnumerable<TransportDTO>>(transports);
 
             return transportsDTO;
@@ -53,6 +69,12 @@ namespace MediMove.Server.Services.TransportService
             var transports = await _transportRepository.GetTransports();
             if (transports is null)
                 throw new NotFoundException($"No transports found.");
+
+            foreach (var transport in transports)       //tymaczasowo
+            {
+                transport.Patient = await _patientRepository.GetPatient(transport.PatientId);
+                transport.Patient.PersonalInformation = await _personalInformationRepository.GetPersonalInformation(transport.PatientId);
+            }
 
             var transportsDTO = _mapper.Map<IEnumerable<TransportDTO>>(transports);
 

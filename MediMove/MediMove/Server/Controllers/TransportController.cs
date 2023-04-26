@@ -51,7 +51,7 @@ namespace MediMove.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TransportDTO>>> GetAll([FromQuery] DateTime date)
+        public async Task<ActionResult<IEnumerable<TransportDTO>>> GetAll()
         {
             var result = await _transportService.GetAll();
 
