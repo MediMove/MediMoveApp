@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MediMove.Server.Controllers
 {
-    [Route("Api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class TransportController : ControllerBase
     {
