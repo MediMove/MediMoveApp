@@ -11,12 +11,14 @@ namespace MediMove.Server.Services.PatientService
     public class PatientService : IPatientService
     {
         private readonly IPatientRepository _patientRepository;
+        private readonly IPersonalInformationRepository _personalInformationRepository;
         private readonly IMapper _mapper;
 
-        public PatientService(IPatientRepository patientRepository, IMapper mapper)
+        public PatientService(IPatientRepository patientRepository, IMapper mapper, IPersonalInformationRepository personalInformationRepository)
         {
             _patientRepository = patientRepository;
             _mapper = mapper;
+            _personalInformationRepository = personalInformationRepository;
         }
 
         public async Task<IEnumerable<PatientNameDTO>> GetAll()
@@ -25,6 +27,13 @@ namespace MediMove.Server.Services.PatientService
 
             if (patients is null)
                 throw new NotFoundException($"No patients found.");
+
+            foreach (var patient in patients)
+            {
+                patient.PersonalInformation =
+                    await _personalInformationRepository
+                        .GetPersonalInformation(patient.PersonalInformationId);
+            }
 
             var patientsNameDTO = _mapper.Map<IEnumerable<PatientNameDTO>>(patients);
 
@@ -37,6 +46,10 @@ namespace MediMove.Server.Services.PatientService
 
             if (patient is null)
                 throw new NotFoundException($"No patients found.");
+
+            patient.PersonalInformation =
+                await _personalInformationRepository
+                    .GetPersonalInformation(patient.PersonalInformationId);
 
             var patientDTO = _mapper.Map<PatientDTO>(patient);
 

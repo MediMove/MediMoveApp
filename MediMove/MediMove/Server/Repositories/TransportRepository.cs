@@ -20,7 +20,7 @@ namespace MediMove.Server.Repositories
         {
             var transports = await _dbContext.Transports
                 .Where(t => 
-                    t.Team.ParamedicId == id &&
+                    (t.Team.ParamedicId == id || t.Team.DriverId == id) &&
                     t.StartTime.Day == date.Day &&
                     t.StartTime.Month == date.Month &&              // bez sensu było szukanie po samym dniu
                     t.StartTime.Year == date.Year

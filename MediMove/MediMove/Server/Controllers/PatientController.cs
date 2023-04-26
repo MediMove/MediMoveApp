@@ -34,7 +34,7 @@ namespace MediMove.Server.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<PatientDTO>> Get(int id)
+        public async Task<ActionResult<PatientDTO>> Get([FromRoute] int id)
         {
             var patient = await _patientService.Get(id);
 
@@ -54,7 +54,7 @@ namespace MediMove.Server.Controllers
         [HttpPatch("{id}")]
         public async Task<ActionResult> Edit([FromRoute]int id, [FromBody] CreatePatientDTO dto)
         {
-           
+           throw new NotImplementedException();
 
             return Ok();
         }
