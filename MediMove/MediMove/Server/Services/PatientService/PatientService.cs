@@ -39,7 +39,7 @@ namespace MediMove.Server.Services.PatientService
             return patientsNameDTO; 
         }
 
-        public async Task<PatientDTO> Get(int id)
+        public async Task<PatientDTO> GetById(int id)
         {
             var patient = await _patientRepository.GetPatient(id);
 

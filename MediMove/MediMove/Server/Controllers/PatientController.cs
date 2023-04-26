@@ -34,9 +34,9 @@ namespace MediMove.Server.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<PatientDTO>> Get([FromRoute] int id)
+        public async Task<ActionResult<PatientDTO>> GetById([FromRoute] int id)
         {
-            var patient = await _patientService.Get(id);
+            var patient = await _patientService.GetById(id);
 
             return Ok(patient);
 
