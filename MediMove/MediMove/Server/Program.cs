@@ -8,6 +8,7 @@ using MediMove.Server.Repositories;
 using MediMove.Server.Repositories.Contracts;
 using MediMove.Server.Services.PatientService;
 using MediMove.Server.Services.TransportService;
+using MediMove.Server.Services.AvailabilityService;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -40,6 +41,10 @@ builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<IPatientService, PatientService>();
 
 builder.Services.AddScoped<IPersonalInformationRepository, PersonalInformationRepository>();
+
+builder.Services.AddScoped<IParamedicRepository, ParamedicRepository>();
+builder.Services.AddScoped<IAvailabilityRepository, AvailabilityRepository>();
+builder.Services.AddScoped<IAvailabilityService, AvailabilityService>();
 
 builder.Services.AddAutoMapper(typeof(MediMoveMappingProfile));
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
