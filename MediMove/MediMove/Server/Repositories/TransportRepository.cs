@@ -15,7 +15,7 @@ namespace MediMove.Server.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<Transport>> GetTransportsForParamedic(int id, DateOnly date)
+        public async Task<IEnumerable<Transport>> GetByParamedicAndDay(int id, DateOnly date)
         {
             var transports = await _dbContext.Transports
                 .Where(t => 
