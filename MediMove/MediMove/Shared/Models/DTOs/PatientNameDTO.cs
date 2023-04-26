@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace MediMove.Shared.Models.DTOs
 {
-    public class EmployeePayoutsDTO
+    public class PatientNameDTO
     {
-        public DateOnly Month { get; set; }
-        public decimal Payout { get; set; }
+        public int Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
     }
 }

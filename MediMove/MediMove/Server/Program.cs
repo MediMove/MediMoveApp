@@ -1,5 +1,7 @@
 using System.Collections.Immutable;
 using System.Data.Common;
+using AutoMapper;
+using MediMove.Server;
 using MediMove.Server.Data;
 using MediMove.Server.Middleware;
 using MediMove.Server.Repositories;
@@ -32,7 +34,7 @@ builder.Services.AddDbContextPool<MediMoveDbContext>(options =>
 
 builder.Services.AddScoped<ITransportRepository, TransportRepository>();
 builder.Services.AddScoped<ITransportService, TransportService>();
-
+builder.Services.AddAutoMapper(typeof(MediMoveMappingProfile));
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 
 var app = builder.Build();
