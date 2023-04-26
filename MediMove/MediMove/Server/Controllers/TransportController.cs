@@ -60,7 +60,7 @@ namespace MediMove.Server.Controllers
 
 
         [HttpPost] 
-        public async Task<ActionResult> Create([FromBody] CreateTransportDTO dto )
+        public async Task<ActionResult> Create([FromBody] CreateTransportDTO dto)
         {
             await _transportService.Create(dto);// Czy to id jest potrzebne?
 
