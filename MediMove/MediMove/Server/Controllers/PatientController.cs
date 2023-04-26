@@ -1,4 +1,4 @@
-﻿using MediMove.Server.Entities;
+﻿using MediMove.Server.Models;
 using MediMove.Server.Services.PatientService;
 using MediMove.Shared.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MediMove.Server.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class PatientController : ControllerBase
     {
@@ -34,9 +34,9 @@ namespace MediMove.Server.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<PatientDTO>> Get([FromRoute] int id)
+        public async Task<ActionResult<PatientDTO>> GetById([FromRoute] int id)
         {
-            var patient = await _patientService.Get(id);
+            var patient = await _patientService.GetById(id);
 
             return Ok(patient);
 

@@ -11,7 +11,6 @@ namespace MediMove.Shared.Models.Enums
         Walking,
         Sitting,
         Lying
-
     }
 
     public enum Financing

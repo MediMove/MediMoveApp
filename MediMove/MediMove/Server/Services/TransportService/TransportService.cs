@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using MediMove.Server.Data;
-using MediMove.Server.Entities;
+using MediMove.Server.Models;
 using MediMove.Server.Exceptions;
 using MediMove.Server.Repositories.Contracts;
-using MediMove.Shared.Entities;
 using MediMove.Shared.Models.DTOs;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,10 +23,10 @@ namespace MediMove.Server.Services.TransportService
             _personalInformationRepository = personalInformationRepository;
         }
 
-        public async Task<IEnumerable<TransportDTO>> GetByParamedicId(int id, DateOnly date)
+        public async Task<IEnumerable<TransportDTO>> GetByParamedicAndDay(int id, DateOnly date)
         {
 
-            var transports = await _transportRepository.GetTransportsForParamedic(id,date);
+            var transports = await _transportRepository.GetByParamedicAndDay(id,date);
 
             if (transports is null)
                 throw new NotFoundException($"Transports with id :{id} and date: {date}, were not found.");

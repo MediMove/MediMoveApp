@@ -1,4 +1,4 @@
-using MediMove.Server.Entities;
+using MediMove.Server.Models;
 using Microsoft.EntityFrameworkCore;
 using MediMove.Shared.Models.Enums;
 

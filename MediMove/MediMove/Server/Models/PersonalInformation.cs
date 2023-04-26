@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-
-
-namespace MediMove.Server.Entities
+﻿
+namespace MediMove.Server.Models
 {
     public class PersonalInformation
     {
@@ -21,7 +14,5 @@ namespace MediMove.Server.Entities
         public string StateProvince { get; set; }
         public string Country { get; set; }
         public string PhoneNumber { get; set; }
-        
-
     }
 }
