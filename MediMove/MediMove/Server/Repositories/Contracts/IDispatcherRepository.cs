@@ -6,5 +6,6 @@ namespace MediMove.Server.Repositories.Contracts
     {
         Task<IEnumerable<Dispatcher>> GetDispatchers();
         Task<Dispatcher> GetDispatcher(int id);
+        Task Create(Dispatcher d);
     }
 }

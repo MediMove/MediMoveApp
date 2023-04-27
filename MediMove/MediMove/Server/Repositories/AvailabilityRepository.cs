@@ -23,5 +23,15 @@ namespace MediMove.Server.Repositories
         {
             return await _dbContext.Availabilities.FindAsync(id);
         }
+
+        public async Task<IEnumerable<Availability>> GetByParamedic(int id)
+        {
+            var availabilities = await _dbContext.Availabilities
+                .Where(t =>
+                    t.ParamedicId == id)
+                .ToListAsync();
+
+            return availabilities;
+        }
     }
 }
