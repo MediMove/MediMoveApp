@@ -23,12 +23,6 @@ namespace MediMove.Server.Services.PatientService
         public async Task<IEnumerable<PatientNameDTO>> GetAll()
         {
             var patients = await _patientRepository.GetPatients() ?? throw new NotFoundException($"No patients found.");
-            foreach (var patient in patients)
-            {
-                patient.PersonalInformation =
-                    await _personalInformationRepository
-                        .GetPersonalInformation(patient.PersonalInformationId);
-            }
 
             var patientsNameDTO = _mapper.Map<IEnumerable<PatientNameDTO>>(patients);
 
@@ -38,10 +32,6 @@ namespace MediMove.Server.Services.PatientService
         public async Task<PatientDTO> GetById(int id)
         {
             var patient = await _patientRepository.GetPatient(id) ?? throw new NotFoundException($"No patients found.");
-            patient.PersonalInformation =
-                await _personalInformationRepository
-                    .GetPersonalInformation(patient.PersonalInformationId);
-
             var patientDTO = _mapper.Map<PatientDTO>(patient);
 
             return patientDTO;

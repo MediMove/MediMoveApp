@@ -16,12 +16,12 @@ namespace MediMove.Server.Repositories
 
         public async Task<IEnumerable<Patient>> GetPatients()
         {
-            return await _dbContext.Patients.ToListAsync();
+            return await _dbContext.Patients.Include(p => p.PersonalInformation).ToListAsync();
         }
 
         public async Task<Patient> GetPatient(int id)
         {
-            return await _dbContext.Patients.FindAsync(id);
+            return await _dbContext.Patients.Include(p => p.PersonalInformation).FirstAsync(p=> p.Id == id);
         }
 
         public async Task<int> Create(Patient dto)
