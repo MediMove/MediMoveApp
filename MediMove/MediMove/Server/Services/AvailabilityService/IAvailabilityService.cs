@@ -1,4 +1,5 @@
 ﻿using MediMove.Shared.Models.DTOs.temp;
+using MediMove.Shared.Models.Enums;
 
 namespace MediMove.Server.Services.AvailabilityService
 {
@@ -6,6 +7,6 @@ namespace MediMove.Server.Services.AvailabilityService
     {
         Task<AvailabilityDTO> GetById(int id);
         Task<IEnumerable<AvailabilityDTO>> GetByParamedic(int id);
-        Task BulkCreate(int id, IEnumerable<AvailabilityDTO> dto);
+        Task BulkCreate(int id, IEnumerable<ShiftType> dto);
     }
 }

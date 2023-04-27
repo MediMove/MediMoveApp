@@ -1,5 +1,6 @@
 ﻿using MediMove.Server.Services.AvailabilityService;
 using MediMove.Shared.Models.DTOs.temp;
+using MediMove.Shared.Models.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MediMove.Server.Controllers
@@ -32,9 +33,9 @@ namespace MediMove.Server.Controllers
         }
 
         [HttpPost("Paramedic/{id}")]
-        public async Task<ActionResult> BulkCreate([FromRoute] int id, [FromBody] IEnumerable<AvailabilityDTO> dto)
+        public async Task<ActionResult> BulkCreate([FromRoute] int id, [FromBody] IEnumerable<ShiftType> shifts)
         {
-            await _availabilityService.BulkCreate(id, dto);
+            await _availabilityService.BulkCreate(id, shifts);
 
             return Ok();
         }
