@@ -15,12 +15,25 @@ namespace MediMove.Server.Repositories
             _dbContext = dbContext;
         }
 
+        private bool DateComapre(DateTime dateTime, DateOnly dateOnly)
+        {
+            return dateTime.Year == dateOnly.Year &&
+                   dateTime.Month == dateOnly.Month &&
+                   dateTime.Day == dateOnly.Day;
+        }
+
         public async Task<IEnumerable<Transport>> GetByParamedicAndDay(int id, DateOnly date)
         {
             var transports = await _dbContext.Transports
                 .Where(t => 
                     (t.Team.ParamedicId == id || t.Team.DriverId == id) &&
-                    DateOnly.FromDateTime(t.StartTime.Date) == date)
+                    (
+                        t.StartTime.Year == date.Year &&
+                        t.StartTime.Month == date.Month &&
+                        t.StartTime.Day == date.Day
+                    ))
+                .Include(t => t.Patient)
+                .ThenInclude(p => p.PersonalInformation)
                 .ToListAsync();
 
             
@@ -30,8 +43,13 @@ namespace MediMove.Server.Repositories
         public async Task<IEnumerable<Transport>> GetTransportsForDay(DateOnly date)
         {
             var transports = await _dbContext.Transports
-                .Where(t =>
-                    DateOnly.FromDateTime(t.StartTime) == date)
+                .Where(t => (
+                    t.StartTime.Year == date.Year &&
+                    t.StartTime.Month == date.Month &&
+                    t.StartTime.Day == date.Day
+                ))
+                .Include(t => t.Patient)
+                .ThenInclude(p => p.PersonalInformation)
                 .ToListAsync();
 
             return transports;
@@ -39,14 +57,22 @@ namespace MediMove.Server.Repositories
 
         public async Task<IEnumerable<Transport>> GetTransports()
         {
-            var transports = await _dbContext.Transports.ToListAsync();
+            var transports = await _dbContext.Transports
+                .Include(t => t.Patient)
+                .ThenInclude(p => p.PersonalInformation)
+                .ToListAsync();
 
             return transports;
         }
 
         public async Task<Transport> GetTransport(int id)
         {
-            throw new NotImplementedException();
+            var transports = await _dbContext.Transports
+                .Include(t => t.Patient)
+                .ThenInclude(p => p.PersonalInformation)
+                .FirstAsync(t => t.Id == id);
+
+            return transports;
         }
 
         public async Task Create(Transport dto)

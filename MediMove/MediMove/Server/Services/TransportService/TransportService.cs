@@ -26,12 +26,8 @@ namespace MediMove.Server.Services.TransportService
         public async Task<IEnumerable<TransportDTO>> GetByParamedicAndDay(int id, DateOnly date)
         {
 
-            var transports = await _transportRepository.GetByParamedicAndDay(id,date) ?? throw new NotFoundException($"Transports with id :{id} and date: {date}, were not found.");
-            foreach (var transport in transports)       //tymaczasowo
-            {
-                transport.Patient = await _patientRepository.GetPatient(transport.PatientId);
-                transport.Patient.PersonalInformation = await _personalInformationRepository.GetPersonalInformation(transport.PatientId);
-            }
+            var transports = await _transportRepository.GetByParamedicAndDay(id,date) ?? 
+                throw new NotFoundException($"Transports with id :{id} and date: {date}, were not found.");
 
             var transportsDTO = _mapper.Map<IEnumerable<TransportDTO>>(transports);
 
@@ -42,12 +38,8 @@ namespace MediMove.Server.Services.TransportService
 
         public async Task<IEnumerable<TransportDTO>> GetByDay(DateOnly date)
         {
-            var transports = await _transportRepository.GetTransportsForDay(date) ?? throw new NotFoundException($"Transports with date: {date}, were not found.");
-            foreach (var transport in transports)       //tymaczasowo
-            {
-                transport.Patient = await _patientRepository.GetPatient(transport.PatientId);
-                transport.Patient.PersonalInformation = await _personalInformationRepository.GetPersonalInformation(transport.PatientId);
-            }
+            var transports = await _transportRepository.GetTransportsForDay(date) ?? 
+                             throw new NotFoundException($"Transports with date: {date}, were not found.");
 
             var transportsDTO = _mapper.Map<IEnumerable<TransportDTO>>(transports);
 
@@ -57,12 +49,8 @@ namespace MediMove.Server.Services.TransportService
 
         public async Task<IEnumerable<TransportDTO>> GetAll()
         {
-            var transports = await _transportRepository.GetTransports() ?? throw new NotFoundException($"No transports found.");
-            foreach (var transport in transports)       //tymaczasowo
-            {
-                transport.Patient = await _patientRepository.GetPatient(transport.PatientId);
-                transport.Patient.PersonalInformation = await _personalInformationRepository.GetPersonalInformation(transport.PatientId);
-            }
+            var transports = await _transportRepository.GetTransports() ?? 
+                             throw new NotFoundException($"No transports found.");
 
             var transportsDTO = _mapper.Map<IEnumerable<TransportDTO>>(transports);
 
