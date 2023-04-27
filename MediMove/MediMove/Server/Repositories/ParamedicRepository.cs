@@ -23,5 +23,10 @@ namespace MediMove.Server.Repositories
         {
             return await _dbContext.Paramedics.FindAsync(id);
         }
+
+        public async Task Create(Paramedic p)
+        {
+            await _dbContext.Paramedics.AddAsync(p);
+        }
     }
 }

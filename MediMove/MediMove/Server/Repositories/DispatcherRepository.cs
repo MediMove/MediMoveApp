@@ -23,5 +23,9 @@ namespace MediMove.Server.Repositories
         {
             return await _dbContext.Dispatchers.FindAsync(id);
         }
+        public async Task Create(Dispatcher d)
+        {
+            await _dbContext.Dispatchers.AddAsync(d);
+        }
     }
 }

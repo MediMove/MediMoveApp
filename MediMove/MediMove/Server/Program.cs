@@ -9,10 +9,12 @@ using MediMove.Server.Repositories.Contracts;
 using MediMove.Server.Services.PatientService;
 using MediMove.Server.Services.TransportService;
 using MediMove.Server.Services.AvailabilityService;
+using MediMove.Server.Services.ParamedicService;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
+using MediMove.Server.Services.DispatcherService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +47,11 @@ builder.Services.AddScoped<IPersonalInformationRepository, PersonalInformationRe
 builder.Services.AddScoped<IParamedicRepository, ParamedicRepository>();
 builder.Services.AddScoped<IAvailabilityRepository, AvailabilityRepository>();
 builder.Services.AddScoped<IAvailabilityService, AvailabilityService>();
+
+builder.Services.AddScoped<IParamedicService, ParamedicService>();
+
+builder.Services.AddScoped<IDispatcherRepository, DispatcherRepository>();
+builder.Services.AddScoped<IDispatcherService, DispatcherService>();
 
 builder.Services.AddAutoMapper(typeof(MediMoveMappingProfile));
 builder.Services.AddScoped<ErrorHandlingMiddleware>();

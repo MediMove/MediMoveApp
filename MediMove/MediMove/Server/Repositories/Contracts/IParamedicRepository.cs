@@ -6,5 +6,6 @@ namespace MediMove.Server.Repositories.Contracts
     {
         Task<IEnumerable<Paramedic>> GetParamedics();
         Task<Paramedic> GetParamedic(int id);
+        Task Create(Paramedic p);
     }
 }
