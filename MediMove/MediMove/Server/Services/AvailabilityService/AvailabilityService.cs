@@ -33,5 +33,10 @@ namespace MediMove.Server.Services.AvailabilityService
 
             return availabilitiesDTO;
         }
+
+        public async Task BulkCreate(int id, IEnumerable<AvailabilityDTO> dto)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

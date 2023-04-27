@@ -6,5 +6,6 @@ namespace MediMove.Server.Services.AvailabilityService
     {
         Task<AvailabilityDTO> GetById(int id);
         Task<IEnumerable<AvailabilityDTO>> GetByParamedic(int id);
+        Task BulkCreate(int id, IEnumerable<AvailabilityDTO> dto);
     }
 }

@@ -19,7 +19,7 @@ namespace MediMove.Server.Controllers
         public async Task<ActionResult<AvailabilityDTO>> GetById([FromRoute] int id)
         {
             var availability = await _availabilityService.GetById(id);
-
+            
             return Ok(availability);
         }
 
@@ -29,6 +29,14 @@ namespace MediMove.Server.Controllers
             var result = await _availabilityService.GetByParamedic(id);
 
             return Ok(result);
+        }
+
+        [HttpPost("Paramedic/{id}")]
+        public async Task<ActionResult> BulkCreate([FromRoute] int id, [FromBody] IEnumerable<AvailabilityDTO> dto)
+        {
+            await _availabilityService.BulkCreate(id, dto);
+
+            return Ok();
         }
     }
 }
