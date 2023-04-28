@@ -23,5 +23,47 @@ namespace MediMove.Server.Repositories
         {
             return await _dbContext.Teams.FindAsync(id);
         }
+        public IEnumerable<Team> GetTeamsByDayAndDrivers(DateOnly day, int driverId, int paramedicId)
+        {
+            var teams = from team in _dbContext.Teams
+                        where team.Day.Year == day.Year &&
+                        team.Day.Month == day.Month &&
+                        team.Day.Day == day.Day && (
+                        team.DriverId == driverId ||
+                        team.ParamedicId == driverId ||
+                        team.DriverId == paramedicId ||
+                        team.ParamedicId == paramedicId)
+                        select team;
+            return teams;
+        }
+
+        public IEnumerable<Team> GetTeamsByDayAndParamedics(DateOnly day, int driverId, int paramedicId)
+        {
+            var teams = from team in _dbContext.Teams
+                        where team.Day.Year == day.Year &&
+                        team.Day.Month == day.Month &&
+                        team.Day.Day == day.Day && (
+                        team.DriverId == driverId ||
+                        team.ParamedicId == driverId ||
+                        team.ParamedicId == paramedicId)
+                        select team;
+            return teams;
+        }
+
+
+        public void Update(Team team)
+        {
+            _dbContext.Teams.Update(team);
+            _dbContext.SaveChanges();
+        }
+
+        /*
+        public async Task<IEnumerable<Team>> GetByDay(DateOnly day)
+        {
+            
+
+            return teams;
+        }
+        */
     }
 }

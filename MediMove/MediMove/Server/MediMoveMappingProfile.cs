@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using MediMove.Server.Models;
 using MediMove.Shared.Models.DTOs;
-using MediMove.Shared.Models.DTOs.temp;
 
 namespace MediMove.Server
 {
@@ -96,17 +95,22 @@ namespace MediMove.Server
                 .ForMember(m => m.City, c => c.MapFrom(s => s.PersonalInformation.City))
                 .ForMember(m => m.Country, c => c.MapFrom(s => s.PersonalInformation.Country));*/
 
+            // TeamController
+            CreateMap<Team, TeamDTO>()
+                .ForMember(m => m.Id, c => c.MapFrom(s => s.Id))
+                .ForMember(m => m.Day, c => c.MapFrom(s => DateOnly.FromDateTime(s.Day)))
+                .ForMember(m => m.DriverId, c => c.MapFrom(s => s.DriverId))
+                .ForMember(m => m.ParamedicId, c => c.MapFrom(s => s.ParamedicId));
 
+            CreateMap<Team, SelectTeamDTO>()
+                .ForMember(m => m.Id, c => c.MapFrom(s => s.Id))
+                .ForMember(m => m.DriverFullName, c => c.MapFrom(s => s.Driver.PersonalInformation.FirstName + s.Driver.PersonalInformation.LastName))
+                .ForMember(m => m.ParamedicFullName, c => c.MapFrom(s => s.Paramedic.PersonalInformation.FirstName + s.Paramedic.PersonalInformation.LastName));
 
-
-
-
-
-
-
-
-
-
+            CreateMap<CreateTeamDTO, Team>()
+                .ForMember(m => m.DriverId, c => c.MapFrom(s => s.DriverId))
+                .ForMember(m => m.ParamedicId, c => c.MapFrom(s => s.ParamedicId))
+                .ForMember(m => m.Day, c => c.MapFrom(s => s.Day.ToDateTime(new TimeOnly())));
         }
     }
 }
