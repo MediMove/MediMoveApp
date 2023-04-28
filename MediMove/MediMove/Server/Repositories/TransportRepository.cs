@@ -65,7 +65,7 @@ namespace MediMove.Server.Repositories
             return transports;
         }
 
-        public async Task<Transport> GetTransport(int id)
+        public async Task<Transport?> GetTransport(int id)
         {
             var transports = await _dbContext.Transports
                 .Include(t => t.Patient)

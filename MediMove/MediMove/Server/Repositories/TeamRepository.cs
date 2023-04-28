@@ -19,7 +19,7 @@ namespace MediMove.Server.Repositories
             return await _dbContext.Teams.ToListAsync();
         }
 
-        public async Task<Team> GetTeam(int id)
+        public async Task<Team?> GetTeam(int id)
         {
             return await _dbContext.Teams.FindAsync(id);
         }
