@@ -66,7 +66,7 @@ namespace MediMove.Server.Services.TeamService
             var paramedic = _paramedicRepository.GetParamedic(dto.ParamedicId).Result
                 ?? throw new ForeignKeyNotFoundException(typeof(Team), dto.ParamedicId, typeof(Paramedic));
 
-            var transports = (true) ?
+            var transports = (paramedic.IsDriver) ?
                 _teamRepository.GetTeamsByDayAndDrivers(dto.Day, driver.Id, paramedic.Id) :
                 _teamRepository.GetTeamsByDayAndParamedics(dto.Day, driver.Id, paramedic.Id);
 
