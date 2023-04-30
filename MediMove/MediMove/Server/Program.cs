@@ -1,6 +1,3 @@
-using System.Collections.Immutable;
-using System.Data.Common;
-using AutoMapper;
 using MediMove.Server;
 using MediMove.Server.Data;
 using MediMove.Server.Middleware;
@@ -11,43 +8,19 @@ using MediMove.Server.Services.TransportService;
 using MediMove.Server.Services.AvailabilityService;
 using MediMove.Server.Services.ParamedicService;
 using MediMove.Server.Services.TeamService;
-using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.OpenApi.Models;
 using MediMove.Server.Services.DispatcherService;
 using System.Reflection;
+using MediMove.Server.Options;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
-builder.Services.AddSwaggerGen(options =>
-{
-    options.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Version = "v1",
-        Title = "MediMove API",
-        Description = "An ASP.NET Core Web API for sanitary transport management",
-        /* TODO
-        TermsOfService = new Uri("https://example.com/terms"),
-        Contact = new OpenApiContact
-        {
-            Name = "Example Contact",
-            Url = new Uri("https://example.com/contact")
-        },
-        License = new OpenApiLicense
-        {
-            Name = "Example License",
-            Url = new Uri("https://example.com/license")
-        }*/
-    });
 
-    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-});
+builder.Services.ConfigureOptions<ConfigureSwaggerOptions>();
 
 IConfiguration config = new ConfigurationBuilder()
     .AddJsonFile("credentials.json", optional: true, reloadOnChange: true)
@@ -81,8 +54,26 @@ builder.Services.AddScoped<ITeamService, TeamService>();
 builder.Services.AddAutoMapper(typeof(MediMoveMappingProfile));
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 
-var app = builder.Build();
+// Swagger
+builder.Services.AddSwaggerGen(options =>
+{
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+});
 
+builder.Services.AddApiVersioning(options =>
+{
+    options.ReportApiVersions = true;
+    options.AssumeDefaultVersionWhenUnspecified = true;
+});
+
+builder.Services.AddVersionedApiExplorer(options =>
+{
+    options.GroupNameFormat = "'v'VVV";
+    options.SubstituteApiVersionInUrl = true;
+});
+
+var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -97,11 +88,15 @@ else
     app.UseHsts();
 }
 
+// Swagger
+var provider = app.Services.GetService<IApiVersionDescriptionProvider>();
 app.UseSwagger();
-app.UseSwaggerUI(c =>
+app.UseSwaggerUI(options =>
 {
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+    foreach (var description in provider.ApiVersionDescriptions)
+        options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
 });
+app.UseApiVersioning();
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseHttpsRedirection();
