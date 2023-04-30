@@ -1,4 +1,5 @@
-﻿using MediMove.Shared.Models.DTOs;
+﻿using MediMove.Server.Models;
+using MediMove.Shared.Models.DTOs;
 
 namespace MediMove.Server.Services.TeamService
 {
@@ -7,6 +8,6 @@ namespace MediMove.Server.Services.TeamService
         Task<TeamDTO> GetById(int id);
         Task<IEnumerable<TeamDTO>> GetAll();
         Task<IEnumerable<SelectTeamDTO>> GetFreeForStartDate(DateTime dt);
-        int Create(CreateTeamDTO dto);
+        Team Create(CreateTeamDTO dto);
     }
 }

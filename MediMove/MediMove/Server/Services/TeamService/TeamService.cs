@@ -3,7 +3,6 @@ using MediMove.Server.Exceptions;
 using MediMove.Server.Models;
 using MediMove.Server.Repositories.Contracts;
 using MediMove.Shared.Models.DTOs;
-using System.Xml;
 
 namespace MediMove.Server.Services.TeamService
 {
@@ -55,7 +54,7 @@ namespace MediMove.Server.Services.TeamService
             return teamsDTO;
         }
 
-        public int Create(CreateTeamDTO dto)
+        public Team Create(CreateTeamDTO dto)
         {
             if (dto.Day < DateOnly.FromDateTime(DateTime.Today))
                 throw new ForeignKeyNotFoundException("Date cannot be in the past");
@@ -76,7 +75,7 @@ namespace MediMove.Server.Services.TeamService
             var team = _mapper.Map<Team>(dto);
 
             _teamRepository.Update(team);
-            return team.Id;
+            return team;
         }
     }
 }

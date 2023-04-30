@@ -1,4 +1,5 @@
 ﻿using MediMove.Server.Exceptions;
+using MediMove.Server.Models;
 using MediMove.Server.Services.TeamService;
 using MediMove.Shared.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +15,7 @@ namespace MediMove.Server.Controllers
             _teamService = teamService;
         }
         
-        [HttpGet("{id}", Name = "GetById")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<TeamDTO>> GetById([FromRoute] int id)
         {
             try
@@ -46,10 +47,10 @@ namespace MediMove.Server.Controllers
         [HttpPost]
         public async Task<ActionResult> Create([FromBody] CreateTeamDTO dto)
         {
-            var newTeamId = -1;
+            Team newTeam;
             try
             {
-                newTeamId = _teamService.Create(dto);
+                newTeam = _teamService.Create(dto);
             }
             catch (InvalidDateException ex)
             {
@@ -59,9 +60,8 @@ namespace MediMove.Server.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            
-            var uri = Url.Link("GetById", new { id = newTeamId });
-            return Created(uri, null);
+
+            return CreatedAtAction(nameof(GetById), new { id = newTeam.Id }, null);
         }
 
         /*
