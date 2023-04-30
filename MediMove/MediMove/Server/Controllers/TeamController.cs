@@ -14,7 +14,15 @@ namespace MediMove.Server.Controllers
         {
             _teamService = teamService;
         }
-        
+
+        /// <summary>
+        /// Returns TeamDTO object with given id.
+        /// </summary>
+        /// <param name="id">
+        /// The id of the TeamDTO object to retrieve.
+        /// </param>
+        /// <response code="200">Returns TeamDTO object with given id</response>
+        /// <response code="404">If Team was not found</response>
         [HttpGet("{id}")]
         public async Task<ActionResult<TeamDTO>> GetById([FromRoute] int id)
         {
@@ -28,12 +36,24 @@ namespace MediMove.Server.Controllers
                 return NotFound();
             }
         }
-        
+
+        /// <summary>
+        /// Returns all Teams as TeamDTO objects.
+        /// </summary>
+        /// <response code="200">Returns all Teams as TeamDTO objects</response>
+        /// <response code="404">If Team DbSet was not found</response>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TeamDTO>>> GetAll()
         {
-            var teams = await _teamService.GetAll();
-            return Ok(teams);
+            try
+            {
+                var teams = await _teamService.GetAll();
+                return Ok(teams);
+            }
+            catch (EntityNotFoundException)
+            {
+                return NotFound();
+            }
         }
         /*
         [HttpGet]
@@ -44,6 +64,24 @@ namespace MediMove.Server.Controllers
             return Ok(result);
         }
         */
+
+        /// <summary>
+        /// Creates a specific Team.
+        /// </summary>
+        /// <param name="dto">CreateTeamDTO object</param>
+        /// <remarks>
+        /// Sample request:
+        /// 
+        ///     POST
+        ///     {
+        ///          "driverId": 2,
+        ///          "paramedicId": 3,
+        ///          "day": "2023-07-01"
+        ///     }
+        ///
+        /// </remarks>
+        /// <response code="201">Returns a Team object with the given id</response>
+        /// <response code="400">Invaild request</response>
         [HttpPost]
         public async Task<ActionResult> Create([FromBody] CreateTeamDTO dto)
         {
