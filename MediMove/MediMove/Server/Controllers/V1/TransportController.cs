@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MediMove.Server.Controllers
+namespace MediMove.Server.Controllers.V1
 {
     [Route("api/v1/[controller]")]
     [ApiController]
@@ -44,7 +44,7 @@ namespace MediMove.Server.Controllers
             var result = await _transportService.GetByDay
             (
                 new DateOnly(year, month, day)
-            ); 
+            );
 
             return Ok(result);
         }
@@ -58,13 +58,13 @@ namespace MediMove.Server.Controllers
         }
 
 
-        [HttpPost] 
+        [HttpPost]
         public async Task<ActionResult> Create([FromBody] CreateTransportDTO dto)
         {
             await _transportService.Create(dto);// Czy to id jest potrzebne?
 
 
-            return Ok(); 
+            return Ok();
         }
 
         [HttpPatch("{id}")]//Z Route pobrac id transportu do edytowania a z body ciało zedytowanego transportu
@@ -80,7 +80,7 @@ namespace MediMove.Server.Controllers
         //Dodawanie transportu wyswietla kontroller pacjentów. Tam jest wybór istniejącego lub dodanie nowego. Po wybraniu pacjenta przekierowanie na tworzenie transportu z gotowym id.
 
 
-        
+
         //post - tworzy
         //put tworzy lub edytuje ( komplet danych potrzebny )
         //patch - edytuje, nie ma potrzeby kompletu danych

@@ -4,9 +4,9 @@ using MediMove.Server.Services.TeamService;
 using MediMove.Shared.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MediMove.Server.Controllers
+namespace MediMove.Server.Controllers.V1
 {
-    public class TeamController : V1ApiController
+    public class TeamController : ApiV1Controller
     {
         private readonly ITeamService _teamService;
 
@@ -29,6 +29,7 @@ namespace MediMove.Server.Controllers
             try
             {
                 var team = await _teamService.GetById(id);
+
                 return Ok(team);
             }
             catch (EntityNotFoundException)

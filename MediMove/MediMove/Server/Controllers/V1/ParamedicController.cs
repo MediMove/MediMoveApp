@@ -1,9 +1,8 @@
-﻿
-using MediMove.Server.Services.ParamedicService;
+﻿using MediMove.Server.Services.ParamedicService;
 using MediMove.Shared.Models.DTOs.temp;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MediMove.Server.Controllers
+namespace MediMove.Server.Controllers.V1
 {
     [Route("api/v1/[controller]")]
     [ApiController]

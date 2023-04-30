@@ -3,7 +3,7 @@ using MediMove.Shared.Models.DTOs.temp;
 using MediMove.Shared.Models.Enums;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MediMove.Server.Controllers
+namespace MediMove.Server.Controllers.V1
 {
     [Route("api/v1/[controller]")]
     [ApiController]
@@ -20,7 +20,7 @@ namespace MediMove.Server.Controllers
         public async Task<ActionResult<AvailabilityDTO>> GetById([FromRoute] int id)
         {
             var availability = await _availabilityService.GetById(id);
-            
+
             return Ok(availability);
         }
 
