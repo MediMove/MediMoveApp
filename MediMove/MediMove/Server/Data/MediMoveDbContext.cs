@@ -6,6 +6,7 @@ namespace MediMove.Server.Data
 {
     public class MediMoveDbContext:DbContext
     {
+        public DbSet<Salary> Salaries { get; set; }
 
         public MediMoveDbContext(DbContextOptions<MediMoveDbContext> options) : base(options)
         {
