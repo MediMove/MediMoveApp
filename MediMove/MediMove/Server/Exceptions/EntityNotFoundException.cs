@@ -1,7 +1,7 @@
 ﻿
 namespace MediMove.Server.Exceptions
 {
-    public class EntityNotFoundException : Exception
+    public class EntityNotFoundException : NotFoundException
     {
         public EntityNotFoundException(string message) : base(message) { }
         public EntityNotFoundException(Type entityType) :

@@ -26,16 +26,9 @@ namespace MediMove.Server.Controllers.V1
         [HttpGet("{id}")]
         public async Task<ActionResult<TeamDTO>> GetById([FromRoute] int id)
         {
-            try
-            {
-                var team = await _teamService.GetById(id);
+            var team = await _teamService.GetById(id);
 
-                return Ok(team);
-            }
-            catch (EntityNotFoundException)
-            {
-                return NotFound();
-            }
+            return Ok(team);
         }
 
         /// <summary>
