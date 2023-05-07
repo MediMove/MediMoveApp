@@ -7,9 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MediMove.Server.Controllers.V1
 {
-    [Route("api/v1/[controller]")]
-    [ApiController]
-    public class TransportController : ControllerBase
+    public class TransportController : ApiController
     {
         private readonly ITransportService _transportService;
 

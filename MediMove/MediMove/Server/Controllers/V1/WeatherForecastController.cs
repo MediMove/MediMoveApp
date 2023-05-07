@@ -3,9 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MediMove.Server.Controllers.V1
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class WeatherForecastController : ApiController
     {
         private static readonly string[] Summaries = new[]
         {

@@ -4,9 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MediMove.Server.Controllers.V1
 {
-    [Route("api/v1/[controller]")]
-    [ApiController]
-    public class ParamedicController : ControllerBase
+    public class ParamedicController : ApiController
     {
         private readonly IParamedicService _paramedicService;
 

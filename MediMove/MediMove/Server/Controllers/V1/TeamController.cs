@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MediMove.Server.Controllers.V1
 {
-    public class TeamController : ApiV1Controller
+    public class TeamController : ApiController
     {
         private readonly ITeamService _teamService;
 
