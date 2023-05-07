@@ -1,6 +1,5 @@
 using MediMove.Server;
 using MediMove.Server.Data;
-using MediMove.Server.Middleware;
 using MediMove.Server.Repositories;
 using MediMove.Server.Repositories.Contracts;
 using MediMove.Server.Services.PatientService;
@@ -52,7 +51,6 @@ builder.Services.AddScoped<ITeamRepository, TeamRepository>();
 builder.Services.AddScoped<ITeamService, TeamService>();
 
 builder.Services.AddAutoMapper(typeof(MediMoveMappingProfile));
-builder.Services.AddScoped<ErrorHandlingMiddleware>();
 
 // Swagger
 builder.Services.AddSwaggerGen(options =>
@@ -80,14 +78,16 @@ if (app.Environment.IsDevelopment())
 {
     app.UseWebAssemblyDebugging();
     
+
 }
 else
 {
-    app.UseExceptionHandler("/Error");
+
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
+app.UseExceptionHandler("/api/Error");
 // Swagger
 var provider = app.Services.GetService<IApiVersionDescriptionProvider>();
 app.UseSwagger();
@@ -98,7 +98,6 @@ app.UseSwaggerUI(options =>
 });
 app.UseApiVersioning();
 
-app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseHttpsRedirection();
 
 app.UseBlazorFrameworkFiles();
