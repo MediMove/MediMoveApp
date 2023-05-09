@@ -36,6 +36,13 @@ namespace MediMove.Server.Data.Seeders
                     PersonalInformationId = 9,
                     Weight = 93,
                 },
+
+                new Patient
+                {
+                    Id = 5,
+                    PersonalInformationId = 15,
+                    Weight = 100,
+                },
             });
         }
     }

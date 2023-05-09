@@ -9,6 +9,86 @@ namespace MediMove.Server.Data.Seeders
         {
             modelBuilder.Entity<PersonalInformation>().HasData(new List<PersonalInformation>
             {
+                // paramedic
+                new PersonalInformation
+                {
+                    Id = 1,
+                    FirstName = "Adam",
+                    LastName = "Nowak",
+                    StreetAddress = "Kwiatowa",
+                    HouseNumber = "10",
+                    ApartmentNumber = null,
+                    PostalCode = "00-001",
+                    StateProvince = "mazowieckie",
+                    Country = "Polska",
+                    PhoneNumber = "123456789",
+                    City = "Warszawa"
+                },
+
+                // paramedic
+                new PersonalInformation
+                {
+                    Id = 2,
+                    FirstName = "Ewa",
+                    LastName = "Kowalska",
+                    StreetAddress = "Koszykowa",
+                    HouseNumber = "20",
+                    ApartmentNumber = null,
+                    PostalCode = "02-002",
+                    StateProvince = "mazowieckie",
+                    Country = "Polska",
+                    PhoneNumber = "987654321",
+                    City = "Warszawa"
+                },
+
+                // paramedic
+                new PersonalInformation
+                {
+                    Id = 3,
+                    FirstName = "Piotr",
+                    LastName = "Lewandowski",
+                    StreetAddress = "Wrocławska",
+                    HouseNumber = "30",
+                    ApartmentNumber = 1,
+                    PostalCode = "03-003",
+                    StateProvince = "mazowieckie",
+                    Country = "Polska",
+                    PhoneNumber = "555444333",
+                    City = "Warszawa"
+                },
+
+                // paramedic
+                new PersonalInformation
+                {
+                    Id = 4,
+                    FirstName = "Magdalena",
+                    LastName = "Kaczmarek",
+                    StreetAddress = "Piłsudskiego",
+                    HouseNumber = "40",
+                    ApartmentNumber = 2,
+                    PostalCode = "04-004",
+                    StateProvince = "wielkopolskie",
+                    Country = "Polska",
+                    PhoneNumber = "111222333",
+                    City = "Poznań"
+                },
+
+                // paramedic
+                new PersonalInformation
+                {
+                    Id = 5,
+                    FirstName = "Marek",
+                    LastName = "Jankowski",
+                    StreetAddress = "Krakowska",
+                    HouseNumber = "50",
+                    ApartmentNumber = null,
+                    PostalCode = "05-005",
+                    StateProvince = "małopolskie",
+                    Country = "Polska",
+                    PhoneNumber = "555888999",
+                    City = "Kraków"
+                },
+
                 // patient
                 new PersonalInformation
                 {
@@ -149,6 +229,22 @@ namespace MediMove.Server.Data.Seeders
                     Country = "Polska",
                     PhoneNumber = "294725402",
                     City = "Katowice",
+                },
+
+                // patient
+                 new PersonalInformation
+                {
+                    Id = 15,
+                    FirstName = "Marek",
+                    LastName = "Jankowski",
+                    StreetAddress = "Krakowska",
+                    HouseNumber = "50",
+                    ApartmentNumber = null,
+                    PostalCode = "05-005",
+                    StateProvince = "małopolskie",
+                    Country = "Polska",
+                    PhoneNumber = "555888999",
+                    City = "Kraków"
                 },
             });
         }
