@@ -1,37 +1,41 @@
-﻿using MediMove.Server.Exceptions;
-using Microsoft.AspNetCore.Diagnostics;
+﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MediMove.Server.Controllers
 {
-    [Route("api/[controller]")]
+    /// <summary>
+    /// Controller that handles global uncaught exceptions.
+    /// </summary>
     public class ErrorController : ControllerBase
     {
         /// <summary>
-        /// 
+        /// Action that handles global uncaught
+        /// exceptions in development environment.
         /// </summary>
-        /// <returns></returns>
-        public IActionResult Error()
+        /// <param name="hostEnvironment">hosting environment</param>
+        /// <returns>ProblemDetails response</returns>
+        [Route("api/Error/Development")]
+        public IActionResult HandleErrorDevelopment(
+            IHostEnvironment hostEnvironment)
         {
-            Exception? exception = HttpContext.Features.Get<IExceptionHandlerFeature>()?.Error;
+            if (!hostEnvironment.IsDevelopment())
+                return NotFound();
 
-            string title;
-            int statusCode;
-
-            switch (exception)
-            {
-                case NotFoundException notFoundException:
-                    title = notFoundException.Message;
-                    statusCode = notFoundException.StatusCode;
-                    break;
-                case BadHttpRequestException badRequestException:
-                    title = badRequestException.Message;
-                    statusCode = badRequestException.StatusCode;
-                    break;
-                default:
-                    return Problem();
-            }
-            return Problem(title: title, statusCode: statusCode);
+            var exception = HttpContext.Features
+                .Get<IExceptionHandlerFeature>()!.Error;
+            
+            return Problem(
+                title: exception.Message,
+                detail: exception.StackTrace);
         }
+
+        /// <summary>
+        /// Action that handles global uncaught
+        /// exceptions in production environment.
+        /// </summary>
+        /// <returns>ProblemDetails response</returns>
+        [Route("api/Error")]
+        public IActionResult HandleError() =>
+            Problem();
     }
 }
