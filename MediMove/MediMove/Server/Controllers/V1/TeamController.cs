@@ -1,64 +1,53 @@
-﻿using MediMove.Server.Exceptions;
-using MediMove.Server.Models;
-using MediMove.Server.Services.TeamService;
-using MediMove.Shared.Models.DTOs;
+﻿using MediMove.Shared.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using MediMove.Server.Application.Teams.Queries.GetTeamQuery;
+using MediMove.Server.Application.Teams.Queries.GetTeamsQuery;
 
 namespace MediMove.Server.Controllers.V1
 {
     public class TeamController : ApiController
     {
-        private readonly ITeamService _teamService;
-
-        public TeamController(ITeamService teamService)
-        {
-            _teamService = teamService;
-        }
-
         /// <summary>
-        /// Returns TeamDTO object with given id.
+        /// Returns Team by id as TeamDTO object.
         /// </summary>
         /// <param name="id">
-        /// The id of the TeamDTO object to retrieve.
+        /// The id of the Team object to retrieve.
         /// </param>
-        /// <response code="200">Returns TeamDTO object with given id</response>
-        /// <response code="404">If Team was not found</response>
+        /// <response code="200">Team by id as TeamDTO object</response>
         [HttpGet("{id}")]
-        public async Task<ActionResult<TeamDTO>> GetById([FromRoute] int id)
+        public async Task<IActionResult> GetById([FromRoute] int id)
         {
-            var team = await _teamService.GetById(id);
+            var result = await Mediator.Send(new GetTeamDTO(id));
 
-            return Ok(team);
+            return result.Match(
+                result => Ok(result),
+                errors => Problem(errors));
         }
 
         /// <summary>
-        /// Returns all Teams as TeamDTO objects.
+        /// Returns list of all Teams as TeamDTO objects.
         /// </summary>
-        /// <response code="200">Returns all Teams as TeamDTO objects</response>
-        /// <response code="404">If Team DbSet was not found</response>
+        /// <response code="200">Returns list of all Teams as TeamDTO objects</response>
+        /// <response code="404">If teams DbSet was null</response>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TeamDTO>>> GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            try
-            {
-                var teams = await _teamService.GetAll();
-                return Ok(teams);
-            }
-            catch (EntityNotFoundException)
-            {
-                return NotFound();
-            }
+            var result = await Mediator.Send(new GetTeamsDTO());
+
+            return result.Match(
+                result => Ok(result),
+                errors => Problem(errors));
         }
+
         /*
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<SelectTeamDTO>>> GetFreeForStartDate([FromBody] DateTime dt)
+        [HttpGet("{startTime:DateTime}")]
+        public async Task<ActionResult<IEnumerable<SelectTeamDTO>>> GetAvailable([FromRoute] DateTime startTime, [FromQuery] TransportType tt)
         {
-            var result = await _teamService.GetFreeForStartDate(dt);
+            var result = await _teamService.GetAvailable(startTime, tt);
 
             return Ok(result);
         }
         */
-
         /// <summary>
         /// Creates a specific Team.
         /// </summary>
@@ -77,23 +66,13 @@ namespace MediMove.Server.Controllers.V1
         /// <response code="201">Returns a Team object with the given id</response>
         /// <response code="400">Invaild request</response>
         [HttpPost]
-        public async Task<ActionResult> Create([FromBody] CreateTeamDTO dto)
+        public async Task<IActionResult> Create([FromBody] CreateTeamDTO dto)
         {
-            Team newTeam;
-            try
-            {
-                newTeam = _teamService.Create(dto);
-            }
-            catch (InvalidDateException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (ForeignKeyNotFoundException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-
-            return CreatedAtAction(nameof(GetById), new { id = newTeam.Id }, null);
+            var newTeamId = await Mediator.Send(dto);
+            
+            return newTeamId.Match(
+                newTeamId => CreatedAtAction(nameof(GetById), new { id = newTeamId }, null),
+                errors => Problem(errors));
         }
 
         /*

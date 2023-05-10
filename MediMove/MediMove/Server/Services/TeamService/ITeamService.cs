@@ -1,4 +1,5 @@
-﻿using MediMove.Server.Models;
+﻿/*
+using MediMove.Server.Models;
 using MediMove.Shared.Models.DTOs;
 
 namespace MediMove.Server.Services.TeamService
@@ -11,3 +12,4 @@ namespace MediMove.Server.Services.TeamService
         Team Create(CreateTeamDTO dto);
     }
 }
+*/

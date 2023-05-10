@@ -6,12 +6,14 @@ using MediMove.Server.Services.PatientService;
 using MediMove.Server.Services.TransportService;
 using MediMove.Server.Services.AvailabilityService;
 using MediMove.Server.Services.ParamedicService;
-using MediMove.Server.Services.TeamService;
 using Microsoft.EntityFrameworkCore;
 using MediMove.Server.Services.DispatcherService;
 using System.Reflection;
 using MediMove.Server.Options;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using FluentValidation;
+using MediatR;
+using MediMove.Server.Behaviors;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,8 +50,14 @@ builder.Services.AddScoped<IDispatcherRepository, DispatcherRepository>();
 builder.Services.AddScoped<IDispatcherService, DispatcherService>();
 
 builder.Services.AddScoped<ITeamRepository, TeamRepository>();
-builder.Services.AddScoped<ITeamService, TeamService>();
+//builder.Services.AddScoped<ITeamService, TeamService>();
 
+builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
+builder.Services.AddMediatR(cfg => {
+    cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+    cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+});
 builder.Services.AddAutoMapper(typeof(MediMoveMappingProfile));
 
 // Swagger

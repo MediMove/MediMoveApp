@@ -1,8 +1,6 @@
-﻿using MediMove.Server.Controllers.V1;
-using MediMove.Server.Exceptions;
-using MediMove.Server.Services.TeamService;
+﻿/*
+using MediMove.Server.Controllers.V1;
 using MediMove.Shared.Models.DTOs;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MediMove.Server.Controllers.V2
@@ -42,3 +40,4 @@ namespace MediMove.Server.Controllers.V2
 
     }
 }
+*/

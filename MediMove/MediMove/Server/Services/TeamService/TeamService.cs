@@ -1,5 +1,5 @@
-﻿using AutoMapper;
-using MediMove.Server.Exceptions;
+﻿/*
+using AutoMapper;
 using MediMove.Server.Models;
 using MediMove.Server.Repositories.Contracts;
 using MediMove.Shared.Models.DTOs;
@@ -79,3 +79,4 @@ namespace MediMove.Server.Services.TeamService
         }
     }
 }
+*/
