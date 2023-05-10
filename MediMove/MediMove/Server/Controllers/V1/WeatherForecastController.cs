@@ -1,11 +1,9 @@
 using MediMove.Shared.Entities;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MediMove.Server.Controllers
+namespace MediMove.Server.Controllers.v1
 {
-[ApiController]
-    [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class WeatherForecastController : BaseApiController
     {
         private static readonly string[] Summaries = new[]
         {

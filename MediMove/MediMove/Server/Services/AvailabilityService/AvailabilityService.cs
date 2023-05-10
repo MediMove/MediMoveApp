@@ -2,6 +2,7 @@
 using MediMove.Server.Exceptions;
 using MediMove.Server.Repositories.Contracts;
 using MediMove.Shared.Models.DTOs.temp;
+using MediMove.Shared.Models.Enums;
 
 namespace MediMove.Server.Services.AvailabilityService
 {
@@ -34,7 +35,7 @@ namespace MediMove.Server.Services.AvailabilityService
             return availabilitiesDTO;
         }
 
-        public async Task BulkCreate(int id, IEnumerable<AvailabilityDTO> dto)
+        public async Task BulkCreate(int id, IEnumerable<ShiftType> shifts)
         {
             throw new NotImplementedException();
         }

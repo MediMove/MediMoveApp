@@ -5,11 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace MediMove.Server.Controllers
+namespace MediMove.Server.Controllers.v1
 {
-    [Route("api/v1/[controller]")]
-    [ApiController]
-    public class PatientController : ControllerBase
+    public class PatientController : BaseApiController
     {
         private readonly IPatientService _patientService;
 
@@ -50,15 +48,15 @@ namespace MediMove.Server.Controllers
             return Ok(newPatientId);
         }
 
-        
+
         [HttpPatch("{id}")]
-        public async Task<ActionResult> Edit([FromRoute]int id, [FromBody] CreatePatientDTO dto)
+        public async Task<ActionResult> Edit([FromRoute] int id, [FromBody] CreatePatientDTO dto)
         {
-           throw new NotImplementedException();
+            throw new NotImplementedException();
 
             return Ok();
         }
 
-       
+
     }
 }

@@ -1,13 +1,10 @@
-﻿
-using MediMove.Server.Services.DispatcherService;
+﻿using MediMove.Server.Services.DispatcherService;
 using MediMove.Shared.Models.DTOs.temp;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MediMove.Server.Controllers
+namespace MediMove.Server.Controllers.v1
 {
-    [Route("api/v1/[controller]")]
-    [ApiController]
-    public class DispatcherController : ControllerBase
+    public class DispatcherController : BaseApiController
     {
         private readonly IDispatcherService _dispatcherService;
 

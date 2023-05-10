@@ -1,13 +1,11 @@
-﻿
-using MediMove.Server.Services.ParamedicService;
+﻿using MediMove.Server.Services.ParamedicService;
+using MediMove.Shared.Models.DTOs;
 using MediMove.Shared.Models.DTOs.temp;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MediMove.Server.Controllers
+namespace MediMove.Server.Controllers.v1
 {
-    [Route("api/v1/[controller]")]
-    [ApiController]
-    public class ParamedicController : ControllerBase
+    public class ParamedicController : BaseApiController
     {
         private readonly IParamedicService _paramedicService;
 

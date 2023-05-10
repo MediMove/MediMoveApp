@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using MediMove.Server.Models;
 using MediMove.Shared.Models.DTOs;
-using MediMove.Shared.Models.DTOs.temp;
 
 namespace MediMove.Server
 {
@@ -64,6 +63,21 @@ namespace MediMove.Server
                     PhoneNumber = dto.PhoneNumber
                 }));
 
+            CreateMap<Paramedic, ParamedicDTO>()
+                .ForMember(m => m.Id, c => c.MapFrom(s => s.Id))
+                .ForMember(m => m.FirstName, c => c.MapFrom(s => s.PersonalInformation.FirstName))
+                .ForMember(m => m.LastName, c => c.MapFrom(s => s.PersonalInformation.LastName))
+                .ForMember(m => m.StreetAddress, c => c.MapFrom(s => s.PersonalInformation.StreetAddress))
+                .ForMember(m => m.HouseNumber, c => c.MapFrom(s => s.PersonalInformation.HouseNumber))
+                .ForMember(m => m.ApartmentNumber, c => c.MapFrom(s => s.PersonalInformation.ApartmentNumber))
+                .ForMember(m => m.PostalCode, c => c.MapFrom(s => s.PersonalInformation.PostalCode))
+                .ForMember(m => m.City, c => c.MapFrom(s => s.PersonalInformation.City))
+                .ForMember(m => m.StateProvince, c => c.MapFrom(s => s.PersonalInformation.StateProvince))
+                .ForMember(m => m.Country, c => c.MapFrom(s => s.PersonalInformation.Country))
+                .ForMember(m => m.IsDriver, c => c.MapFrom(s => s.IsDriver))
+                .ForMember(m => m.BankAccountNumber, c => c.MapFrom(s => s.BankAccountNumber))
+                .ForMember(m => m.PayPerHour, c => c.MapFrom(s => s.Rates.OrderByDescending(r => r.Date).First().PayPerHour));
+
             /*
             //CreateMap<Paramedic, ParamedicsForShiftDTO>()
             //.ForMember(m => m.Paramedics, c => c.MapFrom(s => new List<(int, string, string, bool)>
@@ -72,17 +86,7 @@ namespace MediMove.Server
             //    (s.Id, s.PersonalInformation.FirstName, s.PersonalInformation.LastName, s.IsDriver)
             //}));
 
-            CreateMap<Paramedic, ParamedicDTO>()
-                //.ForMember(m => m.PayPerHour, c => c.MapFrom(s => s.Rates.First())) // Jak ma działac data w rate?
-                .ForMember(m => m.FirstName, c => c.MapFrom(s => s.PersonalInformation.FirstName))
-                .ForMember(m => m.LastName, c => c.MapFrom(s => s.PersonalInformation.LastName))
-                .ForMember(m => m.StreetAddress, c => c.MapFrom(s => s.PersonalInformation.StreetAddress))
-                .ForMember(m => m.HouseNumber, c => c.MapFrom(s => s.PersonalInformation.HouseNumber))
-                .ForMember(m => m.ApartmentNumber, c => c.MapFrom(s => s.PersonalInformation.ApartmentNumber))
-                .ForMember(m => m.PostalCode, c => c.MapFrom(s => s.PersonalInformation.PostalCode))
-                .ForMember(m => m.StateProvince, c => c.MapFrom(s => s.PersonalInformation.StateProvince))
-                .ForMember(m => m.City, c => c.MapFrom(s => s.PersonalInformation.City))
-                .ForMember(m => m.Country, c => c.MapFrom(s => s.PersonalInformation.Country));
+            
 
             CreateMap<Dispatcher,DispatcherDTO>()
                 //Dodać mapowanie Salary
@@ -96,17 +100,22 @@ namespace MediMove.Server
                 .ForMember(m => m.City, c => c.MapFrom(s => s.PersonalInformation.City))
                 .ForMember(m => m.Country, c => c.MapFrom(s => s.PersonalInformation.Country));*/
 
+            // TeamController
+            CreateMap<Team, TeamDTO>()
+                .ForMember(m => m.Id, c => c.MapFrom(s => s.Id))
+                .ForMember(m => m.Day, c => c.MapFrom(s => DateOnly.FromDateTime(s.Day)))
+                .ForMember(m => m.DriverId, c => c.MapFrom(s => s.DriverId))
+                .ForMember(m => m.ParamedicId, c => c.MapFrom(s => s.ParamedicId));
 
+            CreateMap<Team, SelectTeamDTO>()
+                .ForMember(m => m.Id, c => c.MapFrom(s => s.Id))
+                .ForMember(m => m.DriverFullName, c => c.MapFrom(s => s.Driver.PersonalInformation.FirstName + s.Driver.PersonalInformation.LastName))
+                .ForMember(m => m.ParamedicFullName, c => c.MapFrom(s => s.Paramedic.PersonalInformation.FirstName + s.Paramedic.PersonalInformation.LastName));
 
-
-
-
-
-
-
-
-
-
+            CreateMap<CreateTeamDTO, Team>()
+                .ForMember(m => m.DriverId, c => c.MapFrom(s => s.DriverId))
+                .ForMember(m => m.ParamedicId, c => c.MapFrom(s => s.ParamedicId))
+                .ForMember(m => m.Day, c => c.MapFrom(s => s.Day.ToDateTime(new TimeOnly())));
         }
     }
 }
