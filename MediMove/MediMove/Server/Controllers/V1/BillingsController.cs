@@ -10,7 +10,7 @@ using MediMove.Server.Models;
 
 namespace MediMove.Server.Controllers.v1
 {
-    public class BillingsController : ApiController
+    public class BillingsController : BaseApiController
     {
         private readonly MediMoveDbContext _context;
 

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MediMove.Server.Controllers.v1
 {
-    public class AvailabilityController : ApiController
+    public class AvailabilityController : BaseApiController
     {
         private readonly IAvailabilityService _availabilityService;
 

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MediMove.Server.Controllers.v1
 {
-    public class DispatcherController : ApiController
+    public class DispatcherController : BaseApiController
     {
         private readonly IDispatcherService _dispatcherService;
 

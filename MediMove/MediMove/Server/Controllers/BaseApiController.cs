@@ -3,12 +3,12 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace MediMove.Server.Controllers.v1
+namespace MediMove.Server.Controllers
 {
     [ApiController]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiConventionType(typeof(DefaultApiConventions))]
-    public class ApiController : ControllerBase
+    public class BaseApiController : ControllerBase
     {
         private ISender? _mediator;
 

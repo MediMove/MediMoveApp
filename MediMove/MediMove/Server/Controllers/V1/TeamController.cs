@@ -5,7 +5,7 @@ using MediMove.Server.Application.Teams.Queries.GetTeamsQuery;
 
 namespace MediMove.Server.Controllers.v1
 {
-    public class TeamController : ApiController
+    public class TeamController : BaseApiController
     {
         /// <summary>
         /// Returns Team by id as TeamDTO object.
