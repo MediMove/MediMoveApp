@@ -1,4 +1,5 @@
-﻿using MediMove.Shared.Models.DTOs.temp;
+﻿using MediMove.Shared.Models.DTOs;
+using MediMove.Shared.Models.DTOs.temp;
 
 namespace MediMove.Server.Services.ParamedicService
 {

@@ -25,15 +25,38 @@ namespace MediMove.Server.Repositories
             return transports;
         }
 
+
         public async Task<IEnumerable<Transport>> GetTransportsForDay(DateOnly date)
         {
             var transports = await _dbContext.Transports
                 .Where(t =>
                     DateOnly.FromDateTime(t.StartTime) == date)
                 .ToListAsync();
+            return transports;
+        }
+
+        public async Task<IEnumerable<Transport>> GetTransportsForDate(DateTime date)
+        {
+            var transports = from transport in _dbContext.Transports
+                             where (transport.TransportType == Shared.Models.Enums.TransportType.Handover && transport.StartTime >= date.AddMinutes(30) &&
+                             transport.StartTime <= date.AddMinutes(30)) ||
+                             (transport.TransportType == Shared.Models.Enums.TransportType.Visit && transport.StartTime >= date.AddMinutes(30) &&
+                             transport.StartTime <= date.AddMinutes(30))
+                             select transport;
 
             return transports;
         }
+
+        public async Task<IEnumerable<Transport>> GetTransportsByStartTimeRange(DateTime start, DateTime end)
+        {
+            var transports = from transport in _dbContext.Transports
+                             where transport.StartTime >= start &&
+                             transport.StartTime <= end
+                             select transport;
+
+            return transports;
+        }
+
 
         public async Task<IEnumerable<Transport>> GetTransports()
         {
@@ -47,9 +70,9 @@ namespace MediMove.Server.Repositories
             return await _dbContext.Transports.FindAsync(id);
         }
 
-        public async Task GetTransports(Transport dto)
+        public async Task<IEnumerable<Transport>> GetTransports(Transport dto)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Transports.ToListAsync();
         }
 
         public async Task Create(Transport dto)

@@ -1,4 +1,5 @@
 ﻿using MediMove.Server.Services.ParamedicService;
+using MediMove.Shared.Models.DTOs;
 using MediMove.Shared.Models.DTOs.temp;
 using Microsoft.AspNetCore.Mvc;
 

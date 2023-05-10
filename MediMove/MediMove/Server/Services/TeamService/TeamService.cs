@@ -2,7 +2,9 @@
 using AutoMapper;
 using MediMove.Server.Models;
 using MediMove.Server.Repositories.Contracts;
+using MediMove.Shared.Extensions;
 using MediMove.Shared.Models.DTOs;
+using MediMove.Shared.Models.Enums;
 
 namespace MediMove.Server.Services.TeamService
 {
@@ -25,10 +27,12 @@ namespace MediMove.Server.Services.TeamService
         {
             var team = await _teamRepository.GetTeam(id)
                 ?? throw new EntityNotFoundException(typeof(Team), id);
+
             var teamDTO = _mapper.Map<TeamDTO>(team);
 
             return teamDTO;
         }
+
         public async Task<IEnumerable<TeamDTO>> GetAll()
         {
             var teams = await _teamRepository.GetTeams();
@@ -37,19 +41,43 @@ namespace MediMove.Server.Services.TeamService
             return teamDTOs;
         }
 
-        public async Task<IEnumerable<SelectTeamDTO>> GetFreeForStartDate(DateTime dt)
+        public async Task<IEnumerable<SelectTeamDTO>> GetAvailable(DateTime startTime, TransportType tt)
         {
-            var day = DateOnly.FromDateTime(dt);
+            var day = DateOnly.FromDateTime(startTime);
 
-            var teams = await _teamRepository.GetTeams();
-            //var transports = await _transportRepository.GetTransportsForDay(day);
+            var teams = _teamRepository.GetTeamsByDayAndShift(startTime.ToDateOnly(), startTime.ToShiftType()
+                ?? throw new NotImplementedException());
+            DateTime start = startTime.AddHours(-1);
+            DateTime end = startTime;
+            int toAdd;
+            if (tt == TransportType.Visit)
+                toAdd = 2;
+            else if (tt == TransportType.Handover)
+                toAdd = 1;
+            else
+                throw new NotImplementedException();
 
-            /*var teamsX = from team in teams
-                         join transport in transports on team.Id equals transport.TeamId
-                        where team.Day.Day != day.Day || team.Day.Month != day.Month || team.Day.Year != day.Year
-                        select team;
-            */
-            var teamsDTO = _mapper.Map<IEnumerable<SelectTeamDTO>>(teams);
+            var conflictingTransports = await _transportRepository.GetTransportsByStartTimeRange(start, end.AddHours(toAdd));
+
+            var result = teams
+                .GroupJoin(_transportRepository.GetTransports().Result,
+                    team => team.Id,
+                    transport => transport.TeamId,
+                    (team, transports) => new { Team = team, Transports = transports })
+                .SelectMany(
+                    x => x.Transports.DefaultIfEmpty(),
+                    (teamInfo, transport) => new { Team = teamInfo.Team, Transport = transport })
+                .Where(x => x.Team.Day.CompareToDateOnly(day) &&
+                            (x.Transport == null || (x.Transport.StartTime < start && x.Transport.StartTime > end)))
+                .Select(x => x.Team);
+            
+            var test = _teamRepository.GetTeams().Result
+                .GroupJoin(_transportRepository.GetTransports().Result,
+                    team => team.Id,
+                    transport => transport.TeamId,
+                    (team, transports) => new { Team = team, Transports = transports });
+
+            var teamsDTO = _mapper.Map<IEnumerable<SelectTeamDTO>>(result);
 
             return teamsDTO;
         }

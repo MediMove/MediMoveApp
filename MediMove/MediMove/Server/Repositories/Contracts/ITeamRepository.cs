@@ -1,4 +1,5 @@
 ﻿using MediMove.Server.Models;
+using MediMove.Shared.Models.Enums;
 
 namespace MediMove.Server.Repositories.Contracts
 {
@@ -9,5 +10,7 @@ namespace MediMove.Server.Repositories.Contracts
         IEnumerable<Team> GetTeamsByDayAndDrivers(DateOnly day, int driverId, int paramedicId);
         IEnumerable<Team> GetTeamsByDayAndParamedics(DateOnly day, int driverId, int paramedicId);
         void Update(Team team);
+        IEnumerable<Team> GetTeamsByDay(DateOnly day);
+        IEnumerable<Team> GetTeamsByDayAndShift(DateOnly day, ShiftType st);
     }
 }
