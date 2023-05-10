@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using MediMove.Server.Data;
 using MediMove.Server.Models;
 
-namespace MediMove.Server.Controllers.V1
+namespace MediMove.Server.Controllers.v1
 {
     public class BillingsController : ApiController
     {

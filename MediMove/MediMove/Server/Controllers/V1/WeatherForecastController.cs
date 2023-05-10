@@ -1,7 +1,7 @@
 using MediMove.Shared.Entities;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MediMove.Server.Controllers.V1
+namespace MediMove.Server.Controllers.v1
 {
     public class WeatherForecastController : ApiController
     {

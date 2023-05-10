@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace MediMove.Server.Controllers.V1
+namespace MediMove.Server.Controllers.v1
 {
     public class PatientController : ApiController
     {

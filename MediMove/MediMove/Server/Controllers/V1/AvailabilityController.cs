@@ -3,7 +3,7 @@ using MediMove.Shared.Models.DTOs.temp;
 using MediMove.Shared.Models.Enums;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MediMove.Server.Controllers.V1
+namespace MediMove.Server.Controllers.v1
 {
     public class AvailabilityController : ApiController
     {

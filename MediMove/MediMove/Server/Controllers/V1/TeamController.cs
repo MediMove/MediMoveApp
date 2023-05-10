@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MediMove.Server.Application.Teams.Queries.GetTeamQuery;
 using MediMove.Server.Application.Teams.Queries.GetTeamsQuery;
 
-namespace MediMove.Server.Controllers.V1
+namespace MediMove.Server.Controllers.v1
 {
     public class TeamController : ApiController
     {

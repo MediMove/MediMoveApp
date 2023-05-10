@@ -3,7 +3,7 @@ using MediMove.Server.Controllers.V1;
 using MediMove.Shared.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MediMove.Server.Controllers.V2
+namespace MediMove.Server.Controllers.v2
 {
     [ApiVersion("2.0")]
     public class TeamController : ApiController
