@@ -7,6 +7,7 @@ using MediMove.Shared.Models.DTOs;
 
 namespace MediMove.Server.Application.Transports.Queries.GetTransportsByParamedicAndDayQuery;
 
+public record GetTransportsByParamedicAndDayDTO(int ParamedicId, DateOnly Day) : IRequest<ErrorOr<IEnumerable<TransportDTO>>>;
 public class GetTransportsByParamedicAndDayQueryHandler : IRequestHandler<GetTransportsByParamedicAndDayDTO, ErrorOr<IEnumerable<TransportDTO>>>
 {
     private readonly IMapper _mapper;
@@ -20,7 +21,7 @@ public class GetTransportsByParamedicAndDayQueryHandler : IRequestHandler<GetTra
 
     public async Task<ErrorOr<IEnumerable<TransportDTO>>> Handle(GetTransportsByParamedicAndDayDTO request, CancellationToken cancellationToken)
     {
-        var transports = await _transportRepository.GetByParamedicAndDay(request.ParamedicId, request.Day.ToDateOnly());
+        var transports = await _transportRepository.GetByParamedicAndDay(request.ParamedicId, request.Day);
 
         var transportDTOs = _mapper.Map< IEnumerable<TransportDTO>>(transports);
 

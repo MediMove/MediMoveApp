@@ -1,5 +1,6 @@
 ﻿using MediMove.Server.Application.Transports.Queries.GetAllTransportsQuery;
 using MediMove.Server.Application.Transports.Queries.GetTransportQuery;
+using MediMove.Server.Application.Transports.Queries.GetTransportsByParamedicAndDayQuery;
 using MediMove.Shared.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,14 +26,15 @@ namespace MediMove.Server.Controllers.v1
 
 
         [HttpGet("Paramedic/{id}")]
-        public async Task<IActionResult> GetTransportsByParamedicAndDay([FromBody] GetTransportsByParamedicAndDayDTO dto)
+        public async Task<IActionResult> GetTransportsByParamedicAndDay([FromRoute] int id, [FromQuery] int day, [FromQuery] int month, [FromQuery] int year)
         {
-            var result = await Mediator.Send(dto);
+            var result = await Mediator.Send(new GetTransportsByParamedicAndDayDTO(id, new DateOnly(year, month, day)));
 
             return result.Match(
                 result => Ok(result),
                 errors => Problem(errors));
         }
+
         /*
         [HttpGet("Date")]
         public async Task<IActionResult> GetTransportsForDay([FromQuery] int day, [FromQuery] int month, [FromQuery] int year) // zmieniłem z DateTime żeby łatwiej przekazywać przez query

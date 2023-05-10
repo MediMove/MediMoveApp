@@ -19,7 +19,12 @@ namespace MediMove.Server.Repositories
             var transports = await _dbContext.Transports
                 .Where(t => 
                     (t.Team.ParamedicId == id || t.Team.DriverId == id) &&
-                    DateOnly.FromDateTime(t.StartTime.Date) == date)
+                    date.Day == t.StartTime.Day &&
+                    date.Year == t.StartTime.Year &&
+                    date.Month == t.StartTime.Month
+                    )
+                .Include(t => t.Patient)
+                .ThenInclude(p => p.PersonalInformation)
                 .ToListAsync();
 
             return transports;
@@ -30,7 +35,11 @@ namespace MediMove.Server.Repositories
         {
             var transports = await _dbContext.Transports
                 .Where(t =>
-                    DateOnly.FromDateTime(t.StartTime) == date)
+                    date.Day == t.StartTime.Day &&
+                    date.Year == t.StartTime.Year &&
+                    date.Month == t.StartTime.Month)
+                .Include(t => t.Patient)
+                .ThenInclude(p => p.PersonalInformation)
                 .ToListAsync();
             return transports;
         }
@@ -75,15 +84,14 @@ namespace MediMove.Server.Repositories
             return await _dbContext.Transports.ToListAsync();
         }
 
-        public async Task Create(Transport dto)
+        public async Task Create(Transport t)
         {
-            throw new NotImplementedException();
+            _dbContext.Transports.Update(t);
         }
 
-        public async Task Update(Transport dto)
+        public async Task Update(Transport t)
         {
-            throw new NotImplementedException();
+            _dbContext.Transports.Update(t);
         }
-
     }
 }
