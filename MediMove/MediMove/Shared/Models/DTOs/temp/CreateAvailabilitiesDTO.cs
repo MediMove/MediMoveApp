@@ -11,7 +11,7 @@ namespace MediMove.Shared.Models.DTOs.temp
 {
     public class CreateAvailabilitiesDTO : IRequest<ErrorOr<Unit>>
     {
-        public int paramedicId { get; set; }
-        IEnumerable<ShiftType> shiftTypes { get; set; }
+        public int ParamedicId { get; set; }
+        IEnumerable<ShiftType> ShiftTypes { get; set; }
     }
 }
