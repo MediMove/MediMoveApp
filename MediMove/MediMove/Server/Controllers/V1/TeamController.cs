@@ -15,7 +15,7 @@ namespace MediMove.Server.Controllers.v1
         /// </param>
         /// <response code="200">Team by id as TeamDTO object</response>
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById([FromRoute] int id)
+        public async Task<IActionResult> GetTeam([FromRoute] int id)
         {
             var result = await Mediator.Send(new GetTeamDTO(id));
 
@@ -30,9 +30,9 @@ namespace MediMove.Server.Controllers.v1
         /// <response code="200">Returns list of all Teams as TeamDTO objects</response>
         /// <response code="404">If teams DbSet was null</response>
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAllTeams()
         {
-            var result = await Mediator.Send(new GetTeamsDTO());
+            var result = await Mediator.Send(new GetAllTeamsDTO());
 
             return result.Match(
                 result => Ok(result),
@@ -41,7 +41,7 @@ namespace MediMove.Server.Controllers.v1
 
         /*
         [HttpGet("{startTime:DateTime}")]
-        public async Task<ActionResult<IEnumerable<SelectTeamDTO>>> GetAvailable([FromRoute] DateTime startTime, [FromQuery] TransportType tt)
+        public async Task<IActionResult> GetAvailable([FromRoute] DateTime startTime, [FromQuery] TransportType tt)
         {
             var result = await _teamService.GetAvailable(startTime, tt);
 
@@ -66,18 +66,18 @@ namespace MediMove.Server.Controllers.v1
         /// <response code="201">Returns a Team object with the given id</response>
         /// <response code="400">Invaild request</response>
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateTeamDTO dto)
+        public async Task<IActionResult> CreateTeam([FromBody] CreateTeamDTO dto)
         {
-            var newTeamId = await Mediator.Send(dto);
-            
-            return newTeamId.Match(
-                newTeamId => CreatedAtAction(nameof(GetById), new { id = newTeamId }, null),
+            var entityId = await Mediator.Send(dto);
+
+            return entityId.Match(
+                entityId => CreatedAtAction(nameof(GetTeam), new { id = entityId }, null),
                 errors => Problem(errors));
         }
 
         /*
         [HttpPut]
-        public async Task<ActionResult> Edit([FromBody] CreateTeamDTO dto)
+        public async Task<IActionResult> Edit([FromBody] CreateTeamDTO dto)
         {
             var newTeamId = -1;
             try

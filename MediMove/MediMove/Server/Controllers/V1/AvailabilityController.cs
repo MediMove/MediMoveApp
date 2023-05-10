@@ -1,4 +1,5 @@
-﻿using MediMove.Server.Services.AvailabilityService;
+﻿using MediMove.Server.Application.Availabilities.Queries.GetAllAvailabilitiesQuery;
+using MediMove.Server.Application.Availabilities.Queries.GetAvailabilityQuery;
 using MediMove.Shared.Models.DTOs.temp;
 using MediMove.Shared.Models.Enums;
 using Microsoft.AspNetCore.Mvc;
@@ -7,35 +8,44 @@ namespace MediMove.Server.Controllers.v1
 {
     public class AvailabilityController : BaseApiController
     {
-        private readonly IAvailabilityService _availabilityService;
-
-        public AvailabilityController(IAvailabilityService availabilityService)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetAvailability([FromRoute] int id)
         {
-            _availabilityService = availabilityService;
+            var result = await Mediator.Send(new GetAvailabilityDTO(id));
+
+            return result.Match(
+                 result => Ok(result),
+                 errors => Problem(errors));
         }
 
         [HttpGet]
-        public async Task<ActionResult<AvailabilityDTO>> GetById([FromRoute] int id)
+        public async Task<IActionResult> GetAllAvailabilities()
         {
-            var availability = await _availabilityService.GetById(id);
+            var result = await Mediator.Send(new GetAllAvailabilitiesDTO());
 
-            return Ok(availability);
+            return result.Match(
+                result => Ok(result),
+                errors => Problem(errors));
         }
-
+        /*
         [HttpGet("Paramedic/{id}")]
-        public async Task<ActionResult<IEnumerable<AvailabilityDTO>>> GetByParamedic([FromRoute] int id)
+        public async Task<ActionResult> GetAvailabilitiesByParamedic([FromRoute] int id)
         {
-            var result = await _availabilityService.GetByParamedic(id);
+            var result = await Mediator.Send(new GetAvailabilitiesGetByParamedicDTO(id));
 
-            return Ok(result);
+            return result.Match(
+                result => Ok(result),
+                errors => Problem(errors));
         }
-
-        [HttpPost("Paramedic/{id}")]
-        public async Task<ActionResult> BulkCreate([FromRoute] int id, [FromBody] IEnumerable<ShiftType> shifts)
+        */
+        [HttpPost]
+        public async Task<IActionResult> CreateAvailabilities([FromBody] CreateAvailabilitiesDTO availabilities)
         {
-            await _availabilityService.BulkCreate(id, shifts);
+            var result = await Mediator.Send(availabilities);
 
-            return Ok();
+            return result.Match(
+                result => NoContent(),
+                errors => Problem(errors));
         }
     }
 }

@@ -36,8 +36,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Application\Billings\Commands\" />
     <Folder Include="Middleware\" />
-    <Folder Include="Migrations\" />
+    <Folder Include="Application\Infrastructure\Persistence\Migrations\" />
   </ItemGroup>
 
 

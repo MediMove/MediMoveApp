@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using MediMove.Server.Models;
+using MediMove.Shared.Extensions;
 using MediMove.Shared.Models.DTOs;
+using MediMove.Shared.Models.DTOs.temp;
 
 namespace MediMove.Server
 {
@@ -116,6 +118,9 @@ namespace MediMove.Server
                 .ForMember(m => m.DriverId, c => c.MapFrom(s => s.DriverId))
                 .ForMember(m => m.ParamedicId, c => c.MapFrom(s => s.ParamedicId))
                 .ForMember(m => m.Day, c => c.MapFrom(s => s.Day.ToDateTime(new TimeOnly())));
+
+            CreateMap<Availability, AvailabilityDTO>()
+                .ForMember(m => m.Day, c => c.MapFrom(s => s.Day.ToDateOnly()));
         }
     }
 }

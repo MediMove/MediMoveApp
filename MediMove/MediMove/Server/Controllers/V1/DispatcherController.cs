@@ -1,4 +1,5 @@
-﻿using MediMove.Server.Services.DispatcherService;
+﻿using MediMove.Server.Application.Dispatchers.Queries.GetAllDispatchersQuery;
+using MediMove.Server.Application.Dispatchers.Queries.GetDispatcherQuery;
 using MediMove.Shared.Models.DTOs.temp;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,35 +7,34 @@ namespace MediMove.Server.Controllers.v1
 {
     public class DispatcherController : BaseApiController
     {
-        private readonly IDispatcherService _dispatcherService;
-
-        public DispatcherController(IDispatcherService dispatcherService)
-        {
-            _dispatcherService = dispatcherService;
-        }
-
         [HttpGet("{id}")]
-        public async Task<ActionResult<DispatcherDTO>> GetById([FromRoute] int id)
+        public async Task<IActionResult> GetDispatcher([FromRoute] int id)
         {
-            var dispatcher = await _dispatcherService.GetById(id);
+            var result = await Mediator.Send(new GetDispatcherDTO(id));
 
-            return Ok(dispatcher);
+            return result.Match(
+                result => Ok(result),
+                errors => Problem(errors));
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DispatcherDTO>>> GetAll()
+        public async Task<IActionResult> GetAllDispatchers()
         {
-            var result = await _dispatcherService.GetAll();
+            var result = await Mediator.Send(new GetAllDispatchersDTO());
 
-            return Ok(result);
+            return result.Match(
+                result => Ok(result),
+                errors => Problem(errors));
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create([FromBody] CreateDispatcherDTO dto)
+        public async Task<IActionResult> CreateDispatcher([FromBody] CreateDispatcherDTO dto)
         {
-            await _dispatcherService.Create(dto);
+            var entityId = await Mediator.Send(dto);
 
-            return Ok();
+            return entityId.Match(
+                entityId => CreatedAtAction(nameof(GetDispatcher), new { id = entityId }, null),
+                errors => Problem(errors));
         }
     }
 }

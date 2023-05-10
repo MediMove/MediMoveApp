@@ -8,12 +8,12 @@ namespace MediMove.Server.Application.Teams.Queries.GetTeamQuery;
 
 public record GetTeamDTO(int Id) : IRequest<ErrorOr<TeamDTO>>;
 
-public class GetTeamsQueryHandler : IRequestHandler<GetTeamDTO, ErrorOr<TeamDTO>>
+public class GetTeamQueryHandler : IRequestHandler<GetTeamDTO, ErrorOr<TeamDTO>>
 {
     private readonly IMapper _mapper;
     private readonly ITeamRepository _teamRepository;
 
-    public GetTeamsQueryHandler(IMapper mapper, ITeamRepository teamRepository)
+    public GetTeamQueryHandler(IMapper mapper, ITeamRepository teamRepository)
     {
         _mapper = mapper;
         _teamRepository = teamRepository;

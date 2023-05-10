@@ -2,12 +2,7 @@ using MediMove.Server;
 using MediMove.Server.Data;
 using MediMove.Server.Repositories;
 using MediMove.Server.Repositories.Contracts;
-using MediMove.Server.Services.PatientService;
-using MediMove.Server.Services.TransportService;
-using MediMove.Server.Services.AvailabilityService;
-using MediMove.Server.Services.ParamedicService;
 using Microsoft.EntityFrameworkCore;
-using MediMove.Server.Services.DispatcherService;
 using System.Reflection;
 using MediMove.Server.Options;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
@@ -33,21 +28,16 @@ builder.Services.AddDbContextPool<MediMoveDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.AddScoped<ITransportRepository, TransportRepository>();
-builder.Services.AddScoped<ITransportService, TransportService>();
 
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
-builder.Services.AddScoped<IPatientService, PatientService>();
 
 builder.Services.AddScoped<IPersonalInformationRepository, PersonalInformationRepository>();
 
 builder.Services.AddScoped<IParamedicRepository, ParamedicRepository>();
 builder.Services.AddScoped<IAvailabilityRepository, AvailabilityRepository>();
-builder.Services.AddScoped<IAvailabilityService, AvailabilityService>();
 
-builder.Services.AddScoped<IParamedicService, ParamedicService>();
 
 builder.Services.AddScoped<IDispatcherRepository, DispatcherRepository>();
-builder.Services.AddScoped<IDispatcherService, DispatcherService>();
 
 builder.Services.AddScoped<ITeamRepository, TeamRepository>();
 //builder.Services.AddScoped<ITeamService, TeamService>();

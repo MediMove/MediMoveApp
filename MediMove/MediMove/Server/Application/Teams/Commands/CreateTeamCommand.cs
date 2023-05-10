@@ -7,12 +7,12 @@ using MediMove.Shared.Models.DTOs;
 
 namespace MediMove.Server.Application.Teams.Commands
 {
-    public class CreateTeamCommand : IRequestHandler<CreateTeamDTO, ErrorOr<int>>
+    public class CreateTeamCommandHandler : IRequestHandler<CreateTeamDTO, ErrorOr<int>>
     {
         private readonly IMapper _mapper;
         private readonly ITeamRepository _teamRepository;
 
-        public CreateTeamCommand(IMapper mapper, ITeamRepository teamRepository)
+        public CreateTeamCommandHandler(IMapper mapper, ITeamRepository teamRepository)
         {
             _mapper = mapper;
             _teamRepository = teamRepository;
@@ -25,8 +25,8 @@ namespace MediMove.Server.Application.Teams.Commands
             if (team is null)
                 return Errors.Errors.MappingError;
 
-            // TODO: Check if team is valid
-            // _teamRepository.Update(team);
+            throw new NotImplementedException("Validation not implemented");
+            // TODO: Add team to database
 
             return team.Id;
         }

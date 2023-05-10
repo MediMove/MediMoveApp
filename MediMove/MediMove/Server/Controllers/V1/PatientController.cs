@@ -1,5 +1,6 @@
-﻿using MediMove.Server.Models;
-using MediMove.Server.Services.PatientService;
+﻿using MediMove.Server.Application.Patients.Queries.GetAllPatientsQuery;
+using MediMove.Server.Application.Patients.Queries.GetPatientQuery;
+using MediMove.Server.Models;
 using MediMove.Shared.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,13 +10,6 @@ namespace MediMove.Server.Controllers.v1
 {
     public class PatientController : BaseApiController
     {
-        private readonly IPatientService _patientService;
-
-        public PatientController(IPatientService patientService)
-        {
-            _patientService = patientService;
-        }
-
         //1 - Lista imie i nazwisko
         //2 - details o jednym
         //3 - dodawanie pacjenta
@@ -24,39 +18,46 @@ namespace MediMove.Server.Controllers.v1
 
 
         [HttpGet] // Wywyła same imiona i nazwiska
-        public async Task<ActionResult<IEnumerable<PatientNameDTO>>> GetAll()
+        public async Task<IActionResult> GetAllPatients()
         {
-            var patients = await _patientService.GetAll();
+            var result = await Mediator.Send(new GetAllPatientsDTO());
 
-            return Ok(patients);
+            return result.Match(
+                result => Ok(result),
+                errors => Problem(errors));
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<PatientDTO>> GetById([FromRoute] int id)
+        public async Task<IActionResult> GetPatient([FromRoute] int id)
         {
-            var patient = await _patientService.GetById(id);
+            var result = await Mediator.Send(new GetPatientDTO(id));
 
-            return Ok(patient);
-
+            return result.Match(
+                result => Ok(result),
+                errors => Problem(errors));
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> Create([FromBody] CreatePatientDTO dto)
+        public async Task<IActionResult> CreatePatient([FromBody] CreatePatientDTO dto)
         {
-            var newPatientId = await _patientService.Create(dto);
+            var entityId = await Mediator.Send(dto);
 
-            return Ok(newPatientId);
+            return entityId.Match(
+                entityId => CreatedAtAction(nameof(GetPatient), new { id = entityId }, null),
+                errors => Problem(errors));
         }
-
-
+        /*
         [HttpPatch("{id}")]
-        public async Task<ActionResult> Edit([FromRoute] int id, [FromBody] CreatePatientDTO dto)
+        public async Task<IActionResult> PatchPatient([FromRoute] int id, [FromBody] CreatePatientDTO dto)
         {
             throw new NotImplementedException();
 
-            return Ok();
+            var result = await Mediator.Send(dto);
+
+            return result.Match(
+                result => NoContent(),
+                errors => Problem(errors));
         }
-
-
+        */
     }
 }

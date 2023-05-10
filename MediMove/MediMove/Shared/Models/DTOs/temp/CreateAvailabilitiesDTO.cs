@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace MediMove.Shared.Models.DTOs.temp
 {
-    public class AvailabilityDTO : IRequest<ErrorOr<int>>
+    public class CreateAvailabilitiesDTO : IRequest<ErrorOr<Unit>>
     {
-        public DateOnly Day { get; set; }
-        public ShiftType ShiftType { get; set; }
+        public int paramedicId { get; set; }
+        IEnumerable<ShiftType> shiftTypes { get; set; }
     }
 }
