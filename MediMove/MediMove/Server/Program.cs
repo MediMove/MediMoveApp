@@ -29,15 +29,7 @@ builder.Services.AddDbContextPool<MediMoveDbContext>(options =>
 
 builder.Services.AddScoped<ITransportRepository, TransportRepository>();
 
-builder.Services.AddScoped<IPatientRepository, PatientRepository>();
-
-builder.Services.AddScoped<IPersonalInformationRepository, PersonalInformationRepository>();
-
-builder.Services.AddScoped<IParamedicRepository, ParamedicRepository>();
 builder.Services.AddScoped<IAvailabilityRepository, AvailabilityRepository>();
-
-
-builder.Services.AddScoped<IDispatcherRepository, DispatcherRepository>();
 
 builder.Services.AddScoped<ITeamRepository, TeamRepository>();
 //builder.Services.AddScoped<ITeamService, TeamService>();

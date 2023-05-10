@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using ErrorOr;
 using MediatR;
-using MediMove.Server.Application.Teams.Queries.GetTeamsQuery;
-using MediMove.Server.Repositories.Contracts;
+using MediMove.Server.Data;
 using MediMove.Shared.Models.DTOs;
+using Microsoft.EntityFrameworkCore;
 
 namespace MediMove.Server.Application.Transports.Queries.GetAllTransportsQuery;
 
@@ -11,17 +11,18 @@ public record GetAllTransportsDTO : IRequest<ErrorOr<IEnumerable<TransportDTO>>>
 public class GetAllTransportsQueryHandler : IRequestHandler<GetAllTransportsDTO, ErrorOr<IEnumerable<TransportDTO>>>
 {
     private readonly IMapper _mapper;
-    private readonly ITransportRepository _transportRepository;
+    private readonly MediMoveDbContext _dbContext;
 
-    public GetAllTransportsQueryHandler(IMapper mapper, ITransportRepository transportRepository)
+    public GetAllTransportsQueryHandler(IMapper mapper, MediMoveDbContext dbContext)
     {
         _mapper = mapper;
-        _transportRepository = transportRepository;
+        _dbContext = dbContext;
     }
 
     public async Task<ErrorOr<IEnumerable<TransportDTO>>> Handle(GetAllTransportsDTO request, CancellationToken cancellationToken)
     {
-        var transports = await _transportRepository.GetTransports();
+        var transports = await _dbContext.Transports.ToListAsync(cancellationToken: cancellationToken);
+
         var transportDTOs = _mapper.Map<IEnumerable<TransportDTO>>(transports);
 
         if (transportDTOs is null)

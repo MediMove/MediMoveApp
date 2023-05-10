@@ -17,9 +17,6 @@ namespace MediMove.Server.Repositories
         
         public async Task<IEnumerable<Team>> GetTeams()
         {
-            //if (_dbContext.Teams == null)
-            //    throw new NotFoundException("Teams DbSet is null"); // TODO
-
             return await _dbContext.Teams.ToListAsync();
         }
 

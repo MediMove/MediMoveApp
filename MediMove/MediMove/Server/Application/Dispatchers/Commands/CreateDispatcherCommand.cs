@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using ErrorOr;
 using MediatR;
+using MediMove.Server.Data;
 using MediMove.Server.Models;
-using MediMove.Server.Repositories.Contracts;
 using MediMove.Shared.Models.DTOs.temp;
 
 namespace MediMove.Server.Application.Dispatchers.Commands.CreateDispatcherCommand;
@@ -10,12 +10,12 @@ namespace MediMove.Server.Application.Dispatchers.Commands.CreateDispatcherComma
 public class CreateDispatcherCommandHandler : IRequestHandler<CreateDispatcherDTO, ErrorOr<int>>
 {
     private readonly IMapper _mapper;
-    private readonly IDispatcherRepository _dispatcherRepository;
+    private readonly MediMoveDbContext _dbContext;
 
-    public CreateDispatcherCommandHandler(IMapper mapper, IDispatcherRepository dispatcherRepository)
+    public CreateDispatcherCommandHandler(IMapper mapper, MediMoveDbContext dbContext)
     {
         _mapper = mapper;
-        _dispatcherRepository = dispatcherRepository;
+        _dbContext = dbContext;
     }
 
     public async Task<ErrorOr<int>> Handle(CreateDispatcherDTO request, CancellationToken cancellationToken)
@@ -25,8 +25,10 @@ public class CreateDispatcherCommandHandler : IRequestHandler<CreateDispatcherDT
         if (dispatcher is null)
             return Errors.Errors.MappingError;
 
-        throw new NotImplementedException("Validation not implemented");
-        // TODO: Add dispatcher to database
+        // TODO: Add validation
+
+        await _dbContext.Dispatchers.AddAsync(dispatcher, cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
 
         return dispatcher.Id;
     }

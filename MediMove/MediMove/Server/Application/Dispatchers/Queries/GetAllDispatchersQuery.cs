@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using ErrorOr;
 using MediatR;
-using MediMove.Server.Repositories.Contracts;
+using MediMove.Server.Data;
 using MediMove.Shared.Models.DTOs.temp;
+using Microsoft.EntityFrameworkCore;
 
 namespace MediMove.Server.Application.Dispatchers.Queries.GetAllDispatchersQuery;
 
@@ -10,17 +11,18 @@ public record GetAllDispatchersDTO : IRequest<ErrorOr<IEnumerable<DispatcherDTO>
 public class GetAllDispatchersQueryHandler : IRequestHandler<GetAllDispatchersDTO, ErrorOr<IEnumerable<DispatcherDTO>>>
 {
     private readonly IMapper _mapper;
-    private readonly IDispatcherRepository _dispatcherRepository;
+    private readonly MediMoveDbContext _dbContext;
 
-    public GetAllDispatchersQueryHandler(IMapper mapper, IDispatcherRepository dispatcherRepository)
+    public GetAllDispatchersQueryHandler(IMapper mapper, MediMoveDbContext dbContext)
     {
         _mapper = mapper;
-        _dispatcherRepository = dispatcherRepository;
+        _dbContext = dbContext;
     }
 
     public async Task<ErrorOr<IEnumerable<DispatcherDTO>>> Handle(GetAllDispatchersDTO request, CancellationToken cancellationToken)
     {
-        var dispatchers = await _dispatcherRepository.GetDispatchers();
+        var dispatchers = await _dbContext.Dispatchers.ToListAsync(cancellationToken: cancellationToken);
+
         var dispatcherDTOs = _mapper.Map<IEnumerable<DispatcherDTO>>(dispatchers);
 
         if (dispatcherDTOs is null)

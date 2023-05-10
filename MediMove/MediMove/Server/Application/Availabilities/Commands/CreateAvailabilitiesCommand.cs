@@ -1,21 +1,24 @@
 ﻿using AutoMapper;
 using ErrorOr;
 using MediatR;
+using MediMove.Server.Data;
 using MediMove.Server.Models;
 using MediMove.Server.Repositories.Contracts;
 using MediMove.Shared.Models.DTOs.temp;
+using Microsoft.AspNetCore.Components;
+using Microsoft.EntityFrameworkCore;
 
 namespace MediMove.Server.Application.Availabilities.Commands.CreateAvailabilitiesCommand;
 
 public class CreateAvailabilitiesCommandHandler : IRequestHandler<CreateAvailabilitiesDTO, ErrorOr<Unit>>
 {
     private readonly IMapper _mapper;
-    private readonly IAvailabilityRepository _availabilitiesRepository;
+    private readonly MediMoveDbContext _dbContext;
 
-    public CreateAvailabilitiesCommandHandler(IMapper mapper, IAvailabilityRepository availabilitiesRepository)
+    public CreateAvailabilitiesCommandHandler(IMapper mapper, MediMoveDbContext dbContext)
     {
         _mapper = mapper;
-        _availabilitiesRepository = availabilitiesRepository;
+        _dbContext = dbContext;
     }
 
     public async Task<ErrorOr<Unit>> Handle(CreateAvailabilitiesDTO request, CancellationToken cancellationToken)
@@ -25,8 +28,11 @@ public class CreateAvailabilitiesCommandHandler : IRequestHandler<CreateAvailabi
         if (availabilities is null)
             return Errors.Errors.MappingError;
 
-        throw new NotImplementedException("Validation not implemented");
-        // TODO: Add availabilities to database
+        // TODO: Add validation
+
+        await _dbContext.Availabilities.AddRangeAsync(availabilities, cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
         return new ErrorOr<Unit>();
     }
 }

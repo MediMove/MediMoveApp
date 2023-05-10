@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using ErrorOr;
 using MediatR;
+using MediMove.Server.Data;
 using MediMove.Server.Models;
-using MediMove.Server.Repositories.Contracts;
 using MediMove.Shared.Models.DTOs;
 
 namespace MediMove.Server.Application.Teams.Commands
@@ -10,12 +10,12 @@ namespace MediMove.Server.Application.Teams.Commands
     public class CreateTeamCommandHandler : IRequestHandler<CreateTeamDTO, ErrorOr<int>>
     {
         private readonly IMapper _mapper;
-        private readonly ITeamRepository _teamRepository;
+        private readonly MediMoveDbContext _dbContext;
 
-        public CreateTeamCommandHandler(IMapper mapper, ITeamRepository teamRepository)
+        public CreateTeamCommandHandler(IMapper mapper, MediMoveDbContext dbContext)
         {
             _mapper = mapper;
-            _teamRepository = teamRepository;
+            _dbContext = dbContext;
         }
 
         public async Task<ErrorOr<int>> Handle(CreateTeamDTO request, CancellationToken cancellationToken)
@@ -25,8 +25,10 @@ namespace MediMove.Server.Application.Teams.Commands
             if (team is null)
                 return Errors.Errors.MappingError;
 
-            throw new NotImplementedException("Validation not implemented");
-            // TODO: Add team to database
+            // TODO: Add validation
+
+            await _dbContext.Teams.AddAsync(team, cancellationToken);
+            await _dbContext.SaveChangesAsync(cancellationToken);
 
             return team.Id;
         }

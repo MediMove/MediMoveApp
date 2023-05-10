@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using ErrorOr;
 using MediatR;
+using MediMove.Server.Data;
 using MediMove.Server.Models;
-using MediMove.Server.Repositories.Contracts;
-using MediMove.Shared.Models.DTOs;
 using MediMove.Shared.Models.DTOs.temp;
 
 namespace MediMove.Server.Application.Paramedics.Commands.CreateParamedicCommand;
@@ -11,12 +10,12 @@ namespace MediMove.Server.Application.Paramedics.Commands.CreateParamedicCommand
 public class CreateParamedicCommandHandler : IRequestHandler<CreateParamedicDTO, ErrorOr<int>>
 {
     private readonly IMapper _mapper;
-    private readonly IParamedicRepository _paramedicRepository;
+    private readonly MediMoveDbContext _dbContext;
 
-    public CreateParamedicCommandHandler(IMapper mapper, IParamedicRepository paramedicRepository)
+    public CreateParamedicCommandHandler(IMapper mapper, MediMoveDbContext dbContext)
     {
         _mapper = mapper;
-        _paramedicRepository = paramedicRepository;
+        _dbContext = dbContext;
     }
 
     public async Task<ErrorOr<int>> Handle(CreateParamedicDTO request, CancellationToken cancellationToken)
@@ -26,8 +25,10 @@ public class CreateParamedicCommandHandler : IRequestHandler<CreateParamedicDTO,
         if (paramedic is null)
             return Errors.Errors.MappingError;
 
-        throw new NotImplementedException("Validation not implemented");
-        // TODO: Add paramedic to database
+        // TODO: Add validation
+
+        await _dbContext.Paramedics.AddAsync(paramedic, cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
 
         return paramedic.Id;
     }

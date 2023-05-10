@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using ErrorOr;
 using MediatR;
+using MediMove.Server.Data;
 using MediMove.Server.Models;
-using MediMove.Server.Repositories.Contracts;
 using MediMove.Shared.Models.DTOs;
 
 namespace MediMove.Server.Application.Patients.Commands.CreatePatientCommand;
@@ -10,12 +10,12 @@ namespace MediMove.Server.Application.Patients.Commands.CreatePatientCommand;
 public class CreatePatientCommandHandler : IRequestHandler<CreatePatientDTO, ErrorOr<int>>
 {
     private readonly IMapper _mapper;
-    private readonly IPatientRepository _patientRepository;
+    private readonly MediMoveDbContext _dbContext;
 
-    public CreatePatientCommandHandler(IMapper mapper, IPatientRepository patientRepository)
+    public CreatePatientCommandHandler(IMapper mapper, MediMoveDbContext dbContext)
     {
         _mapper = mapper;
-        _patientRepository = patientRepository;
+        _dbContext = dbContext;
     }
 
     public async Task<ErrorOr<int>> Handle(CreatePatientDTO request, CancellationToken cancellationToken)
@@ -25,8 +25,10 @@ public class CreatePatientCommandHandler : IRequestHandler<CreatePatientDTO, Err
         if (patient is null)
             return Errors.Errors.MappingError;
 
-        throw new NotImplementedException("Validation not implemented");
-        // TODO: Add patient to database
+        // TODO: Add validation
+
+        await _dbContext.Patients.AddAsync(patient, cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
 
         return patient.Id;
     }

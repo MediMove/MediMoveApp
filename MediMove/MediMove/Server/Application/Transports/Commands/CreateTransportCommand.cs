@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using ErrorOr;
 using MediatR;
+using MediMove.Server.Data;
 using MediMove.Server.Models;
-using MediMove.Server.Repositories.Contracts;
 using MediMove.Shared.Models.DTOs;
 
 namespace MediMove.Server.Application.Transports.Commands.CreateTransportCommand;
@@ -10,12 +10,12 @@ namespace MediMove.Server.Application.Transports.Commands.CreateTransportCommand
 public class CreateTransportCommandHandler : IRequestHandler<CreateTransportDTO, ErrorOr<int>>
 {
     private readonly IMapper _mapper;
-    private readonly ITransportRepository _transportRepository;
+    private readonly MediMoveDbContext _dbContext;
 
-    public CreateTransportCommandHandler(IMapper mapper, ITransportRepository transportRepository)
+    public CreateTransportCommandHandler(IMapper mapper, MediMoveDbContext dbContext)
     {
         _mapper = mapper;
-        _transportRepository = transportRepository;
+        _dbContext = dbContext;
     }
 
     public async Task<ErrorOr<int>> Handle(CreateTransportDTO request, CancellationToken cancellationToken)
@@ -25,9 +25,11 @@ public class CreateTransportCommandHandler : IRequestHandler<CreateTransportDTO,
         if (transport is null)
             return Errors.Errors.MappingError;
 
-        throw new NotImplementedException("Validation not implemented");
-        // TODO: Add transport to database
+        // TODO: Add validation
 
+        await _dbContext.Transports.AddAsync(transport, cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        
         return transport.Id;
     }
 }
