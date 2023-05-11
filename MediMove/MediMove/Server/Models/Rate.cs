@@ -7,6 +7,6 @@ namespace MediMove.Server.Models
         public DateTime Date { get; set; }
         public decimal PayPerHour { get; set; }
         public int ParamedicId { get; set; }
-        public Paramedic Paramedic { get; set; }
+        public virtual Paramedic Paramedic { get; set; }
     }
 }

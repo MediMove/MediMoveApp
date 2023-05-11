@@ -36,6 +36,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Application\Authentication\Handlers\" />
+    <Folder Include="Application\Authentication\Commands\" />
+    <Folder Include="Application\Authentication\Queries\" />
     <Folder Include="Application\Billings\Commands\" />
     <Folder Include="Middleware\" />
     <Folder Include="Application\Infrastructure\Persistence\Migrations\" />
