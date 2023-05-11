@@ -3,7 +3,7 @@ using MediatR;
 
 namespace MediMove.Shared.Models.DTOs
 {
-    public class CreateTeamDTO : IRequest<ErrorOr<int>>
+    public class CreateTeamDTO
     {
         public int DriverId { get; set; }
         public int ParamedicId { get; set; }
