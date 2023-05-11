@@ -1,25 +1,22 @@
-using System.Collections.Immutable;
-using System.Data.Common;
+using MediMove.Server;
 using MediMove.Server.Data;
-using MediMove.Server.Middleware;
 using MediMove.Server.Repositories;
 using MediMove.Server.Repositories.Contracts;
-using MediMove.Server.Services.TransportService;
-using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.OpenApi.Models;
+using System.Reflection;
+using MediMove.Server.Options;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using FluentValidation;
+using MediatR;
+using MediMove.Server.Behaviors;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
-});
+
+builder.Services.ConfigureOptions<ConfigureSwaggerOptions>();
 
 IConfiguration config = new ConfigurationBuilder()
     .AddJsonFile("credentials.json", optional: true, reloadOnChange: true)
@@ -31,30 +28,65 @@ builder.Services.AddDbContextPool<MediMoveDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.AddScoped<ITransportRepository, TransportRepository>();
-builder.Services.AddScoped<ITransportService, TransportService>();
 
-builder.Services.AddScoped<ErrorHandlingMiddleware>();
+builder.Services.AddScoped<IAvailabilityRepository, AvailabilityRepository>();
+
+builder.Services.AddScoped<ITeamRepository, TeamRepository>();
+//builder.Services.AddScoped<ITeamService, TeamService>();
+
+builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
+builder.Services.AddMediatR(cfg => {
+    cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+    cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+});
+builder.Services.AddAutoMapper(typeof(MediMoveMappingProfile));
+
+// Swagger
+builder.Services.AddSwaggerGen(options =>
+{
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+});
+
+builder.Services.AddApiVersioning(options =>
+{
+    options.ReportApiVersions = true;
+    options.AssumeDefaultVersionWhenUnspecified = true;
+});
+
+builder.Services.AddVersionedApiExplorer(options =>
+{
+    options.GroupNameFormat = "'v'VVV";
+    options.SubstituteApiVersionInUrl = true;
+});
 
 var app = builder.Build();
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseWebAssemblyDebugging();
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-    });
+    app.UseExceptionHandler("/api/Error/Development");
 }
 else
 {
-    app.UseExceptionHandler("/Error");
+    app.UseExceptionHandler("/api/Error");
+
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-app.UseMiddleware<ErrorHandlingMiddleware>();
+
+// Swagger
+var provider = app.Services.GetService<IApiVersionDescriptionProvider>();
+app.UseSwagger();
+app.UseSwaggerUI(options =>
+{
+    foreach (var description in provider.ApiVersionDescriptions)
+        options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName);
+});
+app.UseApiVersioning();
+
 app.UseHttpsRedirection();
 
 app.UseBlazorFrameworkFiles();

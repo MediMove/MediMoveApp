@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ErrorOr;
+using MediatR;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MediMove.Shared.Models.DTOs.temp
 {
-    public class CreateBillingDTO
+    public class CreateBillingDTO : IRequest<ErrorOr<int>>
     {
         public int PersonalInformationId { get; set; }
         public string InvoiceNumber { get; set; }

@@ -1,8 +1,6 @@
 ﻿using MediMove.Server.Data;
-using MediMove.Server.Entities;
+using MediMove.Server.Models;
 using MediMove.Server.Repositories.Contracts;
-using MediMove.Shared.Entities;
-using MediMove.Shared.Models.DTOs;
 using Microsoft.EntityFrameworkCore;
 
 namespace MediMove.Server.Repositories
@@ -16,23 +14,58 @@ namespace MediMove.Server.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<Transport>> GetTransportsForParamedic(int id, DateTime date)
+        public async Task<IEnumerable<Transport>> GetByParamedicAndDay(int id, DateOnly date)
         {
             var transports = await _dbContext.Transports
-                .Where(t => t.Team.ParamedicId == id && t.StartTime.Day == date.Day)
+                .Where(t => 
+                    (t.Team.ParamedicId == id || t.Team.DriverId == id) &&
+                    date.Day == t.StartTime.Day &&
+                    date.Year == t.StartTime.Year &&
+                    date.Month == t.StartTime.Month
+                    )
+                .Include(t => t.Patient)
+                .ThenInclude(p => p.PersonalInformation)
                 .ToListAsync();
 
-            
             return transports;
         }
 
-        public async Task<IEnumerable<Transport>> GetTransportsForDay(DateTime date)
+
+        public async Task<IEnumerable<Transport>> GetTransportsForDay(DateOnly date)
         {
             var transports = await _dbContext.Transports
-                .Where(t => t.StartTime.Day == date.Day).ToListAsync();
+                .Where(t =>
+                    date.Day == t.StartTime.Day &&
+                    date.Year == t.StartTime.Year &&
+                    date.Month == t.StartTime.Month)
+                .Include(t => t.Patient)
+                .ThenInclude(p => p.PersonalInformation)
+                .ToListAsync();
+            return transports;
+        }
+
+        public async Task<IEnumerable<Transport>> GetTransportsForDate(DateTime date)
+        {
+            var transports = from transport in _dbContext.Transports
+                             where (transport.TransportType == Shared.Models.Enums.TransportType.Handover && transport.StartTime >= date.AddMinutes(30) &&
+                             transport.StartTime <= date.AddMinutes(30)) ||
+                             (transport.TransportType == Shared.Models.Enums.TransportType.Visit && transport.StartTime >= date.AddMinutes(30) &&
+                             transport.StartTime <= date.AddMinutes(30))
+                             select transport;
 
             return transports;
         }
+
+        public async Task<IEnumerable<Transport>> GetTransportsByStartTimeRange(DateTime start, DateTime end)
+        {
+            var transports = from transport in _dbContext.Transports
+                             where transport.StartTime >= start &&
+                             transport.StartTime <= end
+                             select transport;
+
+            return transports;
+        }
+
 
         public async Task<IEnumerable<Transport>> GetTransports()
         {
@@ -41,20 +74,24 @@ namespace MediMove.Server.Repositories
             return transports;
         }
 
-        public async Task<Transport> GetTransport(int id)
+        public async Task<Transport?> GetTransport(int id)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Transports.FindAsync(id);
         }
 
-        public async Task Create(Transport dto)
+        public async Task<IEnumerable<Transport>> GetTransports(Transport dto)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Transports.ToListAsync();
         }
 
-        public async Task Update(Transport dto)
+        public async Task Create(Transport t)
         {
-            throw new NotImplementedException();
+            _dbContext.Transports.Update(t);
         }
 
+        public async Task Update(Transport t)
+        {
+            _dbContext.Transports.Update(t);
+        }
     }
 }

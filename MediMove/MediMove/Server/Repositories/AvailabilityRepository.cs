@@ -1,5 +1,5 @@
 ﻿using MediMove.Server.Data;
-using MediMove.Server.Entities;
+using MediMove.Server.Models;
 using MediMove.Server.Repositories.Contracts;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,6 +22,16 @@ namespace MediMove.Server.Repositories
         public async Task<Availability> GetAvailability(int id)
         {
             return await _dbContext.Availabilities.FindAsync(id);
+        }
+
+        public async Task<IEnumerable<Availability>> GetByParamedic(int id)
+        {
+            var availabilities = await _dbContext.Availabilities
+                .Where(t =>
+                    t.ParamedicId == id)
+                .ToListAsync();
+
+            return availabilities;
         }
     }
 }
