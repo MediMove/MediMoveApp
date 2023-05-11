@@ -21,7 +21,7 @@ namespace MediMove.Server.Application.Teams.Handlers
 
         public async Task<ErrorOr<int>> Handle(CreateTeamCommand request, CancellationToken cancellationToken)
         {
-            var team = _mapper.Map<Team>(request);
+            var team = _mapper.Map<Team>(request.dto);
 
             if (team is null)
                 return Errors.Errors.MappingError;

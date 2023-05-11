@@ -1,7 +1,7 @@
 ﻿using MediMove.Shared.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
-using MediMove.Server.Application.Teams.Queries.GetTeamQuery;
-using MediMove.Server.Application.Teams.Queries.GetTeamsQuery;
+using MediMove.Server.Application.Teams.Queries;
+using MediMove.Server.Application.Teams.Commands;
 
 namespace MediMove.Server.Controllers.v1
 {
@@ -17,7 +17,7 @@ namespace MediMove.Server.Controllers.v1
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTeam([FromRoute] int id)
         {
-            var result = await Mediator.Send(new GetTeamDTO(id));
+            var result = await Mediator.Send(new GetTeamQuery(id));
 
             return result.Match(
                 result => Ok(result),
@@ -32,7 +32,7 @@ namespace MediMove.Server.Controllers.v1
         [HttpGet]
         public async Task<IActionResult> GetAllTeams()
         {
-            var result = await Mediator.Send(new GetAllTeamsDTO());
+            var result = await Mediator.Send(new GetAllTeamsQuery());
 
             return result.Match(
                 result => Ok(result),
@@ -68,7 +68,7 @@ namespace MediMove.Server.Controllers.v1
         [HttpPost]
         public async Task<IActionResult> CreateTeam([FromBody] CreateTeamDTO dto)
         {
-            var entityId = await Mediator.Send(dto);
+            var entityId = await Mediator.Send(new CreateTeamCommand(dto));
 
             return entityId.Match(
                 entityId => CreatedAtAction(nameof(GetTeam), new { id = entityId }, null),

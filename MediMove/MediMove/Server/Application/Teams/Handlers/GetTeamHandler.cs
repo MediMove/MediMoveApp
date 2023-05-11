@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using ErrorOr;
 using MediatR;
-using MediMove.Server.Application.Teams.Queries.GetTeamQuery;
+using MediMove.Server.Application.Teams.Queries;
 using MediMove.Server.Data;
 using MediMove.Shared.Models.DTOs;
 

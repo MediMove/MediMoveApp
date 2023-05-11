@@ -2,7 +2,6 @@
 using ErrorOr;
 using MediatR;
 using MediMove.Server.Application.Teams.Queries;
-using MediMove.Server.Application.Teams.Queries.GetAllTeamsQuery;
 using MediMove.Server.Data;
 using MediMove.Shared.Models.DTOs;
 using Microsoft.EntityFrameworkCore;
