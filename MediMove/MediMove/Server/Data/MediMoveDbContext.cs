@@ -16,6 +16,8 @@ namespace MediMove.Server.Data
         public DbSet<Team> Teams { get; set; }
         public DbSet<Transport> Transports { get; set; }
         public DbSet<Billing> Billings { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
 
         public MediMoveDbContext(DbContextOptions<MediMoveDbContext> options) : base(options)
         {
@@ -38,6 +40,7 @@ namespace MediMove.Server.Data
                 new SalariesSeeder(),
                 new BillingsSeeder(),
                 new TransportsSeeder(),
+                new RoleSeeder(),
             };
 
             foreach (var seeder in seeders)
