@@ -12,7 +12,7 @@ namespace MediMove.Server.Controllers.V1
         [HttpGet("User/{id}")]
         public async Task<IActionResult> GetUser([FromRoute] int id)
         {
-            throw new NotImplementedException();
+            
             var result = await Mediator.Send(new GetUserQuery(id));
 
             return result.Match(

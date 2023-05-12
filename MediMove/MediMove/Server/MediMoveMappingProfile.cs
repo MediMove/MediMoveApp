@@ -122,9 +122,11 @@ namespace MediMove.Server
             CreateMap<Availability, AvailabilityDTO>()
                 .ForMember(m => m.Day, c => c.MapFrom(s => s.Day.ToDateOnly()));
 
-            CreateMap<RegisterUserDTO, User>()
-                .ForMember(m => m.Email, c => c.MapFrom(s => s.Email))
-                .ForMember(m => m.RoleId, c => c.MapFrom(s => s.RoleId));
+            CreateMap<RegisterUserDTO, User>();
+            //.ForMember(m => m.Email, c => c.MapFrom(s => s.Email))
+            //.ForMember(m => m.RoleId, c => c.MapFrom(s => s.RoleId))
+            //.ForMember(m => m.AccountId, c => c.MapFrom(s => s.AccountId))
+            //;
 
         }
     }

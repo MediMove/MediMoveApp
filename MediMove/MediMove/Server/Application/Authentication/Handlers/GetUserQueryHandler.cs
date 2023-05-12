@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ErrorOr;
+using MediatR;
 using MediMove.Server.Application.Authentication.Queries;
 using MediMove.Server.Application.Availabilities.Queries.GetAvailabilityQuery;
 using MediMove.Server.Data;
@@ -8,7 +9,7 @@ using MediMove.Shared.Models.DTOs.temp;
 
 namespace MediMove.Server.Application.Authentication.Handlers
 {
-    public class GetUserQueryHandler
+    public class GetUserQueryHandler: IRequestHandler<GetUserQuery, ErrorOr<User>>
     {
         private readonly IMapper _mapper;
         private readonly MediMoveDbContext _dbContext;
@@ -21,7 +22,6 @@ namespace MediMove.Server.Application.Authentication.Handlers
         
         public async Task<ErrorOr<User>> Handle(GetUserQuery request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
 
             var user = await _dbContext.Users.FindAsync(new object?[] { request.Id },
                 cancellationToken: cancellationToken);

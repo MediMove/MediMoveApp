@@ -30,11 +30,10 @@ builder.Services.AddDbContextPool<MediMoveDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.AddScoped<ITransportRepository, TransportRepository>();
-
 builder.Services.AddScoped<IAvailabilityRepository, AvailabilityRepository>();
-
 builder.Services.AddScoped<ITeamRepository, TeamRepository>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+
 //builder.Services.AddScoped<ITeamService, TeamService>();
 
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
