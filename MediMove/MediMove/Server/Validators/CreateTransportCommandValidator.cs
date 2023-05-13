@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using MediMove.Shared.Models.DTOs.V2;
+using MediMove.Shared.Models.DTOs;
 
 namespace MediMove.Server.Validators
 {

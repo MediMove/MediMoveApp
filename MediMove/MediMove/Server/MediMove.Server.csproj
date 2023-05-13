@@ -8,6 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Application\Infrastructure\**" />
+    <Compile Remove="Middleware\**" />
+    <Content Remove="Application\Infrastructure\**" />
+    <Content Remove="Middleware\**" />
+    <EmbeddedResource Remove="Application\Infrastructure\**" />
+    <EmbeddedResource Remove="Middleware\**" />
+    <None Remove="Application\Infrastructure\**" />
+    <None Remove="Middleware\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Utils.cs" />
   </ItemGroup>
 
@@ -33,12 +44,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Client\MediMove.Client.csproj" />
     <ProjectReference Include="..\Shared\MediMove.Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Application\Billings\Commands\" />
-    <Folder Include="Middleware\" />
-    <Folder Include="Application\Infrastructure\Persistence\Migrations\" />
   </ItemGroup>
 
 

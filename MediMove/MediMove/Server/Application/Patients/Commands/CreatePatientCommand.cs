@@ -3,7 +3,7 @@ using ErrorOr;
 using MediatR;
 using MediMove.Server.Data;
 using MediMove.Server.Models;
-using MediMove.Shared.Models.DTOs.V2;
+using MediMove.Shared.Models.DTOs;
 
 namespace MediMove.Server.Application.Patients.Commands;
 

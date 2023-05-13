@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using MediMove.Server.Models;
 using MediMove.Shared.Models.DTOs;
-using MediMove.Shared.Models.DTOs.V2;
 
 namespace MediMove.Server
 {
@@ -46,16 +45,19 @@ namespace MediMove.Server
                 .ForMember(m => m.Country, c => c.MapFrom(s => s.PersonalInformation.Country));
 
             CreateMap<CreatePatientDTO, Patient>()
-                .ForMember(m => m.PersonalInformation.FirstName, c => c.MapFrom(s => s.FirstName))
-                .ForMember(m => m.PersonalInformation.LastName, c => c.MapFrom(s => s.LastName))
-                .ForMember(m => m.PersonalInformation.StreetAddress, c => c.MapFrom(s => s.StreetAddress))
-                .ForMember(m => m.PersonalInformation.HouseNumber, c => c.MapFrom(s => s.HouseNumber))
-                .ForMember(m => m.PersonalInformation.ApartmentNumber, c => c.MapFrom(s => s.ApartmentNumber))
-                .ForMember(m => m.PersonalInformation.PostalCode, c => c.MapFrom(s => s.PostalCode))
-                .ForMember(m => m.PersonalInformation.StateProvince, c => c.MapFrom(s => s.StateProvince))
-                .ForMember(m => m.PersonalInformation.City, c => c.MapFrom(s => s.City))
-                .ForMember(m => m.PersonalInformation.Country, c => c.MapFrom(s => s.Country))
-                .ForMember(m => m.PersonalInformation.PhoneNumber, c => c.MapFrom(s => s.PhoneNumber));
+                .ConvertUsing<PatientConverter>();
+
+            //CreateMap<CreatePatientDTO, Patient>()
+            //    .ForMember(m => m.PersonalInformation.FirstName, c => c.MapFrom(s => s.FirstName))
+            //    .ForMember(m => m.PersonalInformation.LastName, c => c.MapFrom(s => s.LastName))
+            //    .ForMember(m => m.PersonalInformation.StreetAddress, c => c.MapFrom(s => s.StreetAddress))
+            //    .ForMember(m => m.PersonalInformation.HouseNumber, c => c.MapFrom(s => s.HouseNumber))
+            //    .ForMember(m => m.PersonalInformation.ApartmentNumber, c => c.MapFrom(s => s.ApartmentNumber))
+            //    .ForMember(m => m.PersonalInformation.PostalCode, c => c.MapFrom(s => s.PostalCode))
+            //    .ForMember(m => m.PersonalInformation.StateProvince, c => c.MapFrom(s => s.StateProvince))
+            //    .ForMember(m => m.PersonalInformation.City, c => c.MapFrom(s => s.City))
+            //    .ForMember(m => m.PersonalInformation.Country, c => c.MapFrom(s => s.Country))
+            //    .ForMember(m => m.PersonalInformation.PhoneNumber, c => c.MapFrom(s => s.PhoneNumber));
 
 
 
@@ -143,6 +145,31 @@ namespace MediMove.Server
             }
 
             return availabilities;
+        }
+    }
+
+    public class PatientConverter : ITypeConverter<CreatePatientDTO, Patient>
+    {
+        public Patient Convert(CreatePatientDTO source, Patient destination, ResolutionContext context)
+        {
+            var patient = new Patient();
+
+            var personalInformation = new PersonalInformation()
+            {
+                FirstName = source.FirstName,
+                LastName = source.LastName,
+                StreetAddress = source.StreetAddress,
+                HouseNumber = source.HouseNumber,
+                ApartmentNumber = source.ApartmentNumber,
+                City = source.City,
+                PostalCode = source.PostalCode,
+                StateProvince = source.StateProvince,
+                Country = source.Country,
+                PhoneNumber = source.PhoneNumber
+            };
+            patient.Weight = source.Weight;
+            patient.PersonalInformation = personalInformation;
+            return patient;
         }
     }
 }

@@ -7,12 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MediMove.Shared.Models.DTOs.V2
+namespace MediMove.Shared.Models.DTOs
 {
     public class AvailabilityDTO
     {
         public ShiftType ShiftType { get; set; }
-        public string ParamedicFirstName { get; set; } 
+        public string ParamedicFirstName { get; set; }
         public string ParamedicLastName { get; set; }
     }
 }

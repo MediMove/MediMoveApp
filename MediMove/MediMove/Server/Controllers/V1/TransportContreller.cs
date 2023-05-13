@@ -1,11 +1,10 @@
 ﻿using MediMove.Server.Application.Transports.Commands;
 using MediMove.Server.Application.Transports.Queries;
-using MediMove.Shared.Models.DTOs.V2;
+using MediMove.Shared.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MediMove.Server.Controllers.v2
 {
-    [ApiVersion("2.0")]
     public class TransportController : BaseApiController
     {
         //[HttpGet("{id}")] // jeśli ograniczymy wyświetlane informacje przy podglądzie transportów to tutaj rola paramedic i dispacher i wyswietlać wszystko 

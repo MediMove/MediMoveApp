@@ -5,7 +5,7 @@ using MediMove.Server.Application.Patients.Commands;
 using MediMove.Server.Data;
 using MediMove.Server.Errors;
 using MediMove.Server.Models;
-using MediMove.Shared.Models.DTOs.V2;
+
 
 namespace MediMove.Server.Application.Patients.Handlers
 {

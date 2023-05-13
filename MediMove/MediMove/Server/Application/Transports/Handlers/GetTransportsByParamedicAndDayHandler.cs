@@ -4,7 +4,7 @@ using MediatR;
 using MediMove.Server.Application.Transports.Queries;
 using MediMove.Server.Data;
 using MediMove.Server.Errors;
-using MediMove.Shared.Models.DTOs.V2;
+using MediMove.Shared.Models.DTOs;
 using Microsoft.EntityFrameworkCore;
 
 namespace MediMove.Server.Application.Transports.Handlers

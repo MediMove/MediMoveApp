@@ -1,8 +1,7 @@
-﻿
-using MediMove.Shared.Models.Enums;
+﻿using MediMove.Shared.Models.Enums;
 
 
-namespace MediMove.Shared.Models.DTOs.V2
+namespace MediMove.Shared.Models.DTOs
 {
     public class CreateTransportDTO
     {

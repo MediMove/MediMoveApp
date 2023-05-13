@@ -4,7 +4,7 @@ using MediatR;
 using MediMove.Server.Application.Availabilities.Commands;
 using MediMove.Server.Data;
 using MediMove.Server.Models;
-using MediMove.Shared.Models.DTOs.V2;
+
 
 namespace MediMove.Server.Application.Availabilities.Handlers
 {

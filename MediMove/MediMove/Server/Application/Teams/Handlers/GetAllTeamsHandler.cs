@@ -3,8 +3,7 @@ using ErrorOr;
 using MediatR;
 using MediMove.Server.Application.Teams.Queries;
 using MediMove.Server.Data;
-using MediMove.Shared.Extensions;
-using MediMove.Shared.Models.DTOs.V2;
+using MediMove.Shared.Models.DTOs;
 using Microsoft.EntityFrameworkCore;
 
 namespace MediMove.Server.Application.Teams.Handlers

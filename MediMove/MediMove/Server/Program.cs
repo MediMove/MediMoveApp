@@ -1,7 +1,5 @@
 using MediMove.Server;
 using MediMove.Server.Data;
-using MediMove.Server.Repositories;
-using MediMove.Server.Repositories.Contracts;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using MediMove.Server.Options;
@@ -26,13 +24,6 @@ var connectionString = config.GetSection("ConnectionStrings")["MediMoveConnectio
 
 builder.Services.AddDbContextPool<MediMoveDbContext>(options =>
     options.UseSqlServer(connectionString));
-
-builder.Services.AddScoped<ITransportRepository, TransportRepository>();
-
-builder.Services.AddScoped<IAvailabilityRepository, AvailabilityRepository>();
-
-builder.Services.AddScoped<ITeamRepository, TeamRepository>();
-//builder.Services.AddScoped<ITeamService, TeamService>();
 
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 

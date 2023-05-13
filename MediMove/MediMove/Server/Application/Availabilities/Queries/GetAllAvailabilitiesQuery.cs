@@ -2,7 +2,7 @@
 using ErrorOr;
 using MediatR;
 using MediMove.Server.Data;
-using MediMove.Shared.Models.DTOs.V2;
+using MediMove.Shared.Models.DTOs;
 using Microsoft.EntityFrameworkCore;
 
 namespace MediMove.Server.Application.Availabilities.Queries;

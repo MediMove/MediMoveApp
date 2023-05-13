@@ -1,7 +1,5 @@
 ﻿using FluentValidation;
 using MediMove.Server.Application.Teams.Commands;
-using MediMove.Shared.Extensions;
-using MediMove.Shared.Models.DTOs;
 
 namespace MediMove.Server.Validators
 {

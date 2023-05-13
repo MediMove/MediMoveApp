@@ -1,7 +1,7 @@
 ﻿using ErrorOr;
 using MediatR;
 
-namespace MediMove.Shared.Models.DTOs.V2
+namespace MediMove.Shared.Models.DTOs
 {
     //public record CreateTeamDTO(int DriverId, int ParamedicId, DateOnly Day);
 

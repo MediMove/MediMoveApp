@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MediMove.Shared.Models.DTOs.V2
+namespace MediMove.Shared.Models.DTOs
 {
     public class CreateAvailabilitiesDTO
     {

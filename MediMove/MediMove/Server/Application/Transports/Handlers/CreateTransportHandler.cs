@@ -4,7 +4,6 @@ using MediatR;
 using MediMove.Server.Application.Transports.Commands;
 using MediMove.Server.Data;
 using MediMove.Server.Models;
-using MediMove.Shared.Models.DTOs.V2;
 
 namespace MediMove.Server.Application.Transports.Handlers
 {
