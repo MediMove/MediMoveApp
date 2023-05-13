@@ -7,11 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MediMove.Shared.Models.DTOs.temp
+namespace MediMove.Shared.Models.DTOs.V2
 {
-    public class AvailabilityDTO : IRequest<ErrorOr<int>>
+    public class AvailabilityDTO
     {
-        public DateOnly Day { get; set; }
         public ShiftType ShiftType { get; set; }
+        public string ParamedicFirstName { get; set; } 
+        public string ParamedicLastName { get; set; }
     }
 }

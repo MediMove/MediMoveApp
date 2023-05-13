@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
-using MediMove.Shared.Models.DTOs;
+using MediMove.Shared.Models.DTOs.V2;
 
 namespace MediMove.Server.Validators
 {
-    public class CreateTransportValidator : AbstractValidator<CreateTransportDTO>
+    public class CreateTransportCommandValidator : AbstractValidator<CreateTransportDTO>
     {
-        public CreateTransportValidator()
+        public CreateTransportCommandValidator()
         {
             RuleFor( x => x.PatientId)
                 .NotEmpty()

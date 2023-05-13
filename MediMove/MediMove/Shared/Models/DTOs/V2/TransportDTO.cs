@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace MediMove.Shared.Models.DTOs
+namespace MediMove.Shared.Models.DTOs.V2
 {
     public class TransportDTO
     {

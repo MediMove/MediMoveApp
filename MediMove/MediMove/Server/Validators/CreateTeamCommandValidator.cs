@@ -17,7 +17,7 @@ namespace MediMove.Server.Validators
         {
             RuleFor(x => x.dto.ParamedicId).GreaterThan(0);
             RuleFor(x => x.dto.DriverId).GreaterThan(0);
-            RuleFor(x => x.dto.Day).Must(day => day > DateTime.Today.ToDateOnly());
+            RuleFor(x => x.dto.Day).Must(day => day > DateTime.Today);
         }
     }
 }

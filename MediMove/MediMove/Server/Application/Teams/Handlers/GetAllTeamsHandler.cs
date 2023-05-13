@@ -3,7 +3,8 @@ using ErrorOr;
 using MediatR;
 using MediMove.Server.Application.Teams.Queries;
 using MediMove.Server.Data;
-using MediMove.Shared.Models.DTOs;
+using MediMove.Shared.Extensions;
+using MediMove.Shared.Models.DTOs.V2;
 using Microsoft.EntityFrameworkCore;
 
 namespace MediMove.Server.Application.Teams.Handlers
@@ -21,7 +22,9 @@ namespace MediMove.Server.Application.Teams.Handlers
 
         public async Task<ErrorOr<IEnumerable<TeamDTO>>> Handle(GetAllTeamsQuery request, CancellationToken cancellationToken)
         {
-            var teams = await _dbContext.Teams.ToListAsync(cancellationToken);
+            var teams = await _dbContext.Teams
+                .Where( d => d.Day.Date == request.Day.Date)
+                .ToListAsync(cancellationToken);
 
             var teamDTOs = _mapper.Map<IEnumerable<TeamDTO>>(teams);
 
