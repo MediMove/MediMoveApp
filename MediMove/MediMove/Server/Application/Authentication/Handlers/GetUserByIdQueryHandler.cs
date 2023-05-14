@@ -6,26 +6,27 @@ using MediMove.Server.Application.Availabilities.Queries.GetAvailabilityQuery;
 using MediMove.Server.Data;
 using MediMove.Server.Models;
 using MediMove.Shared.Models.DTOs.temp;
+using Microsoft.EntityFrameworkCore;
 
 namespace MediMove.Server.Application.Authentication.Handlers
 {
-    public class GetUserQueryHandler: IRequestHandler<GetUserQuery, ErrorOr<User>>
+    public class GetUserByIdQueryHandler: IRequestHandler<GetUserByIdQuery, ErrorOr<User>>
     {
         private readonly IMapper _mapper;
         private readonly MediMoveDbContext _dbContext;
 
-        public GetUserQueryHandler(IMapper mapper, MediMoveDbContext dbContext)
+        public GetUserByIdQueryHandler(IMapper mapper, MediMoveDbContext dbContext)
         {
             _mapper = mapper;
             _dbContext = dbContext;
         }
         
-        public async Task<ErrorOr<User>> Handle(GetUserQuery request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<User>> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
         {
 
-            var user = await _dbContext.Users.FindAsync(new object?[] { request.Id },
-                cancellationToken: cancellationToken);
-
+            var user = await _dbContext.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Id == request.Id,
+                cancellationToken: cancellationToken);//.FindAsync(new object?[] { request.Id },cancellationToken: cancellationToken);
+            
             if (user is null)
                 return Errors.Errors.EntityNotFoundError;
 

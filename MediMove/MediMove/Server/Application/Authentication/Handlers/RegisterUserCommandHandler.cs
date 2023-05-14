@@ -6,13 +6,14 @@ using MediMove.Server.Application.Availabilities.Queries.GetAllAvailabilitiesQue
 using MediMove.Server.Data;
 using MediMove.Server.Models;
 using MediMove.Shared.Models.DTOs.temp;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace MediMove.Server.Application.Authentication.Handlers
 {
-    
 
+    
     public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, ErrorOr<int>>
     {
         private readonly IMapper _mapper;

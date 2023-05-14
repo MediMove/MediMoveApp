@@ -5,5 +5,5 @@ using MediMove.Shared.Models.DTOs;
 
 namespace MediMove.Server.Application.Authentication.Queries
 {
-    public record GetUserQuery(int Id) : IRequest<ErrorOr<User>>; //dla testów bez mapowania
+    public record GetUserByIdQuery(int Id) : IRequest<ErrorOr<User>>; //dla testów bez mapowania
 }
