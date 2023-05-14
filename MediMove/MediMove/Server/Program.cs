@@ -31,14 +31,7 @@ var authConfig = config.GetSection("Authentication");
 var authenticationSettings = new AuthenticationSettings();
 authConfig.Bind(authenticationSettings);
 
-//var authenticationSettings = new AuthenticationSettings
-//{
-//    JwtIssuer = config.GetSection("Authentication")["JwtIssuer"],
-//    JwtExpireHours = 12, //int.Parse(config.GetSection("Authentication")["JwtExpireHours"]),
-//    JwtKey = config.GetSection("Authentication")["JwtKey"],
-//};
-
-
+//Authentication
 builder.Services.AddSingleton(authenticationSettings);
 
 builder.Services.AddAuthentication(option =>
@@ -58,6 +51,7 @@ builder.Services.AddAuthentication(option =>
 
     };
 });
+
 builder.Services.AddDbContextPool<MediMoveDbContext>(options =>
     options.UseSqlServer(connectionString));
 
