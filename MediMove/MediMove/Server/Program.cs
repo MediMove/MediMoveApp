@@ -4,6 +4,7 @@ using MediMove.Server.Repositories;
 using MediMove.Server.Repositories.Contracts;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using System.Text;
 using MediMove.Server.Options;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using FluentValidation;
@@ -11,6 +12,7 @@ using MediatR;
 using MediMove.Server.Behaviors;
 using MediMove.Server.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +27,37 @@ IConfiguration config = new ConfigurationBuilder()
     .Build();
 
 var connectionString = config.GetSection("ConnectionStrings")["MediMoveConnection"];
+var authConfig = config.GetSection("Authentication");
+var authenticationSettings = new AuthenticationSettings();
+authConfig.Bind(authenticationSettings);
 
+//var authenticationSettings = new AuthenticationSettings
+//{
+//    JwtIssuer = config.GetSection("Authentication")["JwtIssuer"],
+//    JwtExpireHours = 12, //int.Parse(config.GetSection("Authentication")["JwtExpireHours"]),
+//    JwtKey = config.GetSection("Authentication")["JwtKey"],
+//};
+
+
+builder.Services.AddSingleton(authenticationSettings);
+
+builder.Services.AddAuthentication(option =>
+{
+    option.DefaultAuthenticateScheme = "Bearer";
+    option.DefaultScheme = "Bearer";
+    option.DefaultChallengeScheme = "Bearer";
+}).AddJwtBearer(cfg =>
+{
+    cfg.RequireHttpsMetadata = false;
+    cfg.SaveToken = true;
+    cfg.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidIssuer = authenticationSettings.JwtIssuer,
+        ValidAudience = authenticationSettings.JwtIssuer,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey))
+
+    };
+});
 builder.Services.AddDbContextPool<MediMoveDbContext>(options =>
     options.UseSqlServer(connectionString));
 
@@ -88,7 +120,7 @@ app.UseSwaggerUI(options =>
         options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName);
 });
 app.UseApiVersioning();
-
+app.UseAuthentication();
 app.UseHttpsRedirection();
 
 app.UseBlazorFrameworkFiles();

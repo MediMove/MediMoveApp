@@ -17,6 +17,16 @@ namespace MediMove.Server.Validators
                     var emailInUse = _dbContext.Users.Any(u => u.Email == value);
                     if(emailInUse) context.AddFailure("Email", "That email is in use");
                 });
+            RuleFor(x => x.dto.Password).MinimumLength(8)
+                .Custom((value, context) =>
+                {
+                    var passwordNotMatch = value !=
+                                           context.InstanceToValidate.dto.ConfirmPassword;
+                    if(passwordNotMatch) 
+                        context.AddFailure("Password", "Passwords do not match");
+                });
+            RuleFor(x => x.dto.RoleId).GreaterThan(0).LessThan(5);
+            
         }
     }
 }

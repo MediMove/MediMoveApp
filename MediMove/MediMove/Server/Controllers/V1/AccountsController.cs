@@ -29,5 +29,16 @@ namespace MediMove.Server.Controllers.V1
                 result => CreatedAtAction(nameof(GetUser), new { id = result }, null),
                 errors => Problem(errors));
         }
+
+        [HttpPost("Login")]
+
+        public async Task<IActionResult> LoginUser([FromBody] LoginUserDTO dto)
+        {
+            var result = await Mediator.Send(new LoginQuery(dto));
+
+            return result.Match(
+                result => Ok(result),
+                errors => Problem(errors));
+        }
     }
 }
