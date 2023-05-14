@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MediMove.Shared.Models.DTOs
 {
-    public class PatientDTO // Mozna by nie wyświetlac postalCode, state i country ale to nie jestem pewny
+    public class PatientDTO
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
