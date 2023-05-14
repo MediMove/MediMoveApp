@@ -12,7 +12,7 @@ namespace MediMove.Server.Controllers.V1
     {
         [HttpGet("User/{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> GetUser([FromRoute] int id)
+        public async Task<IActionResult> GetUserById([FromRoute] int id)
         {
             
             var result = await Mediator.Send(new GetUserByIdQuery(id));
@@ -29,7 +29,7 @@ namespace MediMove.Server.Controllers.V1
             var entityId = await Mediator.Send(new RegisterUserCommand(dto));
 
             return entityId.Match(
-                result => CreatedAtAction(nameof(GetUser), new { id = result }, null),
+                result => CreatedAtAction(nameof(GetUserById), new { id = result }, null),
                 errors => Problem(errors));
         }
 
