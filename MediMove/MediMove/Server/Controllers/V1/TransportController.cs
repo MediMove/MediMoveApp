@@ -5,7 +5,7 @@ using MediMove.Shared.Models.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MediMove.Server.Controllers.v2
+namespace MediMove.Server.Controllers.V1
 {
     public class TransportController : BaseApiController
     {

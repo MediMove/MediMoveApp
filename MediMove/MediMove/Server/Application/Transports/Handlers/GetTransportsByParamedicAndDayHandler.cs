@@ -25,6 +25,7 @@ namespace MediMove.Server.Application.Transports.Handlers
             var dateOnly = request.Day;
             var transports = await _dbContext.Transports
                     .Where(t => t.StartTime.Date == request.Day.Date)
+                    .Where(t => t.Team.DriverId == request.ParamedicId || t.Team.ParamedicId == request.ParamedicId)
                     .Include(t => t.Patient)
                     .ThenInclude(p => p.PersonalInformation)
                     .ToListAsync(cancellationToken: cancellationToken);

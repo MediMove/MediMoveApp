@@ -2,13 +2,15 @@
 using MediMove.Server.Application.Patients.Commands;
 using MediMove.Server.Application.Patients.Queries;
 using MediMove.Shared.Models.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MediMove.Server.Controllers.V2
+namespace MediMove.Server.Controllers.V1
 {
     public class PatientController : BaseApiController
     {
         [HttpGet] // Wysyła same imiona i nazwiska
+        [Authorize(Roles = "Dispatcher")]
         public async Task<IActionResult> GetAllPatients()
         {
             var result = await Mediator.Send(new GetAllPatientsQuery());
@@ -19,6 +21,7 @@ namespace MediMove.Server.Controllers.V2
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Dispatcher")]
         public async Task<IActionResult> GetPatient([FromRoute] int id)
         {
             var result = await Mediator.Send(new GetPatientQuery(id));
@@ -29,6 +32,7 @@ namespace MediMove.Server.Controllers.V2
         }
 
         [HttpPost]
+        [Authorize(Roles = "Dispatcher")]
         public async Task<IActionResult> CreatePatient([FromBody] CreatePatientDTO dto)
         {
             var entityId = await Mediator.Send(new CreatePatientCommand(dto));
@@ -39,6 +43,7 @@ namespace MediMove.Server.Controllers.V2
         }
 
         [HttpPatch("{id}")]
+        [Authorize(Roles = "Dispatcher")]
         public async Task<IActionResult> EditPatient([FromRoute] int id, [FromBody] CreatePatientDTO dto)
         {
             var result = await Mediator.Send(new UpdatePatientCommand(dto, id));
