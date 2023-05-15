@@ -1,6 +1,7 @@
-﻿namespace MediMove.Server.Application.Teams.Commands
+﻿using ErrorOr;
+using MediatR;
+
+namespace MediMove.Server.Application.Teams.Commands
 {
-    public class ChangeWorkingState
-    {
-    }
+    public record ChangeWorkingStateCommand(int Id, bool state) : IRequest<ErrorOr<Unit>>; // do zaktualizowania return type
 }

@@ -2,10 +2,8 @@
 using ErrorOr;
 using MediatR;
 using MediMove.Server.Application.Authentication.Queries;
-using MediMove.Server.Application.Availabilities.Queries.GetAvailabilityQuery;
 using MediMove.Server.Data;
 using MediMove.Server.Models;
-using MediMove.Shared.Models.DTOs.temp;
 using Microsoft.EntityFrameworkCore;
 
 namespace MediMove.Server.Application.Authentication.Handlers

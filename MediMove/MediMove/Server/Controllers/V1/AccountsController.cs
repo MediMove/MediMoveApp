@@ -1,6 +1,5 @@
 ﻿using MediMove.Server.Application.Authentication.Commands;
 using MediMove.Server.Application.Authentication.Queries;
-using MediMove.Server.Application.Dispatchers.Queries.GetDispatcherQuery;
 using MediMove.Shared.Models.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;

@@ -116,8 +116,7 @@ namespace MediMove.Server
 
 
 
-            CreateMap<Availability, AvailabilityDTO>()
-                .ForMember(m => m.Day, c => c.MapFrom(s => s.Day.ToDateOnly()));
+            
 
             CreateMap<RegisterUserDTO, User>();
 
