@@ -3,10 +3,12 @@ using MediatR;
 
 namespace MediMove.Shared.Models.DTOs
 {
-    public class CreateTeamDTO : IRequest<ErrorOr<int>>
+    //public record CreateTeamDTO(int DriverId, int ParamedicId, DateOnly Day);
+
+    public class CreateTeamDTO
     {
         public int DriverId { get; set; }
         public int ParamedicId { get; set; }
-        public DateOnly Day { get; set; }
+        public DateTime Day { get; set; }
     }
 }

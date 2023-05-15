@@ -1,7 +1,5 @@
 using MediMove.Server;
 using MediMove.Server.Data;
-using MediMove.Server.Repositories;
-using MediMove.Server.Repositories.Contracts;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using System.Text;

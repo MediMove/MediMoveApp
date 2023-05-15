@@ -1,15 +1,9 @@
-﻿using ErrorOr;
-using MediatR;
-using MediMove.Shared.Models.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediMove.Shared.Models.Enums;
+
 
 namespace MediMove.Shared.Models.DTOs
 {
-    public class CreateTransportDTO : IRequest<ErrorOr<int>>
+    public class CreateTransportDTO
     {
         public int PatientId { get; set; }
         public DateTime StartTime { get; set; }
