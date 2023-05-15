@@ -11,6 +11,6 @@ namespace MediMove.Server.Models
         public string BankAccountNumber { get; set; }
         public decimal Cost { get; set; }
         public int PersonalInformationId { get; set; }
-        public PersonalInformation PersonalInformation { get; set; }
+        public virtual PersonalInformation PersonalInformation { get; set; }
     }
 }
