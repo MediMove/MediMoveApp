@@ -1,19 +1,16 @@
 using MediMove.Server;
 using MediMove.Server.Data;
-using MediMove.Server.Repositories;
-using MediMove.Server.Repositories.Contracts;
-using MediMove.Server.Services.PatientService;
-using MediMove.Server.Services.TransportService;
-using MediMove.Server.Services.AvailabilityService;
-using MediMove.Server.Services.ParamedicService;
 using Microsoft.EntityFrameworkCore;
-using MediMove.Server.Services.DispatcherService;
 using System.Reflection;
+using System.Text;
 using MediMove.Server.Options;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using FluentValidation;
 using MediatR;
 using MediMove.Server.Behaviors;
+using MediMove.Server.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,28 +25,39 @@ IConfiguration config = new ConfigurationBuilder()
     .Build();
 
 var connectionString = config.GetSection("ConnectionStrings")["MediMoveConnection"];
+var authConfig = config.GetSection("Authentication");
+var authenticationSettings = new AuthenticationSettings();
+authConfig.Bind(authenticationSettings);
+
+//Authentication
+builder.Services.AddSingleton(authenticationSettings);
+
+builder.Services.AddAuthentication(option =>
+{
+    option.DefaultAuthenticateScheme = "Bearer";
+    option.DefaultScheme = "Bearer";
+    option.DefaultChallengeScheme = "Bearer";
+}).AddJwtBearer(cfg =>
+{
+    cfg.RequireHttpsMetadata = false;
+    cfg.SaveToken = true;
+    cfg.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidIssuer = authenticationSettings.JwtIssuer,
+        ValidAudience = authenticationSettings.JwtIssuer,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey))
+
+    };
+});
 
 builder.Services.AddDbContextPool<MediMoveDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.AddScoped<ITransportRepository, TransportRepository>();
-builder.Services.AddScoped<ITransportService, TransportService>();
-
-builder.Services.AddScoped<IPatientRepository, PatientRepository>();
-builder.Services.AddScoped<IPatientService, PatientService>();
-
-builder.Services.AddScoped<IPersonalInformationRepository, PersonalInformationRepository>();
-
-builder.Services.AddScoped<IParamedicRepository, ParamedicRepository>();
 builder.Services.AddScoped<IAvailabilityRepository, AvailabilityRepository>();
-builder.Services.AddScoped<IAvailabilityService, AvailabilityService>();
-
-builder.Services.AddScoped<IParamedicService, ParamedicService>();
-
-builder.Services.AddScoped<IDispatcherRepository, DispatcherRepository>();
-builder.Services.AddScoped<IDispatcherService, DispatcherService>();
-
 builder.Services.AddScoped<ITeamRepository, TeamRepository>();
+builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+
 //builder.Services.AddScoped<ITeamService, TeamService>();
 
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
@@ -104,14 +112,14 @@ app.UseSwaggerUI(options =>
         options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName);
 });
 app.UseApiVersioning();
-
+app.UseAuthentication();
 app.UseHttpsRedirection();
 
 app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthorization();
 
 app.MapRazorPages();
 

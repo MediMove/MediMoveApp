@@ -1,41 +1,31 @@
-﻿using MediMove.Server.Services.AvailabilityService;
-using MediMove.Shared.Models.DTOs.temp;
+﻿using MediMove.Server.Application.Availabilities.Commands;
+using MediMove.Server.Application.Availabilities.Queries;
+using MediMove.Shared.Models.DTOs;
 using MediMove.Shared.Models.Enums;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MediMove.Server.Controllers.v1
+namespace MediMove.Server.Controllers.v2
 {
     public class AvailabilityController : BaseApiController
     {
-        private readonly IAvailabilityService _availabilityService;
-
-        public AvailabilityController(IAvailabilityService availabilityService)
-        {
-            _availabilityService = availabilityService;
-        }
-
         [HttpGet]
-        public async Task<ActionResult<AvailabilityDTO>> GetById([FromRoute] int id)
+        public async Task<IActionResult> GetAllAvailabilities([FromQuery] int year, [FromQuery] int month, [FromQuery] int day)
         {
-            var availability = await _availabilityService.GetById(id);
+            var result = await Mediator.Send(new GetAllAvailabilitiesQuery(new DateTime(year,month,day)));
 
-            return Ok(availability);
+            return result.Match(
+                result => Ok(result),
+                errors => Problem(errors));
         }
-
-        [HttpGet("Paramedic/{id}")]
-        public async Task<ActionResult<IEnumerable<AvailabilityDTO>>> GetByParamedic([FromRoute] int id)
+       
+        [HttpPost]
+        public async Task<IActionResult> CreateAvailabilities([FromBody] CreateAvailabilitiesDTO availabilities)
         {
-            var result = await _availabilityService.GetByParamedic(id);
+            var result = await Mediator.Send(new CreateAvailabilitiesCommand(availabilities));
 
-            return Ok(result);
-        }
-
-        [HttpPost("Paramedic/{id}")]
-        public async Task<ActionResult> BulkCreate([FromRoute] int id, [FromBody] IEnumerable<ShiftType> shifts)
-        {
-            await _availabilityService.BulkCreate(id, shifts);
-
-            return Ok();
+            return result.Match(
+                result => NoContent(),
+                errors => Problem(errors));
         }
     }
 }

@@ -8,6 +8,6 @@ namespace MediMove.Server.Models
         public DateTime Day { get; set; }
         public ShiftType ShiftType { get; set; }
         public int ParamedicId { get; set; }
-        public Paramedic Paramedic { get; set; }
+        public virtual Paramedic Paramedic { get; set; }
     }
 }
