@@ -1,7 +1,10 @@
 ﻿@page "/"
 @using MediMove.Shared.Models.DTOs
-@using System.Text.Json
 @using System.Text
+@using Azure
+@using Newtonsoft.Json
+@using JsonSerializer = System.Text.Json.JsonSerializer
+@using System.Net
 @inject HttpClient httpClient
 @inject NavigationManager NavManager
 
@@ -21,17 +24,30 @@
     </p>
 </form>
 
-@if (!string.IsNullOrEmpty(loginResponse))
-{
+
     <p>@loginResponse</p>
-    <p>@statusCode</p>
-}
+@if (errorResponse != null && errorResponse.Errors != null)
+    {
+        <p>Errors:</p>
+        <ul>
+            @foreach (var error in errorResponse.Errors)
+            {
+                <li>@error.Key.Replace("dto.",""):</li>
+                <ul>
+                    @foreach (var errorMessage in error.Value)
+                    {
+                    <li>@errorMessage.Replace("dto.","").Replace("dto", "")</li>
+                    }
+                </ul>
+            }
+        </ul>
+    }
 
 @code {
     private string email;
     private string password;
     private string loginResponse;
-    private string statusCode;
+    private ErrorResponse errorResponse;
 
     private async Task HandleLogin()
     {
@@ -41,37 +57,38 @@
             Password = password
         };
 
-        var json = JsonSerializer.Serialize(loginDTO);
+        var json = JsonConvert.SerializeObject(loginDTO);
 
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
         var response = await httpClient.PostAsync("/api/v1/Accounts/Login", content);
-
+        var responseContent = await response.Content.ReadAsStringAsync();
         if (response.IsSuccessStatusCode)
         {
-            var responseContent = await response.Content.ReadAsStringAsync();
-
 
             if (responseContent != null && !string.IsNullOrEmpty(responseContent))
             {
-
+                responseContent = await response.Content.ReadAsStringAsync();
                 loginResponse = responseContent;
-                statusCode = response.StatusCode.ToString();
+                errorResponse = new ErrorResponse();
             }
-            else
-            {
-                loginResponse = responseContent;
-                statusCode = response.StatusCode.ToString();
-            }
+            
         }
         else
         {
-            loginResponse = await response.Content.ReadAsStringAsync();
-            statusCode = response.StatusCode.ToString();
-            
+            responseContent = await response.Content.ReadAsStringAsync();
+            errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(responseContent);
+            loginResponse = errorResponse.Title;
         }
     }
 
-    
+    public class ErrorResponse
+    {
+        public string Type { get; set; }
+        public string Title { get; set; }
+        public int Status { get; set; }
+        public string TraceId { get; set; }
+        public Dictionary<string, List<string>> Errors { get; set; }
+    }
 
 }
