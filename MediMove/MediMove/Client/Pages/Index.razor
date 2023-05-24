@@ -1,7 +1,77 @@
 ﻿@page "/"
+@using MediMove.Shared.Models.DTOs
+@using System.Text.Json
+@using System.Text
+@inject HttpClient httpClient
+@inject NavigationManager NavManager
 
-<PageTitle>MediMove</PageTitle>
+<h3>Login</h3>
 
-<h1>Welcome to the MediMove app</h1>
+<form @onsubmit="HandleLogin">
+    <p>
+        <label for="username">Username:</label>
+        <input id="username" @bind="email"/>
+    </p>
+    <p>
+        <label for="password">Password:</label>
+        <input id="password" @bind="password" type="password"/>
+    </p>
+    <p>
+    <button type="submit">Login</button>
+    </p>
+</form>
+
+@if (!string.IsNullOrEmpty(loginResponse))
+{
+    <p>@loginResponse</p>
+    <p>@statusCode</p>
+}
+
+@code {
+    private string email;
+    private string password;
+    private string loginResponse;
+    private string statusCode;
+
+    private async Task HandleLogin()
+    {
+        var loginDTO = new LoginUserDTO()
+        {
+            Email = email,
+            Password = password
+        };
+
+        var json = JsonSerializer.Serialize(loginDTO);
+
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        var response = await httpClient.PostAsync("/api/v1/Accounts/Login", content);
+
+        if (response.IsSuccessStatusCode)
+        {
+            var responseContent = await response.Content.ReadAsStringAsync();
 
 
+            if (responseContent != null && !string.IsNullOrEmpty(responseContent))
+            {
+
+                loginResponse = responseContent;
+                statusCode = response.StatusCode.ToString();
+            }
+            else
+            {
+                loginResponse = responseContent;
+                statusCode = response.StatusCode.ToString();
+            }
+        }
+        else
+        {
+            loginResponse = await response.Content.ReadAsStringAsync();
+            statusCode = response.StatusCode.ToString();
+            
+        }
+    }
+
+    
+
+}
