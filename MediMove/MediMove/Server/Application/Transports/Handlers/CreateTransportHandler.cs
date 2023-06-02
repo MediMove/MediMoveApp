@@ -25,8 +25,6 @@ namespace MediMove.Server.Application.Transports.Handlers
             if (transport is null)
                 return Errors.Errors.MappingError;
 
-            // TODO: Add validation
-
             await _dbContext.Transports.AddAsync(transport, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
 

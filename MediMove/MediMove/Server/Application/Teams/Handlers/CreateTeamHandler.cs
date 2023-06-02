@@ -26,8 +26,6 @@ namespace MediMove.Server.Application.Teams.Handlers
             if (team is null)
                 return Errors.Errors.MappingError;
 
-            // TODO: Add validation
-
             await _dbContext.Teams.AddAsync(team, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
 

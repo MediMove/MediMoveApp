@@ -26,8 +26,6 @@ namespace MediMove.Server.Application.Availabilities.Handlers
             if (availabilities is null)
                 return Errors.Errors.MappingError;
 
-            // TODO: Add validation
-
             await _dbContext.Availabilities.AddRangeAsync(entities: availabilities,cancellationToken: cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
 

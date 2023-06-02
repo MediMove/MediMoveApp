@@ -26,8 +26,6 @@ namespace MediMove.Server.Application.Patients.Handlers
             if (patient is null)
                 return Errors.Errors.MappingError;
 
-            // TODO: Add validation
-
             await _dbContext.Patients.AddAsync(patient, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
 
