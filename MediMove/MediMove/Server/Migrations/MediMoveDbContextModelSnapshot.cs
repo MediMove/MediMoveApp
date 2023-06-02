@@ -22,7 +22,7 @@ namespace MediMove.Server.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("MediMove.Server.Entities.Availability", b =>
+            modelBuilder.Entity("MediMove.Server.Models.Availability", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -44,9 +44,172 @@ namespace MediMove.Server.Migrations
                     b.HasIndex("ParamedicId");
 
                     b.ToTable("Availabilities");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Day = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            ParamedicId = 1,
+                            ShiftType = 0
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Day = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            ParamedicId = 3,
+                            ShiftType = 0
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Day = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            ParamedicId = 4,
+                            ShiftType = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Day = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            ParamedicId = 5,
+                            ShiftType = 1
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Day = new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Local),
+                            ParamedicId = 1,
+                            ShiftType = 0
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Day = new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Local),
+                            ParamedicId = 2,
+                            ShiftType = 0
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Day = new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Local),
+                            ParamedicId = 3,
+                            ShiftType = 1
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Day = new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Local),
+                            ParamedicId = 4,
+                            ShiftType = 0
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Day = new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Local),
+                            ParamedicId = 5,
+                            ShiftType = 1
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Day = new DateTime(2023, 5, 12, 0, 0, 0, 0, DateTimeKind.Local),
+                            ParamedicId = 1,
+                            ShiftType = 0
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Day = new DateTime(2023, 5, 12, 0, 0, 0, 0, DateTimeKind.Local),
+                            ParamedicId = 2,
+                            ShiftType = 0
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Day = new DateTime(2023, 5, 12, 0, 0, 0, 0, DateTimeKind.Local),
+                            ParamedicId = 3,
+                            ShiftType = 0
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Day = new DateTime(2023, 5, 12, 0, 0, 0, 0, DateTimeKind.Local),
+                            ParamedicId = 4,
+                            ShiftType = 1
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Day = new DateTime(2023, 5, 12, 0, 0, 0, 0, DateTimeKind.Local),
+                            ParamedicId = 5,
+                            ShiftType = 1
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Day = new DateTime(2023, 5, 13, 0, 0, 0, 0, DateTimeKind.Local),
+                            ParamedicId = 1,
+                            ShiftType = 0
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Day = new DateTime(2023, 5, 13, 0, 0, 0, 0, DateTimeKind.Local),
+                            ParamedicId = 3,
+                            ShiftType = 0
+                        },
+                        new
+                        {
+                            Id = 17,
+                            Day = new DateTime(2023, 5, 13, 0, 0, 0, 0, DateTimeKind.Local),
+                            ParamedicId = 4,
+                            ShiftType = 1
+                        },
+                        new
+                        {
+                            Id = 18,
+                            Day = new DateTime(2023, 5, 13, 0, 0, 0, 0, DateTimeKind.Local),
+                            ParamedicId = 5,
+                            ShiftType = 1
+                        },
+                        new
+                        {
+                            Id = 19,
+                            Day = new DateTime(2023, 5, 14, 0, 0, 0, 0, DateTimeKind.Local),
+                            ParamedicId = 1,
+                            ShiftType = 0
+                        },
+                        new
+                        {
+                            Id = 20,
+                            Day = new DateTime(2023, 5, 14, 0, 0, 0, 0, DateTimeKind.Local),
+                            ParamedicId = 2,
+                            ShiftType = 1
+                        },
+                        new
+                        {
+                            Id = 21,
+                            Day = new DateTime(2023, 5, 14, 0, 0, 0, 0, DateTimeKind.Local),
+                            ParamedicId = 3,
+                            ShiftType = 1
+                        },
+                        new
+                        {
+                            Id = 22,
+                            Day = new DateTime(2023, 5, 14, 0, 0, 0, 0, DateTimeKind.Local),
+                            ParamedicId = 4,
+                            ShiftType = 0
+                        },
+                        new
+                        {
+                            Id = 23,
+                            Day = new DateTime(2023, 5, 14, 0, 0, 0, 0, DateTimeKind.Local),
+                            ParamedicId = 5,
+                            ShiftType = 1
+                        });
                 });
 
-            modelBuilder.Entity("MediMove.Server.Entities.Billing", b =>
+            modelBuilder.Entity("MediMove.Server.Models.Billing", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -59,7 +222,7 @@ namespace MediMove.Server.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Cost")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<DateTime>("InvoiceDate")
                         .HasColumnType("datetime2");
@@ -76,9 +239,38 @@ namespace MediMove.Server.Migrations
                     b.HasIndex("PersonalInformationId");
 
                     b.ToTable("Billings");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            BankAccountNumber = "342301332136124",
+                            Cost = 200m,
+                            InvoiceDate = new DateTime(2023, 5, 10, 13, 57, 27, 438, DateTimeKind.Local).AddTicks(7296),
+                            InvoiceNumber = "1.12.05.2023",
+                            PersonalInformationId = 10
+                        },
+                        new
+                        {
+                            Id = 2,
+                            BankAccountNumber = "343301232434821",
+                            Cost = 90m,
+                            InvoiceDate = new DateTime(2023, 5, 10, 23, 59, 0, 0, DateTimeKind.Local),
+                            InvoiceNumber = "2.12.05.2023",
+                            PersonalInformationId = 11
+                        },
+                        new
+                        {
+                            Id = 3,
+                            BankAccountNumber = "543322635238421",
+                            Cost = 50m,
+                            InvoiceDate = new DateTime(2023, 5, 11, 0, 1, 0, 0, DateTimeKind.Local),
+                            InvoiceNumber = "3.12.05.2023",
+                            PersonalInformationId = 12
+                        });
                 });
 
-            modelBuilder.Entity("MediMove.Server.Entities.Dispatcher", b =>
+            modelBuilder.Entity("MediMove.Server.Models.Dispatcher", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -98,9 +290,23 @@ namespace MediMove.Server.Migrations
                     b.HasIndex("PersonalInformationId");
 
                     b.ToTable("Dispatchers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            BankAccountNumber = "4203987928122474",
+                            PersonalInformationId = 13
+                        },
+                        new
+                        {
+                            Id = 2,
+                            BankAccountNumber = "4203787958122274",
+                            PersonalInformationId = 14
+                        });
                 });
 
-            modelBuilder.Entity("MediMove.Server.Entities.Paramedic", b =>
+            modelBuilder.Entity("MediMove.Server.Models.Paramedic", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -158,11 +364,11 @@ namespace MediMove.Server.Migrations
                             Id = 5,
                             BankAccountNumber = "982301231238812",
                             IsDriver = true,
-                            PersonalInformationId = 3
+                            PersonalInformationId = 5
                         });
                 });
 
-            modelBuilder.Entity("MediMove.Server.Entities.Patient", b =>
+            modelBuilder.Entity("MediMove.Server.Models.Patient", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -206,10 +412,16 @@ namespace MediMove.Server.Migrations
                             Id = 4,
                             PersonalInformationId = 9,
                             Weight = 93
+                        },
+                        new
+                        {
+                            Id = 5,
+                            PersonalInformationId = 15,
+                            Weight = 100
                         });
                 });
 
-            modelBuilder.Entity("MediMove.Server.Entities.PersonalInformation", b =>
+            modelBuilder.Entity("MediMove.Server.Models.PersonalInformation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -264,70 +476,69 @@ namespace MediMove.Server.Migrations
                         new
                         {
                             Id = 1,
-                            ApartmentNumber = 1,
-                            City = "Krakow",
+                            City = "Warszawa",
                             Country = "Polska",
-                            FirstName = "Pan",
-                            HouseNumber = "1",
-                            LastName = "Panowski",
-                            PhoneNumber = "645839002",
-                            PostalCode = "41-100",
-                            StateProvince = "śląsk",
+                            FirstName = "Adam",
+                            HouseNumber = "10",
+                            LastName = "Nowak",
+                            PhoneNumber = "123456789",
+                            PostalCode = "00-001",
+                            StateProvince = "mazowieckie",
                             StreetAddress = "Kwiatowa"
                         },
                         new
                         {
                             Id = 2,
-                            ApartmentNumber = 5,
-                            City = "Katowice",
+                            City = "Warszawa",
                             Country = "Polska",
-                            FirstName = "Michal",
-                            HouseNumber = "13",
-                            LastName = "Jakistam",
-                            PhoneNumber = "854888145",
-                            PostalCode = "42-800",
-                            StateProvince = "śląsk",
-                            StreetAddress = "Sadowa"
+                            FirstName = "Ewa",
+                            HouseNumber = "20",
+                            LastName = "Kowalska",
+                            PhoneNumber = "987654321",
+                            PostalCode = "02-002",
+                            StateProvince = "mazowieckie",
+                            StreetAddress = "Koszykowa"
                         },
                         new
                         {
                             Id = 3,
-                            ApartmentNumber = 4,
-                            City = "Krakow",
+                            ApartmentNumber = 1,
+                            City = "Warszawa",
                             Country = "Polska",
-                            FirstName = "Grzegorz",
-                            HouseNumber = "3",
-                            LastName = "Kowalski",
-                            PhoneNumber = "123123123",
-                            PostalCode = "42-400",
-                            StateProvince = "wielkopolskie",
-                            StreetAddress = "Stara"
+                            FirstName = "Piotr",
+                            HouseNumber = "30",
+                            LastName = "Lewandowski",
+                            PhoneNumber = "555444333",
+                            PostalCode = "03-003",
+                            StateProvince = "mazowieckie",
+                            StreetAddress = "Wrocławska"
                         },
                         new
                         {
                             Id = 4,
-                            City = "Krakow",
+                            ApartmentNumber = 2,
+                            City = "Poznań",
                             Country = "Polska",
-                            FirstName = "Marek",
-                            HouseNumber = "44",
-                            LastName = "Zygmunt",
-                            PhoneNumber = "888888888",
-                            PostalCode = "23-213",
+                            FirstName = "Magdalena",
+                            HouseNumber = "40",
+                            LastName = "Kaczmarek",
+                            PhoneNumber = "111222333",
+                            PostalCode = "04-004",
                             StateProvince = "wielkopolskie",
-                            StreetAddress = "Kwiatowa"
+                            StreetAddress = "Piłsudskiego"
                         },
                         new
                         {
                             Id = 5,
                             City = "Kraków",
                             Country = "Polska",
-                            FirstName = "Kamil",
-                            HouseNumber = "10",
-                            LastName = "Nowak",
-                            PhoneNumber = "555777888",
-                            PostalCode = "30-062",
+                            FirstName = "Marek",
+                            HouseNumber = "50",
+                            LastName = "Jankowski",
+                            PhoneNumber = "555888999",
+                            PostalCode = "05-005",
                             StateProvince = "małopolskie",
-                            StreetAddress = "Rynek"
+                            StreetAddress = "Krakowska"
                         },
                         new
                         {
@@ -339,7 +550,7 @@ namespace MediMove.Server.Migrations
                             HouseNumber = "12",
                             LastName = "Kowalczyk",
                             PhoneNumber = "789232737",
-                            PostalCode = "80-850",
+                            PostalCode = "80-255",
                             StateProvince = "pomorskie",
                             StreetAddress = "Polna"
                         },
@@ -353,7 +564,7 @@ namespace MediMove.Server.Migrations
                             HouseNumber = "34",
                             LastName = "Michalski",
                             PhoneNumber = "444555666",
-                            PostalCode = "01-001",
+                            PostalCode = "00-207",
                             StateProvince = "mazowieckie",
                             StreetAddress = "Jana Pawła II"
                         },
@@ -367,7 +578,7 @@ namespace MediMove.Server.Migrations
                             HouseNumber = "17",
                             LastName = "Jankowska",
                             PhoneNumber = "777888999",
-                            PostalCode = "40-005",
+                            PostalCode = "40-009",
                             StateProvince = "śląskie",
                             StreetAddress = "Mickiewicza"
                         },
@@ -384,10 +595,91 @@ namespace MediMove.Server.Migrations
                             PostalCode = "50-049",
                             StateProvince = "dolnośląskie",
                             StreetAddress = "Słowackiego"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            ApartmentNumber = 3,
+                            City = "Wrocław",
+                            Country = "Polska",
+                            FirstName = "Dominik",
+                            HouseNumber = "4",
+                            LastName = "Marciniak",
+                            PhoneNumber = "272332424",
+                            PostalCode = "50-041",
+                            StateProvince = "dolnośląskie",
+                            StreetAddress = "Warszawska"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            ApartmentNumber = 7,
+                            City = "Katowice",
+                            Country = "Polska",
+                            FirstName = "Jacek",
+                            HouseNumber = "12",
+                            LastName = "Marciniak",
+                            PhoneNumber = "583549273",
+                            PostalCode = "40-012",
+                            StateProvince = "śląskie",
+                            StreetAddress = "Rynek"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            City = "Katowice",
+                            Country = "Polska",
+                            FirstName = "Amelia",
+                            HouseNumber = "81",
+                            LastName = "Kołodziej",
+                            PhoneNumber = "583729485",
+                            PostalCode = "40-019",
+                            StateProvince = "śląskie",
+                            StreetAddress = "Pływacka"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            City = "Katowice",
+                            Country = "Polska",
+                            FirstName = "Joanna",
+                            HouseNumber = "18",
+                            LastName = "Nowak",
+                            PhoneNumber = "239583745",
+                            PostalCode = "40-003",
+                            StateProvince = "śląskie",
+                            StreetAddress = "Górnicza"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            ApartmentNumber = 3,
+                            City = "Katowice",
+                            Country = "Polska",
+                            FirstName = "Grzegorz",
+                            HouseNumber = "1",
+                            LastName = "Polański",
+                            PhoneNumber = "294725402",
+                            PostalCode = "40-007",
+                            StateProvince = "śląskie",
+                            StreetAddress = "Różana"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            City = "Kraków",
+                            Country = "Polska",
+                            FirstName = "Marek",
+                            HouseNumber = "50",
+                            LastName = "Jankowski",
+                            PhoneNumber = "555888999",
+                            PostalCode = "05-005",
+                            StateProvince = "małopolskie",
+                            StreetAddress = "Krakowska"
                         });
                 });
 
-            modelBuilder.Entity("MediMove.Server.Entities.Rate", b =>
+            modelBuilder.Entity("MediMove.Server.Models.Rate", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -402,16 +694,113 @@ namespace MediMove.Server.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("PayPerHour")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ParamedicId");
 
                     b.ToTable("Rates");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Date = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            ParamedicId = 1,
+                            PayPerHour = 12m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Date = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            ParamedicId = 2,
+                            PayPerHour = 12m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Date = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            ParamedicId = 3,
+                            PayPerHour = 12m
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Date = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            ParamedicId = 4,
+                            PayPerHour = 12m
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Date = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            ParamedicId = 5,
+                            PayPerHour = 12m
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Date = new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Local),
+                            ParamedicId = 1,
+                            PayPerHour = 13m
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Date = new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Local),
+                            ParamedicId = 5,
+                            PayPerHour = 13m
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Date = new DateTime(2023, 5, 13, 0, 0, 0, 0, DateTimeKind.Local),
+                            ParamedicId = 1,
+                            PayPerHour = 14m
+                        });
                 });
 
-            modelBuilder.Entity("MediMove.Server.Entities.Salary", b =>
+            modelBuilder.Entity("MediMove.Server.Models.Role", b =>
+                {
+                    b.Property<int>("RoleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RoleId"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("RoleId");
+
+                    b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            RoleId = 1,
+                            Name = "Undefined"
+                        },
+                        new
+                        {
+                            RoleId = 2,
+                            Name = "Paramedic"
+                        },
+                        new
+                        {
+                            RoleId = 3,
+                            Name = "Dispatcher"
+                        },
+                        new
+                        {
+                            RoleId = 4,
+                            Name = "Admin"
+                        });
+                });
+
+            modelBuilder.Entity("MediMove.Server.Models.Salary", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -426,16 +815,46 @@ namespace MediMove.Server.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("Income")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("DispatcherId");
 
-                    b.ToTable("Salary");
+                    b.ToTable("Salaries");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Date = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            DispatcherId = 1,
+                            Income = 1200m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Date = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            DispatcherId = 2,
+                            Income = 1200m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Date = new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Local),
+                            DispatcherId = 1,
+                            Income = 1300m
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Date = new DateTime(2023, 5, 13, 0, 0, 0, 0, DateTimeKind.Local),
+                            DispatcherId = 1,
+                            Income = 1500m
+                        });
                 });
 
-            modelBuilder.Entity("MediMove.Server.Entities.Team", b =>
+            modelBuilder.Entity("MediMove.Server.Models.Team", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -464,27 +883,76 @@ namespace MediMove.Server.Migrations
                         new
                         {
                             Id = 1,
-                            Day = new DateTime(2023, 4, 26, 0, 0, 0, 0, DateTimeKind.Local),
-                            DriverId = 2,
-                            ParamedicId = 3
+                            Day = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            DriverId = 1,
+                            ParamedicId = 2
                         },
                         new
                         {
                             Id = 2,
-                            Day = new DateTime(2023, 4, 27, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
                             DriverId = 5,
                             ParamedicId = 4
                         },
                         new
                         {
                             Id = 3,
-                            Day = new DateTime(2023, 4, 28, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Local),
                             DriverId = 1,
-                            ParamedicId = 5
+                            ParamedicId = 2
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Day = new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Local),
+                            DriverId = 5,
+                            ParamedicId = 3
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Day = new DateTime(2023, 5, 12, 0, 0, 0, 0, DateTimeKind.Local),
+                            DriverId = 1,
+                            ParamedicId = 2
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Day = new DateTime(2023, 5, 12, 0, 0, 0, 0, DateTimeKind.Local),
+                            DriverId = 5,
+                            ParamedicId = 4
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Day = new DateTime(2023, 5, 13, 0, 0, 0, 0, DateTimeKind.Local),
+                            DriverId = 1,
+                            ParamedicId = 2
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Day = new DateTime(2023, 5, 13, 0, 0, 0, 0, DateTimeKind.Local),
+                            DriverId = 5,
+                            ParamedicId = 4
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Day = new DateTime(2023, 5, 14, 0, 0, 0, 0, DateTimeKind.Local),
+                            DriverId = 1,
+                            ParamedicId = 4
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Day = new DateTime(2023, 5, 14, 0, 0, 0, 0, DateTimeKind.Local),
+                            DriverId = 2,
+                            ParamedicId = 3
                         });
                 });
 
-            modelBuilder.Entity("MediMove.Server.Entities.Transport", b =>
+            modelBuilder.Entity("MediMove.Server.Models.Transport", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -531,74 +999,334 @@ namespace MediMove.Server.Migrations
                         new
                         {
                             Id = 1,
-                            Destination = "Rybnik",
+                            Destination = "Saska 43 Rybnik",
                             Financing = 0,
                             PatientId = 1,
                             PatientPosition = 0,
-                            StartTime = new DateTime(2023, 4, 26, 0, 0, 0, 0, DateTimeKind.Local),
+                            StartTime = new DateTime(2023, 5, 10, 7, 0, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 1,
                             TransportType = 0
                         },
                         new
                         {
                             Id = 2,
-                            Destination = "Mysłowice",
+                            Destination = "Nadrzeczna 55 Mysłowice",
                             Financing = 2,
                             PatientId = 2,
                             PatientPosition = 1,
-                            StartTime = new DateTime(2023, 4, 26, 0, 0, 0, 0, DateTimeKind.Local),
+                            StartTime = new DateTime(2023, 5, 10, 9, 10, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 1,
                             TransportType = 0
                         },
                         new
                         {
                             Id = 3,
-                            Destination = "Bytom",
+                            Destination = "Wyszogrodzka 44 Bytom",
                             Financing = 1,
                             PatientId = 3,
                             PatientPosition = 1,
-                            StartTime = new DateTime(2023, 4, 26, 0, 0, 0, 0, DateTimeKind.Local),
+                            StartTime = new DateTime(2023, 5, 10, 14, 0, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 1,
                             TransportType = 1
                         },
                         new
                         {
                             Id = 4,
-                            Destination = "Zabrze",
+                            Destination = "Dobosza 101 Zabrze",
                             Financing = 1,
-                            PatientId = 1,
-                            PatientPosition = 0,
-                            StartTime = new DateTime(2023, 4, 27, 0, 0, 0, 0, DateTimeKind.Local),
+                            PatientId = 4,
+                            PatientPosition = 1,
+                            StartTime = new DateTime(2023, 5, 10, 7, 30, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 2,
                             TransportType = 1
                         },
                         new
                         {
                             Id = 5,
-                            Destination = "Chorzów",
+                            Destination = "Dyngus 30 Chorzów",
                             Financing = 0,
-                            PatientId = 4,
-                            PatientPosition = 0,
-                            StartTime = new DateTime(2023, 4, 27, 0, 0, 0, 0, DateTimeKind.Local),
+                            PatientId = 5,
+                            PatientPosition = 2,
+                            StartTime = new DateTime(2023, 5, 10, 12, 0, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 2,
                             TransportType = 0
                         },
                         new
                         {
                             Id = 6,
-                            Destination = "Rybnik",
+                            Destination = "Obornicka 89 Rybnik",
                             Financing = 0,
                             PatientId = 4,
-                            PatientPosition = 0,
-                            StartTime = new DateTime(2023, 4, 28, 0, 0, 0, 0, DateTimeKind.Local),
+                            PatientPosition = 1,
+                            StartTime = new DateTime(2023, 5, 11, 7, 30, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 3,
+                            TransportType = 0
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Destination = "Zakładowa 19 Częstochowa",
+                            Financing = 0,
+                            PatientId = 2,
+                            PatientPosition = 0,
+                            StartTime = new DateTime(2023, 5, 11, 9, 45, 0, 0, DateTimeKind.Unspecified),
+                            TeamId = 3,
+                            TransportType = 0
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Destination = "Ustronna 70 Gliwice",
+                            Financing = 0,
+                            PatientId = 1,
+                            PatientPosition = 0,
+                            StartTime = new DateTime(2023, 5, 11, 13, 0, 0, 0, DateTimeKind.Unspecified),
+                            TeamId = 3,
+                            TransportType = 0
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Destination = "Oboźna 43 Tychy",
+                            Financing = 0,
+                            PatientId = 4,
+                            PatientPosition = 1,
+                            StartTime = new DateTime(2023, 5, 11, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            TeamId = 4,
+                            TransportType = 0
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Destination = "Mickiewicza 119 Żory",
+                            Financing = 0,
+                            PatientId = 2,
+                            PatientPosition = 0,
+                            StartTime = new DateTime(2023, 5, 11, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            TeamId = 4,
+                            TransportType = 0
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Destination = "Rycerska 13 Sosnowiec",
+                            Financing = 0,
+                            PatientId = 5,
+                            PatientPosition = 2,
+                            StartTime = new DateTime(2023, 5, 11, 20, 0, 0, 0, DateTimeKind.Unspecified),
+                            TeamId = 4,
+                            TransportType = 0
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Destination = "Skromna 116 Bieruń",
+                            Financing = 0,
+                            PatientId = 1,
+                            PatientPosition = 0,
+                            StartTime = new DateTime(2023, 5, 12, 7, 0, 0, 0, DateTimeKind.Unspecified),
+                            TeamId = 5,
+                            TransportType = 1
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Destination = "Lidzka 53 Świętochłowice",
+                            Financing = 0,
+                            PatientId = 3,
+                            PatientPosition = 0,
+                            StartTime = new DateTime(2023, 5, 12, 12, 0, 0, 0, DateTimeKind.Unspecified),
+                            TeamId = 5,
+                            TransportType = 1
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Destination = "Pomarańczowa 95 Bielsko-Biała",
+                            Financing = 0,
+                            PatientId = 2,
+                            PatientPosition = 0,
+                            StartTime = new DateTime(2023, 5, 12, 13, 30, 0, 0, DateTimeKind.Unspecified),
+                            TeamId = 5,
+                            TransportType = 1
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Destination = "Bydgoska 123 Ruda Śląska",
+                            Financing = 0,
+                            PatientId = 4,
+                            PatientPosition = 1,
+                            StartTime = new DateTime(2023, 5, 12, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            TeamId = 6,
+                            TransportType = 1
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Destination = "Różana 138 Żory",
+                            Financing = 0,
+                            PatientId = 2,
+                            PatientPosition = 0,
+                            StartTime = new DateTime(2023, 5, 12, 17, 45, 0, 0, DateTimeKind.Unspecified),
+                            TeamId = 6,
+                            TransportType = 1
+                        },
+                        new
+                        {
+                            Id = 17,
+                            Destination = "Okrzei Stefana 132 Chorzów",
+                            Financing = 0,
+                            PatientId = 4,
+                            PatientPosition = 1,
+                            StartTime = new DateTime(2023, 5, 12, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            TeamId = 6,
+                            TransportType = 0
+                        },
+                        new
+                        {
+                            Id = 18,
+                            Destination = "Diamentowa 5 Częstochowa",
+                            Financing = 0,
+                            PatientId = 1,
+                            PatientPosition = 0,
+                            StartTime = new DateTime(2023, 5, 13, 7, 15, 0, 0, DateTimeKind.Unspecified),
+                            TeamId = 7,
+                            TransportType = 1
+                        },
+                        new
+                        {
+                            Id = 19,
+                            Destination = "Pawlikowskiego Tadeusza 96 Cieszyn",
+                            Financing = 0,
+                            PatientId = 2,
+                            PatientPosition = 0,
+                            StartTime = new DateTime(2023, 5, 13, 11, 0, 0, 0, DateTimeKind.Unspecified),
+                            TeamId = 7,
+                            TransportType = 0
+                        },
+                        new
+                        {
+                            Id = 20,
+                            Destination = "Generała Szyllinga Antoniego 111 Imielin",
+                            Financing = 0,
+                            PatientId = 3,
+                            PatientPosition = 0,
+                            StartTime = new DateTime(2023, 5, 13, 13, 15, 0, 0, DateTimeKind.Unspecified),
+                            TeamId = 7,
+                            TransportType = 1
+                        },
+                        new
+                        {
+                            Id = 21,
+                            Destination = "Urbańskiego Tadeusza 45 Pszów",
+                            Financing = 0,
+                            PatientId = 5,
+                            PatientPosition = 2,
+                            StartTime = new DateTime(2023, 5, 13, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            TeamId = 8,
+                            TransportType = 1
+                        },
+                        new
+                        {
+                            Id = 22,
+                            Destination = "Czerwona 46 Katowice",
+                            Financing = 0,
+                            PatientId = 4,
+                            PatientPosition = 1,
+                            StartTime = new DateTime(2023, 5, 13, 17, 15, 0, 0, DateTimeKind.Unspecified),
+                            TeamId = 8,
+                            TransportType = 1
+                        },
+                        new
+                        {
+                            Id = 23,
+                            Destination = "Reutta 54 Bytom",
+                            Financing = 0,
+                            PatientId = 3,
+                            PatientPosition = 0,
+                            StartTime = new DateTime(2023, 5, 13, 20, 0, 0, 0, DateTimeKind.Unspecified),
+                            TeamId = 8,
+                            TransportType = 0
+                        },
+                        new
+                        {
+                            Id = 24,
+                            Destination = "Cybernetyków 120 Tychy",
+                            Financing = 0,
+                            PatientId = 1,
+                            PatientPosition = 0,
+                            StartTime = new DateTime(2023, 5, 14, 8, 30, 0, 0, DateTimeKind.Unspecified),
+                            TeamId = 9,
+                            TransportType = 1
+                        },
+                        new
+                        {
+                            Id = 25,
+                            Destination = "Kaszubska 18 Świętochłowice",
+                            Financing = 0,
+                            PatientId = 3,
+                            PatientPosition = 0,
+                            StartTime = new DateTime(2023, 5, 14, 12, 0, 0, 0, DateTimeKind.Unspecified),
+                            TeamId = 9,
+                            TransportType = 1
+                        },
+                        new
+                        {
+                            Id = 26,
+                            Destination = "Cybernetyków 120 Tychy",
+                            Financing = 0,
+                            PatientId = 2,
+                            PatientPosition = 0,
+                            StartTime = new DateTime(2023, 5, 14, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            TeamId = 10,
+                            TransportType = 1
+                        },
+                        new
+                        {
+                            Id = 27,
+                            Destination = "Kaszubska 18 Świętochłowice",
+                            Financing = 0,
+                            PatientId = 5,
+                            PatientPosition = 2,
+                            StartTime = new DateTime(2023, 5, 14, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            TeamId = 10,
                             TransportType = 0
                         });
                 });
 
-            modelBuilder.Entity("MediMove.Server.Entities.Availability", b =>
+            modelBuilder.Entity("MediMove.Server.Models.User", b =>
                 {
-                    b.HasOne("MediMove.Server.Entities.Paramedic", "Paramedic")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("AccountId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("MediMove.Server.Models.Availability", b =>
+                {
+                    b.HasOne("MediMove.Server.Models.Paramedic", "Paramedic")
                         .WithMany("Availabilities")
                         .HasForeignKey("ParamedicId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -607,9 +1335,9 @@ namespace MediMove.Server.Migrations
                     b.Navigation("Paramedic");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Entities.Billing", b =>
+            modelBuilder.Entity("MediMove.Server.Models.Billing", b =>
                 {
-                    b.HasOne("MediMove.Server.Entities.PersonalInformation", "PersonalInformation")
+                    b.HasOne("MediMove.Server.Models.PersonalInformation", "PersonalInformation")
                         .WithMany()
                         .HasForeignKey("PersonalInformationId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -618,9 +1346,9 @@ namespace MediMove.Server.Migrations
                     b.Navigation("PersonalInformation");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Entities.Dispatcher", b =>
+            modelBuilder.Entity("MediMove.Server.Models.Dispatcher", b =>
                 {
-                    b.HasOne("MediMove.Server.Entities.PersonalInformation", "PersonalInformation")
+                    b.HasOne("MediMove.Server.Models.PersonalInformation", "PersonalInformation")
                         .WithMany()
                         .HasForeignKey("PersonalInformationId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -629,9 +1357,9 @@ namespace MediMove.Server.Migrations
                     b.Navigation("PersonalInformation");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Entities.Paramedic", b =>
+            modelBuilder.Entity("MediMove.Server.Models.Paramedic", b =>
                 {
-                    b.HasOne("MediMove.Server.Entities.PersonalInformation", "PersonalInformation")
+                    b.HasOne("MediMove.Server.Models.PersonalInformation", "PersonalInformation")
                         .WithMany()
                         .HasForeignKey("PersonalInformationId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -640,9 +1368,9 @@ namespace MediMove.Server.Migrations
                     b.Navigation("PersonalInformation");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Entities.Patient", b =>
+            modelBuilder.Entity("MediMove.Server.Models.Patient", b =>
                 {
-                    b.HasOne("MediMove.Server.Entities.PersonalInformation", "PersonalInformation")
+                    b.HasOne("MediMove.Server.Models.PersonalInformation", "PersonalInformation")
                         .WithMany()
                         .HasForeignKey("PersonalInformationId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -651,9 +1379,9 @@ namespace MediMove.Server.Migrations
                     b.Navigation("PersonalInformation");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Entities.Rate", b =>
+            modelBuilder.Entity("MediMove.Server.Models.Rate", b =>
                 {
-                    b.HasOne("MediMove.Server.Entities.Paramedic", "Paramedic")
+                    b.HasOne("MediMove.Server.Models.Paramedic", "Paramedic")
                         .WithMany("Rates")
                         .HasForeignKey("ParamedicId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -662,9 +1390,9 @@ namespace MediMove.Server.Migrations
                     b.Navigation("Paramedic");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Entities.Salary", b =>
+            modelBuilder.Entity("MediMove.Server.Models.Salary", b =>
                 {
-                    b.HasOne("MediMove.Server.Entities.Dispatcher", "Dispatcher")
+                    b.HasOne("MediMove.Server.Models.Dispatcher", "Dispatcher")
                         .WithMany("Salaries")
                         .HasForeignKey("DispatcherId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -673,13 +1401,13 @@ namespace MediMove.Server.Migrations
                     b.Navigation("Dispatcher");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Entities.Team", b =>
+            modelBuilder.Entity("MediMove.Server.Models.Team", b =>
                 {
-                    b.HasOne("MediMove.Server.Entities.Paramedic", "Driver")
+                    b.HasOne("MediMove.Server.Models.Paramedic", "Driver")
                         .WithMany()
                         .HasForeignKey("DriverId");
 
-                    b.HasOne("MediMove.Server.Entities.Paramedic", "Paramedic")
+                    b.HasOne("MediMove.Server.Models.Paramedic", "Paramedic")
                         .WithMany()
                         .HasForeignKey("ParamedicId");
 
@@ -688,19 +1416,19 @@ namespace MediMove.Server.Migrations
                     b.Navigation("Paramedic");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Entities.Transport", b =>
+            modelBuilder.Entity("MediMove.Server.Models.Transport", b =>
                 {
-                    b.HasOne("MediMove.Server.Entities.Billing", "Billing")
+                    b.HasOne("MediMove.Server.Models.Billing", "Billing")
                         .WithMany()
                         .HasForeignKey("BillingId");
 
-                    b.HasOne("MediMove.Server.Entities.Patient", "Patient")
+                    b.HasOne("MediMove.Server.Models.Patient", "Patient")
                         .WithMany("Transports")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MediMove.Server.Entities.Team", "Team")
+                    b.HasOne("MediMove.Server.Models.Team", "Team")
                         .WithMany("Transports")
                         .HasForeignKey("TeamId");
 
@@ -711,24 +1439,35 @@ namespace MediMove.Server.Migrations
                     b.Navigation("Team");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Entities.Dispatcher", b =>
+            modelBuilder.Entity("MediMove.Server.Models.User", b =>
+                {
+                    b.HasOne("MediMove.Server.Models.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("MediMove.Server.Models.Dispatcher", b =>
                 {
                     b.Navigation("Salaries");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Entities.Paramedic", b =>
+            modelBuilder.Entity("MediMove.Server.Models.Paramedic", b =>
                 {
                     b.Navigation("Availabilities");
 
                     b.Navigation("Rates");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Entities.Patient", b =>
+            modelBuilder.Entity("MediMove.Server.Models.Patient", b =>
                 {
                     b.Navigation("Transports");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Entities.Team", b =>
+            modelBuilder.Entity("MediMove.Server.Models.Team", b =>
                 {
                     b.Navigation("Transports");
                 });

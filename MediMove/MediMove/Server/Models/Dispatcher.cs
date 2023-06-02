@@ -7,8 +7,8 @@ namespace MediMove.Server.Models
     {
         public int Id { get; set; }
         public string BankAccountNumber { get; set; }
-        virtual public ICollection<Salary> Salaries { get; set; }
+        public virtual ICollection<Salary> Salaries { get; set; }
         public int PersonalInformationId { get; set; }
-        public PersonalInformation PersonalInformation { get; set; }
+        public virtual PersonalInformation PersonalInformation { get; set; }
     }
 }
