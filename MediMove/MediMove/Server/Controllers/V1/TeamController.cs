@@ -8,6 +8,15 @@ namespace MediMove.Server.Controllers.V1
 {
     public class TeamController : BaseApiController
     {
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetTeam([FromRoute] int id)
+        {
+            var result = await Mediator.Send(new GetTeamQuery(id));
+
+            return result.Match(
+                result => Ok(result),
+                errors => Problem(errors));
+        }
 
         /// <summary>
         /// Returns list of all Teams as TeamDTO objects.
@@ -47,10 +56,10 @@ namespace MediMove.Server.Controllers.V1
         [Authorize(Roles = "Dispatcher")]
         public async Task<IActionResult> CreateTeam([FromBody] CreateTeamDTO dto) // Przerobić na tworzenie listy teamów na dany dzień
         {
-            var entityId = await Mediator.Send(new CreateTeamCommand(dto));
+            var entity = await Mediator.Send(new CreateTeamCommand(dto));
 
-            return entityId.Match(
-                entityId => Ok(),  //entityId => CreatedAtAction(nameof(GetTeam), new { id = entityId }, null),
+            return entity.Match(
+                entity => CreatedAtAction(nameof(GetTeam), new { id = entity.Id }, null),
                 errors => Problem(errors));
         }
 

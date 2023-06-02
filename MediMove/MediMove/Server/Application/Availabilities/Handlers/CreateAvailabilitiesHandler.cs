@@ -8,7 +8,7 @@ using MediMove.Server.Models;
 
 namespace MediMove.Server.Application.Availabilities.Handlers
 {
-    public class CreateAvailabilitiesHandler : IRequestHandler<CreateAvailabilitiesCommand, ErrorOr<int>>
+    public class CreateAvailabilitiesHandler : IRequestHandler<CreateAvailabilitiesCommand, ErrorOr<Unit>>
     {
         private readonly IMapper _mapper;
         private readonly MediMoveDbContext _dbContext;
@@ -19,7 +19,7 @@ namespace MediMove.Server.Application.Availabilities.Handlers
             _dbContext = dbContext;
         }
 
-        public async Task<ErrorOr<int>> Handle(CreateAvailabilitiesCommand request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<Unit>> Handle(CreateAvailabilitiesCommand request, CancellationToken cancellationToken)
         {
             var availabilities = _mapper.Map<IEnumerable<Availability>>(request.Dto);
 
@@ -31,7 +31,7 @@ namespace MediMove.Server.Application.Availabilities.Handlers
             await _dbContext.Availabilities.AddRangeAsync(entities: availabilities,cancellationToken: cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
 
-            return new ErrorOr<int>();
+            return new ErrorOr<Unit>();
         }
 
     }

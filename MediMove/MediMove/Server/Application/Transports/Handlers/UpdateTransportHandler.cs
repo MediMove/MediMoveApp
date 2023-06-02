@@ -7,7 +7,7 @@ using MediMove.Server.Models;
 
 namespace MediMove.Server.Application.Transports.Handlers
 {
-    public class UpdateTransportHandler : IRequestHandler<CreateTransportCommand, ErrorOr<int>>
+    public class UpdateTransportHandler : IRequestHandler<CreateTransportCommand, ErrorOr<Transport>>
     {
         private readonly IMapper _mapper;
         private readonly MediMoveDbContext _dbContext;
@@ -18,7 +18,7 @@ namespace MediMove.Server.Application.Transports.Handlers
             _dbContext = dbContext;
         }
 
-        public async Task<ErrorOr<int>> Handle(CreateTransportCommand request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<Transport>> Handle(CreateTransportCommand request, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

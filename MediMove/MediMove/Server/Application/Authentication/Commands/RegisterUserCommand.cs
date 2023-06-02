@@ -5,5 +5,5 @@ using MediMove.Shared.Models.DTOs;
 
 namespace MediMove.Server.Application.Authentication.Commands
 {
-    public record RegisterUserCommand(RegisterUserDTO dto) : IRequest<ErrorOr<int>>;
+    public record RegisterUserCommand(RegisterUserDTO dto) : IRequest<ErrorOr<User>>;
 }

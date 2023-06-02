@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MediMove.Server.Application.Patients.Handlers
 {
-    public class UpdatePatientHandler : IRequestHandler<UpdatePatientCommand, ErrorOr<int>>
+    public class UpdatePatientHandler : IRequestHandler<UpdatePatientCommand, ErrorOr<Patient>>
     {
         private readonly IMapper _mapper;
         private readonly MediMoveDbContext _dbContext;
@@ -18,7 +18,7 @@ namespace MediMove.Server.Application.Patients.Handlers
             _mapper = mapper;
             _dbContext = dbContext;
         }
-        public async Task<ErrorOr<int>> Handle(UpdatePatientCommand request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<Patient>> Handle(UpdatePatientCommand request, CancellationToken cancellationToken)
         {
             var patient = await _dbContext.Patients.FirstOrDefaultAsync(x => x.Id == request.Id);
 
@@ -39,7 +39,7 @@ namespace MediMove.Server.Application.Patients.Handlers
 
             await _dbContext.SaveChangesAsync(cancellationToken);
 
-            return patient.Id;
+            return patient;
         }
     }
 }

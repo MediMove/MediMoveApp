@@ -8,7 +8,7 @@ using MediMove.Shared.Models.DTOs;
 
 namespace MediMove.Server.Application.Teams.Handlers
 {
-    public class CreateTeamHandler : IRequestHandler<CreateTeamCommand, ErrorOr<int>>
+    public class CreateTeamHandler : IRequestHandler<CreateTeamCommand, ErrorOr<Team>>
     {
         private readonly IMapper _mapper;
         private readonly MediMoveDbContext _dbContext;
@@ -19,7 +19,7 @@ namespace MediMove.Server.Application.Teams.Handlers
             _dbContext = dbContext;
         }
 
-        public async Task<ErrorOr<int>> Handle(CreateTeamCommand request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<Team>> Handle(CreateTeamCommand request, CancellationToken cancellationToken)
         {
             var team = _mapper.Map<Team>(request.dto);
 
@@ -31,7 +31,7 @@ namespace MediMove.Server.Application.Teams.Handlers
             await _dbContext.Teams.AddAsync(team, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
 
-            return team.Id;
+            return team;
         }
 
  

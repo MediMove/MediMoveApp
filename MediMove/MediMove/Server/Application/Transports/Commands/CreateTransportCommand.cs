@@ -7,5 +7,5 @@ using MediMove.Shared.Models.DTOs;
 
 namespace MediMove.Server.Application.Transports.Commands;
 
-public record CreateTransportCommand(CreateTransportDTO Dto) : IRequest<ErrorOr<int>>;
+public record CreateTransportCommand(CreateTransportDTO Dto) : IRequest<ErrorOr<Transport>>;
 

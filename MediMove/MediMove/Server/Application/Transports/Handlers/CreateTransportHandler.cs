@@ -7,7 +7,7 @@ using MediMove.Server.Models;
 
 namespace MediMove.Server.Application.Transports.Handlers
 {
-    public class CreateTransportHandler : IRequestHandler<CreateTransportCommand, ErrorOr<int>>
+    public class CreateTransportHandler : IRequestHandler<CreateTransportCommand, ErrorOr<Transport>>
     {
         private readonly IMapper _mapper;
         private readonly MediMoveDbContext _dbContext;
@@ -18,7 +18,7 @@ namespace MediMove.Server.Application.Transports.Handlers
             _dbContext = dbContext;
         }
 
-        public async Task<ErrorOr<int>> Handle(CreateTransportCommand request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<Transport>> Handle(CreateTransportCommand request, CancellationToken cancellationToken)
         {
             var transport = _mapper.Map<Transport>(request.Dto);
 
@@ -30,7 +30,7 @@ namespace MediMove.Server.Application.Transports.Handlers
             await _dbContext.Transports.AddAsync(transport, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
 
-            return transport.Id;
+            return transport;
         }
     }
 

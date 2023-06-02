@@ -9,7 +9,7 @@ using MediMove.Server.Models;
 
 namespace MediMove.Server.Application.Patients.Handlers
 {
-    public class CreatePatientHandler : IRequestHandler<CreatePatientCommand, ErrorOr<int>>
+    public class CreatePatientHandler : IRequestHandler<CreatePatientCommand, ErrorOr<Patient>>
     {
         private readonly IMapper _mapper;
         private readonly MediMoveDbContext _dbContext;
@@ -19,7 +19,7 @@ namespace MediMove.Server.Application.Patients.Handlers
             _mapper = mapper;
             _dbContext = dbContext;
         }
-        public async Task<ErrorOr<int>> Handle(CreatePatientCommand request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<Patient>> Handle(CreatePatientCommand request, CancellationToken cancellationToken)
         {
             var patient = _mapper.Map<Patient>(request.Dto);
 
@@ -31,7 +31,7 @@ namespace MediMove.Server.Application.Patients.Handlers
             await _dbContext.Patients.AddAsync(patient, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
 
-            return patient.Id;
+            return patient;
         }
     }
 }
