@@ -82,7 +82,7 @@ namespace MediMove.Server.Controllers.V1
 
         [HttpPatch("AddTeamToTransport/{id}")]
         [Authorize(Roles = "Dispatcher")]
-        public async Task<IActionResult> AddTeamToTransport([FromRoute] int id, [FromQuery] int teamId)
+        public async Task<IActionResult> AddTeamToTransport([FromRoute] int id, [FromQuery] int teamId) // do dodania teamu istniejącemu transportowi
         {
             var entity = await Mediator.Send(new AddTransportTeamCommand(id,teamId));
 
