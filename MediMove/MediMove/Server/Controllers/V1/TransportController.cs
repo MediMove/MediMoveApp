@@ -80,5 +80,16 @@ namespace MediMove.Server.Controllers.V1
                 errors => Problem(errors));
         }
 
+        [HttpPatch("AddTeamToTransport/{id}")]
+        [Authorize(Roles = "Dispatcher")]
+        public async Task<IActionResult> AddTeamToTransport([FromRoute] int id, [FromQuery] int teamId)
+        {
+            var entity = await Mediator.Send(new AddTransportTeamCommand(id,teamId));
+
+            return entity.Match(
+                entity => NoContent(),
+                errors => Problem(errors));
+        }
+
     }
 }
