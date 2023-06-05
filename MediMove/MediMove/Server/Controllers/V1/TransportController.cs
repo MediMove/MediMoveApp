@@ -9,15 +9,15 @@ namespace MediMove.Server.Controllers.V1
 {
     public class TransportController : BaseApiController
     {
-        //[HttpGet("{id}")] // jeśli ograniczymy wyświetlane informacje przy podglądzie transportów to tutaj rola paramedic i dispacher i wyswietlać wszystko 
-        //public async Task<IActionResult> GetTransport([FromRoute] int id)
-        //{
-        //    var result = await Mediator.Send(new GetTransportDTO(id));
+        [HttpGet("{id}")] // jeśli ograniczymy wyświetlane informacje przy podglądzie transportów to tutaj rola paramedic i dispacher i wyswietlać wszystko 
+        public async Task<IActionResult> GetTransport([FromRoute] int id)
+        {
+            var result = await Mediator.Send(new GetTransportQuery(id));
 
-        //    return result.Match(
-        //        result => Ok(result),
-        //        errors => Problem(errors));
-        //}
+            return result.Match(
+                result => Ok(result),
+                errors => Problem(errors));
+        }
 
 
         [HttpGet("Paramedic/{id}")]
@@ -61,10 +61,10 @@ namespace MediMove.Server.Controllers.V1
         [Authorize(Roles = "Dispatcher")]// autoryzacja rolą dispacher
         public async Task<IActionResult> CreateTransport([FromBody] CreateTransportDTO dto)
         {
-            var entityId = await Mediator.Send(new CreateTransportCommand(dto));
+            var entity = await Mediator.Send(new CreateTransportCommand(dto));
 
-            return entityId.Match(
-                entityId => Ok(),//CreatedAtAction(nameof(GetTransport), new { id = entityId }, null),
+            return entity.Match(
+                entity => CreatedAtAction(nameof(GetTransport), new { id = entity.Id }, null),
                 errors => Problem(errors));
         }
         
@@ -74,6 +74,17 @@ namespace MediMove.Server.Controllers.V1
         public async Task<IActionResult> EditTransport([FromRoute] int id, [FromBody] CreateTransportDTO dto)
         {
             var entity = await Mediator.Send(new UpdateTransportCommand(dto, id));
+
+            return entity.Match(
+                entity => NoContent(),
+                errors => Problem(errors));
+        }
+
+        [HttpPatch("AddTeamToTransport/{id}")]
+        [Authorize(Roles = "Dispatcher")]
+        public async Task<IActionResult> AddTeamToTransport([FromRoute] int id, [FromQuery] int teamId) // do dodania teamu istniejącemu transportowi
+        {
+            var entity = await Mediator.Send(new AddTransportTeamCommand(id,teamId));
 
             return entity.Match(
                 entity => NoContent(),

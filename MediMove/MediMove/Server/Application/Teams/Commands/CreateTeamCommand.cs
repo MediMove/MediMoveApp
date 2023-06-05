@@ -7,5 +7,5 @@ using MediMove.Shared.Models.DTOs;
 
 namespace MediMove.Server.Application.Teams.Commands
 {
-    public record CreateTeamCommand(CreateTeamDTO dto) : IRequest<ErrorOr<int>>;
+    public record CreateTeamCommand(CreateTeamDTO dto) : IRequest<ErrorOr<Team>>;
 }

@@ -7,8 +7,8 @@ namespace MediMove.Server.Validators
     {
         public LoginQueryValidator()
         {
-            RuleFor(x => x.dto.Email).NotEmpty().EmailAddress();
-            RuleFor(x => x.dto.Password).MinimumLength(8);
+            RuleFor(x => x.dto.Email).NotEmpty();
+            RuleFor(x => x.dto.Password).NotEmpty();
         }
     }
 }

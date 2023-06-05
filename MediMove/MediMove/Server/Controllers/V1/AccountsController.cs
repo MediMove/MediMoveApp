@@ -25,15 +25,14 @@ namespace MediMove.Server.Controllers.V1
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> RegisterUser([FromBody] RegisterUserDTO dto)
         {
-            var entityId = await Mediator.Send(new RegisterUserCommand(dto));
+            var entity = await Mediator.Send(new RegisterUserCommand(dto));
 
-            return entityId.Match(
-                result => CreatedAtAction(nameof(GetUserById), new { id = result }, null),
+            return entity.Match(
+                entity => CreatedAtAction(nameof(GetUserById), new { id = entity.Id }, null),
                 errors => Problem(errors));
         }
 
         [HttpPost("Login")]
-
         public async Task<IActionResult> LoginUser([FromBody] LoginUserDTO dto)
         {
             var result = await Mediator.Send(new LoginQuery(dto));

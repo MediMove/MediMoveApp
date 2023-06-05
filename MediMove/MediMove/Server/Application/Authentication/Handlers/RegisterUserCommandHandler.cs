@@ -12,7 +12,7 @@ namespace MediMove.Server.Application.Authentication.Handlers
 {
 
     
-    public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, ErrorOr<int>>
+    public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, ErrorOr<User>>
     {
         private readonly IMapper _mapper;
         private readonly MediMoveDbContext _dbContext;
@@ -25,7 +25,7 @@ namespace MediMove.Server.Application.Authentication.Handlers
             _passwordHasher = passwordHasher;
         }
 
-        public async Task<ErrorOr<int>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<User>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
         {
             var newUser = _mapper.Map<User>(request.dto);
 
@@ -38,7 +38,7 @@ namespace MediMove.Server.Application.Authentication.Handlers
             await _dbContext.Users.AddAsync(newUser, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
 
-            return newUser.Id;
+            return newUser;
 
         }
     }

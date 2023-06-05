@@ -35,10 +35,10 @@ namespace MediMove.Server.Controllers.V1
         [Authorize(Roles = "Dispatcher")]
         public async Task<IActionResult> CreatePatient([FromBody] CreatePatientDTO dto)
         {
-            var entityId = await Mediator.Send(new CreatePatientCommand(dto));
+            var entity = await Mediator.Send(new CreatePatientCommand(dto));
 
-            return entityId.Match(
-                entityId => CreatedAtAction(nameof(GetPatient), new { id = entityId }, null),
+            return entity.Match(
+                entity => CreatedAtAction(nameof(GetPatient), new { id = entity.Id }, null),
                 errors => Problem(errors));
         }
 
