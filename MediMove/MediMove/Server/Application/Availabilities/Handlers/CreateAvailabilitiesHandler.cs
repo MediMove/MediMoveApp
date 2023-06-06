@@ -21,16 +21,15 @@ namespace MediMove.Server.Application.Availabilities.Handlers
 
         public async Task<ErrorOr<Unit>> Handle(CreateAvailabilitiesCommand request, CancellationToken cancellationToken)
         {
-            var availabilities = _mapper.Map<IEnumerable<Availability>>(request.Dto);
+            var availabilities = _mapper.Map<IEnumerable<Availability>>(request);
 
             if (availabilities is null)
                 return Errors.Errors.MappingError;
 
-            await _dbContext.Availabilities.AddRangeAsync(entities: availabilities,cancellationToken: cancellationToken);
+            await _dbContext.Availabilities.AddRangeAsync(entities: availabilities, cancellationToken: cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
 
             return new ErrorOr<Unit>();
         }
-
     }
 }

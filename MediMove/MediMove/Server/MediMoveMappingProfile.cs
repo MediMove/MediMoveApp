@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MediMove.Server.Application.Availabilities.Commands;
 using MediMove.Server.Models;
 using MediMove.Shared.Models.DTOs;
 
@@ -17,7 +18,7 @@ namespace MediMove.Server
                 .ForMember(m => m.ParamedicFirstName, c => c.MapFrom(s => s.Paramedic.PersonalInformation.FirstName))
                 .ForMember(m => m.ParamedicLastName, c => c.MapFrom(s => s.Paramedic.PersonalInformation.LastName));
 
-            CreateMap<CreateAvailabilitiesDTO, IEnumerable<Availability>>()
+            CreateMap<CreateAvailabilitiesCommand, IEnumerable<Availability>>()
                 .ConvertUsing<AvailabilityListConverter>();
 
             CreateMap<Transport, TransportDTO>()
@@ -125,22 +126,20 @@ namespace MediMove.Server
         }
     }
 
-    public class AvailabilityListConverter : ITypeConverter<CreateAvailabilitiesDTO, IEnumerable<Availability>>
+    public class AvailabilityListConverter : ITypeConverter<CreateAvailabilitiesCommand, IEnumerable<Availability>>
     {
-        public IEnumerable<Availability> Convert(CreateAvailabilitiesDTO source, IEnumerable<Availability> destination, ResolutionContext context)
+        public IEnumerable<Availability> Convert(CreateAvailabilitiesCommand source, IEnumerable<Availability> destination, ResolutionContext context)
         {
             var availabilities = new List<Availability>();
 
-            for (int i = 0; i < source.Days.Count(); i++)
+            foreach (var availability in source.Dto.Availabilities)
             {
-                var availability = new Availability
+                availabilities.Add(new Availability
                 {
-                    Day = source.Days.ElementAt(i),
-                    ShiftType = source.ShiftTypes.ElementAt(i),
-                    ParamedicId = source.ParamedicId
-                };
-
-                availabilities.Add(availability);
+                    ParamedicId = source.ParamedicId,
+                    Day = availability.Day,
+                    ShiftType = availability.Shift
+                });
             }
 
             return availabilities;
