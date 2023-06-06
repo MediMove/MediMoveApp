@@ -3,6 +3,7 @@ using MediMove.Server.Application.Teams.Commands;
 using MediMove.Server.Data;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.EntityFrameworkCore;
+using System.Threading;
 
 namespace MediMove.Server.Validators
 {
@@ -17,12 +18,16 @@ namespace MediMove.Server.Validators
         public CreateTeamCommandValidator(MediMoveDbContext _dbContext)
         {
             RuleFor(x => x.dto.ParamedicId).GreaterThan(0)
-                .MustAsync(async (id, cancellationToken) => await _dbContext.Paramedics.AnyAsync(p => p.Id == id)).WithMessage("Paramedic ID is incorrect.");
+                .CustomAsync(async (driverIdValue, context, cancellationToken) =>
+                {
+                    var paramedic = await _dbContext.Paramedics.FirstOrDefaultAsync(p => p.Id == driverIdValue && p.IsWorking);
+                    if (paramedic is null) context.AddFailure("ParamedicId", "Paramedic ID is incorrect.");
+                });
 
             RuleFor(x => x.dto.DriverId).GreaterThan(0)
                 .CustomAsync(async (driverIdValue, context, cancellationToken) =>
                 {
-                    var driver = await _dbContext.Paramedics.FirstOrDefaultAsync(p => p.Id == driverIdValue);
+                    var driver = await _dbContext.Paramedics.FirstOrDefaultAsync(p => p.Id == driverIdValue && p.IsWorking);
                     if(driver is null) context.AddFailure("DriverId", "Driver ID is incorrect.");
                     else if (!driver.IsDriver) context.AddFailure("DriverId", $"Paramedic provided as driver (ID:{driverIdValue}) is not a driver.");
                 });
