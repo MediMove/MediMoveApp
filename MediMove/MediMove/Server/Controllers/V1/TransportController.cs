@@ -35,9 +35,7 @@ namespace MediMove.Server.Controllers.V1
         [Authorize(Roles = "Paramedic")]// akcja do wyświetlania transportów dla paramedica // autoryzacja rolą paramedic
         public async Task<IActionResult> GetTransportsByParamedicAndDay([FromQuery] int day, [FromQuery] int month, [FromQuery] int year)
         {
-            var id = int.Parse(HttpContext.User.Claims
-                .FirstOrDefault(c => c.Type.Equals("AccountId")).Value);
-            var result = await Mediator.Send(new GetTransportsByParamedicAndDayQuery(id, new DateTime(year, month, day)));   //(new GetTransportsByParamedicAndDayDTO(id, new DateOnly(year, month, day)));
+            var result = await Mediator.Send(new GetTransportsByParamedicAndDayQuery(getUserId(), new DateTime(year, month, day)));   //(new GetTransportsByParamedicAndDayDTO(id, new DateOnly(year, month, day)));
 
             return result.Match(
                 result => Ok(result),
