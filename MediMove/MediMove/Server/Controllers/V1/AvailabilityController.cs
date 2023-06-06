@@ -19,12 +19,15 @@ namespace MediMove.Server.Controllers.V1
                 result => Ok(result),
                 errors => Problem(errors));
         }
-       
+
+        /// <summary>
+        /// Creates availabilities for a given paramedic.
+        /// </summary>
+        /// <param name="dto">CreateAvailabilitiesDTO object</param>
         [HttpPost]
         [Authorize(Roles = "Paramedic")]
         public async Task<IActionResult> CreateAvailabilities([FromBody] CreateAvailabilitiesDTO dto)
         {
-
             var result = await Mediator.Send(new CreateAvailabilitiesCommand(getUserId(), dto));
 
             return result.Match(
