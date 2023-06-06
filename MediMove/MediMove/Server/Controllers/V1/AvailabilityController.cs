@@ -24,7 +24,11 @@ namespace MediMove.Server.Controllers.V1
         [Authorize(Roles = "Paramedic")]
         public async Task<IActionResult> CreateAvailabilities([FromBody] CreateAvailabilitiesDTO availabilities)
         {
-            var result = await Mediator.Send(new CreateAvailabilitiesCommand(availabilities));
+            var id = int.Parse(HttpContext.User.Claims
+                .FirstOrDefault(c => c.Type.Equals("AccountId")).Value);
+
+
+            var result = await Mediator.Send(new CreateAvailabilitiesCommand(id, availabilities));
 
             return result.Match(
                 result => NoContent(),
