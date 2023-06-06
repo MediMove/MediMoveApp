@@ -25,8 +25,8 @@ namespace MediMove.Server.Validators
                     if(passwordNotMatch) 
                         context.AddFailure("Password", "Passwords do not match");
                 });
-            RuleFor(x => x.dto.RoleId).GreaterThan(0).LessThan(5);
-            
+
+            RuleFor(x => x.dto.RoleId).InclusiveBetween(0, 5);
         }
     }
 }
