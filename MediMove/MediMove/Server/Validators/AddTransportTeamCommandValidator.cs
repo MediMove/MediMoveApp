@@ -14,14 +14,14 @@ namespace MediMove.Server.Validators
             RuleFor(x => x.TransportId).GreaterThan(0);
 
             RuleFor(x=> x)
-                .Custom((x, context) =>
+                .CustomAsync(async (x, context, cancellationToken) =>
                 {
-                    var transportDate = _dbContext.Transports.FirstOrDefault(t => t.Id == x.TransportId).StartTime;
-                    var teamDate = _dbContext.Teams.FirstOrDefault(t => t.Id == x.TeamId).Day;
+                    var transport = await _dbContext.Transports.FirstOrDefaultAsync(t => t.Id == x.TransportId);
+                    var team = await _dbContext.Teams.FirstOrDefaultAsync(t => t.Id == x.TeamId);
 
-                    var isSameDay = teamDate.Day == transportDate.Day &&
-                                    teamDate.Month == transportDate.Month &&
-                                    teamDate.Year == transportDate.Year;
+                    var isSameDay = team.Day.Day == transport.StartTime.Day &&
+                                    team.Day.Month == transport.StartTime.Month &&
+                                    team.Day.Year == transport.StartTime.Year;
 
                     if (!isSameDay) context.AddFailure("TeamId", "Date of transport and date when team is working is different");
                 });

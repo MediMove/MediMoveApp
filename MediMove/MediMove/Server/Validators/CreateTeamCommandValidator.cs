@@ -16,40 +16,42 @@ namespace MediMove.Server.Validators
         /// </summary>
         public CreateTeamCommandValidator(MediMoveDbContext _dbContext)
         {
-            RuleFor(x => x.dto.ParamedicId).GreaterThan(0);
+            RuleFor(x => x.dto.ParamedicId).GreaterThan(0)
+                .MustAsync(async (id, cancellationToken) => await _dbContext.Paramedics.AnyAsync(p => p.Id == id)).WithMessage("Paramedic ID is incorrect.");
 
             RuleFor(x => x.dto.DriverId).GreaterThan(0)
-                .Custom((driverIdValue, context) =>
+                .CustomAsync(async (driverIdValue, context, cancellationToken) =>
                 {
-                    var isDriver = _dbContext.Paramedics.FirstOrDefault(p => p.Id == driverIdValue).IsDriver;
-                    if (!isDriver) context.AddFailure("DriverId", $"Paramedic provided as driver (ID:{driverIdValue}) is not a driver");
+                    var driver = await _dbContext.Paramedics.FirstOrDefaultAsync(p => p.Id == driverIdValue);
+                    if(driver is null) context.AddFailure("DriverId", "Driver ID is incorrect.");
+                    else if (!driver.IsDriver) context.AddFailure("DriverId", $"Paramedic provided as driver (ID:{driverIdValue}) is not a driver.");
                 });
 
-            RuleFor(x => x.dto.Day).Must(day => day > DateTime.Today);
+            RuleFor(x => x.dto.Day).Must(day => day > DateTime.Today.AddDays(1)).WithMessage("Date must be in future.");
 
             RuleFor(x => x.dto)
-                .Custom((dto, context) =>
+                .CustomAsync(async (dto, context, cancellationToken) =>
                 {
-                    var isAlreadyPresentThatDay = _dbContext.Teams
-                        .Where(t => t.Day == dto.Day)
-                        .Any(t => 
+                    var isAlreadyPresentThatDay = await _dbContext.Teams
+                        .Where(t => t.Day.Date == dto.Day.Date)
+                        .AnyAsync(t => 
                             t.DriverId == dto.DriverId || 
                             t.ParamedicId == dto.DriverId
                         );
 
-                    if (isAlreadyPresentThatDay) context.AddFailure("DriverId", $"Driver provided (ID:{dto.DriverId}) is already working that day");
+                    if (isAlreadyPresentThatDay) context.AddFailure("DriverId", $"Driver provided (ID:{dto.DriverId}) is already working that day.");
 
                 })
-                .Custom((dto, context) =>
+                .CustomAsync(async (dto, context, cancellationToken) =>
                 {
-                    var isAlreadyPresentThatDay = _dbContext.Teams
-                        .Where(t => t.Day == dto.Day)
-                        .Any(t =>
+                    var isAlreadyPresentThatDay = await _dbContext.Teams
+                        .Where(t => t.Day.Date == dto.Day.Date)
+                        .AnyAsync(t =>
                             t.ParamedicId == dto.ParamedicId ||
                             t.DriverId == dto.ParamedicId
                         );
 
-                    if (isAlreadyPresentThatDay) context.AddFailure("ParamedicId", $"Paramedic provided (ID:{dto.ParamedicId}) is already working that day");
+                    if (isAlreadyPresentThatDay) context.AddFailure("ParamedicId", $"Paramedic provided (ID:{dto.ParamedicId}) is already working that day.");
 
                 });
         }
