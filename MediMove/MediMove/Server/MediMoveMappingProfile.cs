@@ -2,6 +2,7 @@
 using MediMove.Server.Application.Availabilities.Commands;
 using MediMove.Server.Models;
 using MediMove.Shared.Models.DTOs;
+using MediMove.Shared.Models.Enums;
 
 namespace MediMove.Server
 {
@@ -19,8 +20,8 @@ namespace MediMove.Server
                 .ForMember(m => m.ParamedicLastName, c => c.MapFrom(s => s.Paramedic.PersonalInformation.LastName));
 
             CreateMap<CreateAvailabilitiesCommand, IEnumerable<Availability>>()
-                .ConvertUsing<CreateAvailabilitiesCommandToAvailabilitiesListConverter>();
-            
+                .ConvertUsing<AvailabilityListConverter>();
+
             CreateMap<Transport, TransportDTO>()
                 .ForMember(m => m.PatientFirstName, c => c.MapFrom(s => s.Patient.PersonalInformation.FirstName))
                 .ForMember(m => m.PatientLastName, c => c.MapFrom(s => s.Patient.PersonalInformation.LastName))
@@ -47,6 +48,9 @@ namespace MediMove.Server
 
             CreateMap<CreatePatientDTO, Patient>()
                 .ConvertUsing<PatientConverter>();
+
+            CreateMap<CreateTransportWithBillingDTO, Transport>()
+                .ConvertUsing<TransportWithBillingConverter>();
 
             //CreateMap<CreatePatientDTO, Patient>()
             //    .ForMember(m => m.PersonalInformation.FirstName, c => c.MapFrom(s => s.FirstName))
@@ -114,6 +118,11 @@ namespace MediMove.Server
             //    .ForMember(m => m.Country, c => c.MapFrom(s => s.PersonalInformation.Country));
 
 
+
+
+
+
+
             CreateMap<RegisterUserDTO, User>();
 
 
@@ -121,7 +130,7 @@ namespace MediMove.Server
         }
     }
 
-    public class CreateAvailabilitiesCommandToAvailabilitiesListConverter : ITypeConverter<CreateAvailabilitiesCommand, IEnumerable<Availability>>
+    public class AvailabilityListConverter : ITypeConverter<CreateAvailabilitiesCommand, IEnumerable<Availability>>
     {
         public IEnumerable<Availability> Convert(CreateAvailabilitiesCommand source, IEnumerable<Availability> destination, ResolutionContext context)
         {
@@ -163,6 +172,55 @@ namespace MediMove.Server
             patient.Weight = source.Weight;
             patient.PersonalInformation = personalInformation;
             return patient;
+
+        }
+    }
+
+    public class TransportWithBillingConverter : ITypeConverter<CreateTransportWithBillingDTO, Transport>
+    {
+        public Transport Convert(CreateTransportWithBillingDTO source, Transport destination, ResolutionContext context)
+        {
+            
+
+            var personalInformation = new PersonalInformation()
+            {
+                FirstName = source.FirstName,
+                LastName = source.LastName,
+                StreetAddress = source.StreetAddress,
+                HouseNumber = source.HouseNumber,
+                ApartmentNumber = source.ApartmentNumber,
+                City = source.City,
+                PostalCode = source.PostalCode,
+                StateProvince = source.StateProvince,
+                Country = source.Country,
+                PhoneNumber = source.PhoneNumber
+            };
+
+            var billing = new Billing()
+            {
+                BankAccountNumber = source.BankAccountNumber,
+                InvoiceDate = source.InvoiceDate,
+                Cost = source.Cost,
+                InvoiceNumber = source.InvoiceNumber,
+                PersonalInformation = personalInformation
+            };
+
+            var transport = new Transport
+            {
+                Billing = billing,
+                Destination = source.Destination,
+                TransportType = source.TransportType,
+                Financing = source.Financing,
+                PatientId = source.PatientId,
+                PatientPosition = source.PatientPosition,
+                StartTime = source.StartTime,
+
+            };
+
+
+
+
+            return transport;
 
         }
     }

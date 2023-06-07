@@ -65,7 +65,17 @@ namespace MediMove.Server.Controllers.V1
                 entity => CreatedAtAction(nameof(GetTransport), new { id = entity.Id }, null),
                 errors => Problem(errors));
         }
-        
+        [HttpPost("WithBilling")]
+        [Authorize(Roles = "Dispatcher")]// autoryzacja rolą dispacher
+        public async Task<IActionResult> CreateTransportWithBilling([FromBody] CreateTransportWithBillingDTO dto)
+        {
+            var entity = await Mediator.Send(new CreateTransportWithBillingCommand(dto));
+
+            return entity.Match(
+                entity => CreatedAtAction(nameof(GetTransport), new { id = entity.Id }, null),
+                errors => Problem(errors));
+        }
+
 
         [HttpPatch("{id}")]
         [Authorize(Roles = "Dispatcher")]//Autoryzacja rolą dispacher
