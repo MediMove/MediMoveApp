@@ -4,5 +4,5 @@ using MediMove.Shared.Models.DTOs;
 
 namespace MediMove.Server.Application.Availabilities.Commands;
 
-public record CreateAvailabilitiesCommand(int ParamedicId, CreateAvailabilitiesDTO Dto) : IRequest<ErrorOr<Unit>>;
+public record CreateAvailabilitiesCommand(int ParamedicId, CreateAvailabilitiesRequest Dto) : IRequest<ErrorOr<Unit>>;
     

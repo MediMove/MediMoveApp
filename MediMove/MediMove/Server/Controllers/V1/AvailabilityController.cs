@@ -26,7 +26,7 @@ namespace MediMove.Server.Controllers.V1
         /// <param name="dto">CreateAvailabilitiesDTO object</param>
         [HttpPost]
         [Authorize(Roles = "Paramedic")]
-        public async Task<IActionResult> CreateAvailabilities([FromBody] CreateAvailabilitiesDTO dto)
+        public async Task<IActionResult> CreateAvailabilities([FromBody] CreateAvailabilitiesRequest dto)
         {
             var result = await Mediator.Send(new CreateAvailabilitiesCommand(getUserId(), dto));
 
