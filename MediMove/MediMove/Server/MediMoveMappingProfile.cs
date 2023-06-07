@@ -19,8 +19,8 @@ namespace MediMove.Server
                 .ForMember(m => m.ParamedicLastName, c => c.MapFrom(s => s.Paramedic.PersonalInformation.LastName));
 
             CreateMap<CreateAvailabilitiesCommand, IEnumerable<Availability>>()
-                .ConvertUsing<AvailabilityListConverter>();
-
+                .ConvertUsing<CreateAvailabilitiesCommandToAvailabilitiesListConverter>();
+            
             CreateMap<Transport, TransportDTO>()
                 .ForMember(m => m.PatientFirstName, c => c.MapFrom(s => s.Patient.PersonalInformation.FirstName))
                 .ForMember(m => m.PatientLastName, c => c.MapFrom(s => s.Patient.PersonalInformation.LastName))
@@ -114,11 +114,6 @@ namespace MediMove.Server
             //    .ForMember(m => m.Country, c => c.MapFrom(s => s.PersonalInformation.Country));
 
 
-
-
-
-            
-
             CreateMap<RegisterUserDTO, User>();
 
 
@@ -126,7 +121,7 @@ namespace MediMove.Server
         }
     }
 
-    public class AvailabilityListConverter : ITypeConverter<CreateAvailabilitiesCommand, IEnumerable<Availability>>
+    public class CreateAvailabilitiesCommandToAvailabilitiesListConverter : ITypeConverter<CreateAvailabilitiesCommand, IEnumerable<Availability>>
     {
         public IEnumerable<Availability> Convert(CreateAvailabilitiesCommand source, IEnumerable<Availability> destination, ResolutionContext context)
         {
