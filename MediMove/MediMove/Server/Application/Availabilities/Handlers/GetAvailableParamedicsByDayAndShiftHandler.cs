@@ -8,16 +8,31 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MediMove.Server.Application.Availabilities.Handlers
 {
+    /// <summary>
+    /// Handler for getting available paramedics by day and shift.
+    /// </summary>
     public class GetAvailableParamedicsByDayAndShiftHandler : IRequestHandler<GetAvailableParamedicsByDayAndShiftQuery, ErrorOr<GetAvailableParamedicsByDayAndShiftResponse>>
     {
         private readonly IMapper _mapper;
         private readonly MediMoveDbContext _dbContext;
 
+        /// <summary>
+        /// Constructor for GetAvailableParamedicsByDayAndShiftHandler.
+        /// </summary>
+        /// <param name="mapper">mapper to inject</param>
+        /// <param name="dbContext">dbContext to inject</param>
         public GetAvailableParamedicsByDayAndShiftHandler(IMapper mapper, MediMoveDbContext dbContext)
         {
             _mapper = mapper;
             _dbContext = dbContext;
         }
+
+        /// <summary>
+        /// Method for handling the GetAvailableParamedicsByDayAndShiftQuery.
+        /// </summary>
+        /// <param name="request">GetAvailableParamedicsByDayAndShiftQuery</param>
+        /// <param name="cancellationToken">CancellationToken</param>
+        /// <returns>GetAvailableParamedicsByDayAndShiftResponse wrapped in ErrorOr</returns>
         public async Task<ErrorOr<GetAvailableParamedicsByDayAndShiftResponse>> Handle(GetAvailableParamedicsByDayAndShiftQuery request, CancellationToken cancellationToken)
         {
             var query = await _dbContext.Availabilities
@@ -50,7 +65,7 @@ namespace MediMove.Server.Application.Availabilities.Handlers
                 Paramedics = query
             };
 
-            return ErrorOr.ErrorOr.From(response);
+            return response;
         }
     }
 }

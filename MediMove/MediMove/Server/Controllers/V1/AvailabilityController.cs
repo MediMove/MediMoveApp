@@ -7,8 +7,19 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MediMove.Server.Controllers.V1
 {
+    /// <summary>
+    /// Controller for availability related endpoints.
+    /// </summary>
     public class AvailabilityController : BaseApiController
     {
+        /// <summary>
+        /// Gets available paramedics by day and shift.
+        /// </summary>
+        /// <param name="year">year as integer</param>
+        /// <param name="month">month as integer</param>
+        /// <param name="day">day as integer</param>
+        /// <param name="shift">shift as ShiftType</param>
+        /// <returns>GetAvailableParamedicsByDayAndShiftResponse object</returns>
         [HttpGet]
         [Authorize(Roles = "Dispatcher")]
         public async Task<IActionResult> GetAvailableParamedicsByDayAndShift([FromQuery] int year, [FromQuery] int month, [FromQuery] int day, [FromQuery] ShiftType shift)
@@ -20,15 +31,17 @@ namespace MediMove.Server.Controllers.V1
                 errors => Problem(errors));
         }
 
+
         /// <summary>
         /// Creates availabilities for a given paramedic.
         /// </summary>
-        /// <param name="dto">CreateAvailabilitiesDTO object</param>
+        /// <param name="request">CreateAvailabilitiesRequest object</param>
+        /// <returns>No content</returns>
         [HttpPost]
         [Authorize(Roles = "Paramedic")]
-        public async Task<IActionResult> CreateAvailabilities([FromBody] CreateAvailabilitiesRequest dto)
+        public async Task<IActionResult> CreateAvailabilities([FromBody] CreateAvailabilitiesRequest request)
         {
-            var result = await Mediator.Send(new CreateAvailabilitiesCommand(getUserId(), dto));
+            var result = await Mediator.Send(new CreateAvailabilitiesCommand(getUserId(), request));
 
             return result.Match(
                 result => NoContent(),

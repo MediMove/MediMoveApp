@@ -2,7 +2,6 @@
 using MediMove.Server.Application.Availabilities.Commands;
 using MediMove.Server.Models;
 using MediMove.Shared.Models.DTOs;
-using MediMove.Shared.Models.Enums;
 
 namespace MediMove.Server
 {
@@ -15,12 +14,8 @@ namespace MediMove.Server
 
             CreateMap<Team, TeamDTO>();
 
-            CreateMap<Availability, AvailabilityDTO>()
-                .ForMember(m => m.ParamedicFirstName, c => c.MapFrom(s => s.Paramedic.PersonalInformation.FirstName))
-                .ForMember(m => m.ParamedicLastName, c => c.MapFrom(s => s.Paramedic.PersonalInformation.LastName));
-
             CreateMap<CreateAvailabilitiesCommand, IEnumerable<Availability>>()
-                .ConvertUsing<AvailabilityListConverter>();
+                .ConvertUsing<CreateAvailabilitiesCommandToAvailabilityListConverter>();
 
             CreateMap<Transport, TransportDTO>()
                 .ForMember(m => m.PatientFirstName, c => c.MapFrom(s => s.Patient.PersonalInformation.FirstName))
@@ -130,13 +125,23 @@ namespace MediMove.Server
         }
     }
 
-    public class AvailabilityListConverter : ITypeConverter<CreateAvailabilitiesCommand, IEnumerable<Availability>>
+    /// <summary>
+    /// Converter for CreateAvailabilitiesCommand to IEnumerable of Availabilities
+    /// </summary>
+    public class CreateAvailabilitiesCommandToAvailabilityListConverter : ITypeConverter<CreateAvailabilitiesCommand, IEnumerable<Availability>>
     {
+        /// <summary>
+        /// Method that converts CreateAvailabilitiesCommand to IEnumerable of Availabilities
+        /// </summary>
+        /// <param name="source">CreateAvailabilitiesCommand object</param>
+        /// <param name="destination">IEnumerable of Availabilities</param>
+        /// <param name="context">ResolutionContext object</param>
+        /// <returns>IEnumerable of Availabilities</returns>
         public IEnumerable<Availability> Convert(CreateAvailabilitiesCommand source, IEnumerable<Availability> destination, ResolutionContext context)
         {
             var availabilities = new List<Availability>();
 
-            foreach (var availability in source.Dto.Availabilities)
+            foreach (var availability in source.request.Availabilities)
             {
                 availabilities.Add(new Availability
                 {
