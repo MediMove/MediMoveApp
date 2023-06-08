@@ -4,7 +4,7 @@ using MediMove.Server.Data;
 using MediMove.Shared.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 
-namespace MediMove.Server.Validators
+namespace MediMove.Server.Application.Availabilities.Validators
 {
     /// <summary>
     /// Validator for CreateAvailabilitiesCommand.

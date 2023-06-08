@@ -3,7 +3,7 @@ using FluentValidation;
 using MediMove.Server.Application.Authentication.Commands;
 using MediMove.Server.Data;
 
-namespace MediMove.Server.Validators
+namespace MediMove.Server.Application.Authentication.Validators
 {
     public class RegisterUserCommandValidator : AbstractValidator<RegisterUserCommand>
     {
@@ -15,14 +15,14 @@ namespace MediMove.Server.Validators
                 .Custom((value, context) =>
                 {
                     var emailInUse = _dbContext.Users.Any(u => u.Email == value);
-                    if(emailInUse) context.AddFailure("Email", "That email is in use");
+                    if (emailInUse) context.AddFailure("Email", "That email is in use");
                 });
             RuleFor(x => x.dto.Password).MinimumLength(8)
                 .Custom((value, context) =>
                 {
                     var passwordNotMatch = value !=
                                            context.InstanceToValidate.dto.ConfirmPassword;
-                    if(passwordNotMatch) 
+                    if (passwordNotMatch)
                         context.AddFailure("Password", "Passwords do not match");
                 });
 

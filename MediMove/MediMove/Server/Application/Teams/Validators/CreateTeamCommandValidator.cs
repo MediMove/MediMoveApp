@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
 
-namespace MediMove.Server.Validators
+namespace MediMove.Server.Application.Teams.Validators
 {
     /// <summary>
     /// Validator for the CreateTeamDTO
@@ -28,7 +28,7 @@ namespace MediMove.Server.Validators
                 .CustomAsync(async (driverIdValue, context, cancellationToken) =>
                 {
                     var driver = await _dbContext.Paramedics.FirstOrDefaultAsync(p => p.Id == driverIdValue && p.IsWorking);
-                    if(driver is null) context.AddFailure("DriverId", "Driver ID is incorrect.");
+                    if (driver is null) context.AddFailure("DriverId", "Driver ID is incorrect.");
                     else if (!driver.IsDriver) context.AddFailure("DriverId", $"Paramedic provided as driver (ID:{driverIdValue}) is not a driver.");
                 });
 
@@ -39,8 +39,8 @@ namespace MediMove.Server.Validators
                 {
                     var isAlreadyPresentThatDay = await _dbContext.Teams
                         .Where(t => t.Day.Date == dto.Day.Date)
-                        .AnyAsync(t => 
-                            t.DriverId == dto.DriverId || 
+                        .AnyAsync(t =>
+                            t.DriverId == dto.DriverId ||
                             t.ParamedicId == dto.DriverId
                         );
 

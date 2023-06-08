@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using MediMove.Server.Application.Availabilities.Queries;
 
-namespace MediMove.Server.Validators
+namespace MediMove.Server.Application.Availabilities.Validators
 {
     /// <summary>
     /// Validator for GetAvailableParamedicsByDayAndShiftQuery.
