@@ -11,7 +11,7 @@ namespace MediMove.Shared.Extensions
                 return ShiftType.Morning;
             else if (dateTime.Hour >= 14 && dateTime.Hour < 22)
                 return ShiftType.Evening;
-            else return Error.Failure("FAILURE", "DateTime is not in a valid shift");
+            else return Error.Failure("DATETIME_TO_SHIFTTYPE_CONVERSION_FAILURE", "DateTime is not in a valid shift");
         }
     }
 }
