@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using ErrorOr;
 using MediatR;
+using MediMove.Server.Application.Models;
 using MediMove.Server.Application.Patients.Commands;
 using MediMove.Server.Data;
-using MediMove.Server.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace MediMove.Server.Application.Patients.Handlers

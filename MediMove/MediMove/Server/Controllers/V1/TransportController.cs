@@ -1,6 +1,6 @@
 ﻿using MediMove.Server.Application.Transports.Commands;
 using MediMove.Server.Application.Transports.Queries;
-using MediMove.Server.Models;
+using MediMove.Server.Application.Models;
 using MediMove.Shared.Models.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -35,9 +35,7 @@ namespace MediMove.Server.Controllers.V1
         [Authorize(Roles = "Paramedic")]// akcja do wyświetlania transportów dla paramedica // autoryzacja rolą paramedic
         public async Task<IActionResult> GetTransportsByParamedicAndDay([FromQuery] int day, [FromQuery] int month, [FromQuery] int year)
         {
-            var id = int.Parse(HttpContext.User.Claims
-                .FirstOrDefault(c => c.Type.Equals("AccountId")).Value);
-            var result = await Mediator.Send(new GetTransportsByParamedicAndDayQuery(id, new DateTime(year, month, day)));   //(new GetTransportsByParamedicAndDayDTO(id, new DateOnly(year, month, day)));
+            var result = await Mediator.Send(new GetTransportsByParamedicAndDayQuery(getUserId(), new DateTime(year, month, day)));   //(new GetTransportsByParamedicAndDayDTO(id, new DateOnly(year, month, day)));
 
             return result.Match(
                 result => Ok(result),
@@ -67,7 +65,17 @@ namespace MediMove.Server.Controllers.V1
                 entity => CreatedAtAction(nameof(GetTransport), new { id = entity.Id }, null),
                 errors => Problem(errors));
         }
-        
+        [HttpPost("WithBilling")]
+        [Authorize(Roles = "Dispatcher")]// autoryzacja rolą dispacher
+        public async Task<IActionResult> CreateTransportWithBilling([FromBody] CreateTransportWithBillingDTO dto)
+        {
+            var entity = await Mediator.Send(new CreateTransportWithBillingCommand(dto));
+
+            return entity.Match(
+                entity => CreatedAtAction(nameof(GetTransport), new { id = entity.Id }, null),
+                errors => Problem(errors));
+        }
+
 
         [HttpPatch("{id}")]
         [Authorize(Roles = "Dispatcher")]//Autoryzacja rolą dispacher

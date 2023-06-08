@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using ErrorOr;
 using MediatR;
+using MediMove.Server.Application.Models;
 using MediMove.Server.Application.Teams.Commands;
 using MediMove.Server.Data;
-using MediMove.Server.Models;
 using MediMove.Shared.Models.DTOs;
 
 namespace MediMove.Server.Application.Teams.Handlers
