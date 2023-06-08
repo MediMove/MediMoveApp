@@ -20,9 +20,9 @@ namespace MediMove.Server.Controllers.V1
         }
 
 
-        [HttpGet("Paramedic/{id}")]
+        [HttpGet("Team/{id}")]
         [Authorize(Roles = "Dispatcher")]// akcja dla roli dispacher // autoryzacja rolą dispacher
-        public async Task<IActionResult> GetTransportsByParamedicAndDay([FromRoute] int id, [FromQuery] int day, [FromQuery] int month, [FromQuery] int year) 
+        public async Task<IActionResult> GetTransportsByTeamAndDay([FromRoute] int id, [FromQuery] int day, [FromQuery] int month, [FromQuery] int year) 
         {
             var result = await Mediator.Send(new GetTransportsByTeamAndDayQuery(id, new DateTime(year, month, day)));   //(new GetTransportsByParamedicAndDayDTO(id, new DateOnly(year, month, day)));
 
@@ -36,7 +36,6 @@ namespace MediMove.Server.Controllers.V1
         public async Task<IActionResult> GetTransportsByParamedicAndDay([FromQuery] int day, [FromQuery] int month, [FromQuery] int year)
         {
             var result = await Mediator.Send(new GetTransportsByParamedicAndDayQuery(getUserId(), new DateTime(year, month, day)));   //(new GetTransportsByParamedicAndDayDTO(id, new DateOnly(year, month, day)));
-            var id = getUserId();
             return result.Match(
                 result => Ok(result),
                 errors => Problem(errors));

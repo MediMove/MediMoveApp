@@ -32,7 +32,7 @@ namespace MediMove.Server.Application.Transports.Handlers
                 })
                 .ToDictionaryAsync(
                     keySelector: t => t.Id,
-                    elementSelector: t => t.GetTransportResponse
+                    elementSelector: t => t.GetTransportResponse, cancellationToken
                 );
 
 
