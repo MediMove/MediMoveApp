@@ -4,7 +4,7 @@ using MediMove.Server.Application.Transports.Commands;
 using MediMove.Server.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace MediMove.Server.Validators
+namespace MediMove.Server.Application.Transports.Validators
 {
     public class AddTransportTeamCommandValidator : AbstractValidator<AddTransportTeamCommand>
     {
@@ -13,7 +13,7 @@ namespace MediMove.Server.Validators
             RuleFor(x => x.TeamId).GreaterThan(0);
             RuleFor(x => x.TransportId).GreaterThan(0);
 
-            RuleFor(x=> x)
+            RuleFor(x => x)
                 .CustomAsync(async (x, context, cancellationToken) =>
                 {
                     var transport = await _dbContext.Transports.FirstOrDefaultAsync(t => t.Id == x.TransportId);

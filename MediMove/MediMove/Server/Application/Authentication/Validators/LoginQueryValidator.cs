@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using MediMove.Server.Application.Authentication.Queries;
 
-namespace MediMove.Server.Validators
+namespace MediMove.Server.Application.Authentication.Validators
 {
     public class LoginQueryValidator : AbstractValidator<LoginQuery>
     {

@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using MediMove.Server.Application.Patients.Commands;
 
-namespace MediMove.Server.Validators
+namespace MediMove.Server.Application.Patients.Validators
 {
     public class CreatePatientCommandValidator : AbstractValidator<CreatePatientCommand>
     {

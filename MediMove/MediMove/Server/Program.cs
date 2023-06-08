@@ -134,6 +134,7 @@ app.UseSwaggerUI(options =>
 {
     foreach (var description in provider.ApiVersionDescriptions)
         options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName);
+    options.EnableTryItOutByDefault();
 });
 app.UseApiVersioning();
 app.UseAuthentication();

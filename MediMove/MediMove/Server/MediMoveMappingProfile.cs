@@ -14,12 +14,8 @@ namespace MediMove.Server
 
             CreateMap<Team, TeamDTO>();
 
-            CreateMap<Availability, AvailabilityDTO>()
-                .ForMember(m => m.ParamedicFirstName, c => c.MapFrom(s => s.Paramedic.PersonalInformation.FirstName))
-                .ForMember(m => m.ParamedicLastName, c => c.MapFrom(s => s.Paramedic.PersonalInformation.LastName));
-
             CreateMap<CreateAvailabilitiesCommand, IEnumerable<Availability>>()
-                .ConvertUsing<AvailabilityListConverter>();
+                .ConvertUsing<CreateAvailabilitiesCommandToAvailabilityListConverter>();
 
             CreateMap<Transport, TransportDTO>()
                 .ForMember(m => m.PatientFirstName, c => c.MapFrom(s => s.Patient.PersonalInformation.FirstName))
@@ -47,6 +43,9 @@ namespace MediMove.Server
 
             CreateMap<CreatePatientDTO, Patient>()
                 .ConvertUsing<PatientConverter>();
+
+            CreateMap<CreateTransportWithBillingDTO, Transport>()
+                .ConvertUsing<TransportWithBillingConverter>();
 
             //CreateMap<CreatePatientDTO, Patient>()
             //    .ForMember(m => m.PersonalInformation.FirstName, c => c.MapFrom(s => s.FirstName))
@@ -117,7 +116,7 @@ namespace MediMove.Server
 
 
 
-            
+
 
             CreateMap<RegisterUserDTO, User>();
 
@@ -126,13 +125,23 @@ namespace MediMove.Server
         }
     }
 
-    public class AvailabilityListConverter : ITypeConverter<CreateAvailabilitiesCommand, IEnumerable<Availability>>
+    /// <summary>
+    /// Converter for CreateAvailabilitiesCommand to IEnumerable of Availabilities
+    /// </summary>
+    public class CreateAvailabilitiesCommandToAvailabilityListConverter : ITypeConverter<CreateAvailabilitiesCommand, IEnumerable<Availability>>
     {
+        /// <summary>
+        /// Method that converts CreateAvailabilitiesCommand to IEnumerable of Availabilities
+        /// </summary>
+        /// <param name="source">CreateAvailabilitiesCommand object</param>
+        /// <param name="destination">IEnumerable of Availabilities</param>
+        /// <param name="context">ResolutionContext object</param>
+        /// <returns>IEnumerable of Availabilities</returns>
         public IEnumerable<Availability> Convert(CreateAvailabilitiesCommand source, IEnumerable<Availability> destination, ResolutionContext context)
         {
             var availabilities = new List<Availability>();
 
-            foreach (var availability in source.Dto.Availabilities)
+            foreach (var availability in source.request.Availabilities)
             {
                 availabilities.Add(new Availability
                 {
@@ -168,6 +177,55 @@ namespace MediMove.Server
             patient.Weight = source.Weight;
             patient.PersonalInformation = personalInformation;
             return patient;
+
+        }
+    }
+
+    public class TransportWithBillingConverter : ITypeConverter<CreateTransportWithBillingDTO, Transport>
+    {
+        public Transport Convert(CreateTransportWithBillingDTO source, Transport destination, ResolutionContext context)
+        {
+            
+
+            var personalInformation = new PersonalInformation()
+            {
+                FirstName = source.FirstName,
+                LastName = source.LastName,
+                StreetAddress = source.StreetAddress,
+                HouseNumber = source.HouseNumber,
+                ApartmentNumber = source.ApartmentNumber,
+                City = source.City,
+                PostalCode = source.PostalCode,
+                StateProvince = source.StateProvince,
+                Country = source.Country,
+                PhoneNumber = source.PhoneNumber
+            };
+
+            var billing = new Billing()
+            {
+                BankAccountNumber = source.BankAccountNumber,
+                InvoiceDate = source.InvoiceDate,
+                Cost = source.Cost,
+                InvoiceNumber = source.InvoiceNumber,
+                PersonalInformation = personalInformation
+            };
+
+            var transport = new Transport
+            {
+                Billing = billing,
+                Destination = source.Destination,
+                TransportType = source.TransportType,
+                Financing = source.Financing,
+                PatientId = source.PatientId,
+                PatientPosition = source.PatientPosition,
+                StartTime = source.StartTime,
+
+            };
+
+
+
+
+            return transport;
 
         }
     }

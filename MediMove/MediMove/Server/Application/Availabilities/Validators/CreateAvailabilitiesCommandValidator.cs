@@ -1,17 +1,23 @@
 ﻿using FluentValidation;
 using MediMove.Server.Application.Availabilities.Commands;
 using MediMove.Server.Data;
-using MediMove.Shared.Models.DTOs;
 using MediMove.Shared.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 
-namespace MediMove.Server.Validators
+namespace MediMove.Server.Application.Availabilities.Validators
 {
-    public class CreateAvailabilityCommandValidator : AbstractValidator<CreateAvailabilitiesCommand>
+    /// <summary>
+    /// Validator for CreateAvailabilitiesCommand.
+    /// </summary>
+    public class CreateAvailabilitiesCommandValidator : AbstractValidator<CreateAvailabilitiesCommand>
     {
-        public CreateAvailabilityCommandValidator(MediMoveDbContext dbContext)
+        /// <summary>
+        /// Constructor for CreateAvailabilitiesCommandValidator.
+        /// </summary>
+        /// <param name="dbContext">MediMoveDbContext object</param>
+        public CreateAvailabilitiesCommandValidator(MediMoveDbContext dbContext)
         {
-            RuleFor(x => x.Dto.Availabilities)
+            RuleFor(x => x.request.Availabilities)
                 .NotEmpty().WithMessage("Availabilities list cannot be empty.")
                 .Must(a => a.Select(avail => avail.Day.Date).Distinct().Count() == a.Count()).WithMessage("Days must be unique")
                 .Must(a => a.All(avail => avail.Day.Date >= DateTime.Today.AddDays(1).Date)).WithMessage("Days must be in the future")
@@ -37,7 +43,7 @@ namespace MediMove.Server.Validators
                     // Create a HashSet to store the dates of paramedic's availabilities
                     var paramedicAvailabilityDates = new HashSet<DateTime>(paramedic.Availabilities.Select(a => a.Day.Date));
 
-                    if (x.Dto.Availabilities.Any(a => paramedicAvailabilityDates.Contains(a.Day.Date)))
+                    if (x.request.Availabilities.Any(a => paramedicAvailabilityDates.Contains(a.Day.Date)))
                         context.AddFailure("Availabilities", "Paramedic already has availability on one or more of the provided days");
                 });
         }
