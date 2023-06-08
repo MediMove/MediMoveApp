@@ -1,6 +1,6 @@
 ﻿using MediMove.Shared.Models.Enums;
 
-namespace MediMove.Server.Models
+namespace MediMove.Server.Application.Models
 {
     public class Transport
     {

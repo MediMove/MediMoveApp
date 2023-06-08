@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using ErrorOr;
 using MediatR;
+using MediMove.Server.Application.Models;
 using MediMove.Server.Application.Transports.Commands;
 using MediMove.Server.Data;
-using MediMove.Server.Models;
 
 namespace MediMove.Server.Application.Transports.Handlers
 {

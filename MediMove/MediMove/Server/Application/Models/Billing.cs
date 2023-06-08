@@ -1,14 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MediMove.Server.Models
+namespace MediMove.Server.Application.Models
 {
     
-    public class Dispatcher
+    public class Billing
     {
         public int Id { get; set; }
+        public string InvoiceNumber { get; set; }
+        public DateTime InvoiceDate { get; set; }
         public string BankAccountNumber { get; set; }
-        public bool IsWorking { get; set; } = true;
-        public virtual ICollection<Salary> Salaries { get; set; }
+        public decimal Cost { get; set; }
         public int PersonalInformationId { get; set; }
         public virtual PersonalInformation PersonalInformation { get; set; }
     }

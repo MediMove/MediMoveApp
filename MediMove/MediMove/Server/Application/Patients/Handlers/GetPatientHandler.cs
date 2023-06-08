@@ -3,7 +3,6 @@ using ErrorOr;
 using MediatR;
 using MediMove.Server.Application.Patients.Queries;
 using MediMove.Server.Data;
-using MediMove.Server.Errors;
 using MediMove.Shared.Models.DTOs;
 using Microsoft.EntityFrameworkCore;
 

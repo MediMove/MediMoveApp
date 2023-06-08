@@ -2,8 +2,8 @@
 using ErrorOr;
 using MediatR;
 using MediMove.Server.Application.Authentication.Queries;
+using MediMove.Server.Application.Models;
 using MediMove.Server.Data;
-using MediMove.Server.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace MediMove.Server.Application.Authentication.Handlers

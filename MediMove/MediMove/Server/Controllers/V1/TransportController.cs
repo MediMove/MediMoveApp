@@ -1,6 +1,6 @@
 ﻿using MediMove.Server.Application.Transports.Commands;
 using MediMove.Server.Application.Transports.Queries;
-using MediMove.Server.Models;
+using MediMove.Server.Application.Models;
 using MediMove.Shared.Models.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
