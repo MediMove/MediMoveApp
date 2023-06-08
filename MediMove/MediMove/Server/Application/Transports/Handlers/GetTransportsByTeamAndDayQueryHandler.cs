@@ -1,31 +1,33 @@
 ﻿using AutoMapper;
 using ErrorOr;
 using MediatR;
+using MediMove.Server.Application.Models;
 using MediMove.Server.Application.Transports.Queries;
 using MediMove.Server.Data;
 using MediMove.Shared.Models.DTOs;
+using MediMove.Shared.Models.Enums;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography.Xml;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace MediMove.Server.Application.Transports.Handlers
 {
-    public class GetTransportsByParamedicAndDayHandler : IRequestHandler<GetTransportsByParamedicAndDayQuery, ErrorOr<GetTransportsResponse>>
+    public class GetTransportsByTeamAndDayQueryHandler : IRequestHandler<GetTransportsByTeamAndDayQuery, ErrorOr<GetTransportsResponse>>
     {
         private readonly IMapper _mapper;
         private readonly MediMoveDbContext _dbContext;
 
-        public GetTransportsByParamedicAndDayHandler(IMapper mapper, MediMoveDbContext dbContext)
+        public GetTransportsByTeamAndDayQueryHandler(IMapper mapper, MediMoveDbContext dbContext)
         {
             _mapper = mapper;
             _dbContext = dbContext;
         }
 
-        public async Task<ErrorOr<GetTransportsResponse>> Handle(GetTransportsByParamedicAndDayQuery request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<GetTransportsResponse>> Handle(GetTransportsByTeamAndDayQuery request, CancellationToken cancellationToken)
         {
-            var dateOnly = request.Day;
             var query = await _dbContext.Transports
                 .Where(t => t.StartTime.Date == request.Day.Date)
-                .Where(t => t.Team.DriverId == request.ParamedicId || t.Team.ParamedicId == request.ParamedicId)
+                .Where(t => t.Team.Id == request.TeamId)
                 .Include(t => t.Patient)
                 .ThenInclude(p => p.PersonalInformation)
                 .Select(t => new

@@ -17,7 +17,7 @@ namespace MediMove.Server
             CreateMap<CreateAvailabilitiesCommand, IEnumerable<Availability>>()
                 .ConvertUsing<CreateAvailabilitiesCommandToAvailabilityListConverter>();
 
-            CreateMap<Transport, TransportDTO>()
+            CreateMap<Transport, GetTransportResponse>()
                 .ForMember(m => m.PatientFirstName, c => c.MapFrom(s => s.Patient.PersonalInformation.FirstName))
                 .ForMember(m => m.PatientLastName, c => c.MapFrom(s => s.Patient.PersonalInformation.LastName))
                 .ForMember(m => m.PatientPhoneNumber, c => c.MapFrom(s => s.Patient.PersonalInformation.PhoneNumber))

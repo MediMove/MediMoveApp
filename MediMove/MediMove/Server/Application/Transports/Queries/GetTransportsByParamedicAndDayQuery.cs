@@ -7,5 +7,5 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MediMove.Server.Application.Transports.Queries;
 
-public record GetTransportsByParamedicAndDayQuery(int ParamedicId, DateTime Day) : IRequest<ErrorOr<IEnumerable<TransportDTO>>>;
+public record GetTransportsByParamedicAndDayQuery(int ParamedicId, DateTime Day) : IRequest<ErrorOr<GetTransportsResponse>>;
 
