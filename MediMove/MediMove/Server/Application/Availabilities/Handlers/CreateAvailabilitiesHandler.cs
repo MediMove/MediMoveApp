@@ -2,8 +2,8 @@
 using ErrorOr;
 using MediatR;
 using MediMove.Server.Application.Availabilities.Commands;
+using MediMove.Server.Application.Models;
 using MediMove.Server.Data;
-using MediMove.Server.Models;
 
 namespace MediMove.Server.Application.Availabilities.Handlers
 {

@@ -1,5 +1,5 @@
 ﻿
-namespace MediMove.Server.Models
+namespace MediMove.Server.Application.Models
 {
     public class Salary
     {

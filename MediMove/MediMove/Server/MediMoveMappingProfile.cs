@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MediMove.Server.Application.Availabilities.Commands;
-using MediMove.Server.Models;
+using MediMove.Server.Application.Models;
 using MediMove.Shared.Models.DTOs;
 
 namespace MediMove.Server

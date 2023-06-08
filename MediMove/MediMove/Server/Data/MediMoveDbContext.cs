@@ -1,5 +1,5 @@
+using MediMove.Server.Application.Models;
 using MediMove.Server.Data.Seeders;
-using MediMove.Server.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace MediMove.Server.Data

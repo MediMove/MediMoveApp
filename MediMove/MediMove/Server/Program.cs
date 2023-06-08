@@ -8,10 +8,10 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using FluentValidation;
 using MediatR;
 using MediMove.Server.Behaviors;
-using MediMove.Server.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using MediMove.Server.Application.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 

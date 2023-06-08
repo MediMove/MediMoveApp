@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MediMove.Server.Models
+namespace MediMove.Server.Application.Models
 {
     public class Team
     {

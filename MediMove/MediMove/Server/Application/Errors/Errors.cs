@@ -1,6 +1,6 @@
 ﻿using ErrorOr;
 
-namespace MediMove.Server.Errors
+namespace MediMove.Server.Application.Errors
 {
     public static class Errors
     {
