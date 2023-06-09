@@ -1,6 +1,6 @@
 ﻿using ErrorOr;
 using MediatR;
-using MediMove.Server.Models;
+using MediMove.Server.Application.Models;
 using MediMove.Shared.Models.DTOs;
 
 namespace MediMove.Server.Application.Authentication.Commands

@@ -2,8 +2,8 @@
 using ErrorOr;
 using MediatR;
 using MediMove.Server.Application.Authentication.Commands;
+using MediMove.Server.Application.Models;
 using MediMove.Server.Data;
-using MediMove.Server.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 namespace MediMove.Server.Application.Authentication.Handlers
 {
 
-    
+
     public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, ErrorOr<User>>
     {
         private readonly IMapper _mapper;

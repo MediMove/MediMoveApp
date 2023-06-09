@@ -1,6 +1,6 @@
 ﻿using ErrorOr;
 using MediatR;
-using MediMove.Server.Models;
+using MediMove.Server.Application.Models;
 
 namespace MediMove.Server.Application.Transports.Commands
 {

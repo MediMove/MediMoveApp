@@ -22,7 +22,7 @@ namespace MediMove.Server.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("MediMove.Server.Models.Availability", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Availability", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -49,167 +49,167 @@ namespace MediMove.Server.Migrations
                         new
                         {
                             Id = 1,
-                            Day = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 4, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 1,
                             ShiftType = 0
                         },
                         new
                         {
                             Id = 2,
-                            Day = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 4, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 3,
                             ShiftType = 0
                         },
                         new
                         {
                             Id = 3,
-                            Day = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 4, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 4,
                             ShiftType = 1
                         },
                         new
                         {
                             Id = 4,
-                            Day = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 4, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 5,
                             ShiftType = 1
                         },
                         new
                         {
                             Id = 5,
-                            Day = new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 5, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 1,
                             ShiftType = 0
                         },
                         new
                         {
                             Id = 6,
-                            Day = new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 5, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 2,
                             ShiftType = 0
                         },
                         new
                         {
                             Id = 7,
-                            Day = new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 5, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 3,
                             ShiftType = 1
                         },
                         new
                         {
                             Id = 8,
-                            Day = new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 5, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 4,
                             ShiftType = 0
                         },
                         new
                         {
                             Id = 9,
-                            Day = new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 5, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 5,
                             ShiftType = 1
                         },
                         new
                         {
                             Id = 10,
-                            Day = new DateTime(2023, 5, 12, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 6, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 1,
                             ShiftType = 0
                         },
                         new
                         {
                             Id = 11,
-                            Day = new DateTime(2023, 5, 12, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 6, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 2,
                             ShiftType = 0
                         },
                         new
                         {
                             Id = 12,
-                            Day = new DateTime(2023, 5, 12, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 6, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 3,
                             ShiftType = 0
                         },
                         new
                         {
                             Id = 13,
-                            Day = new DateTime(2023, 5, 12, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 6, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 4,
                             ShiftType = 1
                         },
                         new
                         {
                             Id = 14,
-                            Day = new DateTime(2023, 5, 12, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 6, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 5,
                             ShiftType = 1
                         },
                         new
                         {
                             Id = 15,
-                            Day = new DateTime(2023, 5, 13, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 7, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 1,
                             ShiftType = 0
                         },
                         new
                         {
                             Id = 16,
-                            Day = new DateTime(2023, 5, 13, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 7, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 3,
                             ShiftType = 0
                         },
                         new
                         {
                             Id = 17,
-                            Day = new DateTime(2023, 5, 13, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 7, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 4,
                             ShiftType = 1
                         },
                         new
                         {
                             Id = 18,
-                            Day = new DateTime(2023, 5, 13, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 7, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 5,
                             ShiftType = 1
                         },
                         new
                         {
                             Id = 19,
-                            Day = new DateTime(2023, 5, 14, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 8, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 1,
                             ShiftType = 0
                         },
                         new
                         {
                             Id = 20,
-                            Day = new DateTime(2023, 5, 14, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 8, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 2,
                             ShiftType = 1
                         },
                         new
                         {
                             Id = 21,
-                            Day = new DateTime(2023, 5, 14, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 8, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 3,
                             ShiftType = 1
                         },
                         new
                         {
                             Id = 22,
-                            Day = new DateTime(2023, 5, 14, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 8, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 4,
                             ShiftType = 0
                         },
                         new
                         {
                             Id = 23,
-                            Day = new DateTime(2023, 5, 14, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 8, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 5,
                             ShiftType = 1
                         });
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Billing", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Billing", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -246,8 +246,8 @@ namespace MediMove.Server.Migrations
                             Id = 1,
                             BankAccountNumber = "342301332136124",
                             Cost = 200m,
-                            InvoiceDate = new DateTime(2023, 5, 10, 13, 57, 27, 438, DateTimeKind.Local).AddTicks(7296),
-                            InvoiceNumber = "1.12.05.2023",
+                            InvoiceDate = new DateTime(2023, 6, 4, 20, 54, 24, 38, DateTimeKind.Local).AddTicks(6840),
+                            InvoiceNumber = "1.06.06.2023",
                             PersonalInformationId = 10
                         },
                         new
@@ -255,8 +255,8 @@ namespace MediMove.Server.Migrations
                             Id = 2,
                             BankAccountNumber = "343301232434821",
                             Cost = 90m,
-                            InvoiceDate = new DateTime(2023, 5, 10, 23, 59, 0, 0, DateTimeKind.Local),
-                            InvoiceNumber = "2.12.05.2023",
+                            InvoiceDate = new DateTime(2023, 6, 4, 23, 59, 0, 0, DateTimeKind.Local),
+                            InvoiceNumber = "2.06.06.2023",
                             PersonalInformationId = 11
                         },
                         new
@@ -264,13 +264,13 @@ namespace MediMove.Server.Migrations
                             Id = 3,
                             BankAccountNumber = "543322635238421",
                             Cost = 50m,
-                            InvoiceDate = new DateTime(2023, 5, 11, 0, 1, 0, 0, DateTimeKind.Local),
-                            InvoiceNumber = "3.12.05.2023",
+                            InvoiceDate = new DateTime(2023, 6, 5, 0, 1, 0, 0, DateTimeKind.Local),
+                            InvoiceNumber = "3.06.06.2023",
                             PersonalInformationId = 12
                         });
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Dispatcher", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Dispatcher", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -281,6 +281,9 @@ namespace MediMove.Server.Migrations
                     b.Property<string>("BankAccountNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsWorking")
+                        .HasColumnType("bit");
 
                     b.Property<int>("PersonalInformationId")
                         .HasColumnType("int");
@@ -296,17 +299,19 @@ namespace MediMove.Server.Migrations
                         {
                             Id = 1,
                             BankAccountNumber = "4203987928122474",
+                            IsWorking = true,
                             PersonalInformationId = 13
                         },
                         new
                         {
                             Id = 2,
                             BankAccountNumber = "4203787958122274",
+                            IsWorking = true,
                             PersonalInformationId = 14
                         });
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Paramedic", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Paramedic", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -319,6 +324,9 @@ namespace MediMove.Server.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDriver")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsWorking")
                         .HasColumnType("bit");
 
                     b.Property<int>("PersonalInformationId")
@@ -336,6 +344,7 @@ namespace MediMove.Server.Migrations
                             Id = 1,
                             BankAccountNumber = "1203987908127474",
                             IsDriver = true,
+                            IsWorking = true,
                             PersonalInformationId = 1
                         },
                         new
@@ -343,6 +352,7 @@ namespace MediMove.Server.Migrations
                             Id = 2,
                             BankAccountNumber = "124341763465609",
                             IsDriver = true,
+                            IsWorking = true,
                             PersonalInformationId = 2
                         },
                         new
@@ -350,6 +360,7 @@ namespace MediMove.Server.Migrations
                             Id = 3,
                             BankAccountNumber = "121234124123109",
                             IsDriver = false,
+                            IsWorking = true,
                             PersonalInformationId = 3
                         },
                         new
@@ -357,6 +368,7 @@ namespace MediMove.Server.Migrations
                             Id = 4,
                             BankAccountNumber = "123456780123109",
                             IsDriver = false,
+                            IsWorking = true,
                             PersonalInformationId = 4
                         },
                         new
@@ -364,11 +376,12 @@ namespace MediMove.Server.Migrations
                             Id = 5,
                             BankAccountNumber = "982301231238812",
                             IsDriver = true,
+                            IsWorking = true,
                             PersonalInformationId = 5
                         });
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Patient", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Patient", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -421,7 +434,7 @@ namespace MediMove.Server.Migrations
                         });
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.PersonalInformation", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.PersonalInformation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -679,7 +692,7 @@ namespace MediMove.Server.Migrations
                         });
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Rate", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Rate", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -706,62 +719,62 @@ namespace MediMove.Server.Migrations
                         new
                         {
                             Id = 1,
-                            Date = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            Date = new DateTime(2023, 6, 4, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 1,
                             PayPerHour = 12m
                         },
                         new
                         {
                             Id = 2,
-                            Date = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            Date = new DateTime(2023, 6, 4, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 2,
                             PayPerHour = 12m
                         },
                         new
                         {
                             Id = 3,
-                            Date = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            Date = new DateTime(2023, 6, 4, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 3,
                             PayPerHour = 12m
                         },
                         new
                         {
                             Id = 4,
-                            Date = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            Date = new DateTime(2023, 6, 4, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 4,
                             PayPerHour = 12m
                         },
                         new
                         {
                             Id = 5,
-                            Date = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            Date = new DateTime(2023, 6, 4, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 5,
                             PayPerHour = 12m
                         },
                         new
                         {
                             Id = 6,
-                            Date = new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Local),
+                            Date = new DateTime(2023, 6, 5, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 1,
                             PayPerHour = 13m
                         },
                         new
                         {
                             Id = 7,
-                            Date = new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Local),
+                            Date = new DateTime(2023, 6, 5, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 5,
                             PayPerHour = 13m
                         },
                         new
                         {
                             Id = 8,
-                            Date = new DateTime(2023, 5, 13, 0, 0, 0, 0, DateTimeKind.Local),
+                            Date = new DateTime(2023, 6, 7, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 1,
                             PayPerHour = 14m
                         });
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Role", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Role", b =>
                 {
                     b.Property<int>("RoleId")
                         .ValueGeneratedOnAdd()
@@ -800,7 +813,7 @@ namespace MediMove.Server.Migrations
                         });
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Salary", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Salary", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -827,34 +840,34 @@ namespace MediMove.Server.Migrations
                         new
                         {
                             Id = 1,
-                            Date = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            Date = new DateTime(2023, 6, 4, 0, 0, 0, 0, DateTimeKind.Local),
                             DispatcherId = 1,
                             Income = 1200m
                         },
                         new
                         {
                             Id = 2,
-                            Date = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            Date = new DateTime(2023, 6, 4, 0, 0, 0, 0, DateTimeKind.Local),
                             DispatcherId = 2,
                             Income = 1200m
                         },
                         new
                         {
                             Id = 3,
-                            Date = new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Local),
+                            Date = new DateTime(2023, 6, 5, 0, 0, 0, 0, DateTimeKind.Local),
                             DispatcherId = 1,
                             Income = 1300m
                         },
                         new
                         {
                             Id = 4,
-                            Date = new DateTime(2023, 5, 13, 0, 0, 0, 0, DateTimeKind.Local),
+                            Date = new DateTime(2023, 6, 7, 0, 0, 0, 0, DateTimeKind.Local),
                             DispatcherId = 1,
                             Income = 1500m
                         });
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Team", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Team", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -883,76 +896,76 @@ namespace MediMove.Server.Migrations
                         new
                         {
                             Id = 1,
-                            Day = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 4, 0, 0, 0, 0, DateTimeKind.Local),
                             DriverId = 1,
                             ParamedicId = 2
                         },
                         new
                         {
                             Id = 2,
-                            Day = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 4, 0, 0, 0, 0, DateTimeKind.Local),
                             DriverId = 5,
                             ParamedicId = 4
                         },
                         new
                         {
                             Id = 3,
-                            Day = new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 5, 0, 0, 0, 0, DateTimeKind.Local),
                             DriverId = 1,
                             ParamedicId = 2
                         },
                         new
                         {
                             Id = 4,
-                            Day = new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 5, 0, 0, 0, 0, DateTimeKind.Local),
                             DriverId = 5,
                             ParamedicId = 3
                         },
                         new
                         {
                             Id = 5,
-                            Day = new DateTime(2023, 5, 12, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 6, 0, 0, 0, 0, DateTimeKind.Local),
                             DriverId = 1,
                             ParamedicId = 2
                         },
                         new
                         {
                             Id = 6,
-                            Day = new DateTime(2023, 5, 12, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 6, 0, 0, 0, 0, DateTimeKind.Local),
                             DriverId = 5,
                             ParamedicId = 4
                         },
                         new
                         {
                             Id = 7,
-                            Day = new DateTime(2023, 5, 13, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 7, 0, 0, 0, 0, DateTimeKind.Local),
                             DriverId = 1,
                             ParamedicId = 2
                         },
                         new
                         {
                             Id = 8,
-                            Day = new DateTime(2023, 5, 13, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 7, 0, 0, 0, 0, DateTimeKind.Local),
                             DriverId = 5,
                             ParamedicId = 4
                         },
                         new
                         {
                             Id = 9,
-                            Day = new DateTime(2023, 5, 14, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 8, 0, 0, 0, 0, DateTimeKind.Local),
                             DriverId = 1,
                             ParamedicId = 4
                         },
                         new
                         {
                             Id = 10,
-                            Day = new DateTime(2023, 5, 14, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 8, 0, 0, 0, 0, DateTimeKind.Local),
                             DriverId = 2,
                             ParamedicId = 3
                         });
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Transport", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Transport", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1003,7 +1016,7 @@ namespace MediMove.Server.Migrations
                             Financing = 0,
                             PatientId = 1,
                             PatientPosition = 0,
-                            StartTime = new DateTime(2023, 5, 10, 7, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 4, 7, 0, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 1,
                             TransportType = 0
                         },
@@ -1014,7 +1027,7 @@ namespace MediMove.Server.Migrations
                             Financing = 2,
                             PatientId = 2,
                             PatientPosition = 1,
-                            StartTime = new DateTime(2023, 5, 10, 9, 10, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 4, 9, 10, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 1,
                             TransportType = 0
                         },
@@ -1025,7 +1038,7 @@ namespace MediMove.Server.Migrations
                             Financing = 1,
                             PatientId = 3,
                             PatientPosition = 1,
-                            StartTime = new DateTime(2023, 5, 10, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 4, 14, 0, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 1,
                             TransportType = 1
                         },
@@ -1036,7 +1049,7 @@ namespace MediMove.Server.Migrations
                             Financing = 1,
                             PatientId = 4,
                             PatientPosition = 1,
-                            StartTime = new DateTime(2023, 5, 10, 7, 30, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 4, 7, 30, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 2,
                             TransportType = 1
                         },
@@ -1047,7 +1060,7 @@ namespace MediMove.Server.Migrations
                             Financing = 0,
                             PatientId = 5,
                             PatientPosition = 2,
-                            StartTime = new DateTime(2023, 5, 10, 12, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 4, 12, 0, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 2,
                             TransportType = 0
                         },
@@ -1058,7 +1071,7 @@ namespace MediMove.Server.Migrations
                             Financing = 0,
                             PatientId = 4,
                             PatientPosition = 1,
-                            StartTime = new DateTime(2023, 5, 11, 7, 30, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 5, 7, 30, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 3,
                             TransportType = 0
                         },
@@ -1069,7 +1082,7 @@ namespace MediMove.Server.Migrations
                             Financing = 0,
                             PatientId = 2,
                             PatientPosition = 0,
-                            StartTime = new DateTime(2023, 5, 11, 9, 45, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 5, 9, 45, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 3,
                             TransportType = 0
                         },
@@ -1080,7 +1093,7 @@ namespace MediMove.Server.Migrations
                             Financing = 0,
                             PatientId = 1,
                             PatientPosition = 0,
-                            StartTime = new DateTime(2023, 5, 11, 13, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 5, 13, 0, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 3,
                             TransportType = 0
                         },
@@ -1091,7 +1104,7 @@ namespace MediMove.Server.Migrations
                             Financing = 0,
                             PatientId = 4,
                             PatientPosition = 1,
-                            StartTime = new DateTime(2023, 5, 11, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 5, 15, 30, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 4,
                             TransportType = 0
                         },
@@ -1102,7 +1115,7 @@ namespace MediMove.Server.Migrations
                             Financing = 0,
                             PatientId = 2,
                             PatientPosition = 0,
-                            StartTime = new DateTime(2023, 5, 11, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 5, 18, 0, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 4,
                             TransportType = 0
                         },
@@ -1113,7 +1126,7 @@ namespace MediMove.Server.Migrations
                             Financing = 0,
                             PatientId = 5,
                             PatientPosition = 2,
-                            StartTime = new DateTime(2023, 5, 11, 20, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 5, 20, 0, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 4,
                             TransportType = 0
                         },
@@ -1124,7 +1137,7 @@ namespace MediMove.Server.Migrations
                             Financing = 0,
                             PatientId = 1,
                             PatientPosition = 0,
-                            StartTime = new DateTime(2023, 5, 12, 7, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 6, 7, 0, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 5,
                             TransportType = 1
                         },
@@ -1135,7 +1148,7 @@ namespace MediMove.Server.Migrations
                             Financing = 0,
                             PatientId = 3,
                             PatientPosition = 0,
-                            StartTime = new DateTime(2023, 5, 12, 12, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 6, 12, 0, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 5,
                             TransportType = 1
                         },
@@ -1146,7 +1159,7 @@ namespace MediMove.Server.Migrations
                             Financing = 0,
                             PatientId = 2,
                             PatientPosition = 0,
-                            StartTime = new DateTime(2023, 5, 12, 13, 30, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 6, 13, 30, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 5,
                             TransportType = 1
                         },
@@ -1157,7 +1170,7 @@ namespace MediMove.Server.Migrations
                             Financing = 0,
                             PatientId = 4,
                             PatientPosition = 1,
-                            StartTime = new DateTime(2023, 5, 12, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 6, 16, 0, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 6,
                             TransportType = 1
                         },
@@ -1168,7 +1181,7 @@ namespace MediMove.Server.Migrations
                             Financing = 0,
                             PatientId = 2,
                             PatientPosition = 0,
-                            StartTime = new DateTime(2023, 5, 12, 17, 45, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 6, 17, 45, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 6,
                             TransportType = 1
                         },
@@ -1179,7 +1192,7 @@ namespace MediMove.Server.Migrations
                             Financing = 0,
                             PatientId = 4,
                             PatientPosition = 1,
-                            StartTime = new DateTime(2023, 5, 12, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 6, 19, 0, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 6,
                             TransportType = 0
                         },
@@ -1190,7 +1203,7 @@ namespace MediMove.Server.Migrations
                             Financing = 0,
                             PatientId = 1,
                             PatientPosition = 0,
-                            StartTime = new DateTime(2023, 5, 13, 7, 15, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 7, 7, 15, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 7,
                             TransportType = 1
                         },
@@ -1201,7 +1214,7 @@ namespace MediMove.Server.Migrations
                             Financing = 0,
                             PatientId = 2,
                             PatientPosition = 0,
-                            StartTime = new DateTime(2023, 5, 13, 11, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 7, 11, 0, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 7,
                             TransportType = 0
                         },
@@ -1212,7 +1225,7 @@ namespace MediMove.Server.Migrations
                             Financing = 0,
                             PatientId = 3,
                             PatientPosition = 0,
-                            StartTime = new DateTime(2023, 5, 13, 13, 15, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 7, 13, 15, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 7,
                             TransportType = 1
                         },
@@ -1223,7 +1236,7 @@ namespace MediMove.Server.Migrations
                             Financing = 0,
                             PatientId = 5,
                             PatientPosition = 2,
-                            StartTime = new DateTime(2023, 5, 13, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 7, 16, 0, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 8,
                             TransportType = 1
                         },
@@ -1234,7 +1247,7 @@ namespace MediMove.Server.Migrations
                             Financing = 0,
                             PatientId = 4,
                             PatientPosition = 1,
-                            StartTime = new DateTime(2023, 5, 13, 17, 15, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 7, 17, 15, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 8,
                             TransportType = 1
                         },
@@ -1245,7 +1258,7 @@ namespace MediMove.Server.Migrations
                             Financing = 0,
                             PatientId = 3,
                             PatientPosition = 0,
-                            StartTime = new DateTime(2023, 5, 13, 20, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 7, 20, 0, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 8,
                             TransportType = 0
                         },
@@ -1256,7 +1269,7 @@ namespace MediMove.Server.Migrations
                             Financing = 0,
                             PatientId = 1,
                             PatientPosition = 0,
-                            StartTime = new DateTime(2023, 5, 14, 8, 30, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 8, 8, 30, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 9,
                             TransportType = 1
                         },
@@ -1267,7 +1280,7 @@ namespace MediMove.Server.Migrations
                             Financing = 0,
                             PatientId = 3,
                             PatientPosition = 0,
-                            StartTime = new DateTime(2023, 5, 14, 12, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 8, 12, 0, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 9,
                             TransportType = 1
                         },
@@ -1278,7 +1291,7 @@ namespace MediMove.Server.Migrations
                             Financing = 0,
                             PatientId = 2,
                             PatientPosition = 0,
-                            StartTime = new DateTime(2023, 5, 14, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 8, 17, 0, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 10,
                             TransportType = 1
                         },
@@ -1289,13 +1302,13 @@ namespace MediMove.Server.Migrations
                             Financing = 0,
                             PatientId = 5,
                             PatientPosition = 2,
-                            StartTime = new DateTime(2023, 5, 14, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 8, 19, 0, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 10,
                             TransportType = 0
                         });
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.User", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1324,9 +1337,9 @@ namespace MediMove.Server.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Availability", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Availability", b =>
                 {
-                    b.HasOne("MediMove.Server.Models.Paramedic", "Paramedic")
+                    b.HasOne("MediMove.Server.Application.Models.Paramedic", "Paramedic")
                         .WithMany("Availabilities")
                         .HasForeignKey("ParamedicId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1335,9 +1348,9 @@ namespace MediMove.Server.Migrations
                     b.Navigation("Paramedic");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Billing", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Billing", b =>
                 {
-                    b.HasOne("MediMove.Server.Models.PersonalInformation", "PersonalInformation")
+                    b.HasOne("MediMove.Server.Application.Models.PersonalInformation", "PersonalInformation")
                         .WithMany()
                         .HasForeignKey("PersonalInformationId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1346,9 +1359,9 @@ namespace MediMove.Server.Migrations
                     b.Navigation("PersonalInformation");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Dispatcher", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Dispatcher", b =>
                 {
-                    b.HasOne("MediMove.Server.Models.PersonalInformation", "PersonalInformation")
+                    b.HasOne("MediMove.Server.Application.Models.PersonalInformation", "PersonalInformation")
                         .WithMany()
                         .HasForeignKey("PersonalInformationId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1357,9 +1370,9 @@ namespace MediMove.Server.Migrations
                     b.Navigation("PersonalInformation");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Paramedic", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Paramedic", b =>
                 {
-                    b.HasOne("MediMove.Server.Models.PersonalInformation", "PersonalInformation")
+                    b.HasOne("MediMove.Server.Application.Models.PersonalInformation", "PersonalInformation")
                         .WithMany()
                         .HasForeignKey("PersonalInformationId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1368,9 +1381,9 @@ namespace MediMove.Server.Migrations
                     b.Navigation("PersonalInformation");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Patient", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Patient", b =>
                 {
-                    b.HasOne("MediMove.Server.Models.PersonalInformation", "PersonalInformation")
+                    b.HasOne("MediMove.Server.Application.Models.PersonalInformation", "PersonalInformation")
                         .WithMany()
                         .HasForeignKey("PersonalInformationId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1379,9 +1392,9 @@ namespace MediMove.Server.Migrations
                     b.Navigation("PersonalInformation");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Rate", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Rate", b =>
                 {
-                    b.HasOne("MediMove.Server.Models.Paramedic", "Paramedic")
+                    b.HasOne("MediMove.Server.Application.Models.Paramedic", "Paramedic")
                         .WithMany("Rates")
                         .HasForeignKey("ParamedicId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1390,9 +1403,9 @@ namespace MediMove.Server.Migrations
                     b.Navigation("Paramedic");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Salary", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Salary", b =>
                 {
-                    b.HasOne("MediMove.Server.Models.Dispatcher", "Dispatcher")
+                    b.HasOne("MediMove.Server.Application.Models.Dispatcher", "Dispatcher")
                         .WithMany("Salaries")
                         .HasForeignKey("DispatcherId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1401,13 +1414,13 @@ namespace MediMove.Server.Migrations
                     b.Navigation("Dispatcher");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Team", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Team", b =>
                 {
-                    b.HasOne("MediMove.Server.Models.Paramedic", "Driver")
+                    b.HasOne("MediMove.Server.Application.Models.Paramedic", "Driver")
                         .WithMany()
                         .HasForeignKey("DriverId");
 
-                    b.HasOne("MediMove.Server.Models.Paramedic", "Paramedic")
+                    b.HasOne("MediMove.Server.Application.Models.Paramedic", "Paramedic")
                         .WithMany()
                         .HasForeignKey("ParamedicId");
 
@@ -1416,19 +1429,19 @@ namespace MediMove.Server.Migrations
                     b.Navigation("Paramedic");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Transport", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Transport", b =>
                 {
-                    b.HasOne("MediMove.Server.Models.Billing", "Billing")
+                    b.HasOne("MediMove.Server.Application.Models.Billing", "Billing")
                         .WithMany()
                         .HasForeignKey("BillingId");
 
-                    b.HasOne("MediMove.Server.Models.Patient", "Patient")
+                    b.HasOne("MediMove.Server.Application.Models.Patient", "Patient")
                         .WithMany("Transports")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MediMove.Server.Models.Team", "Team")
+                    b.HasOne("MediMove.Server.Application.Models.Team", "Team")
                         .WithMany("Transports")
                         .HasForeignKey("TeamId");
 
@@ -1439,9 +1452,9 @@ namespace MediMove.Server.Migrations
                     b.Navigation("Team");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.User", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.User", b =>
                 {
-                    b.HasOne("MediMove.Server.Models.Role", "Role")
+                    b.HasOne("MediMove.Server.Application.Models.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1450,24 +1463,24 @@ namespace MediMove.Server.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Dispatcher", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Dispatcher", b =>
                 {
                     b.Navigation("Salaries");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Paramedic", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Paramedic", b =>
                 {
                     b.Navigation("Availabilities");
 
                     b.Navigation("Rates");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Patient", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Patient", b =>
                 {
                     b.Navigation("Transports");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Team", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Team", b =>
                 {
                     b.Navigation("Transports");
                 });

@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
-using MediMove.Server.Models;
+using MediMove.Server.Application.Availabilities.Commands;
+using MediMove.Server.Application.Models;
+using MediMove.Server.Application.Teams.Commands;
 using MediMove.Shared.Models.DTOs;
 
 namespace MediMove.Server
@@ -9,16 +11,13 @@ namespace MediMove.Server
         public MediMoveMappingProfile()
         {
 
-            CreateMap<CreateTeamDTO, Team>();
+            
+
 
             CreateMap<Team, TeamDTO>();
 
-            CreateMap<Availability, AvailabilityDTO>()
-                .ForMember(m => m.ParamedicFirstName, c => c.MapFrom(s => s.Paramedic.PersonalInformation.FirstName))
-                .ForMember(m => m.ParamedicLastName, c => c.MapFrom(s => s.Paramedic.PersonalInformation.LastName));
-
-            CreateMap<CreateAvailabilitiesDTO, IEnumerable<Availability>>()
-                .ConvertUsing<AvailabilityListConverter>();
+            CreateMap<CreateAvailabilitiesCommand, IEnumerable<Availability>>()
+                .ConvertUsing<CreateAvailabilitiesCommandToAvailabilityListConverter>();
 
             CreateMap<Transport, TransportDTO>()
                 .ForMember(m => m.PatientFirstName, c => c.MapFrom(s => s.Patient.PersonalInformation.FirstName))
@@ -46,6 +45,9 @@ namespace MediMove.Server
 
             CreateMap<CreatePatientDTO, Patient>()
                 .ConvertUsing<PatientConverter>();
+
+            CreateMap<CreateTransportWithBillingDTO, Transport>()
+                .ConvertUsing<TransportWithBillingConverter>();
 
             //CreateMap<CreatePatientDTO, Patient>()
             //    .ForMember(m => m.PersonalInformation.FirstName, c => c.MapFrom(s => s.FirstName))
@@ -113,34 +115,72 @@ namespace MediMove.Server
             //    .ForMember(m => m.Country, c => c.MapFrom(s => s.PersonalInformation.Country));
 
 
-
-
-
-            
-
             CreateMap<RegisterUserDTO, User>();
 
+            CreateMap<Team, GetTeamsByDayAndShiftResponse.TeamInfo>()
+                .ForMember(m => m.DriverFirstName, c => c.MapFrom(s => s.Driver.PersonalInformation.FirstName))
+                .ForMember(m => m.DriverLastName, c => c.MapFrom(s => s.Driver.PersonalInformation.LastName))
+                .ForMember(m => m.ParamedicFirstName, c => c.MapFrom(s => s.Paramedic.PersonalInformation.FirstName))
+                .ForMember(m => m.ParamedicLastName, c => c.MapFrom(s => s.Paramedic.PersonalInformation.LastName));
 
-
+            CreateMap<CreateTeamsCommand, IEnumerable<Team>>()
+                .ConvertUsing<CreateTeamsCommandToTeamIEnumerableConverter>();
         }
     }
 
-    public class AvailabilityListConverter : ITypeConverter<CreateAvailabilitiesDTO, IEnumerable<Availability>>
+
+    /// <summary>
+    /// Converter from CreateTeamsCommand to IEnumerable of Teams
+    /// </summary>
+    public class CreateTeamsCommandToTeamIEnumerableConverter : ITypeConverter<CreateTeamsCommand, IEnumerable<Team>>
     {
-        public IEnumerable<Availability> Convert(CreateAvailabilitiesDTO source, IEnumerable<Availability> destination, ResolutionContext context)
+        /// <summary>
+        /// Method that converts CreateTeamsCommand to IEnumerable of Teams
+        /// </summary>
+        /// <param name="source">CreateTeamsCommand</param>
+        /// <param name="destination">IEnumerable of Teams</param>
+        /// <param name="context">ResolutionContext</param>
+        /// <returns></returns>
+        public IEnumerable<Team> Convert(CreateTeamsCommand source, IEnumerable<Team> destination, ResolutionContext context)
+        {
+            var teams = new List<Team>();
+
+            foreach (var team in source.Request.Teams)
+                teams.Add(new Team
+                {
+                    DriverId = team.DriverId,
+                    ParamedicId = team.ParamedicId,
+                    Day = source.Request.Day.Date
+                });
+
+            return teams;
+        }
+    }
+
+    /// <summary>
+    /// Converter for CreateAvailabilitiesCommand to IEnumerable of Availabilities
+    /// </summary>
+    public class CreateAvailabilitiesCommandToAvailabilityListConverter : ITypeConverter<CreateAvailabilitiesCommand, IEnumerable<Availability>>
+    {
+        /// <summary>
+        /// Method that converts CreateAvailabilitiesCommand to IEnumerable of Availabilities
+        /// </summary>
+        /// <param name="source">CreateAvailabilitiesCommand object</param>
+        /// <param name="destination">IEnumerable of Availabilities</param>
+        /// <param name="context">ResolutionContext object</param>
+        /// <returns>IEnumerable of Availabilities</returns>
+        public IEnumerable<Availability> Convert(CreateAvailabilitiesCommand source, IEnumerable<Availability> destination, ResolutionContext context)
         {
             var availabilities = new List<Availability>();
 
-            for (int i = 0; i < source.Days.Count(); i++)
+            foreach (var availability in source.request.Availabilities)
             {
-                var availability = new Availability
+                availabilities.Add(new Availability
                 {
-                    Day = source.Days.ElementAt(i),
-                    ShiftType = source.ShiftTypes.ElementAt(i),
-                    ParamedicId = source.ParamedicId
-                };
-
-                availabilities.Add(availability);
+                    ParamedicId = source.ParamedicId,
+                    Day = availability.Day,
+                    ShiftType = availability.Shift
+                });
             }
 
             return availabilities;
@@ -169,6 +209,55 @@ namespace MediMove.Server
             patient.Weight = source.Weight;
             patient.PersonalInformation = personalInformation;
             return patient;
+
+        }
+    }
+
+    public class TransportWithBillingConverter : ITypeConverter<CreateTransportWithBillingDTO, Transport>
+    {
+        public Transport Convert(CreateTransportWithBillingDTO source, Transport destination, ResolutionContext context)
+        {
+            
+
+            var personalInformation = new PersonalInformation()
+            {
+                FirstName = source.FirstName,
+                LastName = source.LastName,
+                StreetAddress = source.StreetAddress,
+                HouseNumber = source.HouseNumber,
+                ApartmentNumber = source.ApartmentNumber,
+                City = source.City,
+                PostalCode = source.PostalCode,
+                StateProvince = source.StateProvince,
+                Country = source.Country,
+                PhoneNumber = source.PhoneNumber
+            };
+
+            var billing = new Billing()
+            {
+                BankAccountNumber = source.BankAccountNumber,
+                InvoiceDate = source.InvoiceDate,
+                Cost = source.Cost,
+                InvoiceNumber = source.InvoiceNumber,
+                PersonalInformation = personalInformation
+            };
+
+            var transport = new Transport
+            {
+                Billing = billing,
+                Destination = source.Destination,
+                TransportType = source.TransportType,
+                Financing = source.Financing,
+                PatientId = source.PatientId,
+                PatientPosition = source.PatientPosition,
+                StartTime = source.StartTime,
+
+            };
+
+
+
+
+            return transport;
 
         }
     }

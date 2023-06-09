@@ -8,9 +8,10 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using FluentValidation;
 using MediatR;
 using MediMove.Server.Behaviors;
-using MediMove.Server.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using MediMove.Server.Application.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -71,6 +72,31 @@ builder.Services.AddSwaggerGen(options =>
 {
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+
+    var securityScheme = new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        BearerFormat = "JWT",
+        Scheme = "bearer",
+        Description = "Specify the authorization token.",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http
+    };
+    options.AddSecurityDefinition("Bearer", securityScheme);
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
 });
 
 builder.Services.AddApiVersioning(options =>
@@ -108,6 +134,7 @@ app.UseSwaggerUI(options =>
 {
     foreach (var description in provider.ApiVersionDescriptions)
         options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName);
+    options.EnableTryItOutByDefault();
 });
 app.UseApiVersioning();
 app.UseAuthentication();

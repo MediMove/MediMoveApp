@@ -25,7 +25,7 @@ namespace MediMove.Server.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("MediMove.Server.Models.Availability", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Availability", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -212,7 +212,7 @@ namespace MediMove.Server.Migrations
                         });
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Billing", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Billing", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -273,7 +273,7 @@ namespace MediMove.Server.Migrations
                         });
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Dispatcher", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Dispatcher", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -309,7 +309,7 @@ namespace MediMove.Server.Migrations
                         });
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Paramedic", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Paramedic", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -371,7 +371,7 @@ namespace MediMove.Server.Migrations
                         });
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Patient", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Patient", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -424,7 +424,7 @@ namespace MediMove.Server.Migrations
                         });
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.PersonalInformation", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.PersonalInformation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -682,7 +682,7 @@ namespace MediMove.Server.Migrations
                         });
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Rate", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Rate", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -764,7 +764,7 @@ namespace MediMove.Server.Migrations
                         });
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Salary", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Salary", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -818,7 +818,7 @@ namespace MediMove.Server.Migrations
                         });
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Team", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Team", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -916,7 +916,7 @@ namespace MediMove.Server.Migrations
                         });
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Transport", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Transport", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1259,9 +1259,9 @@ namespace MediMove.Server.Migrations
                         });
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Availability", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Availability", b =>
                 {
-                    b.HasOne("MediMove.Server.Models.Paramedic", "Paramedic")
+                    b.HasOne("MediMove.Server.Application.Models.Paramedic", "Paramedic")
                         .WithMany("Availabilities")
                         .HasForeignKey("ParamedicId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1270,9 +1270,9 @@ namespace MediMove.Server.Migrations
                     b.Navigation("Paramedic");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Billing", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Billing", b =>
                 {
-                    b.HasOne("MediMove.Server.Models.PersonalInformation", "PersonalInformation")
+                    b.HasOne("MediMove.Server.Application.Models.PersonalInformation", "PersonalInformation")
                         .WithMany()
                         .HasForeignKey("PersonalInformationId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1281,9 +1281,9 @@ namespace MediMove.Server.Migrations
                     b.Navigation("PersonalInformation");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Dispatcher", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Dispatcher", b =>
                 {
-                    b.HasOne("MediMove.Server.Models.PersonalInformation", "PersonalInformation")
+                    b.HasOne("MediMove.Server.Application.Models.PersonalInformation", "PersonalInformation")
                         .WithMany()
                         .HasForeignKey("PersonalInformationId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1292,9 +1292,9 @@ namespace MediMove.Server.Migrations
                     b.Navigation("PersonalInformation");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Paramedic", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Paramedic", b =>
                 {
-                    b.HasOne("MediMove.Server.Models.PersonalInformation", "PersonalInformation")
+                    b.HasOne("MediMove.Server.Application.Models.PersonalInformation", "PersonalInformation")
                         .WithMany()
                         .HasForeignKey("PersonalInformationId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1303,9 +1303,9 @@ namespace MediMove.Server.Migrations
                     b.Navigation("PersonalInformation");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Patient", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Patient", b =>
                 {
-                    b.HasOne("MediMove.Server.Models.PersonalInformation", "PersonalInformation")
+                    b.HasOne("MediMove.Server.Application.Models.PersonalInformation", "PersonalInformation")
                         .WithMany()
                         .HasForeignKey("PersonalInformationId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1314,9 +1314,9 @@ namespace MediMove.Server.Migrations
                     b.Navigation("PersonalInformation");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Rate", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Rate", b =>
                 {
-                    b.HasOne("MediMove.Server.Models.Paramedic", "Paramedic")
+                    b.HasOne("MediMove.Server.Application.Models.Paramedic", "Paramedic")
                         .WithMany("Rates")
                         .HasForeignKey("ParamedicId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1325,9 +1325,9 @@ namespace MediMove.Server.Migrations
                     b.Navigation("Paramedic");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Salary", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Salary", b =>
                 {
-                    b.HasOne("MediMove.Server.Models.Dispatcher", "Dispatcher")
+                    b.HasOne("MediMove.Server.Application.Models.Dispatcher", "Dispatcher")
                         .WithMany("Salaries")
                         .HasForeignKey("DispatcherId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1336,13 +1336,13 @@ namespace MediMove.Server.Migrations
                     b.Navigation("Dispatcher");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Team", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Team", b =>
                 {
-                    b.HasOne("MediMove.Server.Models.Paramedic", "Driver")
+                    b.HasOne("MediMove.Server.Application.Models.Paramedic", "Driver")
                         .WithMany()
                         .HasForeignKey("DriverId");
 
-                    b.HasOne("MediMove.Server.Models.Paramedic", "Paramedic")
+                    b.HasOne("MediMove.Server.Application.Models.Paramedic", "Paramedic")
                         .WithMany()
                         .HasForeignKey("ParamedicId");
 
@@ -1351,19 +1351,19 @@ namespace MediMove.Server.Migrations
                     b.Navigation("Paramedic");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Transport", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Transport", b =>
                 {
-                    b.HasOne("MediMove.Server.Models.Billing", "Billing")
+                    b.HasOne("MediMove.Server.Application.Models.Billing", "Billing")
                         .WithMany()
                         .HasForeignKey("BillingId");
 
-                    b.HasOne("MediMove.Server.Models.Patient", "Patient")
+                    b.HasOne("MediMove.Server.Application.Models.Patient", "Patient")
                         .WithMany("Transports")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MediMove.Server.Models.Team", "Team")
+                    b.HasOne("MediMove.Server.Application.Models.Team", "Team")
                         .WithMany("Transports")
                         .HasForeignKey("TeamId");
 
@@ -1374,24 +1374,24 @@ namespace MediMove.Server.Migrations
                     b.Navigation("Team");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Dispatcher", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Dispatcher", b =>
                 {
                     b.Navigation("Salaries");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Paramedic", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Paramedic", b =>
                 {
                     b.Navigation("Availabilities");
 
                     b.Navigation("Rates");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Patient", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Patient", b =>
                 {
                     b.Navigation("Transports");
                 });
 
-            modelBuilder.Entity("MediMove.Server.Models.Team", b =>
+            modelBuilder.Entity("MediMove.Server.Application.Models.Team", b =>
                 {
                     b.Navigation("Transports");
                 });
