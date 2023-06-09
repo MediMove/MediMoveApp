@@ -1,9 +1,9 @@
 ﻿using MediMove.Server.Application.Transports.Commands;
 using MediMove.Server.Application.Transports.Queries;
-using MediMove.Server.Application.Models;
 using MediMove.Shared.Models.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MediMove.Shared.Models.Enums;
 
 namespace MediMove.Server.Controllers.V1
 {
@@ -42,12 +42,19 @@ namespace MediMove.Server.Controllers.V1
                 errors => Problem(errors));
         }
 
-        
+        /// <summary>
+        /// Action for getting transports by day and shift while editing plan and adding transport.
+        /// </summary>
+        /// <param name="year">year as integer</param>
+        /// <param name="month">month as integer</param>
+        /// <param name="day">day as integer</param>
+        /// <param name="shift">shift as ShiftType</param>
+        /// <returns>GetTransportsByDayAndShiftResponse</returns>
         [HttpGet("Date")]
-        [Authorize(Roles = "Dispatcher")]// Wyświetlanie skróconej listy transportów ( podgląd przy tworzeniu zespołów ) // Autoryzacja rolą dispacher
-        public async Task<IActionResult> GetTransportsForDay([FromQuery] int day, [FromQuery] int month, [FromQuery] int year) // zmieniłem z DateTime żeby łatwiej przekazywać przez query
+        [Authorize(Roles = "Dispatcher")]
+        public async Task<IActionResult> GetTransportsByDayAndShift([FromQuery] int year, [FromQuery] int month, [FromQuery] int day, [FromQuery] ShiftType shift)
         {
-            var result = await Mediator.Send(new GetTransportsByDayQuery(new DateTime(year, month, day)));
+            var result = await Mediator.Send(new GetTransportsByDayAndShiftQuery(new DateTime(year, month, day), shift));
 
             return result.Match(
                 result => Ok(result),
