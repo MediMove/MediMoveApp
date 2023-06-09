@@ -95,16 +95,30 @@ namespace MediMove.Server.Controllers.V1
                 errors => Problem(errors));
         }
 
-        [HttpPatch("AddTeamToTransport/{id}")]
+        /// <summary>
+        /// Action for assigning teams to transports.
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// {   
+        ///     "TransportsToTeams":
+        ///     {
+        ///         "2":2,
+        ///         "30":1
+        ///     }
+        /// }
+        /// </remarks>
+        /// <param name="request">AssignTeamsToTransportsRequest</param>
+        /// <returns>no content</returns>
+        [HttpPatch("AssignTeams")]
         [Authorize(Roles = "Dispatcher")]
-        public async Task<IActionResult> AddTeamToTransport([FromRoute] int id, [FromQuery] int teamId) // do dodania teamu istniejącemu transportowi
+        public async Task<IActionResult> AssignTeamsToTransports([FromBody] AssignTeamsToTransportsRequest request)
         {
-            var entity = await Mediator.Send(new AddTransportTeamCommand(id,teamId));
+            var transports = await Mediator.Send(new AssignTeamsToTransportsCommand(request));
 
-            return entity.Match(
-                entity => NoContent(),
+            return transports.Match(
+                success => NoContent(),
                 errors => Problem(errors));
         }
-
     }
 }
