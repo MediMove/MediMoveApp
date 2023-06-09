@@ -56,15 +56,5 @@ namespace MediMove.Server.Controllers.V1
                 success => NoContent(),
                 errors => Problem(errors));
         }
-
-        [HttpPatch]
-        [Authorize(Roles = "Dispatcher")]
-        public async Task<IActionResult> ChangeWorkingState([FromQuery]int id, [FromQuery]bool state)
-        {
-            throw new NotImplementedException();
-
-            var result = await Mediator.Send(new ChangeWorkingStateCommand(id, state)); // dodać co zwraca komenda
-        }
-
     }
 }
