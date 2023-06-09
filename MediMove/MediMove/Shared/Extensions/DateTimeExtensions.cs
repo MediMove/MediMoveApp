@@ -7,11 +7,13 @@ namespace MediMove.Shared.Extensions
     {
         public static ErrorOr<ShiftType> ToShiftType(this DateTime dateTime)
         {
-            if (dateTime.Hour >= 6 && dateTime.Hour < 14)
+            var time = dateTime.TimeOfDay;
+            if (time >= ShiftType.Morning.StartTime() && time < ShiftType.Morning.EndTime())
                 return ShiftType.Morning;
-            else if (dateTime.Hour >= 14 && dateTime.Hour < 22)
+            else if (time >= ShiftType.Evening.StartTime() && time < ShiftType.Evening.EndTime())
                 return ShiftType.Evening;
-            else return Error.Failure("DATETIME_TO_SHIFTTYPE_CONVERSION_FAILURE", "DateTime is not in a valid shift");
+            else return Error.Failure("DATETIME_TO_SHIFTTYPE_CONVERSION_FAILURE",
+                "DateTime is not in a valid shift");
         }
     }
 }
