@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using MediMove.Client.temp;
 @using MediMove.Shared.Models.DTOs
 @using System.Text
 @using Azure
@@ -7,6 +8,7 @@
 @using System.Net
 @inject HttpClient httpClient
 @inject NavigationManager NavManager
+@inject MediMoveAuthenticationStateProvider stateProvider
 
 <h3>Login</h3>
 
@@ -26,6 +28,13 @@
 
 
     <p>@loginResponse</p>
+
+        <div>User: @stateProvider.Role</div>
+        <div>State: @z</div>
+        @if (z)
+{
+    NavManager.NavigateTo("/Counter");
+}
 @if (errorResponse != null && errorResponse.Errors != null)
     {
         <p>Errors:</p>
@@ -48,6 +57,7 @@
     private string password;
     private string loginResponse;
     private ErrorResponse errorResponse;
+    private bool z;
 
     private async Task HandleLogin()
     {
@@ -60,35 +70,12 @@
         var json = JsonConvert.SerializeObject(loginDTO);
 
         var content = new StringContent(json, Encoding.UTF8, "application/json");
+        var response = await stateProvider.LoginAsync(content);
+        var x = await stateProvider.GetAuthenticationStateAsync();
+        //z = x.User.Identity.IsAuthenticated;
 
-        var response = await httpClient.PostAsync("/api/v1/Accounts/Login", content);
-        var responseContent = await response.Content.ReadAsStringAsync();
-        if (response.IsSuccessStatusCode)
-        {
+     //loginResponse= await response.Content.ReadAsStringAsync();
 
-            if (responseContent != null && !string.IsNullOrEmpty(responseContent))
-            {
-                responseContent = await response.Content.ReadAsStringAsync();
-                loginResponse = responseContent;
-                errorResponse = new ErrorResponse();
-            }
-            
-        }
-        else
-        {
-            responseContent = await response.Content.ReadAsStringAsync();
-            errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(responseContent);
-            loginResponse = errorResponse.Title;
-        }
     }
-
-    public class ErrorResponse
-    {
-        public string Type { get; set; }
-        public string Title { get; set; }
-        public int Status { get; set; }
-        public string TraceId { get; set; }
-        public Dictionary<string, List<string>> Errors { get; set; }
-    }
-
+    
 }

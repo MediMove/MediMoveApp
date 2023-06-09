@@ -1,10 +1,14 @@
-﻿@inherits LayoutComponentBase
+﻿@using MediMove.Client.temp;
+@inject MediMoveAuthenticationStateProvider stateProvider
+@inherits LayoutComponentBase
 
 <div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
-
+    @if (IsAuthorized)
+    {
+        <div class="sidebar">
+            <NavMenu />
+        </div>
+    }
     <main>
         <div class="top-row px-4">
             <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
@@ -15,3 +19,14 @@
         </article>
     </main>
 </div>
+
+@code {
+    private bool IsAuthorized = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        var state = await stateProvider.GetAuthenticationStateAsync();
+        IsAuthorized = state.User.Identity.IsAuthenticated;
+    }
+}
