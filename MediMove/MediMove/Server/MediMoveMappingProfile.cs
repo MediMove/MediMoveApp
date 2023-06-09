@@ -10,7 +10,8 @@ namespace MediMove.Server
         public MediMoveMappingProfile()
         {
 
-            CreateMap<CreateTeamDTO, Team>();
+            
+
 
             CreateMap<Team, TeamDTO>();
 
@@ -113,15 +114,40 @@ namespace MediMove.Server
             //    .ForMember(m => m.Country, c => c.MapFrom(s => s.PersonalInformation.Country));
 
 
-
-
-
-
-
             CreateMap<RegisterUserDTO, User>();
 
 
+            CreateMap<CreateTeamsCommand, IEnumerable<Team>>()
+                .ConvertUsing<CreateTeamsCommandToTeamIEnumerableConverter>();
+        }
+    }
 
+
+    /// <summary>
+    /// Converter from CreateTeamsCommand to IEnumerable of Teams
+    /// </summary>
+    public class CreateTeamsCommandToTeamIEnumerableConverter : ITypeConverter<CreateTeamsCommand, IEnumerable<Team>>
+    {
+        /// <summary>
+        /// Method that converts CreateTeamsCommand to IEnumerable of Teams
+        /// </summary>
+        /// <param name="source">CreateTeamsCommand</param>
+        /// <param name="destination">IEnumerable of Teams</param>
+        /// <param name="context">ResolutionContext</param>
+        /// <returns></returns>
+        public IEnumerable<Team> Convert(CreateTeamsCommand source, IEnumerable<Team> destination, ResolutionContext context)
+        {
+            var teams = new List<Team>();
+
+            foreach (var team in source.Request.Teams)
+                teams.Add(new Team
+                {
+                    DriverId = team.DriverId,
+                    ParamedicId = team.ParamedicId,
+                    Day = source.Request.Day.Date
+                });
+
+            return teams;
         }
     }
 

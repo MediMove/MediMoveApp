@@ -3,9 +3,13 @@ using MediMove.Server.Application.Teams.Queries;
 using MediMove.Server.Application.Teams.Commands;
 using MediMove.Shared.Models.DTOs;
 using Microsoft.AspNetCore.Authorization;
+using MediMove.Shared.Models.Enums;
 
 namespace MediMove.Server.Controllers.V1
 {
+    /// <summary>
+    /// Controller for managing teams.
+    /// </summary>
     public class TeamController : BaseApiController
     {
         [HttpGet("{id}")]
@@ -34,32 +38,19 @@ namespace MediMove.Server.Controllers.V1
                 errors => Problem(errors));
         }
 
-
         /// <summary>
-        /// Creates a specific Team.
+        /// Action for creating teams.
         /// </summary>
-        /// <param name="dto">CreateTeamDTO object</param>
-        /// <remarks>
-        /// Sample request:
-        /// 
-        ///     POST
-        ///     {
-        ///          "driverId": 2,
-        ///          "paramedicId": 3,
-        ///          "day": "2023-07-01"
-        ///     }
-        ///
-        /// </remarks>
-        /// <response code="200">Ok</response>
-        /// <response code="400">Invaild request</response>
+        /// <param name="request">CreateTeamsRequest</param>
+        /// <returns>no content</returns>
         [HttpPost]
         [Authorize(Roles = "Dispatcher")]
-        public async Task<IActionResult> CreateTeam([FromBody] CreateTeamDTO dto) // Przerobić na tworzenie listy teamów na dany dzień
+        public async Task<IActionResult> CreateTeams([FromBody] CreateTeamsRequest request)
         {
-            var entity = await Mediator.Send(new CreateTeamCommand(dto));
+            var result = await Mediator.Send(new CreateTeamsCommand(request));
 
-            return entity.Match(
-                entity => CreatedAtAction(nameof(GetTeam), new { id = entity.Id }, null),
+            return result.Match(
+                success => NoContent(),
                 errors => Problem(errors));
         }
 
