@@ -15,7 +15,6 @@ namespace MediMove.Server.Application.Availabilities.Validators
         {
             RuleFor(x => x.Shift).IsInEnum().WithMessage("Shift must be a valid ShiftType");
             RuleFor(x => x.Day).NotEmpty().WithMessage("Date cannot be empty");
-            RuleFor(x => x.Day.TimeOfDay).Empty().WithMessage("Date cannot have a time component");
         }
     }
 }

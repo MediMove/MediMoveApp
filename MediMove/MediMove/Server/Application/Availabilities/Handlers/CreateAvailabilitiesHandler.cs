@@ -39,7 +39,7 @@ namespace MediMove.Server.Application.Availabilities.Handlers
             if (availabilities is null)
                 return Errors.Errors.MappingError;
 
-            await _dbContext.Availabilities.AddRangeAsync(entities: availabilities, cancellationToken: cancellationToken);
+            await _dbContext.Availabilities.AddRangeAsync(availabilities, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
 
             return new ErrorOr<Unit>();

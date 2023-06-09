@@ -13,13 +13,13 @@ namespace MediMove.Server.Controllers.V1
     public class AvailabilityController : BaseApiController
     {
         /// <summary>
-        /// Gets available paramedics by day and shift.
+        /// Action for getting available paramedics by day and shift.
         /// </summary>
         /// <param name="year">year as integer</param>
         /// <param name="month">month as integer</param>
         /// <param name="day">day as integer</param>
         /// <param name="shift">shift as ShiftType</param>
-        /// <returns>GetAvailableParamedicsByDayAndShiftResponse object</returns>
+        /// <returns>GetAvailableParamedicsByDayAndShiftResponse</returns>
         [HttpGet]
         [Authorize(Roles = "Dispatcher")]
         public async Task<IActionResult> GetAvailableParamedicsByDayAndShift([FromQuery] int year, [FromQuery] int month, [FromQuery] int day, [FromQuery] ShiftType shift)
@@ -33,10 +33,10 @@ namespace MediMove.Server.Controllers.V1
 
 
         /// <summary>
-        /// Creates availabilities for a given paramedic.
+        /// Action for creating availabilities.
         /// </summary>
-        /// <param name="request">CreateAvailabilitiesRequest object</param>
-        /// <returns>No content</returns>
+        /// <param name="request">CreateAvailabilitiesRequest</param>
+        /// <returns>no content</returns>
         [HttpPost]
         [Authorize(Roles = "Paramedic")]
         public async Task<IActionResult> CreateAvailabilities([FromBody] CreateAvailabilitiesRequest request)

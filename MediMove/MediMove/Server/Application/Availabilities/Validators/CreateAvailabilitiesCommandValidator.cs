@@ -14,7 +14,7 @@ namespace MediMove.Server.Application.Availabilities.Validators
         /// <summary>
         /// Constructor for CreateAvailabilitiesCommandValidator.
         /// </summary>
-        /// <param name="dbContext">MediMoveDbContext object</param>
+        /// <param name="dbContext">MediMoveDbContext</param>
         public CreateAvailabilitiesCommandValidator(MediMoveDbContext dbContext)
         {
             RuleFor(x => x.request.Availabilities)
