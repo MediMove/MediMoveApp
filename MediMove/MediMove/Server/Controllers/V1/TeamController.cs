@@ -23,15 +23,18 @@ namespace MediMove.Server.Controllers.V1
         }
 
         /// <summary>
-        /// Returns list of all Teams as TeamDTO objects.
+        /// Action for getting teams by day and shift.
         /// </summary>
-        /// <response code="200">Returns list of all Teams as TeamDTO objects</response>
-        /// <response code="404">If teams DbSet was null</response>
+        /// <param name="year">year as integer</param>
+        /// <param name="month">month as integer</param>
+        /// <param name="day">day as integer</param>
+        /// <param name="shift">shift as ShiftType</param>
+        /// <returns>GetTeamsByDayAndShiftResponse</returns>
         [HttpGet]
         [Authorize(Roles = "Dispatcher")]
-        public async Task<IActionResult> GetAllTeamsByDay([FromQuery] int day, [FromQuery] int month, [FromQuery] int year) // Autoryzacja rolą dispacher
+        public async Task<IActionResult> GetTeamsByDayAndShift([FromQuery] int year, [FromQuery] int month, [FromQuery] int day, [FromQuery] ShiftType shift)
         {
-            var result = await Mediator.Send(new GetAllTeamsQuery(new DateTime(year, month, day)));//Send(new GetAllTeamsQuery(new DateTime(year, month, day)));
+            var result = await Mediator.Send(new GetTeamsByDayAndShiftQuery(new DateTime(year, month, day), shift));
 
             return result.Match(
                 result => Ok(result),

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediMove.Server.Application.Availabilities.Commands;
 using MediMove.Server.Application.Models;
+using MediMove.Server.Application.Teams.Commands;
 using MediMove.Shared.Models.DTOs;
 
 namespace MediMove.Server
@@ -116,6 +117,11 @@ namespace MediMove.Server
 
             CreateMap<RegisterUserDTO, User>();
 
+            CreateMap<Team, GetTeamsByDayAndShiftResponse.TeamInfo>()
+                .ForMember(m => m.DriverFirstName, c => c.MapFrom(s => s.Driver.PersonalInformation.FirstName))
+                .ForMember(m => m.DriverLastName, c => c.MapFrom(s => s.Driver.PersonalInformation.LastName))
+                .ForMember(m => m.ParamedicFirstName, c => c.MapFrom(s => s.Paramedic.PersonalInformation.FirstName))
+                .ForMember(m => m.ParamedicLastName, c => c.MapFrom(s => s.Paramedic.PersonalInformation.LastName));
 
             CreateMap<CreateTeamsCommand, IEnumerable<Team>>()
                 .ConvertUsing<CreateTeamsCommandToTeamIEnumerableConverter>();
