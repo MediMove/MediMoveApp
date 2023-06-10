@@ -31,6 +31,20 @@ namespace MediMove.Server.Controllers.V1
                 errors => Problem(errors));
         }
 
+        /// <summary>
+        /// Action for getting availabilities for paramedic.
+        /// </summary>
+        /// <returns>GetAvailabilitiesByParamedicResponse</returns>
+        [HttpGet("Paramedic")]
+        [Authorize(Roles = "Paramedic")]
+        public async Task<IActionResult> GetAvailabilitiesForParamedic()
+        {
+            var result = await Mediator.Send(new GetAvailabilitiesByParamedicQuery(getUserId()));
+
+            return result.Match(
+                result => Ok(result),
+                errors => Problem(errors));
+        }
 
         /// <summary>
         /// Action for creating availabilities.
