@@ -84,7 +84,6 @@ namespace MediMove.Client.temp
             }
             else
             {
-                responseContent = await httpResponse.Content.ReadAsStringAsync();
                 var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(responseContent);
                 response = new(errorResponse);
             }
