@@ -56,5 +56,21 @@ namespace MediMove.Server.Controllers.V1
                 success => NoContent(),
                 errors => Problem(errors));
         }
+
+        /// <summary>
+        /// Action for deleting teams.
+        /// </summary>
+        /// <param name="request">DeleteTeamsRequest</param>
+        /// <returns>no content</returns>
+        [HttpDelete]
+        [Authorize(Roles = "Dispatcher")]
+        public async Task<IActionResult> DeleteTeams([FromBody] DeleteTeamsRequest request)
+        {
+            var result = await Mediator.Send(new DeleteTeamsCommand(request));
+
+            return result.Match(
+                success => NoContent(),
+                errors => Problem(errors));
+        }
     }
 }
