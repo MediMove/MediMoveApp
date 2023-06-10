@@ -17,12 +17,12 @@ namespace MediMove.Server.Application.Availabilities.Validators
         /// <param name="dbContext">MediMoveDbContext</param>
         public CreateAvailabilitiesCommandValidator(MediMoveDbContext dbContext)
         {
-            RuleFor(x => x.request)
+            RuleFor(x => x.Request)
                 .NotNull().WithMessage("Request cannot be empty.");
 
-            RuleFor(x => x.request.Availabilities)
+            RuleFor(x => x.Request.Availabilities)
                 .NotEmpty().WithMessage("Availabilities list cannot be empty.")
-                .When(x => x != null && x.request.Availabilities != null && x.request.Availabilities.Any())
+                .When(x => x != null && x.Request.Availabilities != null && x.Request.Availabilities.Any())
                 .Must(declatations => declatations.Select(a => a.Day.Date).Distinct().Count() == declatations.Count()).WithMessage("Days must be unique")
                 .Must(declatations => declatations.All(a => a.Day.Date >= DateTime.Today.Date)).WithMessage("Days must be in the future")
                 .Must(declatations => declatations.All(a => !a.Shift.HasValue || Enum.IsDefined(typeof(ShiftType), a.Shift))).WithMessage("Shift must be null or a valid ShiftType");
@@ -48,7 +48,7 @@ namespace MediMove.Server.Application.Availabilities.Validators
                         return;
                     }
 
-                    if (x.request.Availabilities.Any(a => paramedic.Availabilities.Contains(a.Day.Date)))
+                    if (x.Request.Availabilities.Any(a => paramedic.Availabilities.Contains(a.Day.Date)))
                         context.AddFailure("Availabilities", "Paramedic already has availability on one or more of the provided days");
                 });
         }

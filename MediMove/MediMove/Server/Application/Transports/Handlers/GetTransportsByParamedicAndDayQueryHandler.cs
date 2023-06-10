@@ -21,7 +21,6 @@ namespace MediMove.Server.Application.Transports.Handlers
 
         public async Task<ErrorOr<IEnumerable<TransportDTO>>> Handle(GetTransportsByParamedicAndDayQuery request, CancellationToken cancellationToken)
         {
-            var dateOnly = request.Day;
             var transports = await _dbContext.Transports
                     .Where(t => t.StartTime.Date == request.Day.Date)
                     .Where(t => t.Team.DriverId == request.ParamedicId || t.Team.ParamedicId == request.ParamedicId)

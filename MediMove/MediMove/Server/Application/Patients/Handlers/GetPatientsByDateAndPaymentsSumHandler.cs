@@ -3,9 +3,7 @@ using ErrorOr;
 using MediatR;
 using MediMove.Server.Application.Patients.Queries;
 using MediMove.Server.Data;
-using MediMove.Server.Models;
 using MediMove.Shared.Models.DTOs;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace MediMove.Server.Application.Patients.Handlers

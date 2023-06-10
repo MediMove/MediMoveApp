@@ -16,7 +16,7 @@ namespace MediMove.Server.Application.Availabilities.Handlers
         private readonly MediMoveDbContext _dbContext;
 
         /// <summary>
-        /// Constructor for CreateAvailabilitiesCommandHandler .
+        /// Constructor for CreateAvailabilitiesCommandHandler.
         /// </summary>
         /// <param name="mapper">mapper to inject</param>
         /// <param name="dbContext">dbContext to inject</param>

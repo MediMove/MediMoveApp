@@ -17,7 +17,7 @@ namespace MediMove.Server.Application.Teams.Handlers
         private readonly MediMoveDbContext _dbContext;
 
         /// <summary>
-        /// Constructor for GetTeamsByDayAndShiftHandler.
+        /// Constructor for GetTeamsByDayAndShiftQueryHandler.
         /// </summary>
         /// <param name="mapper">mapper to inject</param>
         /// <param name="dbContext">dbContext to inject</param>

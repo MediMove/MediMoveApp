@@ -173,7 +173,7 @@ namespace MediMove.Server
         {
             var availabilities = new List<Availability>();
 
-            foreach (var declaration in source.request.Availabilities)
+            foreach (var declaration in source.Request.Availabilities)
             {
                 availabilities.Add(new Availability
                 {
