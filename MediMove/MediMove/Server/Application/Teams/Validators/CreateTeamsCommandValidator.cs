@@ -13,12 +13,15 @@ namespace MediMove.Server.Application.Teams.Validators
         /// <summary>
         /// Constructor for CreateTeamsCommandValidator.
         /// </summary>
-        /// <param name="_dbContext">MediMoveDbContext</param>
-        public CreateTeamsCommandValidator(MediMoveDbContext _dbContext)
+        /// <param name="dbContext">MediMoveDbContext</param>
+        public CreateTeamsCommandValidator(MediMoveDbContext dbContext)
         {
             RuleFor(x => x.Request.Day)
                 .NotEmpty().WithMessage("Day cannot be empty.")
                 .GreaterThanOrEqualTo(DateTime.Today).WithMessage("Day cannot be in the past.");
+
+            RuleFor(x => x.Request.Shift)
+                .IsInEnum().WithMessage("Shift must be a valid ShiftType");
 
             RuleFor(x => x.Request)
                 .NotEmpty().WithMessage("Request cannot be empty.")
@@ -32,8 +35,9 @@ namespace MediMove.Server.Application.Teams.Validators
                         context.AddFailure("request.Teams", "All IDs must be distinct.");
                         return;
                     }
-                    if (await _dbContext.Teams
+                    if (await dbContext.Teams
                         .AnyAsync(t => t.Day.Date == request.Day.Date &&
+                            t.ShiftType == request.Shift &&
                         (ids.Contains(t.DriverId) || ids.Contains(t.ParamedicId)),
                         cancellationToken))
                     {
@@ -42,11 +46,12 @@ namespace MediMove.Server.Application.Teams.Validators
                         return;
                     }
 
-                    var relatedParamedicsDict = await _dbContext.Paramedics
+                    var relatedParamedicsDict = await dbContext.Paramedics
                         .Where(p => ids.Contains(p.Id) && p.IsWorking)
                         .Include(p => p.Availabilities)
                         .SelectMany(p => p.Availabilities
-                            .Where(a => a.Day.Date == request.Day.Date),
+                            .Where(a => a.Day.Date == request.Day.Date &&
+                                (!a.ShiftType.HasValue || a.ShiftType == request.Shift)),
                             (p, a) => new { p.Id, p.IsDriver, a.ShiftType })
                         .ToDictionaryAsync(p => p.Id, cancellationToken);
 
@@ -57,9 +62,10 @@ namespace MediMove.Server.Application.Teams.Validators
                         return;
                     }
 
-                    if (request.Teams.Any(t => relatedParamedicsDict[t.DriverId].ShiftType != relatedParamedicsDict[t.ParamedicId].ShiftType))
+                    if (request.Teams.Any(t => relatedParamedicsDict[t.DriverId].ShiftType.HasValue && relatedParamedicsDict[t.ParamedicId].ShiftType.HasValue &&
+                        relatedParamedicsDict[t.DriverId].ShiftType != relatedParamedicsDict[t.ParamedicId].ShiftType))
                     {
-                        context.AddFailure("request.Teams", "Paramedic and driver must have the same shift type.");
+                        context.AddFailure("request.Teams", "Paramedic and driver cannot have different shifts.");
                         return;
                     }
 

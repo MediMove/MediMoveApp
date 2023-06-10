@@ -8,6 +8,6 @@ namespace MediMove.Server.Application.Availabilities.Commands;
 /// Command for creating availabilities.
 /// </summary>
 /// <param name="ParamedicId">ParamedicId as integer</param>
-/// <param name="request">CreateAvailabilitiesRequest</param>
-public record CreateAvailabilitiesCommand(int ParamedicId, CreateAvailabilitiesRequest request) : IRequest<ErrorOr<Unit>>;
+/// <param name="Request">CreateAvailabilitiesRequest</param>
+public record CreateAvailabilitiesCommand(int ParamedicId, CreateAvailabilitiesRequest Request) : IRequest<ErrorOr<Unit>>;
     

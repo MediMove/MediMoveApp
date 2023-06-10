@@ -173,13 +173,13 @@ namespace MediMove.Server
         {
             var availabilities = new List<Availability>();
 
-            foreach (var availability in source.request.Availabilities)
+            foreach (var declaration in source.request.Availabilities)
             {
                 availabilities.Add(new Availability
                 {
                     ParamedicId = source.ParamedicId,
-                    Day = availability.Day,
-                    ShiftType = availability.Shift
+                    Day = declaration.Day,
+                    ShiftType = declaration.Shift
                 });
             }
 

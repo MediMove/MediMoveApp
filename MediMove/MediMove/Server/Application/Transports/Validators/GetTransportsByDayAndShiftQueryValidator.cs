@@ -6,12 +6,12 @@ namespace MediMove.Server.Application.Transports.Validators
     /// <summary>
     /// Validator for GetTransportsByDayAndShiftQuery.
     /// </summary>
-    public class GetTransportsByDayAndShiftValidator : AbstractValidator<GetTransportsByDayAndShiftQuery>
+    public class GetTransportsByDayAndShiftQueryValidator : AbstractValidator<GetTransportsByDayAndShiftQuery>
     {
         /// <summary>
-        /// Constructor for GetTransportsByDayAndShiftValidator.
+        /// Constructor for GetTransportsByDayAndShiftQueryValidator.
         /// </summary>
-        public GetTransportsByDayAndShiftValidator()
+        public GetTransportsByDayAndShiftQueryValidator()
         {
             RuleFor(x => x.Day)
                 .NotEmpty().WithMessage("Day cannot be empty");

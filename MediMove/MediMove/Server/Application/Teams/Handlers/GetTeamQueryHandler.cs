@@ -7,12 +7,12 @@ using MediMove.Shared.Models.DTOs;
 
 namespace MediMove.Server.Application.Teams.Handlers
 {
-    public class GetTeamHandler : IRequestHandler<GetTeamQuery, ErrorOr<TeamDTO>>
+    public class GetTeamQueryHandler : IRequestHandler<GetTeamQuery, ErrorOr<TeamDTO>>
     {
         private readonly IMapper _mapper;
         private readonly MediMoveDbContext _dbContext;
 
-        public GetTeamHandler(IMapper mapper, MediMoveDbContext dbContext)
+        public GetTeamQueryHandler(IMapper mapper, MediMoveDbContext dbContext)
         {
             _mapper = mapper;
             _dbContext = dbContext;

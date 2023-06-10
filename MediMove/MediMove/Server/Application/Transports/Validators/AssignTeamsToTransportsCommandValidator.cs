@@ -49,16 +49,12 @@ namespace MediMove.Server.Application.Transports.Validators
 
                     var teamsOk = dbContext.Teams
                         .Where(t => transportsToTeams.Values.Contains(t.Id) &&
-                            t.Day.Date == datesAndShifts[0].Day)
-                        .Include(t => t.Driver)
-                        .ThenInclude(p => p.Availabilities)
-                        .Where(t => t.Driver.Availabilities.Any(a =>
-                            a.Day.Date == datesAndShifts[0].Day &&
-                            a.ShiftType == datesAndShifts[0].ShiftType))
+                            t.Day.Date == datesAndShifts[0].Day &&
+                            t.ShiftType == datesAndShifts[0].ShiftType)
                         .Count().Equals(transportsToTeams.Values.Count);
 
                     if (!teamsOk)
-                        context.AddFailure("Request.TransportsToTeams", "All teams must be valid");
+                        context.AddFailure("Request.TransportsToTeams", "All teams must exist and have the same date and shiftType");
 
                 }).Unless(x => x.Request == null ||
                     x.Request.TransportsToTeams == null);

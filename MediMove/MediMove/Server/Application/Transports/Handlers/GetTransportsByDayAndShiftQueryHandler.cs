@@ -11,15 +11,15 @@ namespace MediMove.Server.Application.Transports.Handlers
     /// <summary>
     /// Handler for getting transports by day and shift.
     /// </summary>
-    public class GetTransportsByDayAndShiftHandler : IRequestHandler<GetTransportsByDayAndShiftQuery, ErrorOr<GetTransportsByDayAndShiftResponse>>
+    public class GetTransportsByDayAndShiftQueryHandler : IRequestHandler<GetTransportsByDayAndShiftQuery, ErrorOr<GetTransportsByDayAndShiftResponse>>
     {
         private readonly MediMoveDbContext _dbContext;
 
         /// <summary>
-        /// Constructor for GetTransportsByDayHandler.
+        /// Constructor for GetTransportsByDayAndShiftQueryHandler.
         /// </summary>
         /// <param name="dbContext">dbContext to inject</param>
-        public GetTransportsByDayAndShiftHandler(MediMoveDbContext dbContext)
+        public GetTransportsByDayAndShiftQueryHandler(MediMoveDbContext dbContext)
         {
             _dbContext = dbContext;
         }

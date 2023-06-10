@@ -8,12 +8,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MediMove.Server.Application.Transports.Handlers
 {
-    public class GetTransportsByParamedicAndDayHandler : IRequestHandler<GetTransportsByParamedicAndDayQuery, ErrorOr<IEnumerable<TransportDTO>>>
+    public class GetTransportsByParamedicAndDayQueryHandler : IRequestHandler<GetTransportsByParamedicAndDayQuery, ErrorOr<IEnumerable<TransportDTO>>>
     {
         private readonly IMapper _mapper;
         private readonly MediMoveDbContext _dbContext;
 
-        public GetTransportsByParamedicAndDayHandler(IMapper mapper, MediMoveDbContext dbContext)
+        public GetTransportsByParamedicAndDayQueryHandler(IMapper mapper, MediMoveDbContext dbContext)
         {
             _mapper = mapper;
             _dbContext = dbContext;

@@ -10,17 +10,17 @@ namespace MediMove.Server.Application.Availabilities.Handlers
     /// <summary>
     /// Handler for creating availabilities.
     /// </summary>
-    public class CreateAvailabilitiesHandler : IRequestHandler<CreateAvailabilitiesCommand, ErrorOr<Unit>>
+    public class CreateAvailabilitiesCommandHandler : IRequestHandler<CreateAvailabilitiesCommand, ErrorOr<Unit>>
     {
         private readonly IMapper _mapper;
         private readonly MediMoveDbContext _dbContext;
 
         /// <summary>
-        /// Constructor for CreateAvailabilitiesHandler.
+        /// Constructor for CreateAvailabilitiesCommandHandler .
         /// </summary>
         /// <param name="mapper">mapper to inject</param>
         /// <param name="dbContext">dbContext to inject</param>
-        public CreateAvailabilitiesHandler(IMapper mapper, MediMoveDbContext dbContext)
+        public CreateAvailabilitiesCommandHandler(IMapper mapper, MediMoveDbContext dbContext)
         {
             _mapper = mapper;
             _dbContext = dbContext;
@@ -29,12 +29,12 @@ namespace MediMove.Server.Application.Availabilities.Handlers
         /// <summary>
         /// Method for handling the CreateAvailabilitiesCommand.
         /// </summary>
-        /// <param name="request">CreateAvailabilitiesCommand</param>
+        /// <param name="command">CreateAvailabilitiesCommand</param>
         /// <param name="cancellationToken">CancellationToken</param>
         /// <returns>Unit wrapped in ErrorOr</returns>
-        public async Task<ErrorOr<Unit>> Handle(CreateAvailabilitiesCommand request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<Unit>> Handle(CreateAvailabilitiesCommand command, CancellationToken cancellationToken)
         {
-            var availabilities = _mapper.Map<IEnumerable<Availability>>(request);
+            var availabilities = _mapper.Map<IEnumerable<Availability>>(command);
 
             if (availabilities is null)
                 return Errors.Errors.MappingError;

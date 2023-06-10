@@ -15,7 +15,7 @@ namespace MediMove.Server.Application.Transports.Handlers
         private readonly MediMoveDbContext _dbContext;
 
         /// <summary>
-        /// Constructor for AssignTeamsToTransportsHandler.
+        /// Constructor for AssignTeamsToTransportsCommandHandler.
         /// </summary>
         /// <param name="dbContext">dbContext to inject</param>
         public AssignTeamsToTransportsCommandHandler(MediMoveDbContext dbContext)
