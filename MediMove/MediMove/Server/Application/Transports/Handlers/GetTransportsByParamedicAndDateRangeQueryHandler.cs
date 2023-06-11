@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using ErrorOr;
+﻿using ErrorOr;
 using MediatR;
 using MediMove.Server.Application.Transports.Queries;
 using MediMove.Server.Data;
@@ -13,43 +12,53 @@ namespace MediMove.Server.Application.Transports.Handlers
     /// </summary>
     public class GetTransportsByParamedicAndDateRangeQueryHandler : IRequestHandler<GetTransportsByParamedicAndDateRangeQuery, ErrorOr<GetTransportsByParamedicAndDateRangeResponse>>
     {
-        private readonly IMapper _mapper;
         private readonly MediMoveDbContext _dbContext;
 
         /// <summary>
         /// Constructor for GetTransportsByParamedicAndDateRangeQueryHandler.
         /// </summary>
-        /// <param name="mapper">mapper to inject</param>
         /// <param name="dbContext">dbContext to inject</param>
-        public GetTransportsByParamedicAndDateRangeQueryHandler(IMapper mapper, MediMoveDbContext dbContext)
+        public GetTransportsByParamedicAndDateRangeQueryHandler(MediMoveDbContext dbContext)
         {
-            _mapper = mapper;
             _dbContext = dbContext;
         }
 
         /// <summary>
         /// Method for handling the GetTransportsByParamedicAndDateRangeQuery.
         /// </summary>
-        /// <param name="request"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public async Task<ErrorOr<GetTransportsByParamedicAndDateRangeResponse>> Handle(GetTransportsByParamedicAndDateRangeQuery request, CancellationToken cancellationToken)
+        /// <param name="query">GetTransportsByParamedicAndDateRangeQuery</param>
+        /// <param name="cancellationToken">CancellationToken</param>
+        /// <returns>GetTransportsByParamedicAndDateRangeResponse wrapped in ErrorOr</returns>
+        public async Task<ErrorOr<GetTransportsByParamedicAndDateRangeResponse>> Handle(GetTransportsByParamedicAndDateRangeQuery query, CancellationToken cancellationToken)
         {
             var transports = await _dbContext.Transports
                 .Where(t => !t.IsCancelled &&
-                    (!request.StartDateInclusive.HasValue || t.StartTime.Date >= request.StartDateInclusive.Value.Date) &&
-                    (!request.EndDateInclusive.HasValue || t.StartTime.Date <= request.EndDateInclusive.Value.Date) &&
-                    (t.Team.DriverId == request.ParamedicId || t.Team.ParamedicId == request.ParamedicId))
+                    (!query.StartDateInclusive.HasValue || t.StartTime.Date >= query.StartDateInclusive.Value.Date) &&
+                    (!query.EndDateInclusive.HasValue || t.StartTime.Date <= query.EndDateInclusive.Value.Date) &&
+                    (t.Team.DriverId == query.ParamedicId || t.Team.ParamedicId == query.ParamedicId))
                 .Include(t => t.Patient)
                 .ThenInclude(p => p.PersonalInformation)
+                .Select(t => new TransportDTO
+                {
+                    PatientFirstName = t.Patient.PersonalInformation.FirstName,
+                    PatientLastName = t.Patient.PersonalInformation.LastName,
+                    PatientPhoneNumber = t.Patient.PersonalInformation.PhoneNumber,
+                    PatientStreetAddress = t.Patient.PersonalInformation.StreetAddress,
+                    PatientHouseNumber = t.Patient.PersonalInformation.HouseNumber,
+                    PatientApartmentNumber = t.Patient.PersonalInformation.ApartmentNumber,
+                    PatientPostalCode = t.Patient.PersonalInformation.PostalCode,
+                    PatientCity = t.Patient.PersonalInformation.City,
+                    PatientWeight = t.Patient.Weight,
+                    StartTime = t.StartTime,
+                    Financing = t.Financing,
+                    PatientPosition = t.PatientPosition,
+                    Destination = t.Destination,
+                    TransportType = t.TransportType
+                })
                 .ToArrayAsync(cancellationToken);
 
-            var transportDTOs = _mapper.Map<TransportDTO[]>(transports);
-
-            if (transportDTOs is null)
-                return Errors.Errors.MappingError;
-
-            return new GetTransportsByParamedicAndDateRangeResponse(transportDTOs);
+            return new GetTransportsByParamedicAndDateRangeResponse(
+                transports.ToLookup(t => t.StartTime.Date));
         }
     }
 }
