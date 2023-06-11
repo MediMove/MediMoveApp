@@ -48,16 +48,15 @@ namespace MediMove.Server.Application.Transports.Validators
                     }
 
                     var teamsOk = dbContext.Teams
-                        .Where(t => transportsToTeams.Values.Contains(t.Id) &&
-                            t.Day.Date == datesAndShifts[0].Day &&
-                            t.ShiftType == datesAndShifts[0].ShiftType)
-                        .Count().Equals(transportsToTeams.Values.Count);
+                        .Count(t => transportsToTeams.Values.Contains(t.Id) &&
+                                    t.Day.Date == datesAndShifts[0].Day &&
+                                    t.ShiftType == datesAndShifts[0].ShiftType)
+                        .Equals(transportsToTeams.Values.Count);
 
                     if (!teamsOk)
                         context.AddFailure("Request.TransportsToTeams", "All teams must exist and have the same date and shiftType");
 
-                }).Unless(x => x.Request == null ||
-                    x.Request.TransportsToTeams == null);
+                }).Unless(x => x.Request == null || x.Request.TransportsToTeams == null);
         }
     }
 }
