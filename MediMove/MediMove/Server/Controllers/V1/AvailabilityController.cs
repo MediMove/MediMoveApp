@@ -61,5 +61,21 @@ namespace MediMove.Server.Controllers.V1
                 result => NoContent(),
                 errors => Problem(errors));
         }
+
+        /// <summary>
+        /// Action for deleting availabilities.
+        /// </summary>
+        /// <param name="request">DeleteAvailabilitiesRequest</param>
+        /// <returns>no content</returns>
+        [HttpDelete]
+        [Authorize(Roles = "Paramedic")]
+        public async Task<IActionResult> DeleteAvailabilities([FromBody] DeleteAvailabilitiesRequest request)
+        {
+            var result = await Mediator.Send(new DeleteAvailabilitiesCommand(getUserId(), request));
+
+            return result.Match(
+                result => NoContent(),
+                errors => Problem(errors));
+        }
     }
 }
