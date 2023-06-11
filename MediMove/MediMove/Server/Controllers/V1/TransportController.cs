@@ -120,5 +120,21 @@ namespace MediMove.Server.Controllers.V1
                 success => NoContent(),
                 errors => Problem(errors));
         }
+
+        /// <summary>
+        /// Action for deleting transports.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpDelete]
+        [Authorize(Roles = "Dispatcher")]
+        public async Task<IActionResult> DeleteTransports([FromBody] DeleteTransportsRequest request)
+        {
+            var result = await Mediator.Send(new DeleteTransportsCommand(request));
+
+            return result.Match(
+                success => NoContent(),
+                errors => Problem(errors));
+        }
     }
 }
