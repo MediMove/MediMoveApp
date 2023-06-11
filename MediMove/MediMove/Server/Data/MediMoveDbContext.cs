@@ -33,6 +33,12 @@ namespace MediMove.Server.Data
                 .HasForeignKey(t => t.TeamId)
                 .OnDelete(DeleteBehavior.SetNull);
 
+            modelBuilder.Entity<Team>()
+                .HasOne(t => t.Paramedic)
+                .WithMany()
+                .HasForeignKey(t => t.ParamedicId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             base.OnModelCreating(modelBuilder);
 
             var seeders = new List<IDbSeeder>

@@ -4,6 +4,7 @@ using MediMove.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MediMove.Server.Migrations
 {
     [DbContext(typeof(MediMoveDbContext))]
-    partial class MediMoveDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230611131455_AddedIsCancelledToTransports")]
+    partial class AddedIsCancelledToTransports
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,7 +46,7 @@ namespace MediMove.Server.Migrations
 
                     b.HasIndex("ParamedicId");
 
-                    b.ToTable("Availabilities", (string)null);
+                    b.ToTable("Availabilities");
 
                     b.HasData(
                         new
@@ -238,7 +241,7 @@ namespace MediMove.Server.Migrations
 
                     b.HasIndex("PersonalInformationId");
 
-                    b.ToTable("Billings", (string)null);
+                    b.ToTable("Billings");
 
                     b.HasData(
                         new
@@ -292,7 +295,7 @@ namespace MediMove.Server.Migrations
 
                     b.HasIndex("PersonalInformationId");
 
-                    b.ToTable("Dispatchers", (string)null);
+                    b.ToTable("Dispatchers");
 
                     b.HasData(
                         new
@@ -336,7 +339,7 @@ namespace MediMove.Server.Migrations
 
                     b.HasIndex("PersonalInformationId");
 
-                    b.ToTable("Paramedics", (string)null);
+                    b.ToTable("Paramedics");
 
                     b.HasData(
                         new
@@ -399,7 +402,7 @@ namespace MediMove.Server.Migrations
 
                     b.HasIndex("PersonalInformationId");
 
-                    b.ToTable("Patients", (string)null);
+                    b.ToTable("Patients");
 
                     b.HasData(
                         new
@@ -483,7 +486,7 @@ namespace MediMove.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PersonalInformations", (string)null);
+                    b.ToTable("PersonalInformations");
 
                     b.HasData(
                         new
@@ -713,7 +716,7 @@ namespace MediMove.Server.Migrations
 
                     b.HasIndex("ParamedicId");
 
-                    b.ToTable("Rates", (string)null);
+                    b.ToTable("Rates");
 
                     b.HasData(
                         new
@@ -788,7 +791,7 @@ namespace MediMove.Server.Migrations
 
                     b.HasKey("RoleId");
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("Roles");
 
                     b.HasData(
                         new
@@ -834,7 +837,7 @@ namespace MediMove.Server.Migrations
 
                     b.HasIndex("DispatcherId");
 
-                    b.ToTable("Salaries", (string)null);
+                    b.ToTable("Salaries");
 
                     b.HasData(
                         new
@@ -893,7 +896,7 @@ namespace MediMove.Server.Migrations
 
                     b.HasIndex("ParamedicId");
 
-                    b.ToTable("Teams", (string)null);
+                    b.ToTable("Teams");
 
                     b.HasData(
                         new
@@ -1012,7 +1015,7 @@ namespace MediMove.Server.Migrations
 
                     b.HasIndex("TeamId");
 
-                    b.ToTable("Transports", (string)null);
+                    b.ToTable("Transports");
 
                     b.HasData(
                         new
@@ -1367,7 +1370,7 @@ namespace MediMove.Server.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("MediMove.Server.Application.Models.Availability", b =>

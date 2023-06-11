@@ -4,6 +4,7 @@ using MediMove.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MediMove.Server.Migrations
 {
     [DbContext(typeof(MediMoveDbContext))]
-    partial class MediMoveDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230611124238_test")]
+    partial class test
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,7 +46,7 @@ namespace MediMove.Server.Migrations
 
                     b.HasIndex("ParamedicId");
 
-                    b.ToTable("Availabilities", (string)null);
+                    b.ToTable("Availabilities");
 
                     b.HasData(
                         new
@@ -238,7 +241,7 @@ namespace MediMove.Server.Migrations
 
                     b.HasIndex("PersonalInformationId");
 
-                    b.ToTable("Billings", (string)null);
+                    b.ToTable("Billings");
 
                     b.HasData(
                         new
@@ -246,7 +249,7 @@ namespace MediMove.Server.Migrations
                             Id = 1,
                             BankAccountNumber = "342301332136124",
                             Cost = 200m,
-                            InvoiceDate = new DateTime(2023, 6, 9, 15, 14, 54, 789, DateTimeKind.Local).AddTicks(7519),
+                            InvoiceDate = new DateTime(2023, 6, 9, 14, 42, 37, 925, DateTimeKind.Local).AddTicks(8684),
                             InvoiceNumber = "1.11.06.2023",
                             PersonalInformationId = 10
                         },
@@ -292,7 +295,7 @@ namespace MediMove.Server.Migrations
 
                     b.HasIndex("PersonalInformationId");
 
-                    b.ToTable("Dispatchers", (string)null);
+                    b.ToTable("Dispatchers");
 
                     b.HasData(
                         new
@@ -336,7 +339,7 @@ namespace MediMove.Server.Migrations
 
                     b.HasIndex("PersonalInformationId");
 
-                    b.ToTable("Paramedics", (string)null);
+                    b.ToTable("Paramedics");
 
                     b.HasData(
                         new
@@ -399,7 +402,7 @@ namespace MediMove.Server.Migrations
 
                     b.HasIndex("PersonalInformationId");
 
-                    b.ToTable("Patients", (string)null);
+                    b.ToTable("Patients");
 
                     b.HasData(
                         new
@@ -483,7 +486,7 @@ namespace MediMove.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PersonalInformations", (string)null);
+                    b.ToTable("PersonalInformations");
 
                     b.HasData(
                         new
@@ -713,7 +716,7 @@ namespace MediMove.Server.Migrations
 
                     b.HasIndex("ParamedicId");
 
-                    b.ToTable("Rates", (string)null);
+                    b.ToTable("Rates");
 
                     b.HasData(
                         new
@@ -788,7 +791,7 @@ namespace MediMove.Server.Migrations
 
                     b.HasKey("RoleId");
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("Roles");
 
                     b.HasData(
                         new
@@ -834,7 +837,7 @@ namespace MediMove.Server.Migrations
 
                     b.HasIndex("DispatcherId");
 
-                    b.ToTable("Salaries", (string)null);
+                    b.ToTable("Salaries");
 
                     b.HasData(
                         new
@@ -878,10 +881,10 @@ namespace MediMove.Server.Migrations
                     b.Property<DateTime>("Day")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DriverId")
+                    b.Property<int?>("DriverId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ParamedicId")
+                    b.Property<int?>("ParamedicId")
                         .HasColumnType("int");
 
                     b.Property<int?>("ShiftType")
@@ -893,7 +896,7 @@ namespace MediMove.Server.Migrations
 
                     b.HasIndex("ParamedicId");
 
-                    b.ToTable("Teams", (string)null);
+                    b.ToTable("Teams");
 
                     b.HasData(
                         new
@@ -986,9 +989,6 @@ namespace MediMove.Server.Migrations
                     b.Property<int>("Financing")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsCancelled")
-                        .HasColumnType("bit");
-
                     b.Property<int>("PatientId")
                         .HasColumnType("int");
 
@@ -999,6 +999,7 @@ namespace MediMove.Server.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("TeamId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<int>("TransportType")
@@ -1012,7 +1013,7 @@ namespace MediMove.Server.Migrations
 
                     b.HasIndex("TeamId");
 
-                    b.ToTable("Transports", (string)null);
+                    b.ToTable("Transports");
 
                     b.HasData(
                         new
@@ -1020,7 +1021,6 @@ namespace MediMove.Server.Migrations
                             Id = 1,
                             Destination = "Saska 43 Rybnik",
                             Financing = 0,
-                            IsCancelled = false,
                             PatientId = 1,
                             PatientPosition = 0,
                             StartTime = new DateTime(2023, 6, 9, 7, 0, 0, 0, DateTimeKind.Unspecified),
@@ -1032,7 +1032,6 @@ namespace MediMove.Server.Migrations
                             Id = 2,
                             Destination = "Nadrzeczna 55 Mysłowice",
                             Financing = 2,
-                            IsCancelled = false,
                             PatientId = 2,
                             PatientPosition = 1,
                             StartTime = new DateTime(2023, 6, 9, 9, 10, 0, 0, DateTimeKind.Unspecified),
@@ -1044,7 +1043,6 @@ namespace MediMove.Server.Migrations
                             Id = 3,
                             Destination = "Wyszogrodzka 44 Bytom",
                             Financing = 1,
-                            IsCancelled = false,
                             PatientId = 3,
                             PatientPosition = 1,
                             StartTime = new DateTime(2023, 6, 9, 14, 0, 0, 0, DateTimeKind.Unspecified),
@@ -1056,7 +1054,6 @@ namespace MediMove.Server.Migrations
                             Id = 4,
                             Destination = "Dobosza 101 Zabrze",
                             Financing = 1,
-                            IsCancelled = false,
                             PatientId = 4,
                             PatientPosition = 1,
                             StartTime = new DateTime(2023, 6, 9, 7, 30, 0, 0, DateTimeKind.Unspecified),
@@ -1068,7 +1065,6 @@ namespace MediMove.Server.Migrations
                             Id = 5,
                             Destination = "Dyngus 30 Chorzów",
                             Financing = 0,
-                            IsCancelled = false,
                             PatientId = 5,
                             PatientPosition = 2,
                             StartTime = new DateTime(2023, 6, 9, 12, 0, 0, 0, DateTimeKind.Unspecified),
@@ -1080,7 +1076,6 @@ namespace MediMove.Server.Migrations
                             Id = 6,
                             Destination = "Obornicka 89 Rybnik",
                             Financing = 0,
-                            IsCancelled = false,
                             PatientId = 4,
                             PatientPosition = 1,
                             StartTime = new DateTime(2023, 6, 10, 7, 30, 0, 0, DateTimeKind.Unspecified),
@@ -1092,7 +1087,6 @@ namespace MediMove.Server.Migrations
                             Id = 7,
                             Destination = "Zakładowa 19 Częstochowa",
                             Financing = 0,
-                            IsCancelled = false,
                             PatientId = 2,
                             PatientPosition = 0,
                             StartTime = new DateTime(2023, 6, 10, 9, 45, 0, 0, DateTimeKind.Unspecified),
@@ -1104,7 +1098,6 @@ namespace MediMove.Server.Migrations
                             Id = 8,
                             Destination = "Ustronna 70 Gliwice",
                             Financing = 0,
-                            IsCancelled = false,
                             PatientId = 1,
                             PatientPosition = 0,
                             StartTime = new DateTime(2023, 6, 10, 13, 0, 0, 0, DateTimeKind.Unspecified),
@@ -1116,7 +1109,6 @@ namespace MediMove.Server.Migrations
                             Id = 9,
                             Destination = "Oboźna 43 Tychy",
                             Financing = 0,
-                            IsCancelled = false,
                             PatientId = 4,
                             PatientPosition = 1,
                             StartTime = new DateTime(2023, 6, 10, 15, 30, 0, 0, DateTimeKind.Unspecified),
@@ -1128,7 +1120,6 @@ namespace MediMove.Server.Migrations
                             Id = 10,
                             Destination = "Mickiewicza 119 Żory",
                             Financing = 0,
-                            IsCancelled = false,
                             PatientId = 2,
                             PatientPosition = 0,
                             StartTime = new DateTime(2023, 6, 10, 18, 0, 0, 0, DateTimeKind.Unspecified),
@@ -1140,7 +1131,6 @@ namespace MediMove.Server.Migrations
                             Id = 11,
                             Destination = "Rycerska 13 Sosnowiec",
                             Financing = 0,
-                            IsCancelled = false,
                             PatientId = 5,
                             PatientPosition = 2,
                             StartTime = new DateTime(2023, 6, 10, 20, 0, 0, 0, DateTimeKind.Unspecified),
@@ -1152,7 +1142,6 @@ namespace MediMove.Server.Migrations
                             Id = 12,
                             Destination = "Skromna 116 Bieruń",
                             Financing = 0,
-                            IsCancelled = false,
                             PatientId = 1,
                             PatientPosition = 0,
                             StartTime = new DateTime(2023, 6, 11, 7, 0, 0, 0, DateTimeKind.Unspecified),
@@ -1164,7 +1153,6 @@ namespace MediMove.Server.Migrations
                             Id = 13,
                             Destination = "Lidzka 53 Świętochłowice",
                             Financing = 0,
-                            IsCancelled = false,
                             PatientId = 3,
                             PatientPosition = 0,
                             StartTime = new DateTime(2023, 6, 11, 12, 0, 0, 0, DateTimeKind.Unspecified),
@@ -1176,7 +1164,6 @@ namespace MediMove.Server.Migrations
                             Id = 14,
                             Destination = "Pomarańczowa 95 Bielsko-Biała",
                             Financing = 0,
-                            IsCancelled = false,
                             PatientId = 2,
                             PatientPosition = 0,
                             StartTime = new DateTime(2023, 6, 11, 13, 30, 0, 0, DateTimeKind.Unspecified),
@@ -1188,7 +1175,6 @@ namespace MediMove.Server.Migrations
                             Id = 15,
                             Destination = "Bydgoska 123 Ruda Śląska",
                             Financing = 0,
-                            IsCancelled = false,
                             PatientId = 4,
                             PatientPosition = 1,
                             StartTime = new DateTime(2023, 6, 11, 16, 0, 0, 0, DateTimeKind.Unspecified),
@@ -1200,7 +1186,6 @@ namespace MediMove.Server.Migrations
                             Id = 16,
                             Destination = "Różana 138 Żory",
                             Financing = 0,
-                            IsCancelled = false,
                             PatientId = 2,
                             PatientPosition = 0,
                             StartTime = new DateTime(2023, 6, 11, 17, 45, 0, 0, DateTimeKind.Unspecified),
@@ -1212,7 +1197,6 @@ namespace MediMove.Server.Migrations
                             Id = 17,
                             Destination = "Okrzei Stefana 132 Chorzów",
                             Financing = 0,
-                            IsCancelled = false,
                             PatientId = 4,
                             PatientPosition = 1,
                             StartTime = new DateTime(2023, 6, 11, 19, 0, 0, 0, DateTimeKind.Unspecified),
@@ -1224,7 +1208,6 @@ namespace MediMove.Server.Migrations
                             Id = 18,
                             Destination = "Diamentowa 5 Częstochowa",
                             Financing = 0,
-                            IsCancelled = false,
                             PatientId = 1,
                             PatientPosition = 0,
                             StartTime = new DateTime(2023, 6, 12, 7, 15, 0, 0, DateTimeKind.Unspecified),
@@ -1236,7 +1219,6 @@ namespace MediMove.Server.Migrations
                             Id = 19,
                             Destination = "Pawlikowskiego Tadeusza 96 Cieszyn",
                             Financing = 0,
-                            IsCancelled = false,
                             PatientId = 2,
                             PatientPosition = 0,
                             StartTime = new DateTime(2023, 6, 12, 11, 0, 0, 0, DateTimeKind.Unspecified),
@@ -1248,7 +1230,6 @@ namespace MediMove.Server.Migrations
                             Id = 20,
                             Destination = "Generała Szyllinga Antoniego 111 Imielin",
                             Financing = 0,
-                            IsCancelled = false,
                             PatientId = 3,
                             PatientPosition = 0,
                             StartTime = new DateTime(2023, 6, 12, 13, 15, 0, 0, DateTimeKind.Unspecified),
@@ -1260,7 +1241,6 @@ namespace MediMove.Server.Migrations
                             Id = 21,
                             Destination = "Urbańskiego Tadeusza 45 Pszów",
                             Financing = 0,
-                            IsCancelled = false,
                             PatientId = 5,
                             PatientPosition = 2,
                             StartTime = new DateTime(2023, 6, 12, 16, 0, 0, 0, DateTimeKind.Unspecified),
@@ -1272,7 +1252,6 @@ namespace MediMove.Server.Migrations
                             Id = 22,
                             Destination = "Czerwona 46 Katowice",
                             Financing = 0,
-                            IsCancelled = false,
                             PatientId = 4,
                             PatientPosition = 1,
                             StartTime = new DateTime(2023, 6, 12, 17, 15, 0, 0, DateTimeKind.Unspecified),
@@ -1284,7 +1263,6 @@ namespace MediMove.Server.Migrations
                             Id = 23,
                             Destination = "Reutta 54 Bytom",
                             Financing = 0,
-                            IsCancelled = false,
                             PatientId = 3,
                             PatientPosition = 0,
                             StartTime = new DateTime(2023, 6, 12, 20, 0, 0, 0, DateTimeKind.Unspecified),
@@ -1296,7 +1274,6 @@ namespace MediMove.Server.Migrations
                             Id = 24,
                             Destination = "Cybernetyków 120 Tychy",
                             Financing = 0,
-                            IsCancelled = false,
                             PatientId = 1,
                             PatientPosition = 0,
                             StartTime = new DateTime(2023, 6, 13, 8, 30, 0, 0, DateTimeKind.Unspecified),
@@ -1308,7 +1285,6 @@ namespace MediMove.Server.Migrations
                             Id = 25,
                             Destination = "Kaszubska 18 Świętochłowice",
                             Financing = 0,
-                            IsCancelled = false,
                             PatientId = 3,
                             PatientPosition = 0,
                             StartTime = new DateTime(2023, 6, 13, 12, 0, 0, 0, DateTimeKind.Unspecified),
@@ -1320,7 +1296,6 @@ namespace MediMove.Server.Migrations
                             Id = 26,
                             Destination = "Cybernetyków 120 Tychy",
                             Financing = 0,
-                            IsCancelled = false,
                             PatientId = 2,
                             PatientPosition = 0,
                             StartTime = new DateTime(2023, 6, 13, 17, 0, 0, 0, DateTimeKind.Unspecified),
@@ -1332,7 +1307,6 @@ namespace MediMove.Server.Migrations
                             Id = 27,
                             Destination = "Kaszubska 18 Świętochłowice",
                             Financing = 0,
-                            IsCancelled = false,
                             PatientId = 5,
                             PatientPosition = 2,
                             StartTime = new DateTime(2023, 6, 13, 19, 0, 0, 0, DateTimeKind.Unspecified),
@@ -1367,7 +1341,7 @@ namespace MediMove.Server.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("MediMove.Server.Application.Models.Availability", b =>
@@ -1451,15 +1425,11 @@ namespace MediMove.Server.Migrations
                 {
                     b.HasOne("MediMove.Server.Application.Models.Paramedic", "Driver")
                         .WithMany()
-                        .HasForeignKey("DriverId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DriverId");
 
                     b.HasOne("MediMove.Server.Application.Models.Paramedic", "Paramedic")
                         .WithMany()
-                        .HasForeignKey("ParamedicId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("ParamedicId");
 
                     b.Navigation("Driver");
 
@@ -1480,7 +1450,9 @@ namespace MediMove.Server.Migrations
 
                     b.HasOne("MediMove.Server.Application.Models.Team", "Team")
                         .WithMany("Transports")
-                        .HasForeignKey("TeamId");
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
 
                     b.Navigation("Billing");
 
