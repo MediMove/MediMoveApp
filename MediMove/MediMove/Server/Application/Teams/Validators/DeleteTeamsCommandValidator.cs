@@ -27,7 +27,7 @@ namespace MediMove.Server.Application.Teams.Validators
                         .Where(t => TeamIds.Contains(t.Id))
                         .Count().Equals(TeamIds.Length))
                         context.AddFailure("TeamIds", "One or more teams do not exist");
-                }).Unless(x => x.Request == null || x.Request.TeamIds == null || !x.Request.TeamIds.Any());
+                }).When(x => x.Request != null && x.Request.TeamIds != null && x.Request.TeamIds.Any());
         }
     }
 }

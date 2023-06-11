@@ -13,17 +13,14 @@ namespace MediMove.Server.Application.Availabilities.Handlers
     /// </summary>
     public class GetAvailableParamedicsByDayAndShiftQueryHandler : IRequestHandler<GetAvailableParamedicsByDayAndShiftQuery, ErrorOr<GetAvailableParamedicsByDayAndShiftResponse>>
     {
-        private readonly IMapper _mapper;
         private readonly MediMoveDbContext _dbContext;
 
         /// <summary>
         /// Constructor for GetAvailableParamedicsByDayAndShiftQueryHandler.
         /// </summary>
-        /// <param name="mapper">mapper to inject</param>
         /// <param name="dbContext">dbContext to inject</param>
-        public GetAvailableParamedicsByDayAndShiftQueryHandler(IMapper mapper, MediMoveDbContext dbContext)
+        public GetAvailableParamedicsByDayAndShiftQueryHandler(MediMoveDbContext dbContext)
         {
-            _mapper = mapper;
             _dbContext = dbContext;
         }
 

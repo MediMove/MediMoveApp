@@ -1,7 +1,5 @@
-﻿using AutoMapper;
-using ErrorOr;
+﻿using ErrorOr;
 using MediatR;
-using MediMove.Server.Application.Models;
 using MediMove.Server.Application.Teams.Commands;
 using MediMove.Server.Data;
 using Microsoft.EntityFrameworkCore;
@@ -13,17 +11,14 @@ namespace MediMove.Server.Application.Teams.Handlers
     /// </summary>
     public class DeleteTeamsCommandHandler : IRequestHandler<DeleteTeamsCommand, ErrorOr<Unit>>
     {
-        private readonly IMapper _mapper;
         private readonly MediMoveDbContext _dbContext;
 
         /// <summary>
         /// Constructor for DeleteTeamsCommandHandler.
         /// </summary>
-        /// <param name="mapper">mapper to inject</param>
         /// <param name="dbContext">dbContext to inject</param>
-        public DeleteTeamsCommandHandler(IMapper mapper, MediMoveDbContext dbContext)
+        public DeleteTeamsCommandHandler(MediMoveDbContext dbContext)
         {
-            _mapper = mapper;
             _dbContext = dbContext;
         }
 

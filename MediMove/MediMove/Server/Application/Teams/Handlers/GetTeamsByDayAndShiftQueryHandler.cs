@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using ErrorOr;
+﻿using ErrorOr;
 using MediatR;
 using MediMove.Server.Application.Teams.Queries;
 using MediMove.Server.Data;
@@ -13,17 +12,14 @@ namespace MediMove.Server.Application.Teams.Handlers
     /// </summary>
     public class GetTeamsByDayAndShiftQueryHandler : IRequestHandler<GetTeamsByDayAndShiftQuery, ErrorOr<GetTeamsByDayAndShiftResponse>>
     {
-        private readonly IMapper _mapper;
         private readonly MediMoveDbContext _dbContext;
 
         /// <summary>
         /// Constructor for GetTeamsByDayAndShiftQueryHandler.
         /// </summary>
-        /// <param name="mapper">mapper to inject</param>
         /// <param name="dbContext">dbContext to inject</param>
-        public GetTeamsByDayAndShiftQueryHandler(IMapper mapper, MediMoveDbContext dbContext)
+        public GetTeamsByDayAndShiftQueryHandler(MediMoveDbContext dbContext)
         {
-            _mapper = mapper;
             _dbContext = dbContext;
         }
 
