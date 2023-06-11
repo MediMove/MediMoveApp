@@ -7,32 +7,34 @@ using Microsoft.EntityFrameworkCore;
 namespace MediMove.Server.Application.Transports.Handlers
 {
     /// <summary>
-    /// Handler for deleting transports.
+    /// Handler for cancelling transports.
     /// </summary>
-    public class DeleteTransportsCommandHandler : IRequestHandler<DeleteTransportsCommand, ErrorOr<Unit>>
+    public class CancelTransportsCommandHandler : IRequestHandler<CancelTransportsCommand, ErrorOr<Unit>>
     {
         private readonly MediMoveDbContext _dbContext;
 
         /// <summary>
-        /// Constructor for DeleteTransportsCommandHandler.
+        /// Constructor for CancelTransportsCommandHandler.
         /// </summary>
         /// <param name="dbContext">dbContext to inject</param>
-        public DeleteTransportsCommandHandler(MediMoveDbContext dbContext)
+        public CancelTransportsCommandHandler(MediMoveDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
         /// <summary>
-        /// Method for handling the DeleteTransportsCommand.
+        /// Method for handling the CancelTransportsCommand.
         /// </summary>
-        /// <param name="command">DeleteTransportsCommand</param>
+        /// <param name="command">CancelTransportsCommand</param>
         /// <param name="cancellationToken">CancellationToken</param>
         /// <returns>Unit wrapped in ErrorOr</returns>
-        public async Task<ErrorOr<Unit>> Handle(DeleteTransportsCommand command, CancellationToken cancellationToken)
+        public async Task<ErrorOr<Unit>> Handle(CancelTransportsCommand command, CancellationToken cancellationToken)
         {
-            var transports = await _dbContext.Transports
+            await _dbContext.Transports
                 .Where(t => command.Request.TransportIds.Contains(t.Id))
-                .ExecuteDeleteAsync(cancellationToken);
+                .ForEachAsync(t => t.IsCancelled = true, cancellationToken);
+
+            await _dbContext.SaveChangesAsync(cancellationToken);
 
             return new ErrorOr<Unit>();
         }

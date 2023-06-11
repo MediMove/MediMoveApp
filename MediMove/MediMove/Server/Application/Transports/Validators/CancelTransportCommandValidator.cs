@@ -5,15 +5,15 @@ using MediMove.Server.Data;
 namespace MediMove.Server.Application.Transports.Validators
 {
     /// <summary>
-    /// Validator for DeleteTransportsCommand.
+    /// Validator for CancelTransportsCommand.
     /// </summary>
-    public class DeleteTransportCommandValidator : AbstractValidator<DeleteTransportsCommand>
+    public class CancelTransportCommandValidator : AbstractValidator<CancelTransportsCommand>
     {
         /// <summary>
-        /// Constructor for DeleteTransportsCommandValidator.
+        /// Constructor for CancelTransportsCommandValidator.
         /// </summary>
         /// <param name="dbContext">MediMoveDbContext</param>
-        public DeleteTransportCommandValidator(MediMoveDbContext dbContext)
+        public CancelTransportCommandValidator(MediMoveDbContext dbContext)
         {
             RuleFor(x => x.Request)
                 .NotEmpty().WithMessage("Request cannot be empty");
@@ -25,7 +25,7 @@ namespace MediMove.Server.Application.Transports.Validators
                     if (!dbContext.Transports
                         .Where(t => transportIds.Contains(t.Id))
                         .Count().Equals(transportIds.Length))
-                        context.AddFailure("TransportIds", "One or more transport ids do not exist");
+                        context.AddFailure("Request.TransportIds", "One or more transport ids do not exist");
                 })
                 .When(x => x.Request != null &&
                     x.Request.TransportIds != null &&

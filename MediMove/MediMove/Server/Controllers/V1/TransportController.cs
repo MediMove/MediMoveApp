@@ -132,15 +132,15 @@ namespace MediMove.Server.Controllers.V1
         }
 
         /// <summary>
-        /// Action for deleting transports.
+        /// Action for cancelling transports.
         /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        [HttpDelete]
+        /// <param name="request">CancelTransportsRequest</param>
+        /// <returns>no content</returns>
+        [HttpPatch]
         [Authorize(Roles = "Dispatcher")]
-        public async Task<IActionResult> DeleteTransports([FromBody] DeleteTransportsRequest request)
+        public async Task<IActionResult> DeleteTransports([FromBody] CancelTransportsRequest request)
         {
-            var result = await Mediator.Send(new DeleteTransportsCommand(request));
+            var result = await Mediator.Send(new CancelTransportsCommand(request));
 
             return result.Match(
                 success => NoContent(),
