@@ -11,7 +11,7 @@ namespace MediMove.Server.Application.Transports.Handlers
     /// <summary>
     /// Handler for getting transports by paramedic and date range.
     /// </summary>
-    public class GetTransportsByParamedicAndDateRangeQueryHandler : IRequestHandler<GetTransportsByParamedicAndDateRangeQuery, ErrorOr<IEnumerable<TransportDTO>>>
+    public class GetTransportsByParamedicAndDateRangeQueryHandler : IRequestHandler<GetTransportsByParamedicAndDateRangeQuery, ErrorOr<GetTransportsByParamedicAndDateRangeResponse>>
     {
         private readonly IMapper _mapper;
         private readonly MediMoveDbContext _dbContext;
@@ -33,7 +33,7 @@ namespace MediMove.Server.Application.Transports.Handlers
         /// <param name="request"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<ErrorOr<IEnumerable<TransportDTO>>> Handle(GetTransportsByParamedicAndDateRangeQuery request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<GetTransportsByParamedicAndDateRangeResponse>> Handle(GetTransportsByParamedicAndDateRangeQuery request, CancellationToken cancellationToken)
         {
             var transports = await _dbContext.Transports
                 .Where(t => !t.IsCancelled &&
@@ -42,14 +42,14 @@ namespace MediMove.Server.Application.Transports.Handlers
                 (t.Team.DriverId == request.ParamedicId || t.Team.ParamedicId == request.ParamedicId))
                 .Include(t => t.Patient)
                 .ThenInclude(p => p.PersonalInformation)
-                .ToListAsync(cancellationToken);
+                .ToArrayAsync(cancellationToken);
 
-            var transportDTOs = _mapper.Map<IEnumerable<TransportDTO>>(transports);
+            var transportDTOs = _mapper.Map<TransportDTO[]>(transports);
 
             if (transportDTOs is null)
                 return Errors.Errors.MappingError;
 
-            return ErrorOr.ErrorOr.From(transportDTOs);
+            return new GetTransportsByParamedicAndDateRangeResponse(transportDTOs);
         }
     }
 }

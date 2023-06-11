@@ -9,4 +9,4 @@ namespace MediMove.Server.Application.Transports.Queries;
 /// <param name="ParamedicId">ID of paramedic as integer</param>
 /// <param name="StartDateInclusive">inclusive start date as nullable DateTime</param>
 /// <param name="EndDateInclusive">inclusive end date as nullable DateTime</param>
-public record GetTransportsByParamedicAndDateRangeQuery(int ParamedicId, DateTime? StartDateInclusive, DateTime? EndDateInclusive) : IRequest<ErrorOr<IEnumerable<TransportDTO>>>;
+public record GetTransportsByParamedicAndDateRangeQuery(int ParamedicId, DateTime? StartDateInclusive, DateTime? EndDateInclusive) : IRequest<ErrorOr<GetTransportsByParamedicAndDateRangeResponse>>;
