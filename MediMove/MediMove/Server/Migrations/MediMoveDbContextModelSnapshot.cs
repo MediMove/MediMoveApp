@@ -43,7 +43,7 @@ namespace MediMove.Server.Migrations
 
                     b.HasIndex("ParamedicId");
 
-                    b.ToTable("Availabilities", (string)null);
+                    b.ToTable("Availabilities");
 
                     b.HasData(
                         new
@@ -57,8 +57,7 @@ namespace MediMove.Server.Migrations
                         {
                             Id = 2,
                             Day = new DateTime(2023, 6, 9, 0, 0, 0, 0, DateTimeKind.Local),
-                            ParamedicId = 3,
-                            ShiftType = 0
+                            ParamedicId = 3
                         },
                         new
                         {
@@ -71,8 +70,7 @@ namespace MediMove.Server.Migrations
                         {
                             Id = 4,
                             Day = new DateTime(2023, 6, 9, 0, 0, 0, 0, DateTimeKind.Local),
-                            ParamedicId = 5,
-                            ShiftType = 1
+                            ParamedicId = 5
                         },
                         new
                         {
@@ -92,8 +90,7 @@ namespace MediMove.Server.Migrations
                         {
                             Id = 7,
                             Day = new DateTime(2023, 6, 10, 0, 0, 0, 0, DateTimeKind.Local),
-                            ParamedicId = 3,
-                            ShiftType = 1
+                            ParamedicId = 3
                         },
                         new
                         {
@@ -113,8 +110,7 @@ namespace MediMove.Server.Migrations
                         {
                             Id = 10,
                             Day = new DateTime(2023, 6, 11, 0, 0, 0, 0, DateTimeKind.Local),
-                            ParamedicId = 1,
-                            ShiftType = 0
+                            ParamedicId = 1
                         },
                         new
                         {
@@ -148,8 +144,7 @@ namespace MediMove.Server.Migrations
                         {
                             Id = 15,
                             Day = new DateTime(2023, 6, 12, 0, 0, 0, 0, DateTimeKind.Local),
-                            ParamedicId = 1,
-                            ShiftType = 0
+                            ParamedicId = 1
                         },
                         new
                         {
@@ -176,8 +171,7 @@ namespace MediMove.Server.Migrations
                         {
                             Id = 19,
                             Day = new DateTime(2023, 6, 13, 0, 0, 0, 0, DateTimeKind.Local),
-                            ParamedicId = 1,
-                            ShiftType = 0
+                            ParamedicId = 1
                         },
                         new
                         {
@@ -197,8 +191,7 @@ namespace MediMove.Server.Migrations
                         {
                             Id = 22,
                             Day = new DateTime(2023, 6, 13, 0, 0, 0, 0, DateTimeKind.Local),
-                            ParamedicId = 4,
-                            ShiftType = 0
+                            ParamedicId = 4
                         },
                         new
                         {
@@ -238,7 +231,7 @@ namespace MediMove.Server.Migrations
 
                     b.HasIndex("PersonalInformationId");
 
-                    b.ToTable("Billings", (string)null);
+                    b.ToTable("Billings");
 
                     b.HasData(
                         new
@@ -246,7 +239,7 @@ namespace MediMove.Server.Migrations
                             Id = 1,
                             BankAccountNumber = "342301332136124",
                             Cost = 200m,
-                            InvoiceDate = new DateTime(2023, 6, 9, 15, 14, 54, 789, DateTimeKind.Local).AddTicks(7519),
+                            InvoiceDate = new DateTime(2023, 6, 9, 21, 33, 22, 616, DateTimeKind.Local).AddTicks(4291),
                             InvoiceNumber = "1.11.06.2023",
                             PersonalInformationId = 10
                         },
@@ -292,7 +285,7 @@ namespace MediMove.Server.Migrations
 
                     b.HasIndex("PersonalInformationId");
 
-                    b.ToTable("Dispatchers", (string)null);
+                    b.ToTable("Dispatchers");
 
                     b.HasData(
                         new
@@ -336,7 +329,7 @@ namespace MediMove.Server.Migrations
 
                     b.HasIndex("PersonalInformationId");
 
-                    b.ToTable("Paramedics", (string)null);
+                    b.ToTable("Paramedics");
 
                     b.HasData(
                         new
@@ -399,7 +392,7 @@ namespace MediMove.Server.Migrations
 
                     b.HasIndex("PersonalInformationId");
 
-                    b.ToTable("Patients", (string)null);
+                    b.ToTable("Patients");
 
                     b.HasData(
                         new
@@ -483,7 +476,7 @@ namespace MediMove.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PersonalInformations", (string)null);
+                    b.ToTable("PersonalInformations");
 
                     b.HasData(
                         new
@@ -713,7 +706,7 @@ namespace MediMove.Server.Migrations
 
                     b.HasIndex("ParamedicId");
 
-                    b.ToTable("Rates", (string)null);
+                    b.ToTable("Rates");
 
                     b.HasData(
                         new
@@ -788,7 +781,7 @@ namespace MediMove.Server.Migrations
 
                     b.HasKey("RoleId");
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("Roles");
 
                     b.HasData(
                         new
@@ -834,7 +827,7 @@ namespace MediMove.Server.Migrations
 
                     b.HasIndex("DispatcherId");
 
-                    b.ToTable("Salaries", (string)null);
+                    b.ToTable("Salaries");
 
                     b.HasData(
                         new
@@ -884,7 +877,7 @@ namespace MediMove.Server.Migrations
                     b.Property<int>("ParamedicId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ShiftType")
+                    b.Property<int>("ShiftType")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -893,7 +886,7 @@ namespace MediMove.Server.Migrations
 
                     b.HasIndex("ParamedicId");
 
-                    b.ToTable("Teams", (string)null);
+                    b.ToTable("Teams");
 
                     b.HasData(
                         new
@@ -901,70 +894,80 @@ namespace MediMove.Server.Migrations
                             Id = 1,
                             Day = new DateTime(2023, 6, 9, 0, 0, 0, 0, DateTimeKind.Local),
                             DriverId = 1,
-                            ParamedicId = 2
+                            ParamedicId = 3,
+                            ShiftType = 0
                         },
                         new
                         {
                             Id = 2,
                             Day = new DateTime(2023, 6, 9, 0, 0, 0, 0, DateTimeKind.Local),
                             DriverId = 5,
-                            ParamedicId = 4
+                            ParamedicId = 4,
+                            ShiftType = 1
                         },
                         new
                         {
                             Id = 3,
                             Day = new DateTime(2023, 6, 10, 0, 0, 0, 0, DateTimeKind.Local),
                             DriverId = 1,
-                            ParamedicId = 2
+                            ParamedicId = 2,
+                            ShiftType = 0
                         },
                         new
                         {
                             Id = 4,
                             Day = new DateTime(2023, 6, 10, 0, 0, 0, 0, DateTimeKind.Local),
                             DriverId = 5,
-                            ParamedicId = 3
+                            ParamedicId = 3,
+                            ShiftType = 1
                         },
                         new
                         {
                             Id = 5,
                             Day = new DateTime(2023, 6, 11, 0, 0, 0, 0, DateTimeKind.Local),
                             DriverId = 1,
-                            ParamedicId = 2
+                            ParamedicId = 2,
+                            ShiftType = 0
                         },
                         new
                         {
                             Id = 6,
                             Day = new DateTime(2023, 6, 11, 0, 0, 0, 0, DateTimeKind.Local),
                             DriverId = 5,
-                            ParamedicId = 4
+                            ParamedicId = 4,
+                            ShiftType = 1
                         },
                         new
                         {
                             Id = 7,
                             Day = new DateTime(2023, 6, 12, 0, 0, 0, 0, DateTimeKind.Local),
                             DriverId = 1,
-                            ParamedicId = 2
+                            ParamedicId = 3,
+                            ShiftType = 0
                         },
                         new
                         {
                             Id = 8,
                             Day = new DateTime(2023, 6, 12, 0, 0, 0, 0, DateTimeKind.Local),
                             DriverId = 5,
-                            ParamedicId = 4
+                            ParamedicId = 4,
+                            ShiftType = 1
                         },
                         new
                         {
                             Id = 9,
                             Day = new DateTime(2023, 6, 13, 0, 0, 0, 0, DateTimeKind.Local),
                             DriverId = 1,
-                            ParamedicId = 4
+                            ParamedicId = 4,
+                            ShiftType = 0
                         },
                         new
                         {
                             Id = 10,
                             Day = new DateTime(2023, 6, 13, 0, 0, 0, 0, DateTimeKind.Local),
                             DriverId = 2,
-                            ParamedicId = 3
+                            ParamedicId = 3,
+                            ShiftType = 1
                         });
                 });
 
@@ -1012,7 +1015,7 @@ namespace MediMove.Server.Migrations
 
                     b.HasIndex("TeamId");
 
-                    b.ToTable("Transports", (string)null);
+                    b.ToTable("Transports");
 
                     b.HasData(
                         new
@@ -1030,6 +1033,7 @@ namespace MediMove.Server.Migrations
                         new
                         {
                             Id = 2,
+                            BillingId = 1,
                             Destination = "Nadrzeczna 55 Mysłowice",
                             Financing = 2,
                             IsCancelled = false,
@@ -1042,6 +1046,7 @@ namespace MediMove.Server.Migrations
                         new
                         {
                             Id = 3,
+                            BillingId = 2,
                             Destination = "Wyszogrodzka 44 Bytom",
                             Financing = 1,
                             IsCancelled = false,
@@ -1054,6 +1059,7 @@ namespace MediMove.Server.Migrations
                         new
                         {
                             Id = 4,
+                            BillingId = 3,
                             Destination = "Dobosza 101 Zabrze",
                             Financing = 1,
                             IsCancelled = false,
@@ -1367,7 +1373,7 @@ namespace MediMove.Server.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("MediMove.Server.Application.Models.Availability", b =>
@@ -1452,14 +1458,12 @@ namespace MediMove.Server.Migrations
                     b.HasOne("MediMove.Server.Application.Models.Paramedic", "Driver")
                         .WithMany()
                         .HasForeignKey("DriverId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("MediMove.Server.Application.Models.Paramedic", "Paramedic")
                         .WithMany()
                         .HasForeignKey("ParamedicId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Driver");
 
@@ -1480,7 +1484,8 @@ namespace MediMove.Server.Migrations
 
                     b.HasOne("MediMove.Server.Application.Models.Team", "Team")
                         .WithMany("Transports")
-                        .HasForeignKey("TeamId");
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Billing");
 
