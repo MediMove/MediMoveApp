@@ -1,7 +1,11 @@
 ﻿using FluentValidation;
 using MediMove.Server.Application.Availabilities.Commands;
 using MediMove.Server.Data;
+using MediMove.Shared.Extensions;
+using MediMove.Shared.Models.Enums;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
 
 namespace MediMove.Server.Application.Availabilities.Validators
 {
@@ -24,19 +28,27 @@ namespace MediMove.Server.Application.Availabilities.Validators
 
             RuleFor(x => x.Request.AvailabilityDates)
                 .NotEmpty().WithMessage("AvailabilityDates array cannot be empty")
-                .Must(a => a.All(day => day.Date >= DateTime.Today &&
-                    day.Date < DateTime.Today.AddMonths(1)))
-                .WithMessage("All dates must be in the future and within the next month");
+                .Must(a => a.All(day => day >= DateTime.Today))
+                .WithMessage("Dates cannot be in the past");
 
             RuleFor(x => x)
                 .CustomAsync(async (command, context, cancellationToken) =>
                 {
                     var availabilityDatesNormalized = command.Request.AvailabilityDates.Select(d => d.Date);
-                    if (!dbContext.Availabilities
+                    var availabilities = await dbContext.Availabilities
                         .Where(a => a.ParamedicId == command.ParamedicId && availabilityDatesNormalized.Contains(a.Day.Date))
-                        .Count().Equals(command.Request.AvailabilityDates.Length))
+                        .Select(a => new { a.Day.Date, ShiftType = a.ShiftType == null ? ShiftType.Morning : a.ShiftType })
+                        .ToArrayAsync(cancellationToken);
+
+                    if (availabilities.Length != command.Request.AvailabilityDates.Length)
                     {
                         context.AddFailure("Request.AvailabilityDates", "Paramedic does not have availability on one or more of the provided days");
+                        return;
+                    }
+
+                    if (availabilities.Any(a => a.Date == DateTime.Today && a.ShiftType.Value.StartTime() <= DateTime.Now.TimeOfDay))
+                    {
+                        context.AddFailure("Request.AvailabilityDates", "Shift has already started today");
                         return;
                     }
 
