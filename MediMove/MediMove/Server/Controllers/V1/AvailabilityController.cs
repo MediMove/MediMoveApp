@@ -32,14 +32,19 @@ namespace MediMove.Server.Controllers.V1
         }
 
         /// <summary>
-        /// Action for getting availabilities for paramedic.
+        /// Action for getting availabilities for paramedic by date range.
         /// </summary>
-        /// <returns>GetAvailabilitiesByParamedicResponse</returns>
+        /// <param name="startDateInclusive">inclusive start date as nullable DateTime</param>
+        /// <param name="endDateInclusive">inclusive end date as nullable DateTime</param>
+        /// <returns>GetAvailabilitiesForParamedicByDateRangeResponse</returns>
+        /// <remarks>
+        /// Example date: 2023-06-11T12:34:56Z
+        /// </remarks>
         [HttpGet("Paramedic")]
         [Authorize(Roles = "Paramedic")]
-        public async Task<IActionResult> GetAvailabilitiesForParamedic()
+        public async Task<IActionResult> GetAvailabilitiesForParamedicByDateRange([FromQuery] DateTime? startDateInclusive, [FromQuery] DateTime? endDateInclusive)
         {
-            var result = await Mediator.Send(new GetAvailabilitiesByParamedicQuery(getUserId()));
+            var result = await Mediator.Send(new GetAvailabilitiesForParamedicByDateRangeQuery(getUserId(), startDateInclusive, endDateInclusive));
 
             return result.Match(
                 result => Ok(result),
