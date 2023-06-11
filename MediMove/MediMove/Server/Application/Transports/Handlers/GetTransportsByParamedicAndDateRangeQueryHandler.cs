@@ -44,7 +44,7 @@ namespace MediMove.Server.Application.Transports.Handlers
                 .ThenInclude(p => p.PersonalInformation)
                 .ToArrayAsync(cancellationToken);
 
-            var transportDTOs = _mapper.Map<TransportDTO[]>(transports);
+            var transportDTOs = _mapper.Map<GetTransportResponse[]>(transports);
 
             if (transportDTOs is null)
                 return Errors.Errors.MappingError;
