@@ -26,8 +26,10 @@ namespace MediMove.Server.Application.Transports.Validators
                         .Where(t => transportIds.Contains(t.Id))
                         .Count().Equals(transportIds.Length))
                         context.AddFailure("TransportIds", "One or more transport ids do not exist");
-                    
-                }).When(x => x.Request.TransportIds.Any());
+                })
+                .When(x => x.Request != null &&
+                    x.Request.TransportIds != null &&
+                    x.Request.TransportIds.Any());
         }
     }
 }

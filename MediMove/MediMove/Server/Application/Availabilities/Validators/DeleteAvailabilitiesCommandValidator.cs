@@ -44,10 +44,12 @@ namespace MediMove.Server.Application.Availabilities.Validators
                         .AnyAsync(t => (t.DriverId == command.ParamedicId || t.ParamedicId == command.ParamedicId) &&
                             availabilityDatesNormalized.Contains(t.Day.Date), cancellationToken))
                         context.AddFailure("Request.AvailabilityDates", "Paramedic has a team on one or more of the provided days");
-                }).When(x =>
+                })
+                .When(x =>
                     x.ParamedicId > 0 &&
-                    x.Request.AvailabilityDates.Any()
-                );
+                    x.Request != null &&
+                    x.Request.AvailabilityDates != null &&
+                    x.Request.AvailabilityDates.Any());
         }
     }
 }
