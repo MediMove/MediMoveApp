@@ -52,5 +52,19 @@ namespace MediMove.Server.Controllers.V1
                 result => NoContent(),
                 errors => Problem(errors));
         }
+        [HttpGet("Raport")]
+       //[Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetPatientsByDateAndPaymentsSum(
+            [FromQuery] DateTime startTime,
+            [FromQuery] DateTime endTime,
+            [FromQuery] decimal startPaymentsSum,
+            [FromQuery] decimal endPaymentsSum)
+        {
+            var result = await Mediator.Send(new GetPatientsByDateAndPaymentsSumQuery(startTime, endTime, startPaymentsSum, endPaymentsSum));
+
+            return result.Match(
+                result => Ok(result),
+                errors => Problem(errors));
+        }
     }
 }

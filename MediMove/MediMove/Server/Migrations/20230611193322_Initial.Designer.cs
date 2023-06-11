@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MediMove.Server.Migrations
 {
     [DbContext(typeof(MediMoveDbContext))]
-    [Migration("20230512115727_AddedAuthModelsWithRoleSeeding")]
-    partial class AddedAuthModelsWithRoleSeeding
+    [Migration("20230611193322_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,7 +39,7 @@ namespace MediMove.Server.Migrations
                     b.Property<int>("ParamedicId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ShiftType")
+                    b.Property<int?>("ShiftType")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -52,161 +52,154 @@ namespace MediMove.Server.Migrations
                         new
                         {
                             Id = 1,
-                            Day = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 9, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 1,
                             ShiftType = 0
                         },
                         new
                         {
                             Id = 2,
-                            Day = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
-                            ParamedicId = 3,
-                            ShiftType = 0
+                            Day = new DateTime(2023, 6, 9, 0, 0, 0, 0, DateTimeKind.Local),
+                            ParamedicId = 3
                         },
                         new
                         {
                             Id = 3,
-                            Day = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 9, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 4,
                             ShiftType = 1
                         },
                         new
                         {
                             Id = 4,
-                            Day = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
-                            ParamedicId = 5,
-                            ShiftType = 1
+                            Day = new DateTime(2023, 6, 9, 0, 0, 0, 0, DateTimeKind.Local),
+                            ParamedicId = 5
                         },
                         new
                         {
                             Id = 5,
-                            Day = new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 10, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 1,
                             ShiftType = 0
                         },
                         new
                         {
                             Id = 6,
-                            Day = new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 10, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 2,
                             ShiftType = 0
                         },
                         new
                         {
                             Id = 7,
-                            Day = new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Local),
-                            ParamedicId = 3,
-                            ShiftType = 1
+                            Day = new DateTime(2023, 6, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            ParamedicId = 3
                         },
                         new
                         {
                             Id = 8,
-                            Day = new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 10, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 4,
                             ShiftType = 0
                         },
                         new
                         {
                             Id = 9,
-                            Day = new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 10, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 5,
                             ShiftType = 1
                         },
                         new
                         {
                             Id = 10,
-                            Day = new DateTime(2023, 5, 12, 0, 0, 0, 0, DateTimeKind.Local),
-                            ParamedicId = 1,
-                            ShiftType = 0
+                            Day = new DateTime(2023, 6, 11, 0, 0, 0, 0, DateTimeKind.Local),
+                            ParamedicId = 1
                         },
                         new
                         {
                             Id = 11,
-                            Day = new DateTime(2023, 5, 12, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 11, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 2,
                             ShiftType = 0
                         },
                         new
                         {
                             Id = 12,
-                            Day = new DateTime(2023, 5, 12, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 11, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 3,
                             ShiftType = 0
                         },
                         new
                         {
                             Id = 13,
-                            Day = new DateTime(2023, 5, 12, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 11, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 4,
                             ShiftType = 1
                         },
                         new
                         {
                             Id = 14,
-                            Day = new DateTime(2023, 5, 12, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 11, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 5,
                             ShiftType = 1
                         },
                         new
                         {
                             Id = 15,
-                            Day = new DateTime(2023, 5, 13, 0, 0, 0, 0, DateTimeKind.Local),
-                            ParamedicId = 1,
-                            ShiftType = 0
+                            Day = new DateTime(2023, 6, 12, 0, 0, 0, 0, DateTimeKind.Local),
+                            ParamedicId = 1
                         },
                         new
                         {
                             Id = 16,
-                            Day = new DateTime(2023, 5, 13, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 12, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 3,
                             ShiftType = 0
                         },
                         new
                         {
                             Id = 17,
-                            Day = new DateTime(2023, 5, 13, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 12, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 4,
                             ShiftType = 1
                         },
                         new
                         {
                             Id = 18,
-                            Day = new DateTime(2023, 5, 13, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 12, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 5,
                             ShiftType = 1
                         },
                         new
                         {
                             Id = 19,
-                            Day = new DateTime(2023, 5, 14, 0, 0, 0, 0, DateTimeKind.Local),
-                            ParamedicId = 1,
-                            ShiftType = 0
+                            Day = new DateTime(2023, 6, 13, 0, 0, 0, 0, DateTimeKind.Local),
+                            ParamedicId = 1
                         },
                         new
                         {
                             Id = 20,
-                            Day = new DateTime(2023, 5, 14, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 13, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 2,
                             ShiftType = 1
                         },
                         new
                         {
                             Id = 21,
-                            Day = new DateTime(2023, 5, 14, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 13, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 3,
                             ShiftType = 1
                         },
                         new
                         {
                             Id = 22,
-                            Day = new DateTime(2023, 5, 14, 0, 0, 0, 0, DateTimeKind.Local),
-                            ParamedicId = 4,
-                            ShiftType = 0
+                            Day = new DateTime(2023, 6, 13, 0, 0, 0, 0, DateTimeKind.Local),
+                            ParamedicId = 4
                         },
                         new
                         {
                             Id = 23,
-                            Day = new DateTime(2023, 5, 14, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 13, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 5,
                             ShiftType = 1
                         });
@@ -249,8 +242,8 @@ namespace MediMove.Server.Migrations
                             Id = 1,
                             BankAccountNumber = "342301332136124",
                             Cost = 200m,
-                            InvoiceDate = new DateTime(2023, 5, 10, 13, 57, 27, 438, DateTimeKind.Local).AddTicks(7296),
-                            InvoiceNumber = "1.12.05.2023",
+                            InvoiceDate = new DateTime(2023, 6, 9, 21, 33, 22, 616, DateTimeKind.Local).AddTicks(4291),
+                            InvoiceNumber = "1.11.06.2023",
                             PersonalInformationId = 10
                         },
                         new
@@ -258,8 +251,8 @@ namespace MediMove.Server.Migrations
                             Id = 2,
                             BankAccountNumber = "343301232434821",
                             Cost = 90m,
-                            InvoiceDate = new DateTime(2023, 5, 10, 23, 59, 0, 0, DateTimeKind.Local),
-                            InvoiceNumber = "2.12.05.2023",
+                            InvoiceDate = new DateTime(2023, 6, 9, 23, 59, 0, 0, DateTimeKind.Local),
+                            InvoiceNumber = "2.11.06.2023",
                             PersonalInformationId = 11
                         },
                         new
@@ -267,8 +260,8 @@ namespace MediMove.Server.Migrations
                             Id = 3,
                             BankAccountNumber = "543322635238421",
                             Cost = 50m,
-                            InvoiceDate = new DateTime(2023, 5, 11, 0, 1, 0, 0, DateTimeKind.Local),
-                            InvoiceNumber = "3.12.05.2023",
+                            InvoiceDate = new DateTime(2023, 6, 10, 0, 1, 0, 0, DateTimeKind.Local),
+                            InvoiceNumber = "3.11.06.2023",
                             PersonalInformationId = 12
                         });
                 });
@@ -285,6 +278,9 @@ namespace MediMove.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsWorking")
+                        .HasColumnType("bit");
+
                     b.Property<int>("PersonalInformationId")
                         .HasColumnType("int");
 
@@ -299,12 +295,14 @@ namespace MediMove.Server.Migrations
                         {
                             Id = 1,
                             BankAccountNumber = "4203987928122474",
+                            IsWorking = true,
                             PersonalInformationId = 13
                         },
                         new
                         {
                             Id = 2,
                             BankAccountNumber = "4203787958122274",
+                            IsWorking = true,
                             PersonalInformationId = 14
                         });
                 });
@@ -324,6 +322,9 @@ namespace MediMove.Server.Migrations
                     b.Property<bool>("IsDriver")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsWorking")
+                        .HasColumnType("bit");
+
                     b.Property<int>("PersonalInformationId")
                         .HasColumnType("int");
 
@@ -339,6 +340,7 @@ namespace MediMove.Server.Migrations
                             Id = 1,
                             BankAccountNumber = "1203987908127474",
                             IsDriver = true,
+                            IsWorking = true,
                             PersonalInformationId = 1
                         },
                         new
@@ -346,6 +348,7 @@ namespace MediMove.Server.Migrations
                             Id = 2,
                             BankAccountNumber = "124341763465609",
                             IsDriver = true,
+                            IsWorking = true,
                             PersonalInformationId = 2
                         },
                         new
@@ -353,6 +356,7 @@ namespace MediMove.Server.Migrations
                             Id = 3,
                             BankAccountNumber = "121234124123109",
                             IsDriver = false,
+                            IsWorking = true,
                             PersonalInformationId = 3
                         },
                         new
@@ -360,6 +364,7 @@ namespace MediMove.Server.Migrations
                             Id = 4,
                             BankAccountNumber = "123456780123109",
                             IsDriver = false,
+                            IsWorking = true,
                             PersonalInformationId = 4
                         },
                         new
@@ -367,6 +372,7 @@ namespace MediMove.Server.Migrations
                             Id = 5,
                             BankAccountNumber = "982301231238812",
                             IsDriver = true,
+                            IsWorking = true,
                             PersonalInformationId = 5
                         });
                 });
@@ -709,56 +715,56 @@ namespace MediMove.Server.Migrations
                         new
                         {
                             Id = 1,
-                            Date = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            Date = new DateTime(2023, 6, 9, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 1,
                             PayPerHour = 12m
                         },
                         new
                         {
                             Id = 2,
-                            Date = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            Date = new DateTime(2023, 6, 9, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 2,
                             PayPerHour = 12m
                         },
                         new
                         {
                             Id = 3,
-                            Date = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            Date = new DateTime(2023, 6, 9, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 3,
                             PayPerHour = 12m
                         },
                         new
                         {
                             Id = 4,
-                            Date = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            Date = new DateTime(2023, 6, 9, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 4,
                             PayPerHour = 12m
                         },
                         new
                         {
                             Id = 5,
-                            Date = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            Date = new DateTime(2023, 6, 9, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 5,
                             PayPerHour = 12m
                         },
                         new
                         {
                             Id = 6,
-                            Date = new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Local),
+                            Date = new DateTime(2023, 6, 10, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 1,
                             PayPerHour = 13m
                         },
                         new
                         {
                             Id = 7,
-                            Date = new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Local),
+                            Date = new DateTime(2023, 6, 10, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 5,
                             PayPerHour = 13m
                         },
                         new
                         {
                             Id = 8,
-                            Date = new DateTime(2023, 5, 13, 0, 0, 0, 0, DateTimeKind.Local),
+                            Date = new DateTime(2023, 6, 12, 0, 0, 0, 0, DateTimeKind.Local),
                             ParamedicId = 1,
                             PayPerHour = 14m
                         });
@@ -830,28 +836,28 @@ namespace MediMove.Server.Migrations
                         new
                         {
                             Id = 1,
-                            Date = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            Date = new DateTime(2023, 6, 9, 0, 0, 0, 0, DateTimeKind.Local),
                             DispatcherId = 1,
                             Income = 1200m
                         },
                         new
                         {
                             Id = 2,
-                            Date = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            Date = new DateTime(2023, 6, 9, 0, 0, 0, 0, DateTimeKind.Local),
                             DispatcherId = 2,
                             Income = 1200m
                         },
                         new
                         {
                             Id = 3,
-                            Date = new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Local),
+                            Date = new DateTime(2023, 6, 10, 0, 0, 0, 0, DateTimeKind.Local),
                             DispatcherId = 1,
                             Income = 1300m
                         },
                         new
                         {
                             Id = 4,
-                            Date = new DateTime(2023, 5, 13, 0, 0, 0, 0, DateTimeKind.Local),
+                            Date = new DateTime(2023, 6, 12, 0, 0, 0, 0, DateTimeKind.Local),
                             DispatcherId = 1,
                             Income = 1500m
                         });
@@ -868,10 +874,13 @@ namespace MediMove.Server.Migrations
                     b.Property<DateTime>("Day")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("DriverId")
+                    b.Property<int>("DriverId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ParamedicId")
+                    b.Property<int>("ParamedicId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ShiftType")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -886,72 +895,82 @@ namespace MediMove.Server.Migrations
                         new
                         {
                             Id = 1,
-                            Day = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 9, 0, 0, 0, 0, DateTimeKind.Local),
                             DriverId = 1,
-                            ParamedicId = 2
+                            ParamedicId = 3,
+                            ShiftType = 0
                         },
                         new
                         {
                             Id = 2,
-                            Day = new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 9, 0, 0, 0, 0, DateTimeKind.Local),
                             DriverId = 5,
-                            ParamedicId = 4
+                            ParamedicId = 4,
+                            ShiftType = 1
                         },
                         new
                         {
                             Id = 3,
-                            Day = new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 10, 0, 0, 0, 0, DateTimeKind.Local),
                             DriverId = 1,
-                            ParamedicId = 2
+                            ParamedicId = 2,
+                            ShiftType = 0
                         },
                         new
                         {
                             Id = 4,
-                            Day = new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 10, 0, 0, 0, 0, DateTimeKind.Local),
                             DriverId = 5,
-                            ParamedicId = 3
+                            ParamedicId = 3,
+                            ShiftType = 1
                         },
                         new
                         {
                             Id = 5,
-                            Day = new DateTime(2023, 5, 12, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 11, 0, 0, 0, 0, DateTimeKind.Local),
                             DriverId = 1,
-                            ParamedicId = 2
+                            ParamedicId = 2,
+                            ShiftType = 0
                         },
                         new
                         {
                             Id = 6,
-                            Day = new DateTime(2023, 5, 12, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 11, 0, 0, 0, 0, DateTimeKind.Local),
                             DriverId = 5,
-                            ParamedicId = 4
+                            ParamedicId = 4,
+                            ShiftType = 1
                         },
                         new
                         {
                             Id = 7,
-                            Day = new DateTime(2023, 5, 13, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 12, 0, 0, 0, 0, DateTimeKind.Local),
                             DriverId = 1,
-                            ParamedicId = 2
+                            ParamedicId = 3,
+                            ShiftType = 0
                         },
                         new
                         {
                             Id = 8,
-                            Day = new DateTime(2023, 5, 13, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 12, 0, 0, 0, 0, DateTimeKind.Local),
                             DriverId = 5,
-                            ParamedicId = 4
+                            ParamedicId = 4,
+                            ShiftType = 1
                         },
                         new
                         {
                             Id = 9,
-                            Day = new DateTime(2023, 5, 14, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 13, 0, 0, 0, 0, DateTimeKind.Local),
                             DriverId = 1,
-                            ParamedicId = 4
+                            ParamedicId = 4,
+                            ShiftType = 0
                         },
                         new
                         {
                             Id = 10,
-                            Day = new DateTime(2023, 5, 14, 0, 0, 0, 0, DateTimeKind.Local),
+                            Day = new DateTime(2023, 6, 13, 0, 0, 0, 0, DateTimeKind.Local),
                             DriverId = 2,
-                            ParamedicId = 3
+                            ParamedicId = 3,
+                            ShiftType = 1
                         });
                 });
 
@@ -972,6 +991,9 @@ namespace MediMove.Server.Migrations
 
                     b.Property<int>("Financing")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsCancelled")
+                        .HasColumnType("bit");
 
                     b.Property<int>("PatientId")
                         .HasColumnType("int");
@@ -1004,42 +1026,49 @@ namespace MediMove.Server.Migrations
                             Id = 1,
                             Destination = "Saska 43 Rybnik",
                             Financing = 0,
+                            IsCancelled = false,
                             PatientId = 1,
                             PatientPosition = 0,
-                            StartTime = new DateTime(2023, 5, 10, 7, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 9, 7, 0, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 1,
                             TransportType = 0
                         },
                         new
                         {
                             Id = 2,
+                            BillingId = 1,
                             Destination = "Nadrzeczna 55 Mysłowice",
                             Financing = 2,
+                            IsCancelled = false,
                             PatientId = 2,
                             PatientPosition = 1,
-                            StartTime = new DateTime(2023, 5, 10, 9, 10, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 9, 9, 10, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 1,
                             TransportType = 0
                         },
                         new
                         {
                             Id = 3,
+                            BillingId = 2,
                             Destination = "Wyszogrodzka 44 Bytom",
                             Financing = 1,
+                            IsCancelled = false,
                             PatientId = 3,
                             PatientPosition = 1,
-                            StartTime = new DateTime(2023, 5, 10, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 9, 14, 0, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 1,
                             TransportType = 1
                         },
                         new
                         {
                             Id = 4,
+                            BillingId = 3,
                             Destination = "Dobosza 101 Zabrze",
                             Financing = 1,
+                            IsCancelled = false,
                             PatientId = 4,
                             PatientPosition = 1,
-                            StartTime = new DateTime(2023, 5, 10, 7, 30, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 9, 7, 30, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 2,
                             TransportType = 1
                         },
@@ -1048,9 +1077,10 @@ namespace MediMove.Server.Migrations
                             Id = 5,
                             Destination = "Dyngus 30 Chorzów",
                             Financing = 0,
+                            IsCancelled = false,
                             PatientId = 5,
                             PatientPosition = 2,
-                            StartTime = new DateTime(2023, 5, 10, 12, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 9, 12, 0, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 2,
                             TransportType = 0
                         },
@@ -1059,9 +1089,10 @@ namespace MediMove.Server.Migrations
                             Id = 6,
                             Destination = "Obornicka 89 Rybnik",
                             Financing = 0,
+                            IsCancelled = false,
                             PatientId = 4,
                             PatientPosition = 1,
-                            StartTime = new DateTime(2023, 5, 11, 7, 30, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 10, 7, 30, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 3,
                             TransportType = 0
                         },
@@ -1070,9 +1101,10 @@ namespace MediMove.Server.Migrations
                             Id = 7,
                             Destination = "Zakładowa 19 Częstochowa",
                             Financing = 0,
+                            IsCancelled = false,
                             PatientId = 2,
                             PatientPosition = 0,
-                            StartTime = new DateTime(2023, 5, 11, 9, 45, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 10, 9, 45, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 3,
                             TransportType = 0
                         },
@@ -1081,9 +1113,10 @@ namespace MediMove.Server.Migrations
                             Id = 8,
                             Destination = "Ustronna 70 Gliwice",
                             Financing = 0,
+                            IsCancelled = false,
                             PatientId = 1,
                             PatientPosition = 0,
-                            StartTime = new DateTime(2023, 5, 11, 13, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 10, 13, 0, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 3,
                             TransportType = 0
                         },
@@ -1092,9 +1125,10 @@ namespace MediMove.Server.Migrations
                             Id = 9,
                             Destination = "Oboźna 43 Tychy",
                             Financing = 0,
+                            IsCancelled = false,
                             PatientId = 4,
                             PatientPosition = 1,
-                            StartTime = new DateTime(2023, 5, 11, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 10, 15, 30, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 4,
                             TransportType = 0
                         },
@@ -1103,9 +1137,10 @@ namespace MediMove.Server.Migrations
                             Id = 10,
                             Destination = "Mickiewicza 119 Żory",
                             Financing = 0,
+                            IsCancelled = false,
                             PatientId = 2,
                             PatientPosition = 0,
-                            StartTime = new DateTime(2023, 5, 11, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 10, 18, 0, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 4,
                             TransportType = 0
                         },
@@ -1114,9 +1149,10 @@ namespace MediMove.Server.Migrations
                             Id = 11,
                             Destination = "Rycerska 13 Sosnowiec",
                             Financing = 0,
+                            IsCancelled = false,
                             PatientId = 5,
                             PatientPosition = 2,
-                            StartTime = new DateTime(2023, 5, 11, 20, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 10, 20, 0, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 4,
                             TransportType = 0
                         },
@@ -1125,9 +1161,10 @@ namespace MediMove.Server.Migrations
                             Id = 12,
                             Destination = "Skromna 116 Bieruń",
                             Financing = 0,
+                            IsCancelled = false,
                             PatientId = 1,
                             PatientPosition = 0,
-                            StartTime = new DateTime(2023, 5, 12, 7, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 11, 7, 0, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 5,
                             TransportType = 1
                         },
@@ -1136,9 +1173,10 @@ namespace MediMove.Server.Migrations
                             Id = 13,
                             Destination = "Lidzka 53 Świętochłowice",
                             Financing = 0,
+                            IsCancelled = false,
                             PatientId = 3,
                             PatientPosition = 0,
-                            StartTime = new DateTime(2023, 5, 12, 12, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 11, 12, 0, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 5,
                             TransportType = 1
                         },
@@ -1147,9 +1185,10 @@ namespace MediMove.Server.Migrations
                             Id = 14,
                             Destination = "Pomarańczowa 95 Bielsko-Biała",
                             Financing = 0,
+                            IsCancelled = false,
                             PatientId = 2,
                             PatientPosition = 0,
-                            StartTime = new DateTime(2023, 5, 12, 13, 30, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 11, 13, 30, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 5,
                             TransportType = 1
                         },
@@ -1158,9 +1197,10 @@ namespace MediMove.Server.Migrations
                             Id = 15,
                             Destination = "Bydgoska 123 Ruda Śląska",
                             Financing = 0,
+                            IsCancelled = false,
                             PatientId = 4,
                             PatientPosition = 1,
-                            StartTime = new DateTime(2023, 5, 12, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 11, 16, 0, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 6,
                             TransportType = 1
                         },
@@ -1169,9 +1209,10 @@ namespace MediMove.Server.Migrations
                             Id = 16,
                             Destination = "Różana 138 Żory",
                             Financing = 0,
+                            IsCancelled = false,
                             PatientId = 2,
                             PatientPosition = 0,
-                            StartTime = new DateTime(2023, 5, 12, 17, 45, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 11, 17, 45, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 6,
                             TransportType = 1
                         },
@@ -1180,9 +1221,10 @@ namespace MediMove.Server.Migrations
                             Id = 17,
                             Destination = "Okrzei Stefana 132 Chorzów",
                             Financing = 0,
+                            IsCancelled = false,
                             PatientId = 4,
                             PatientPosition = 1,
-                            StartTime = new DateTime(2023, 5, 12, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 11, 19, 0, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 6,
                             TransportType = 0
                         },
@@ -1191,9 +1233,10 @@ namespace MediMove.Server.Migrations
                             Id = 18,
                             Destination = "Diamentowa 5 Częstochowa",
                             Financing = 0,
+                            IsCancelled = false,
                             PatientId = 1,
                             PatientPosition = 0,
-                            StartTime = new DateTime(2023, 5, 13, 7, 15, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 12, 7, 15, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 7,
                             TransportType = 1
                         },
@@ -1202,9 +1245,10 @@ namespace MediMove.Server.Migrations
                             Id = 19,
                             Destination = "Pawlikowskiego Tadeusza 96 Cieszyn",
                             Financing = 0,
+                            IsCancelled = false,
                             PatientId = 2,
                             PatientPosition = 0,
-                            StartTime = new DateTime(2023, 5, 13, 11, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 12, 11, 0, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 7,
                             TransportType = 0
                         },
@@ -1213,9 +1257,10 @@ namespace MediMove.Server.Migrations
                             Id = 20,
                             Destination = "Generała Szyllinga Antoniego 111 Imielin",
                             Financing = 0,
+                            IsCancelled = false,
                             PatientId = 3,
                             PatientPosition = 0,
-                            StartTime = new DateTime(2023, 5, 13, 13, 15, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 12, 13, 15, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 7,
                             TransportType = 1
                         },
@@ -1224,9 +1269,10 @@ namespace MediMove.Server.Migrations
                             Id = 21,
                             Destination = "Urbańskiego Tadeusza 45 Pszów",
                             Financing = 0,
+                            IsCancelled = false,
                             PatientId = 5,
                             PatientPosition = 2,
-                            StartTime = new DateTime(2023, 5, 13, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 12, 16, 0, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 8,
                             TransportType = 1
                         },
@@ -1235,9 +1281,10 @@ namespace MediMove.Server.Migrations
                             Id = 22,
                             Destination = "Czerwona 46 Katowice",
                             Financing = 0,
+                            IsCancelled = false,
                             PatientId = 4,
                             PatientPosition = 1,
-                            StartTime = new DateTime(2023, 5, 13, 17, 15, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 12, 17, 15, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 8,
                             TransportType = 1
                         },
@@ -1246,9 +1293,10 @@ namespace MediMove.Server.Migrations
                             Id = 23,
                             Destination = "Reutta 54 Bytom",
                             Financing = 0,
+                            IsCancelled = false,
                             PatientId = 3,
                             PatientPosition = 0,
-                            StartTime = new DateTime(2023, 5, 13, 20, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 12, 20, 0, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 8,
                             TransportType = 0
                         },
@@ -1257,9 +1305,10 @@ namespace MediMove.Server.Migrations
                             Id = 24,
                             Destination = "Cybernetyków 120 Tychy",
                             Financing = 0,
+                            IsCancelled = false,
                             PatientId = 1,
                             PatientPosition = 0,
-                            StartTime = new DateTime(2023, 5, 14, 8, 30, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 13, 8, 30, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 9,
                             TransportType = 1
                         },
@@ -1268,9 +1317,10 @@ namespace MediMove.Server.Migrations
                             Id = 25,
                             Destination = "Kaszubska 18 Świętochłowice",
                             Financing = 0,
+                            IsCancelled = false,
                             PatientId = 3,
                             PatientPosition = 0,
-                            StartTime = new DateTime(2023, 5, 14, 12, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 13, 12, 0, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 9,
                             TransportType = 1
                         },
@@ -1279,9 +1329,10 @@ namespace MediMove.Server.Migrations
                             Id = 26,
                             Destination = "Cybernetyków 120 Tychy",
                             Financing = 0,
+                            IsCancelled = false,
                             PatientId = 2,
                             PatientPosition = 0,
-                            StartTime = new DateTime(2023, 5, 14, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 13, 17, 0, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 10,
                             TransportType = 1
                         },
@@ -1290,9 +1341,10 @@ namespace MediMove.Server.Migrations
                             Id = 27,
                             Destination = "Kaszubska 18 Świętochłowice",
                             Financing = 0,
+                            IsCancelled = false,
                             PatientId = 5,
                             PatientPosition = 2,
-                            StartTime = new DateTime(2023, 5, 14, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            StartTime = new DateTime(2023, 6, 13, 19, 0, 0, 0, DateTimeKind.Unspecified),
                             TeamId = 10,
                             TransportType = 0
                         });
@@ -1408,11 +1460,13 @@ namespace MediMove.Server.Migrations
                 {
                     b.HasOne("MediMove.Server.Application.Models.Paramedic", "Driver")
                         .WithMany()
-                        .HasForeignKey("DriverId");
+                        .HasForeignKey("DriverId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("MediMove.Server.Application.Models.Paramedic", "Paramedic")
                         .WithMany()
-                        .HasForeignKey("ParamedicId");
+                        .HasForeignKey("ParamedicId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Driver");
 
@@ -1433,7 +1487,8 @@ namespace MediMove.Server.Migrations
 
                     b.HasOne("MediMove.Server.Application.Models.Team", "Team")
                         .WithMany("Transports")
-                        .HasForeignKey("TeamId");
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Billing");
 

@@ -3,9 +3,13 @@ using MediMove.Server.Application.Teams.Queries;
 using MediMove.Server.Application.Teams.Commands;
 using MediMove.Shared.Models.DTOs;
 using Microsoft.AspNetCore.Authorization;
+using MediMove.Shared.Models.Enums;
 
 namespace MediMove.Server.Controllers.V1
 {
+    /// <summary>
+    /// Controller for managing teams.
+    /// </summary>
     public class TeamController : BaseApiController
     {
         [HttpGet("{id}")]
@@ -19,58 +23,54 @@ namespace MediMove.Server.Controllers.V1
         }
 
         /// <summary>
-        /// Returns list of all Teams as TeamDTO objects.
+        /// Action for getting teams by day and shift.
         /// </summary>
-        /// <response code="200">Returns list of all Teams as TeamDTO objects</response>
-        /// <response code="404">If teams DbSet was null</response>
+        /// <param name="year">year as integer</param>
+        /// <param name="month">month as integer</param>
+        /// <param name="day">day as integer</param>
+        /// <param name="shift">shift as ShiftType</param>
+        /// <returns>GetTeamsByDayAndShiftResponse</returns>
         [HttpGet]
         [Authorize(Roles = "Dispatcher")]
-        public async Task<IActionResult> GetAllTeamsByDay([FromQuery] int day, [FromQuery] int month, [FromQuery] int year) // Autoryzacja rolą dispacher
+        public async Task<IActionResult> GetTeamsByDayAndShift([FromQuery] int year, [FromQuery] int month, [FromQuery] int day, [FromQuery] ShiftType shift)
         {
-            var result = await Mediator.Send(new GetAllTeamsQuery(new DateTime(year, month, day)));//Send(new GetAllTeamsQuery(new DateTime(year, month, day)));
+            var result = await Mediator.Send(new GetTeamsByDayAndShiftQuery(new DateTime(year, month, day), shift));
 
             return result.Match(
                 result => Ok(result),
                 errors => Problem(errors));
         }
 
-
         /// <summary>
-        /// Creates a specific Team.
+        /// Action for creating teams.
         /// </summary>
-        /// <param name="dto">CreateTeamDTO object</param>
-        /// <remarks>
-        /// Sample request:
-        /// 
-        ///     POST
-        ///     {
-        ///          "driverId": 2,
-        ///          "paramedicId": 3,
-        ///          "day": "2023-07-01"
-        ///     }
-        ///
-        /// </remarks>
-        /// <response code="200">Ok</response>
-        /// <response code="400">Invaild request</response>
+        /// <param name="request">CreateTeamsRequest</param>
+        /// <returns>no content</returns>
         [HttpPost]
         [Authorize(Roles = "Dispatcher")]
-        public async Task<IActionResult> CreateTeam([FromBody] CreateTeamDTO dto) // Przerobić na tworzenie listy teamów na dany dzień
+        public async Task<IActionResult> CreateTeams([FromBody] CreateTeamsRequest request)
         {
-            var entity = await Mediator.Send(new CreateTeamCommand(dto));
+            var result = await Mediator.Send(new CreateTeamsCommand(request));
 
-            return entity.Match(
-                entity => CreatedAtAction(nameof(GetTeam), new { id = entity.Id }, null),
+            return result.Match(
+                success => NoContent(),
                 errors => Problem(errors));
         }
 
-        [HttpPatch]
+        /// <summary>
+        /// Action for deleting teams.
+        /// </summary>
+        /// <param name="request">DeleteTeamsRequest</param>
+        /// <returns>no content</returns>
+        [HttpDelete]
         [Authorize(Roles = "Dispatcher")]
-        public async Task<IActionResult> ChangeWorkingState([FromQuery]int id, [FromQuery]bool state)
+        public async Task<IActionResult> DeleteTeams([FromBody] DeleteTeamsRequest request)
         {
-            throw new NotImplementedException();
+            var result = await Mediator.Send(new DeleteTeamsCommand(request));
 
-            var result = await Mediator.Send(new ChangeWorkingStateCommand(id, state)); // dodać co zwraca komenda
+            return result.Match(
+                success => NoContent(),
+                errors => Problem(errors));
         }
-
     }
 }

@@ -22,7 +22,6 @@ namespace MediMove.Server.Data.Seeders
                 {
                     Id = 2,
                     Day = DateTime.Today.AddDays(-2),
-                    ShiftType = ShiftType.Morning,
                     ParamedicId = 3,
                 },
                 new Availability
@@ -36,7 +35,6 @@ namespace MediMove.Server.Data.Seeders
                 {
                     Id = 4,
                     Day = DateTime.Today.AddDays(-2),
-                    ShiftType = ShiftType.Evening,
                     ParamedicId = 5,
                 },
 
@@ -59,7 +57,6 @@ namespace MediMove.Server.Data.Seeders
                 {
                     Id = 7,
                     Day = DateTime.Today.AddDays(-1),
-                    ShiftType = ShiftType.Evening,
                     ParamedicId = 3,
                 },
                 new Availability
@@ -82,7 +79,6 @@ namespace MediMove.Server.Data.Seeders
                 {
                     Id = 10,
                     Day = DateTime.Today,
-                    ShiftType = ShiftType.Morning,
                     ParamedicId = 1,
                 },
                 new Availability
@@ -119,7 +115,6 @@ namespace MediMove.Server.Data.Seeders
                 {
                     Id = 15,
                     Day = DateTime.Today.AddDays(1),
-                    ShiftType = ShiftType.Morning,
                     ParamedicId = 1,
                 },
                 new Availability
@@ -149,7 +144,6 @@ namespace MediMove.Server.Data.Seeders
                 {
                     Id = 19,
                     Day = DateTime.Today.AddDays(2),
-                    ShiftType = ShiftType.Morning,
                     ParamedicId = 1,
                 },
                 new Availability
@@ -170,7 +164,6 @@ namespace MediMove.Server.Data.Seeders
                 {
                     Id = 22,
                     Day = DateTime.Today.AddDays(2),
-                    ShiftType = ShiftType.Morning,
                     ParamedicId = 4,
                 },
                 new Availability

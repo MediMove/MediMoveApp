@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediMove.Server.Application.Availabilities.Commands;
 using MediMove.Server.Application.Models;
+using MediMove.Server.Application.Teams.Commands;
 using MediMove.Shared.Models.DTOs;
 
 namespace MediMove.Server
@@ -10,7 +11,8 @@ namespace MediMove.Server
         public MediMoveMappingProfile()
         {
 
-            CreateMap<CreateTeamDTO, Team>();
+            
+
 
             CreateMap<Team, TeamDTO>();
 
@@ -113,15 +115,45 @@ namespace MediMove.Server
             //    .ForMember(m => m.Country, c => c.MapFrom(s => s.PersonalInformation.Country));
 
 
-
-
-
-
-
             CreateMap<RegisterUserDTO, User>();
 
+            CreateMap<Team, GetTeamsByDayAndShiftResponse.TeamInfo>()
+                .ForMember(m => m.DriverFirstName, c => c.MapFrom(s => s.Driver.PersonalInformation.FirstName))
+                .ForMember(m => m.DriverLastName, c => c.MapFrom(s => s.Driver.PersonalInformation.LastName))
+                .ForMember(m => m.ParamedicFirstName, c => c.MapFrom(s => s.Paramedic.PersonalInformation.FirstName))
+                .ForMember(m => m.ParamedicLastName, c => c.MapFrom(s => s.Paramedic.PersonalInformation.LastName));
+
+            CreateMap<CreateTeamsCommand, IEnumerable<Team>>()
+                .ConvertUsing<CreateTeamsCommandToTeamIEnumerableConverter>();
+        }
+    }
 
 
+    /// <summary>
+    /// Converter from CreateTeamsCommand to IEnumerable of Teams
+    /// </summary>
+    public class CreateTeamsCommandToTeamIEnumerableConverter : ITypeConverter<CreateTeamsCommand, IEnumerable<Team>>
+    {
+        /// <summary>
+        /// Method that converts CreateTeamsCommand to IEnumerable of Teams
+        /// </summary>
+        /// <param name="source">CreateTeamsCommand</param>
+        /// <param name="destination">IEnumerable of Teams</param>
+        /// <param name="context">ResolutionContext</param>
+        /// <returns></returns>
+        public IEnumerable<Team> Convert(CreateTeamsCommand source, IEnumerable<Team> destination, ResolutionContext context)
+        {
+            var teams = new List<Team>();
+
+            foreach (var team in source.Request.Teams)
+                teams.Add(new Team
+                {
+                    DriverId = team.DriverId,
+                    ParamedicId = team.ParamedicId,
+                    Day = source.Request.Day.Date
+                });
+
+            return teams;
         }
     }
 
@@ -141,13 +173,13 @@ namespace MediMove.Server
         {
             var availabilities = new List<Availability>();
 
-            foreach (var availability in source.request.Availabilities)
+            foreach (var declaration in source.Request.Availabilities)
             {
                 availabilities.Add(new Availability
                 {
                     ParamedicId = source.ParamedicId,
-                    Day = availability.Day,
-                    ShiftType = availability.Shift
+                    Day = declaration.Day,
+                    ShiftType = declaration.Shift
                 });
             }
 

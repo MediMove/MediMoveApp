@@ -31,8 +31,10 @@ namespace MediMove.Server.Data.Seeders
                     PatientPosition = PatientPosition.Sitting,
                     TransportType = TransportType.Visit,
                     Financing = Financing.FullyPaid,
+                    BillingId = 1,
                     StartTime = new DateTime(DateTime.Today.AddDays(-2).Year, DateTime.Today.AddDays(-2).Month, DateTime.Today.AddDays(-2).Day, 9, 10, 0),
                     Destination = "Nadrzeczna 55 Mysłowice"
+
                 },
                 new Transport
                 {
@@ -42,6 +44,7 @@ namespace MediMove.Server.Data.Seeders
                     PatientPosition = PatientPosition.Sitting,
                     TransportType = TransportType.Handover,
                     Financing = Financing.PartiallyFunded,
+                    BillingId = 2,
                     StartTime = new DateTime(DateTime.Today.AddDays(-2).Year, DateTime.Today.AddDays(-2).Month, DateTime.Today.AddDays(-2).Day, 14, 0, 0),
                     Destination = "Wyszogrodzka 44 Bytom"
                 },
@@ -55,6 +58,7 @@ namespace MediMove.Server.Data.Seeders
                     PatientPosition = PatientPosition.Sitting,
                     TransportType = TransportType.Handover,
                     Financing = Financing.PartiallyFunded,
+                    BillingId = 3,
                     StartTime = new DateTime(DateTime.Today.AddDays(-2).Year, DateTime.Today.AddDays(-2).Month, DateTime.Today.AddDays(-2).Day, 7, 30, 0),
                     Destination = "Dobosza 101 Zabrze"
                 },

@@ -36,6 +36,19 @@ namespace MediMove.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Roles",
+                columns: table => new
+                {
+                    RoleId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Roles", x => x.RoleId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Billings",
                 columns: table => new
                 {
@@ -65,6 +78,7 @@ namespace MediMove.Server.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     BankAccountNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsWorking = table.Column<bool>(type: "bit", nullable: false),
                     PersonalInformationId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -86,6 +100,7 @@ namespace MediMove.Server.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     BankAccountNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsDriver = table.Column<bool>(type: "bit", nullable: false),
+                    IsWorking = table.Column<bool>(type: "bit", nullable: false),
                     PersonalInformationId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -120,6 +135,28 @@ namespace MediMove.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AccountId = table.Column<int>(type: "int", nullable: true),
+                    RoleId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Users_Roles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Roles",
+                        principalColumn: "RoleId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Salaries",
                 columns: table => new
                 {
@@ -147,7 +184,7 @@ namespace MediMove.Server.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Day = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ShiftType = table.Column<int>(type: "int", nullable: false),
+                    ShiftType = table.Column<int>(type: "int", nullable: true),
                     ParamedicId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -189,8 +226,9 @@ namespace MediMove.Server.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Day = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DriverId = table.Column<int>(type: "int", nullable: true),
-                    ParamedicId = table.Column<int>(type: "int", nullable: true)
+                    ShiftType = table.Column<int>(type: "int", nullable: false),
+                    DriverId = table.Column<int>(type: "int", nullable: false),
+                    ParamedicId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -199,12 +237,14 @@ namespace MediMove.Server.Migrations
                         name: "FK_Teams_Paramedics_DriverId",
                         column: x => x.DriverId,
                         principalTable: "Paramedics",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Teams_Paramedics_ParamedicId",
                         column: x => x.ParamedicId,
                         principalTable: "Paramedics",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -218,6 +258,7 @@ namespace MediMove.Server.Migrations
                     StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Destination = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TransportType = table.Column<int>(type: "int", nullable: false),
+                    IsCancelled = table.Column<bool>(type: "bit", nullable: false),
                     TeamId = table.Column<int>(type: "int", nullable: true),
                     PatientId = table.Column<int>(type: "int", nullable: false),
                     BillingId = table.Column<int>(type: "int", nullable: true)
@@ -240,7 +281,8 @@ namespace MediMove.Server.Migrations
                         name: "FK_Transports_Teams_TeamId",
                         column: x => x.TeamId,
                         principalTable: "Teams",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.InsertData(
@@ -266,34 +308,45 @@ namespace MediMove.Server.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Roles",
+                columns: new[] { "RoleId", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Undefined" },
+                    { 2, "Paramedic" },
+                    { 3, "Dispatcher" },
+                    { 4, "Admin" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Billings",
                 columns: new[] { "Id", "BankAccountNumber", "Cost", "InvoiceDate", "InvoiceNumber", "PersonalInformationId" },
                 values: new object[,]
                 {
-                    { 1, "342301332136124", 200m, new DateTime(2023, 5, 7, 0, 2, 10, 168, DateTimeKind.Local).AddTicks(6422), "1.09.05.2023", 10 },
-                    { 2, "343301232434821", 90m, new DateTime(2023, 5, 7, 23, 59, 0, 0, DateTimeKind.Local), "2.09.05.2023", 11 },
-                    { 3, "543322635238421", 50m, new DateTime(2023, 5, 8, 0, 1, 0, 0, DateTimeKind.Local), "3.09.05.2023", 12 }
+                    { 1, "342301332136124", 200m, new DateTime(2023, 6, 9, 21, 33, 22, 616, DateTimeKind.Local).AddTicks(4291), "1.11.06.2023", 10 },
+                    { 2, "343301232434821", 90m, new DateTime(2023, 6, 9, 23, 59, 0, 0, DateTimeKind.Local), "2.11.06.2023", 11 },
+                    { 3, "543322635238421", 50m, new DateTime(2023, 6, 10, 0, 1, 0, 0, DateTimeKind.Local), "3.11.06.2023", 12 }
                 });
 
             migrationBuilder.InsertData(
                 table: "Dispatchers",
-                columns: new[] { "Id", "BankAccountNumber", "PersonalInformationId" },
+                columns: new[] { "Id", "BankAccountNumber", "IsWorking", "PersonalInformationId" },
                 values: new object[,]
                 {
-                    { 1, "4203987928122474", 13 },
-                    { 2, "4203787958122274", 14 }
+                    { 1, "4203987928122474", true, 13 },
+                    { 2, "4203787958122274", true, 14 }
                 });
 
             migrationBuilder.InsertData(
                 table: "Paramedics",
-                columns: new[] { "Id", "BankAccountNumber", "IsDriver", "PersonalInformationId" },
+                columns: new[] { "Id", "BankAccountNumber", "IsDriver", "IsWorking", "PersonalInformationId" },
                 values: new object[,]
                 {
-                    { 1, "1203987908127474", true, 1 },
-                    { 2, "124341763465609", true, 2 },
-                    { 3, "121234124123109", false, 3 },
-                    { 4, "123456780123109", false, 4 },
-                    { 5, "982301231238812", true, 5 }
+                    { 1, "1203987908127474", true, true, 1 },
+                    { 2, "124341763465609", true, true, 2 },
+                    { 3, "121234124123109", false, true, 3 },
+                    { 4, "123456780123109", false, true, 4 },
+                    { 5, "982301231238812", true, true, 5 }
                 });
 
             migrationBuilder.InsertData(
@@ -313,29 +366,29 @@ namespace MediMove.Server.Migrations
                 columns: new[] { "Id", "Day", "ParamedicId", "ShiftType" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2023, 5, 7, 0, 0, 0, 0, DateTimeKind.Local), 1, 0 },
-                    { 2, new DateTime(2023, 5, 7, 0, 0, 0, 0, DateTimeKind.Local), 3, 0 },
-                    { 3, new DateTime(2023, 5, 7, 0, 0, 0, 0, DateTimeKind.Local), 4, 1 },
-                    { 4, new DateTime(2023, 5, 7, 0, 0, 0, 0, DateTimeKind.Local), 5, 1 },
-                    { 5, new DateTime(2023, 5, 8, 0, 0, 0, 0, DateTimeKind.Local), 1, 0 },
-                    { 6, new DateTime(2023, 5, 8, 0, 0, 0, 0, DateTimeKind.Local), 2, 0 },
-                    { 7, new DateTime(2023, 5, 8, 0, 0, 0, 0, DateTimeKind.Local), 3, 1 },
-                    { 8, new DateTime(2023, 5, 8, 0, 0, 0, 0, DateTimeKind.Local), 4, 0 },
-                    { 9, new DateTime(2023, 5, 8, 0, 0, 0, 0, DateTimeKind.Local), 5, 1 },
-                    { 10, new DateTime(2023, 5, 9, 0, 0, 0, 0, DateTimeKind.Local), 1, 0 },
-                    { 11, new DateTime(2023, 5, 9, 0, 0, 0, 0, DateTimeKind.Local), 2, 0 },
-                    { 12, new DateTime(2023, 5, 9, 0, 0, 0, 0, DateTimeKind.Local), 3, 0 },
-                    { 13, new DateTime(2023, 5, 9, 0, 0, 0, 0, DateTimeKind.Local), 4, 1 },
-                    { 14, new DateTime(2023, 5, 9, 0, 0, 0, 0, DateTimeKind.Local), 5, 1 },
-                    { 15, new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local), 1, 0 },
-                    { 16, new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local), 3, 0 },
-                    { 17, new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local), 4, 1 },
-                    { 18, new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local), 5, 1 },
-                    { 19, new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Local), 1, 0 },
-                    { 20, new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Local), 2, 1 },
-                    { 21, new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Local), 3, 1 },
-                    { 22, new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Local), 4, 0 },
-                    { 23, new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Local), 5, 1 }
+                    { 1, new DateTime(2023, 6, 9, 0, 0, 0, 0, DateTimeKind.Local), 1, 0 },
+                    { 2, new DateTime(2023, 6, 9, 0, 0, 0, 0, DateTimeKind.Local), 3, null },
+                    { 3, new DateTime(2023, 6, 9, 0, 0, 0, 0, DateTimeKind.Local), 4, 1 },
+                    { 4, new DateTime(2023, 6, 9, 0, 0, 0, 0, DateTimeKind.Local), 5, null },
+                    { 5, new DateTime(2023, 6, 10, 0, 0, 0, 0, DateTimeKind.Local), 1, 0 },
+                    { 6, new DateTime(2023, 6, 10, 0, 0, 0, 0, DateTimeKind.Local), 2, 0 },
+                    { 7, new DateTime(2023, 6, 10, 0, 0, 0, 0, DateTimeKind.Local), 3, null },
+                    { 8, new DateTime(2023, 6, 10, 0, 0, 0, 0, DateTimeKind.Local), 4, 0 },
+                    { 9, new DateTime(2023, 6, 10, 0, 0, 0, 0, DateTimeKind.Local), 5, 1 },
+                    { 10, new DateTime(2023, 6, 11, 0, 0, 0, 0, DateTimeKind.Local), 1, null },
+                    { 11, new DateTime(2023, 6, 11, 0, 0, 0, 0, DateTimeKind.Local), 2, 0 },
+                    { 12, new DateTime(2023, 6, 11, 0, 0, 0, 0, DateTimeKind.Local), 3, 0 },
+                    { 13, new DateTime(2023, 6, 11, 0, 0, 0, 0, DateTimeKind.Local), 4, 1 },
+                    { 14, new DateTime(2023, 6, 11, 0, 0, 0, 0, DateTimeKind.Local), 5, 1 },
+                    { 15, new DateTime(2023, 6, 12, 0, 0, 0, 0, DateTimeKind.Local), 1, null },
+                    { 16, new DateTime(2023, 6, 12, 0, 0, 0, 0, DateTimeKind.Local), 3, 0 },
+                    { 17, new DateTime(2023, 6, 12, 0, 0, 0, 0, DateTimeKind.Local), 4, 1 },
+                    { 18, new DateTime(2023, 6, 12, 0, 0, 0, 0, DateTimeKind.Local), 5, 1 },
+                    { 19, new DateTime(2023, 6, 13, 0, 0, 0, 0, DateTimeKind.Local), 1, null },
+                    { 20, new DateTime(2023, 6, 13, 0, 0, 0, 0, DateTimeKind.Local), 2, 1 },
+                    { 21, new DateTime(2023, 6, 13, 0, 0, 0, 0, DateTimeKind.Local), 3, 1 },
+                    { 22, new DateTime(2023, 6, 13, 0, 0, 0, 0, DateTimeKind.Local), 4, null },
+                    { 23, new DateTime(2023, 6, 13, 0, 0, 0, 0, DateTimeKind.Local), 5, 1 }
                 });
 
             migrationBuilder.InsertData(
@@ -343,14 +396,14 @@ namespace MediMove.Server.Migrations
                 columns: new[] { "Id", "Date", "ParamedicId", "PayPerHour" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2023, 5, 7, 0, 0, 0, 0, DateTimeKind.Local), 1, 12m },
-                    { 2, new DateTime(2023, 5, 7, 0, 0, 0, 0, DateTimeKind.Local), 2, 12m },
-                    { 3, new DateTime(2023, 5, 7, 0, 0, 0, 0, DateTimeKind.Local), 3, 12m },
-                    { 4, new DateTime(2023, 5, 7, 0, 0, 0, 0, DateTimeKind.Local), 4, 12m },
-                    { 5, new DateTime(2023, 5, 7, 0, 0, 0, 0, DateTimeKind.Local), 5, 12m },
-                    { 6, new DateTime(2023, 5, 8, 0, 0, 0, 0, DateTimeKind.Local), 1, 13m },
-                    { 7, new DateTime(2023, 5, 8, 0, 0, 0, 0, DateTimeKind.Local), 5, 13m },
-                    { 8, new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local), 1, 14m }
+                    { 1, new DateTime(2023, 6, 9, 0, 0, 0, 0, DateTimeKind.Local), 1, 12m },
+                    { 2, new DateTime(2023, 6, 9, 0, 0, 0, 0, DateTimeKind.Local), 2, 12m },
+                    { 3, new DateTime(2023, 6, 9, 0, 0, 0, 0, DateTimeKind.Local), 3, 12m },
+                    { 4, new DateTime(2023, 6, 9, 0, 0, 0, 0, DateTimeKind.Local), 4, 12m },
+                    { 5, new DateTime(2023, 6, 9, 0, 0, 0, 0, DateTimeKind.Local), 5, 12m },
+                    { 6, new DateTime(2023, 6, 10, 0, 0, 0, 0, DateTimeKind.Local), 1, 13m },
+                    { 7, new DateTime(2023, 6, 10, 0, 0, 0, 0, DateTimeKind.Local), 5, 13m },
+                    { 8, new DateTime(2023, 6, 12, 0, 0, 0, 0, DateTimeKind.Local), 1, 14m }
                 });
 
             migrationBuilder.InsertData(
@@ -358,61 +411,61 @@ namespace MediMove.Server.Migrations
                 columns: new[] { "Id", "Date", "DispatcherId", "Income" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2023, 5, 7, 0, 0, 0, 0, DateTimeKind.Local), 1, 1200m },
-                    { 2, new DateTime(2023, 5, 7, 0, 0, 0, 0, DateTimeKind.Local), 2, 1200m },
-                    { 3, new DateTime(2023, 5, 8, 0, 0, 0, 0, DateTimeKind.Local), 1, 1300m },
-                    { 4, new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local), 1, 1500m }
+                    { 1, new DateTime(2023, 6, 9, 0, 0, 0, 0, DateTimeKind.Local), 1, 1200m },
+                    { 2, new DateTime(2023, 6, 9, 0, 0, 0, 0, DateTimeKind.Local), 2, 1200m },
+                    { 3, new DateTime(2023, 6, 10, 0, 0, 0, 0, DateTimeKind.Local), 1, 1300m },
+                    { 4, new DateTime(2023, 6, 12, 0, 0, 0, 0, DateTimeKind.Local), 1, 1500m }
                 });
 
             migrationBuilder.InsertData(
                 table: "Teams",
-                columns: new[] { "Id", "Day", "DriverId", "ParamedicId" },
+                columns: new[] { "Id", "Day", "DriverId", "ParamedicId", "ShiftType" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2023, 5, 7, 0, 0, 0, 0, DateTimeKind.Local), 1, 2 },
-                    { 2, new DateTime(2023, 5, 7, 0, 0, 0, 0, DateTimeKind.Local), 5, 4 },
-                    { 3, new DateTime(2023, 5, 8, 0, 0, 0, 0, DateTimeKind.Local), 1, 2 },
-                    { 4, new DateTime(2023, 5, 8, 0, 0, 0, 0, DateTimeKind.Local), 5, 3 },
-                    { 5, new DateTime(2023, 5, 9, 0, 0, 0, 0, DateTimeKind.Local), 1, 2 },
-                    { 6, new DateTime(2023, 5, 9, 0, 0, 0, 0, DateTimeKind.Local), 5, 4 },
-                    { 7, new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local), 1, 2 },
-                    { 8, new DateTime(2023, 5, 10, 0, 0, 0, 0, DateTimeKind.Local), 5, 4 },
-                    { 9, new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Local), 1, 4 },
-                    { 10, new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Local), 2, 3 }
+                    { 1, new DateTime(2023, 6, 9, 0, 0, 0, 0, DateTimeKind.Local), 1, 3, 0 },
+                    { 2, new DateTime(2023, 6, 9, 0, 0, 0, 0, DateTimeKind.Local), 5, 4, 1 },
+                    { 3, new DateTime(2023, 6, 10, 0, 0, 0, 0, DateTimeKind.Local), 1, 2, 0 },
+                    { 4, new DateTime(2023, 6, 10, 0, 0, 0, 0, DateTimeKind.Local), 5, 3, 1 },
+                    { 5, new DateTime(2023, 6, 11, 0, 0, 0, 0, DateTimeKind.Local), 1, 2, 0 },
+                    { 6, new DateTime(2023, 6, 11, 0, 0, 0, 0, DateTimeKind.Local), 5, 4, 1 },
+                    { 7, new DateTime(2023, 6, 12, 0, 0, 0, 0, DateTimeKind.Local), 1, 3, 0 },
+                    { 8, new DateTime(2023, 6, 12, 0, 0, 0, 0, DateTimeKind.Local), 5, 4, 1 },
+                    { 9, new DateTime(2023, 6, 13, 0, 0, 0, 0, DateTimeKind.Local), 1, 4, 0 },
+                    { 10, new DateTime(2023, 6, 13, 0, 0, 0, 0, DateTimeKind.Local), 2, 3, 1 }
                 });
 
             migrationBuilder.InsertData(
                 table: "Transports",
-                columns: new[] { "Id", "BillingId", "Destination", "Financing", "PatientId", "PatientPosition", "StartTime", "TeamId", "TransportType" },
+                columns: new[] { "Id", "BillingId", "Destination", "Financing", "IsCancelled", "PatientId", "PatientPosition", "StartTime", "TeamId", "TransportType" },
                 values: new object[,]
                 {
-                    { 1, null, "Saska 43 Rybnik", 0, 1, 0, new DateTime(2023, 5, 7, 7, 0, 0, 0, DateTimeKind.Unspecified), 1, 0 },
-                    { 2, null, "Nadrzeczna 55 Mysłowice", 2, 2, 1, new DateTime(2023, 5, 7, 9, 10, 0, 0, DateTimeKind.Unspecified), 1, 0 },
-                    { 3, null, "Wyszogrodzka 44 Bytom", 1, 3, 1, new DateTime(2023, 5, 7, 14, 0, 0, 0, DateTimeKind.Unspecified), 1, 1 },
-                    { 4, null, "Dobosza 101 Zabrze", 1, 4, 1, new DateTime(2023, 5, 7, 7, 30, 0, 0, DateTimeKind.Unspecified), 2, 1 },
-                    { 5, null, "Dyngus 30 Chorzów", 0, 5, 2, new DateTime(2023, 5, 7, 12, 0, 0, 0, DateTimeKind.Unspecified), 2, 0 },
-                    { 6, null, "Obornicka 89 Rybnik", 0, 4, 1, new DateTime(2023, 5, 8, 7, 30, 0, 0, DateTimeKind.Unspecified), 3, 0 },
-                    { 7, null, "Zakładowa 19 Częstochowa", 0, 2, 0, new DateTime(2023, 5, 8, 9, 45, 0, 0, DateTimeKind.Unspecified), 3, 0 },
-                    { 8, null, "Ustronna 70 Gliwice", 0, 1, 0, new DateTime(2023, 5, 8, 13, 0, 0, 0, DateTimeKind.Unspecified), 3, 0 },
-                    { 9, null, "Oboźna 43 Tychy", 0, 4, 1, new DateTime(2023, 5, 8, 15, 30, 0, 0, DateTimeKind.Unspecified), 4, 0 },
-                    { 10, null, "Mickiewicza 119 Żory", 0, 2, 0, new DateTime(2023, 5, 8, 18, 0, 0, 0, DateTimeKind.Unspecified), 4, 0 },
-                    { 11, null, "Rycerska 13 Sosnowiec", 0, 5, 2, new DateTime(2023, 5, 8, 20, 0, 0, 0, DateTimeKind.Unspecified), 4, 0 },
-                    { 12, null, "Skromna 116 Bieruń", 0, 1, 0, new DateTime(2023, 5, 9, 7, 0, 0, 0, DateTimeKind.Unspecified), 5, 1 },
-                    { 13, null, "Lidzka 53 Świętochłowice", 0, 3, 0, new DateTime(2023, 5, 9, 12, 0, 0, 0, DateTimeKind.Unspecified), 5, 1 },
-                    { 14, null, "Pomarańczowa 95 Bielsko-Biała", 0, 2, 0, new DateTime(2023, 5, 9, 13, 30, 0, 0, DateTimeKind.Unspecified), 5, 1 },
-                    { 15, null, "Bydgoska 123 Ruda Śląska", 0, 4, 1, new DateTime(2023, 5, 9, 16, 0, 0, 0, DateTimeKind.Unspecified), 6, 1 },
-                    { 16, null, "Różana 138 Żory", 0, 2, 0, new DateTime(2023, 5, 9, 17, 45, 0, 0, DateTimeKind.Unspecified), 6, 1 },
-                    { 17, null, "Okrzei Stefana 132 Chorzów", 0, 4, 1, new DateTime(2023, 5, 9, 19, 0, 0, 0, DateTimeKind.Unspecified), 6, 0 },
-                    { 18, null, "Diamentowa 5 Częstochowa", 0, 1, 0, new DateTime(2023, 5, 10, 7, 15, 0, 0, DateTimeKind.Unspecified), 7, 1 },
-                    { 19, null, "Pawlikowskiego Tadeusza 96 Cieszyn", 0, 2, 0, new DateTime(2023, 5, 10, 11, 0, 0, 0, DateTimeKind.Unspecified), 7, 0 },
-                    { 20, null, "Generała Szyllinga Antoniego 111 Imielin", 0, 3, 0, new DateTime(2023, 5, 10, 13, 15, 0, 0, DateTimeKind.Unspecified), 7, 1 },
-                    { 21, null, "Urbańskiego Tadeusza 45 Pszów", 0, 5, 2, new DateTime(2023, 5, 10, 16, 0, 0, 0, DateTimeKind.Unspecified), 8, 1 },
-                    { 22, null, "Czerwona 46 Katowice", 0, 4, 1, new DateTime(2023, 5, 10, 17, 15, 0, 0, DateTimeKind.Unspecified), 8, 1 },
-                    { 23, null, "Reutta 54 Bytom", 0, 3, 0, new DateTime(2023, 5, 10, 20, 0, 0, 0, DateTimeKind.Unspecified), 8, 0 },
-                    { 24, null, "Cybernetyków 120 Tychy", 0, 1, 0, new DateTime(2023, 5, 11, 8, 30, 0, 0, DateTimeKind.Unspecified), 9, 1 },
-                    { 25, null, "Kaszubska 18 Świętochłowice", 0, 3, 0, new DateTime(2023, 5, 11, 12, 0, 0, 0, DateTimeKind.Unspecified), 9, 1 },
-                    { 26, null, "Cybernetyków 120 Tychy", 0, 2, 0, new DateTime(2023, 5, 11, 17, 0, 0, 0, DateTimeKind.Unspecified), 10, 1 },
-                    { 27, null, "Kaszubska 18 Świętochłowice", 0, 5, 2, new DateTime(2023, 5, 11, 19, 0, 0, 0, DateTimeKind.Unspecified), 10, 0 }
+                    { 1, null, "Saska 43 Rybnik", 0, false, 1, 0, new DateTime(2023, 6, 9, 7, 0, 0, 0, DateTimeKind.Unspecified), 1, 0 },
+                    { 2, 1, "Nadrzeczna 55 Mysłowice", 2, false, 2, 1, new DateTime(2023, 6, 9, 9, 10, 0, 0, DateTimeKind.Unspecified), 1, 0 },
+                    { 3, 2, "Wyszogrodzka 44 Bytom", 1, false, 3, 1, new DateTime(2023, 6, 9, 14, 0, 0, 0, DateTimeKind.Unspecified), 1, 1 },
+                    { 4, 3, "Dobosza 101 Zabrze", 1, false, 4, 1, new DateTime(2023, 6, 9, 7, 30, 0, 0, DateTimeKind.Unspecified), 2, 1 },
+                    { 5, null, "Dyngus 30 Chorzów", 0, false, 5, 2, new DateTime(2023, 6, 9, 12, 0, 0, 0, DateTimeKind.Unspecified), 2, 0 },
+                    { 6, null, "Obornicka 89 Rybnik", 0, false, 4, 1, new DateTime(2023, 6, 10, 7, 30, 0, 0, DateTimeKind.Unspecified), 3, 0 },
+                    { 7, null, "Zakładowa 19 Częstochowa", 0, false, 2, 0, new DateTime(2023, 6, 10, 9, 45, 0, 0, DateTimeKind.Unspecified), 3, 0 },
+                    { 8, null, "Ustronna 70 Gliwice", 0, false, 1, 0, new DateTime(2023, 6, 10, 13, 0, 0, 0, DateTimeKind.Unspecified), 3, 0 },
+                    { 9, null, "Oboźna 43 Tychy", 0, false, 4, 1, new DateTime(2023, 6, 10, 15, 30, 0, 0, DateTimeKind.Unspecified), 4, 0 },
+                    { 10, null, "Mickiewicza 119 Żory", 0, false, 2, 0, new DateTime(2023, 6, 10, 18, 0, 0, 0, DateTimeKind.Unspecified), 4, 0 },
+                    { 11, null, "Rycerska 13 Sosnowiec", 0, false, 5, 2, new DateTime(2023, 6, 10, 20, 0, 0, 0, DateTimeKind.Unspecified), 4, 0 },
+                    { 12, null, "Skromna 116 Bieruń", 0, false, 1, 0, new DateTime(2023, 6, 11, 7, 0, 0, 0, DateTimeKind.Unspecified), 5, 1 },
+                    { 13, null, "Lidzka 53 Świętochłowice", 0, false, 3, 0, new DateTime(2023, 6, 11, 12, 0, 0, 0, DateTimeKind.Unspecified), 5, 1 },
+                    { 14, null, "Pomarańczowa 95 Bielsko-Biała", 0, false, 2, 0, new DateTime(2023, 6, 11, 13, 30, 0, 0, DateTimeKind.Unspecified), 5, 1 },
+                    { 15, null, "Bydgoska 123 Ruda Śląska", 0, false, 4, 1, new DateTime(2023, 6, 11, 16, 0, 0, 0, DateTimeKind.Unspecified), 6, 1 },
+                    { 16, null, "Różana 138 Żory", 0, false, 2, 0, new DateTime(2023, 6, 11, 17, 45, 0, 0, DateTimeKind.Unspecified), 6, 1 },
+                    { 17, null, "Okrzei Stefana 132 Chorzów", 0, false, 4, 1, new DateTime(2023, 6, 11, 19, 0, 0, 0, DateTimeKind.Unspecified), 6, 0 },
+                    { 18, null, "Diamentowa 5 Częstochowa", 0, false, 1, 0, new DateTime(2023, 6, 12, 7, 15, 0, 0, DateTimeKind.Unspecified), 7, 1 },
+                    { 19, null, "Pawlikowskiego Tadeusza 96 Cieszyn", 0, false, 2, 0, new DateTime(2023, 6, 12, 11, 0, 0, 0, DateTimeKind.Unspecified), 7, 0 },
+                    { 20, null, "Generała Szyllinga Antoniego 111 Imielin", 0, false, 3, 0, new DateTime(2023, 6, 12, 13, 15, 0, 0, DateTimeKind.Unspecified), 7, 1 },
+                    { 21, null, "Urbańskiego Tadeusza 45 Pszów", 0, false, 5, 2, new DateTime(2023, 6, 12, 16, 0, 0, 0, DateTimeKind.Unspecified), 8, 1 },
+                    { 22, null, "Czerwona 46 Katowice", 0, false, 4, 1, new DateTime(2023, 6, 12, 17, 15, 0, 0, DateTimeKind.Unspecified), 8, 1 },
+                    { 23, null, "Reutta 54 Bytom", 0, false, 3, 0, new DateTime(2023, 6, 12, 20, 0, 0, 0, DateTimeKind.Unspecified), 8, 0 },
+                    { 24, null, "Cybernetyków 120 Tychy", 0, false, 1, 0, new DateTime(2023, 6, 13, 8, 30, 0, 0, DateTimeKind.Unspecified), 9, 1 },
+                    { 25, null, "Kaszubska 18 Świętochłowice", 0, false, 3, 0, new DateTime(2023, 6, 13, 12, 0, 0, 0, DateTimeKind.Unspecified), 9, 1 },
+                    { 26, null, "Cybernetyków 120 Tychy", 0, false, 2, 0, new DateTime(2023, 6, 13, 17, 0, 0, 0, DateTimeKind.Unspecified), 10, 1 },
+                    { 27, null, "Kaszubska 18 Świętochłowice", 0, false, 5, 2, new DateTime(2023, 6, 13, 19, 0, 0, 0, DateTimeKind.Unspecified), 10, 0 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -474,6 +527,11 @@ namespace MediMove.Server.Migrations
                 name: "IX_Transports_TeamId",
                 table: "Transports",
                 column: "TeamId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_RoleId",
+                table: "Users",
+                column: "RoleId");
         }
 
         /// <inheritdoc />
@@ -492,6 +550,9 @@ namespace MediMove.Server.Migrations
                 name: "Transports");
 
             migrationBuilder.DropTable(
+                name: "Users");
+
+            migrationBuilder.DropTable(
                 name: "Dispatchers");
 
             migrationBuilder.DropTable(
@@ -502,6 +563,9 @@ namespace MediMove.Server.Migrations
 
             migrationBuilder.DropTable(
                 name: "Teams");
+
+            migrationBuilder.DropTable(
+                name: "Roles");
 
             migrationBuilder.DropTable(
                 name: "Paramedics");

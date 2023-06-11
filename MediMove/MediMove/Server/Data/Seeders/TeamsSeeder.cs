@@ -1,4 +1,5 @@
 ﻿using MediMove.Server.Application.Models;
+using MediMove.Shared.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace MediMove.Server.Data.Seeders
@@ -14,8 +15,9 @@ namespace MediMove.Server.Data.Seeders
                 {
                     Id = 1,
                     DriverId = 1,
-                    ParamedicId = 2,
+                    ParamedicId = 3,
                     Day = DateTime.Today.AddDays(-2),
+                    ShiftType = ShiftType.Morning,
                 },
                 new Team
                 {
@@ -23,6 +25,7 @@ namespace MediMove.Server.Data.Seeders
                     DriverId = 5,
                     ParamedicId = 4,
                     Day = DateTime.Today.AddDays(-2),
+                    ShiftType = ShiftType.Evening,
                 },
 
                 // Yesterday
@@ -32,6 +35,7 @@ namespace MediMove.Server.Data.Seeders
                     DriverId = 1,
                     ParamedicId = 2,
                     Day = DateTime.Today.AddDays(-1),
+                    ShiftType = ShiftType.Morning,
                 },
                 new Team
                 {
@@ -39,6 +43,7 @@ namespace MediMove.Server.Data.Seeders
                     DriverId = 5,
                     ParamedicId = 3,
                     Day = DateTime.Today.AddDays(-1),
+                    ShiftType = ShiftType.Evening,
                 },
 
                 // Today
@@ -48,6 +53,7 @@ namespace MediMove.Server.Data.Seeders
                     DriverId = 1,
                     ParamedicId = 2,
                     Day = DateTime.Today,
+                    ShiftType = ShiftType.Morning,
                 },
                 new Team
                 {
@@ -55,6 +61,7 @@ namespace MediMove.Server.Data.Seeders
                     DriverId = 5,
                     ParamedicId = 4,
                     Day = DateTime.Today,
+                    ShiftType = ShiftType.Evening,
                 },
 
                 // Tomorrow
@@ -62,8 +69,9 @@ namespace MediMove.Server.Data.Seeders
                 {
                     Id = 7,
                     DriverId = 1,
-                    ParamedicId = 2,
+                    ParamedicId = 3,
                     Day = DateTime.Today.AddDays(1),
+                    ShiftType = ShiftType.Morning,
                 },
                 new Team
                 {
@@ -71,6 +79,7 @@ namespace MediMove.Server.Data.Seeders
                     DriverId = 5,
                     ParamedicId = 4,
                     Day = DateTime.Today.AddDays(1),
+                    ShiftType = ShiftType.Evening,
                 },
 
                 // Day after tomorrow
@@ -80,6 +89,7 @@ namespace MediMove.Server.Data.Seeders
                     DriverId = 1,
                     ParamedicId = 4,
                     Day = DateTime.Today.AddDays(2),
+                    ShiftType = ShiftType.Morning,
                 },
                 new Team
                 {
@@ -87,6 +97,7 @@ namespace MediMove.Server.Data.Seeders
                     DriverId = 2,
                     ParamedicId = 3,
                     Day = DateTime.Today.AddDays(2),
+                    ShiftType = ShiftType.Evening,
                 },
             });
         }

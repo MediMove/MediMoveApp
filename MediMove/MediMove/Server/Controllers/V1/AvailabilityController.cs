@@ -13,13 +13,13 @@ namespace MediMove.Server.Controllers.V1
     public class AvailabilityController : BaseApiController
     {
         /// <summary>
-        /// Gets available paramedics by day and shift.
+        /// Action for getting available paramedics by day and shift.
         /// </summary>
         /// <param name="year">year as integer</param>
         /// <param name="month">month as integer</param>
         /// <param name="day">day as integer</param>
         /// <param name="shift">shift as ShiftType</param>
-        /// <returns>GetAvailableParamedicsByDayAndShiftResponse object</returns>
+        /// <returns>GetAvailableParamedicsByDayAndShiftResponse</returns>
         [HttpGet]
         [Authorize(Roles = "Dispatcher")]
         public async Task<IActionResult> GetAvailableParamedicsByDayAndShift([FromQuery] int year, [FromQuery] int month, [FromQuery] int day, [FromQuery] ShiftType shift)
@@ -31,17 +31,52 @@ namespace MediMove.Server.Controllers.V1
                 errors => Problem(errors));
         }
 
+        /// <summary>
+        /// Action for getting availabilities for paramedic by date range.
+        /// </summary>
+        /// <param name="startDateInclusive">inclusive start date as nullable DateTime</param>
+        /// <param name="endDateInclusive">inclusive end date as nullable DateTime</param>
+        /// <returns>GetAvailabilitiesForParamedicByDateRangeResponse</returns>
+        /// <remarks>
+        /// Example date: 2023-06-11T12:34:56Z
+        /// </remarks>
+        [HttpGet("Paramedic")]
+        [Authorize(Roles = "Paramedic")]
+        public async Task<IActionResult> GetAvailabilitiesForParamedicByDateRange([FromQuery] DateTime? startDateInclusive, [FromQuery] DateTime? endDateInclusive)
+        {
+            var result = await Mediator.Send(new GetAvailabilitiesForParamedicByDateRangeQuery(getUserId(), startDateInclusive, endDateInclusive));
+
+            return result.Match(
+                result => Ok(result),
+                errors => Problem(errors));
+        }
 
         /// <summary>
-        /// Creates availabilities for a given paramedic.
+        /// Action for creating availabilities.
         /// </summary>
-        /// <param name="request">CreateAvailabilitiesRequest object</param>
-        /// <returns>No content</returns>
+        /// <param name="request">CreateAvailabilitiesRequest</param>
+        /// <returns>no content</returns>
         [HttpPost]
         [Authorize(Roles = "Paramedic")]
         public async Task<IActionResult> CreateAvailabilities([FromBody] CreateAvailabilitiesRequest request)
         {
             var result = await Mediator.Send(new CreateAvailabilitiesCommand(getUserId(), request));
+
+            return result.Match(
+                result => NoContent(),
+                errors => Problem(errors));
+        }
+
+        /// <summary>
+        /// Action for deleting availabilities.
+        /// </summary>
+        /// <param name="request">DeleteAvailabilitiesRequest</param>
+        /// <returns>no content</returns>
+        [HttpDelete]
+        [Authorize(Roles = "Paramedic")]
+        public async Task<IActionResult> DeleteAvailabilities([FromBody] DeleteAvailabilitiesRequest request)
+        {
+            var result = await Mediator.Send(new DeleteAvailabilitiesCommand(getUserId(), request));
 
             return result.Match(
                 result => NoContent(),
