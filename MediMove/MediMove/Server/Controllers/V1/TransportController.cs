@@ -55,22 +55,22 @@ namespace MediMove.Server.Controllers.V1
         /// <summary>
         /// Action for getting transports by day and shift while editing plan and adding transport.
         /// </summary>
-        /// <param name="year">year as integer</param>
-        /// <param name="month">month as integer</param>
-        /// <param name="day">day as integer</param>
+        /// <param name="date">date as DateTime</param>
         /// <param name="shift">shift as ShiftType</param>
-        /// <returns>GetTransportsByDayAndShiftResponse</returns>
+        /// <returns>>GetTransportsByDayAndShiftResponse</returns>
+        /// <remarks>
+        /// Example date: 2023-06-11T12:34:56Z
+        /// </remarks>
         [HttpGet("Date")]
         [Authorize(Roles = "Dispatcher")]
-        public async Task<IActionResult> GetTransportsByDayAndShift([FromQuery] int year, [FromQuery] int month, [FromQuery] int day, [FromQuery] ShiftType shift)
+        public async Task<IActionResult> GetTransportsByDayAndShift([FromQuery] DateTime date, [FromQuery] ShiftType shift)
         {
-            var result = await Mediator.Send(new GetTransportsByDayAndShiftQuery(new DateTime(year, month, day), shift));
+            var result = await Mediator.Send(new GetTransportsByDayAndShiftQuery(date, shift));
 
             return result.Match(
                 result => Ok(result),
                 errors => Problem(errors));
         }
-
 
         [HttpPost]
         [Authorize(Roles = "Dispatcher")]// autoryzacja rolą dispacher
@@ -82,6 +82,7 @@ namespace MediMove.Server.Controllers.V1
                 entity => CreatedAtAction(nameof(GetTransport), new { id = entity.Id }, null),
                 errors => Problem(errors));
         }
+
         [HttpPost("WithBilling")]
         [Authorize(Roles = "Dispatcher")]// autoryzacja rolą dispacher
         public async Task<IActionResult> CreateTransportWithBilling([FromBody] CreateTransportWithBillingDTO dto)
