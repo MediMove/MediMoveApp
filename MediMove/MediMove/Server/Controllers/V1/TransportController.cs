@@ -24,18 +24,28 @@ namespace MediMove.Server.Controllers.V1
         [Authorize(Roles = "Dispatcher")]// akcja dla roli dispacher // autoryzacja rolą dispacher
         public async Task<IActionResult> GetTransportsByParamedicAndDay([FromRoute] int id, [FromQuery] int day, [FromQuery] int month, [FromQuery] int year) 
         {
-            var result = await Mediator.Send(new GetTransportsByParamedicAndDayQuery(id, new DateTime(year, month, day)));   
+            var date = new DateTime(year, month, day);
+            var result = await Mediator.Send(new GetTransportsByParamedicAndDateRangeQuery(id, date, date));
 
             return result.Match(
                 result => Ok(result),
                 errors => Problem(errors));
         }
 
+        /// <summary>
+        /// Action for getting transports for paramedic by date range.
+        /// </summary>
+        /// <param name="startDateInclusive">inclusive start date as nullable DateTime</param>
+        /// <param name="endDateInclusive">inclusive end date as nullable DateTime</param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Example date: 2023-06-11T12:34:56Z
+        /// </remarks>
         [HttpGet("Paramedic")]
-        [Authorize(Roles = "Paramedic")]// akcja do wyświetlania transportów dla paramedica // autoryzacja rolą paramedic
-        public async Task<IActionResult> GetTransportsByParamedicAndDay([FromQuery] int day, [FromQuery] int month, [FromQuery] int year)
+        [Authorize(Roles = "Paramedic")]
+        public async Task<IActionResult> GetTransportsByParamedicAndDateRange([FromQuery] DateTime? startDateInclusive, [FromQuery] DateTime? endDateInclusive)
         {
-            var result = await Mediator.Send(new GetTransportsByParamedicAndDayQuery(getUserId(), new DateTime(year, month, day)));   //(new GetTransportsByParamedicAndDayDTO(id, new DateOnly(year, month, day)));
+            var result = await Mediator.Send(new GetTransportsByParamedicAndDateRangeQuery(getUserId(), startDateInclusive, endDateInclusive));
 
             return result.Match(
                 result => Ok(result),
