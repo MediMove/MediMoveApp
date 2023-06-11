@@ -37,9 +37,9 @@ namespace MediMove.Server.Application.Transports.Handlers
         {
             var transports = await _dbContext.Transports
                 .Where(t => !t.IsCancelled &&
-                (!request.StartDateInclusive.HasValue || t.StartTime.Date >= request.StartDateInclusive.Value.Date) &&
-                (!request.EndDateInclusive.HasValue || t.StartTime.Date <= request.EndDateInclusive.Value.Date) &&
-                (t.Team.DriverId == request.ParamedicId || t.Team.ParamedicId == request.ParamedicId))
+                    (!request.StartDateInclusive.HasValue || t.StartTime.Date >= request.StartDateInclusive.Value.Date) &&
+                    (!request.EndDateInclusive.HasValue || t.StartTime.Date <= request.EndDateInclusive.Value.Date) &&
+                    (t.Team.DriverId == request.ParamedicId || t.Team.ParamedicId == request.ParamedicId))
                 .Include(t => t.Patient)
                 .ThenInclude(p => p.PersonalInformation)
                 .ToArrayAsync(cancellationToken);

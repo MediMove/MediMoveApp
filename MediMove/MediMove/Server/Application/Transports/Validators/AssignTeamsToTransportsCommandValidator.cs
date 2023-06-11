@@ -29,7 +29,7 @@ namespace MediMove.Server.Application.Transports.Validators
                     }
 
                     var transports = await dbContext.Transports
-                        .Where(t => transportsToTeams.Keys.Contains(t.Id))
+                        .Where(t => !t.IsCancelled && transportsToTeams.Keys.Contains(t.Id))
                         .Select(t => t.StartTime)
                         .ToArrayAsync(cancellationToken);
 

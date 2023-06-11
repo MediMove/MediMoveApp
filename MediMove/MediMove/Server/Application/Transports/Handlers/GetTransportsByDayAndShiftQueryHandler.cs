@@ -33,8 +33,9 @@ namespace MediMove.Server.Application.Transports.Handlers
         public async Task<ErrorOr<GetTransportsByDayAndShiftResponse>> Handle(GetTransportsByDayAndShiftQuery request, CancellationToken cancellationToken)
         {
             var transports = await _dbContext.Transports
-                .Where(t => t.StartTime >= request.Day.Date + request.Shift.StartTime() &&
-                 t.StartTime < request.Day.Date + request.Shift.EndTime())
+                .Where(t => !t.IsCancelled &&
+                    t.StartTime >= request.Day.Date + request.Shift.StartTime() &&
+                    t.StartTime < request.Day.Date + request.Shift.EndTime())
                 .Include(t => t.Patient)
                 .ThenInclude(p => p.PersonalInformation)
                 .Select(t => new
