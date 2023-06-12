@@ -26,8 +26,10 @@ namespace MediMove.Server.Application.Transports.Handlers
         public async Task<ErrorOr<GetTransportsResponse>> Handle(GetTransportsByTeamAndDayQuery request, CancellationToken cancellationToken)
         {
             var query = await _dbContext.Transports
-                .Where(t => t.StartTime.Date == request.Day.Date)
-                .Where(t => t.Team.Id == request.TeamId)
+                .Where(t => 
+                    t.StartTime.Date == request.Day.Date &&
+                    t.Team.Id == request.TeamId
+                    )
                 .Include(t => t.Patient)
                 .ThenInclude(p => p.PersonalInformation)
                 .Select(t => new
@@ -37,7 +39,8 @@ namespace MediMove.Server.Application.Transports.Handlers
                 })
                 .ToDictionaryAsync(
                     keySelector: t => t.Id,
-                    elementSelector: t => t.GetTransportResponse, cancellationToken
+                    elementSelector: t => t.GetTransportResponse, 
+                    cancellationToken
                 );
 
 

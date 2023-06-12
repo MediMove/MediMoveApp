@@ -36,10 +36,12 @@ namespace MediMove.Server.Application.Transports.Handlers
         public async Task<ErrorOr<GetTransportsByParamedicAndDateRangeResponse>> Handle(GetTransportsByParamedicAndDateRangeQuery request, CancellationToken cancellationToken)
         {
             var transports = await _dbContext.Transports
-                .Where(t => !t.IsCancelled &&
-                    (!request.StartDateInclusive.HasValue || t.StartTime.Date >= request.StartDateInclusive.Value.Date) &&
-                    (!request.EndDateInclusive.HasValue || t.StartTime.Date <= request.EndDateInclusive.Value.Date) &&
-                    (t.Team.DriverId == request.ParamedicId || t.Team.ParamedicId == request.ParamedicId))
+                .Where(t => 
+                    !t.IsCancelled &&
+                    (t.StartTime.Date >= request.StartDateInclusive.Value.Date) && 
+                    (t.StartTime.Date <= request.EndDateInclusive.Value.Date) &&
+                    (t.Team.DriverId == request.ParamedicId || t.Team.ParamedicId == request.ParamedicId)
+                    )
                 .Include(t => t.Patient)
                 .ThenInclude(p => p.PersonalInformation)
                 .ToArrayAsync(cancellationToken);
