@@ -16,6 +16,8 @@ namespace MediMove.Shared.Models.DTOs
         public string Destination { get; set; }
         public TransportType TransportType { get; set; }
 
+        public int? TeamId { get; set; }
+
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string StreetAddress { get; set; }
