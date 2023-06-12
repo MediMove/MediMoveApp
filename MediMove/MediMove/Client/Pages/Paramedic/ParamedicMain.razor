@@ -1,5 +1,39 @@
-﻿<h3>ParamedicMain</h3>
+﻿@page "/paramedic/"
+@using MediMove.Client.Services;
+@using MediMove.Shared.Models.DTOs;
+@inject TransportService _transportService
+
+@*<RadzenDataList WrapItems="true" Data="@transports" TItem="TransportDTO">
+    <Template Context="transport">
+        <RadzenCard>
+            <div class="row">
+                <div class="col-md-6">
+                    <div>Patient: @transport.PatientFirstName @transport.PatientLastName</div>
+                    <br />
+                    <div>
+                        Address: @transport.PatientCity @transport.PatientStreetAddress
+                        @transport.PatientHouseNumber @transport.PatientPostalCode
+                    </div>
+                    <br />
+                    <div>PhoneNumber: @transport.PatientPhoneNumber</div>
+                </div>
+            </div>
+
+        </RadzenCard>
+    </Template>
+</RadzenDataList>*@
+
+
+<h3>ParamedicMain</h3>
 
 @code {
+    private IEnumerable<TransportDTO> transports;
+    protected override async Task OnInitializedAsync()
+    {
+        //transports = await _transportService.GetTransportByDay(10, 6, 2023);
+
+    }
+    //Data
+    // tabela godzin i w niej transporty? coś ala u nas na planie polsl
 
 }

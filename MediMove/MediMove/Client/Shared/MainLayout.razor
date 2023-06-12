@@ -45,7 +45,7 @@
 
     private async Task HandleLogout()
     {
-        stateProvider.Logout();
+        await stateProvider.Logout();
         NavManager.NavigateTo("/login/", true);
     }
 }

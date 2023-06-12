@@ -5,6 +5,9 @@ using System.Security.Claims;
 using Microsoft.JSInterop;
 using Newtonsoft.Json.Linq;
 using Microsoft.AspNetCore.Components;
+using MediatR.NotificationPublishers;
+using MediMove.Shared.Models.DTOs;
+using System.Net.Http.Json;
 
 namespace MediMove.Client.temp
 {
@@ -17,6 +20,8 @@ namespace MediMove.Client.temp
         //private ErrorResponse errorResponse;
 
         public string Role { get; set; } = "";
+        public string Name { get; set; } = "";
+
 
         public MediMoveAuthenticationStateProvider( HttpClient httpClient, IJSRuntime jSRuntime)
         {
@@ -60,6 +65,8 @@ namespace MediMove.Client.temp
             // Jeśli użytkownik nie jest uwierzytelniony lub nie ma przypisanej roli, zwróć null lub domyślną wartość
             return null;
 
+            //zmienic na odczyt pola Role
+
         }
         public async Task Logout()
         {
@@ -67,12 +74,12 @@ namespace MediMove.Client.temp
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
         }
 
-        public async Task<MediMoveResponse> LoginAsync(StringContent content)
+        public async Task<MediMoveResponse<HttpResponseMessage>> LoginAsync(LoginUserDTO content)
         {
             
-            var httpResponse = await _httpClient.PostAsync("/api/v1/Accounts/Login", content);
+            var httpResponse = await _httpClient.PostAsJsonAsync("/api/v1/Accounts/Login", content);
             var responseContent = await httpResponse.Content.ReadAsStringAsync();
-            MediMoveResponse response = null;
+            MediMoveResponse<HttpResponseMessage> response = null;
             if (httpResponse.IsSuccessStatusCode)
             {
                 if (!string.IsNullOrEmpty(responseContent))
@@ -101,6 +108,7 @@ namespace MediMove.Client.temp
             if (authenticationState is not null)
             {
                 Role = authenticationState.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value ?? "";
+                Name = authenticationState.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value ?? "";
             }
         }
         public void Dispose()

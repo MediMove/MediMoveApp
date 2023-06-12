@@ -1,24 +1,27 @@
 ﻿namespace MediMove.Client.temp
 {
-    public record MediMoveResponse
+    public record MediMoveResponse<T> where T : class
     {
-        public HttpResponseMessage? HttpResponse { get; } 
         public ErrorResponse? ErrorResponse { get; }
+        public T? CorrectResponse { get; }
+
         public MediMoveResponse()
         {
-            HttpResponse = null;
             ErrorResponse = null;
-        }
-        public MediMoveResponse(HttpResponseMessage response)
-        {
-            HttpResponse = response;
-            ErrorResponse = null;
+            CorrectResponse = null; //default(T!)
         }
 
         public MediMoveResponse(ErrorResponse response)
         {
             ErrorResponse = response;
-            HttpResponse = null;
+            CorrectResponse = null;
         }
+
+        public MediMoveResponse(T response)
+        {
+            ErrorResponse = null;
+            CorrectResponse = response;
+        }
+        /* Base response - zrobic klase abstrakcyjna która bedzie musiala byc zaimplementowana poprzez klasy response, Ta implementacja zamienić na MedioveResponse */
     }
 }
