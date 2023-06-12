@@ -38,7 +38,7 @@ namespace MediMove.Server.Application.Transports.Handlers
                     (t.Team.DriverId == query.ParamedicId || t.Team.ParamedicId == query.ParamedicId))
                 .Include(t => t.Patient)
                 .ThenInclude(p => p.PersonalInformation)
-                .Select(t => new GetTransportResponse()
+                .Select(t => new TransportDTO()
                 {
                     PatientFirstName = t.Patient.PersonalInformation.FirstName,
                     PatientLastName = t.Patient.PersonalInformation.LastName,

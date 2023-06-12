@@ -7,7 +7,7 @@ using MediMove.Shared.Models.DTOs;
 
 namespace MediMove.Server.Application.Transports.Handlers
 {
-    public class GetTransportQueryHandler : IRequestHandler<GetTransportQuery, ErrorOr<GetTransportResponse>>
+    public class GetTransportQueryHandler : IRequestHandler<GetTransportQuery, ErrorOr<TransportDTO>>
     {
         private readonly IMapper _mapper;
         private readonly MediMoveDbContext _dbContext;
@@ -18,14 +18,14 @@ namespace MediMove.Server.Application.Transports.Handlers
             _dbContext = dbContext;
         }
 
-        public async Task<ErrorOr<GetTransportResponse>> Handle(GetTransportQuery request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<TransportDTO>> Handle(GetTransportQuery request, CancellationToken cancellationToken)
         {
             var transport = await _dbContext.Transports.FindAsync(request.Id, cancellationToken);
 
             if (transport is null)
                 return Errors.Errors.EntityNotFoundError;
 
-            var transportDTO = _mapper.Map<GetTransportResponse>(transport);
+            var transportDTO = _mapper.Map<TransportDTO>(transport);
 
             if (transportDTO is null)
                 return Errors.Errors.MappingError;

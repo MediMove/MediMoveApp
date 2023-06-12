@@ -41,7 +41,7 @@ namespace MediMove.Server.Application.Transports.Handlers
                 .Select(t => new
                 {
                     t.Id,
-                    TransportInfo = new GetTransportResponse
+                    TransportInfo = new TransportDTO
                     {
                         PatientFirstName = t.Patient.PersonalInformation.FirstName,
                         PatientLastName = t.Patient.PersonalInformation.LastName,

@@ -6,4 +6,4 @@ using MediMove.Shared.Models.DTOs;
 
 namespace MediMove.Server.Application.Transports.Queries;
 
-public record GetTransportQuery(int Id) : IRequest<ErrorOr<GetTransportResponse>>;
+public record GetTransportQuery(int Id) : IRequest<ErrorOr<TransportDTO>>;

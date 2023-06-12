@@ -31,7 +31,7 @@ namespace MediMove.Server.Application.Transports.Handlers
                 .Select(t => new
                 {
                     t.Id,
-                    GetTransportResponse = _mapper.Map<GetTransportResponse>(t)
+                    GetTransportResponse = _mapper.Map<TransportDTO>(t)
                 })
                 .ToDictionaryAsync(
                     keySelector: t => t.Id,

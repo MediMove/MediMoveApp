@@ -9,6 +9,6 @@ namespace MediMove.Shared.Models.DTOs;
 
 public class GetTransportsResponse
 {
-    public Dictionary<int, GetTransportResponse> Transports { get; set; }
+    public Dictionary<int, TransportDTO> Transports { get; set; }
 
 }

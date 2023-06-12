@@ -3,6 +3,7 @@ using MediMove.Server.Application.Transports.Commands;
 using MediMove.Server.Data;
 using MediMove.Shared.Extensions;
 using MediMove.Shared.Models.DTOs;
+using MediMove.Shared.Models.Enums;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,7 +18,7 @@ namespace MediMove.Server.Application.Transports.Validators
                 .GreaterThan(0)
                 .CustomAsync(async (patientId, context, cancellationToken) =>
                 {
-                    if (!await _dbContext.Patients.AnyAsync(p=> p.Id == patientId))
+                    if (!await _dbContext.Patients.AnyAsync(p=> p.Id == patientId, cancellationToken))
                         context.AddFailure("PatientId", "Patient does not exits");
                 });
 
@@ -43,21 +44,21 @@ namespace MediMove.Server.Application.Transports.Validators
                     }
                 });
 
-            //RuleFor(x => x.Dto.StartTime)
-            //    .Must(startTime => startTime > DateTime.Now);
+            RuleFor(x => x.Dto.StartTime)
+                .Must(startTime => startTime >= DateTime.Now).WithMessage("Date must be in the future");
 
-            RuleFor(x => x.Dto.Financing)
-                .IsInEnum();
+            RuleFor(x => x.Dto.Financing).NotEmpty()
+                .Must(x => Enum.IsDefined(typeof(Financing), x)).WithMessage("Incorrect financing type"); ;
 
             RuleFor(x => x.Dto.Destination)
                 .NotEmpty()
-                .MaximumLength(50);
+                .MaximumLength(70);
 
-            RuleFor(x => x.Dto.PatientPosition)
-                .IsInEnum();
+            RuleFor(x => x.Dto.PatientPosition).NotEmpty()
+                .Must(x => Enum.IsDefined(typeof(PatientPosition), x)).WithMessage("Incorrect patient position");
 
-            RuleFor(x => x.Dto.TransportType)
-                .IsInEnum();
+            RuleFor(x => x.Dto.TransportType).NotEmpty()
+                .Must(x => Enum.IsDefined(typeof(TransportType), x)).WithMessage("Incorrect transport type");
         }
     }
 }
