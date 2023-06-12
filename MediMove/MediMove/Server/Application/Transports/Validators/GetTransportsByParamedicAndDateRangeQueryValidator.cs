@@ -13,9 +13,6 @@ namespace MediMove.Server.Application.Transports.Validators
         /// </summary>
         public GetTransportsByParamedicAndDateRangeQueryValidator()
         {
-            RuleFor(x => x)
-                .Must(x => x.EndDateInclusive.HasValue && x.StartDateInclusive.HasValue)
-                .WithMessage("Date range must have start and end value");
 
             RuleFor(x => x.ParamedicId)
                 .GreaterThan(0).WithMessage("ParamedicId must be greater than 0");
