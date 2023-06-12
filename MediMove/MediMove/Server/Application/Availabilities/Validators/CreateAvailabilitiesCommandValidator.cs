@@ -23,9 +23,9 @@ namespace MediMove.Server.Application.Availabilities.Validators
             RuleFor(x => x.Request.Availabilities)
                 .NotEmpty().WithMessage("Availabilities list cannot be empty.")
                 .When(x => x != null && x.Request.Availabilities != null && x.Request.Availabilities.Any())
-                .Must(declatations => declatations.Select(a => a.Day.Date).Distinct().Count() == declatations.Count()).WithMessage("Days must be unique")
-                .Must(declatations => declatations.All(a => a.Day.Date >= DateTime.Today.Date)).WithMessage("Days must be in the future")
-                .Must(declatations => declatations.All(a => !a.Shift.HasValue || Enum.IsDefined(typeof(ShiftType), a.Shift))).WithMessage("Shift must be null or a valid ShiftType");
+                .Must(declarations => declarations.Select(a => a.Day.Date).Distinct().Count() == declarations.Count()).WithMessage("Days must be unique")
+                .Must(declarations => declarations.All(a => a.Day.Date >= DateTime.Today.Date)).WithMessage("Days must be in the future")
+                .Must(declarations => declarations.All(a => !a.Shift.HasValue || Enum.IsDefined(typeof(ShiftType), a.Shift))).WithMessage("Shift must be null or a valid ShiftType");
 
             RuleFor(x => x)
                 .Must(p => p.ParamedicId > 0).WithMessage("ParamedicId must be greater than 0")
