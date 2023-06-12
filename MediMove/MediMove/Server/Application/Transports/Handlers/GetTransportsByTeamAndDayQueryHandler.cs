@@ -28,7 +28,8 @@ namespace MediMove.Server.Application.Transports.Handlers
             var query = await _dbContext.Transports
                 .Where(t => 
                     t.StartTime.Date == request.Day.Date &&
-                    t.Team.Id == request.TeamId
+                    t.Team.Id == request.TeamId &&
+                    !t.IsCancelled
                     )
                 .Include(t => t.Patient)
                 .ThenInclude(p => p.PersonalInformation)

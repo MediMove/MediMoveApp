@@ -22,7 +22,10 @@ namespace MediMove.Server.Application.Transports.Handlers
         public async Task<ErrorOr<GetTransportsResponse>> Handle(GetTransportsByDayQuery request, CancellationToken cancellationToken)
         {
             var query = await _dbContext.Transports
-                .Where(t => t.StartTime.Date == request.Day.Date)
+                .Where(t => 
+                    t.StartTime.Date == request.Day.Date &&
+                    !t.IsCancelled
+                    )
                 .Include(t => t.Patient)
                 .ThenInclude(p => p.PersonalInformation)
                 .Select(t => new
