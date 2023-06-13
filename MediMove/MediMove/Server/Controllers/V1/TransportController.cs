@@ -130,7 +130,7 @@ namespace MediMove.Server.Controllers.V1
         /// <returns>no content</returns>
         [HttpPatch]
         [Authorize(Roles = "Dispatcher")]
-        public async Task<IActionResult> DeleteTransports([FromBody] CancelTransportsRequest request)
+        public async Task<IActionResult> CancelTransports([FromBody] CancelTransportsRequest request)
         {
             var result = await Mediator.Send(new CancelTransportsCommand(request));
 

@@ -7,13 +7,13 @@ namespace MediMove.Server.Application.Transports.Validators
     /// <summary>
     /// Validator for CancelTransportsCommand.
     /// </summary>
-    public class CancelTransportCommandValidator : AbstractValidator<CancelTransportsCommand>
+    public class CancelTransportsCommandValidator : AbstractValidator<CancelTransportsCommand>
     {
         /// <summary>
         /// Constructor for CancelTransportsCommandValidator.
         /// </summary>
         /// <param name="dbContext">MediMoveDbContext</param>
-        public CancelTransportCommandValidator(MediMoveDbContext dbContext)
+        public CancelTransportsCommandValidator(MediMoveDbContext dbContext)
         {
             RuleFor(x => x.Request)
                 .NotEmpty().WithMessage("Request cannot be empty");
@@ -24,7 +24,7 @@ namespace MediMove.Server.Application.Transports.Validators
                 {
                     if (!dbContext.Transports
                         .Where(t => transportIds.Contains(t.Id))
-                        .Count().Equals(transportIds.Length))
+                        .Count().Equals(transportIds.Count))
                         context.AddFailure("Request.TransportIds", "One or more transport ids do not exist");
                 })
                 .When(x => x.Request != null &&
