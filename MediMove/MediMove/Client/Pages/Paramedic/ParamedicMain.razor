@@ -1,0 +1,64 @@
+﻿@page "/paramedic/"
+@using MediMove.Client.Services;
+@using MediMove.Shared.Models.DTOs;
+@inject TransportService _transportService
+
+<div class="rz-p-12 rz-text-align-center">
+    <RadzenDatePicker @bind-Value=@value Inline="true" Change="Change" />
+</div>
+
+<RadzenDataList WrapItems="true" Data="@transports" TItem="TransportDTO">
+    <Template Context="transport">
+        <RadzenCard class="cart-box">
+           
+                <div class="col-md-6">
+                    <div>Patient: @transport.PatientFirstName @transport.PatientLastName</div>
+                    <div>PhoneNumber: @transport.PatientPhoneNumber</div>
+                    <br />
+                    <div>Destination: @transport.Destination</div>
+                    <div>Time: @transport.StartTime</div>
+                    <br />
+                    <div>
+                        Address: @transport.PatientStreetAddress
+                        @transport.PatientHouseNumber @if (transport.PatientApartmentNumber != null) { @transport.PatientApartmentNumber }  
+                        <br />
+                        @transport.PatientPostalCode @transport.PatientCity
+                    </div>
+                    <br />
+                    <div>Position: @transport.PatientPosition</div>
+                    <div>Weight: @transport.PatientWeight</div>
+                    <br />
+                    <div>Type: @transport.TransportType</div>
+                    <div>Financing: @transport.Financing</div>
+
+                    
+                   
+                    
+                    
+                    
+                </div>
+           
+
+        </RadzenCard>
+    </Template>
+</RadzenDataList>
+
+
+
+@code {
+    private IEnumerable<TransportDTO> transports;
+    DateTime? value = DateTime.Now;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Change();
+
+    }
+    private async Task Change()
+    {
+        transports = await _transportService.GetTransportByDay(value.Value.Day, value.Value.Month, value.Value.Year);
+    }
+
+    // Przenieśc logout na NavMenu na dół a imie i nazwisko zamiast MediMove w rogu
+
+}
