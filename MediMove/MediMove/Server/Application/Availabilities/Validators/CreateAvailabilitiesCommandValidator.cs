@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using MediMove.Server.Application.Availabilities.Commands;
 using MediMove.Server.Data;
+using MediMove.Shared.Extensions;
 using MediMove.Shared.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,9 +24,9 @@ namespace MediMove.Server.Application.Availabilities.Validators
             RuleFor(x => x.Request.Availabilities)
                 .NotEmpty().WithMessage("Availabilities list cannot be empty.")
                 .When(x => x != null && x.Request.Availabilities != null && x.Request.Availabilities.Any())
-                .Must(declarations => declarations.Select(a => a.Day.Date).Distinct().Count() == declarations.Count()).WithMessage("Days must be unique")
-                .Must(declarations => declarations.All(a => a.Day.Date >= DateTime.Today.Date)).WithMessage("Days must be in the future")
-                .Must(declarations => declarations.All(a => !a.Shift.HasValue || Enum.IsDefined(typeof(ShiftType), a.Shift))).WithMessage("Shift must be null or a valid ShiftType");
+                .Must(declatations => declatations.Select(a => a.Day.Date).Distinct().Count() == declatations.Count()).WithMessage("Days must be unique")
+                .Must(declatations => declatations.All(a => a.Day.Date > DateTime.Today.Date || (a.Day.Date == DateTime.Today && (a.Shift == null ? ShiftType.Morning : a.Shift).Value.StartTime() > DateTime.Now.TimeOfDay))).WithMessage("Days must be in the future")
+                .Must(declatations => declatations.All(a => !a.Shift.HasValue || Enum.IsDefined(typeof(ShiftType), a.Shift))).WithMessage("Shift must be null or a valid ShiftType");
 
             RuleFor(x => x)
                 .Must(p => p.ParamedicId > 0).WithMessage("ParamedicId must be greater than 0")

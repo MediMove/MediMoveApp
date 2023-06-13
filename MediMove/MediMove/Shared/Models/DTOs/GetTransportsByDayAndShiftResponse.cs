@@ -1,7 +1,25 @@
-﻿namespace MediMove.Shared.Models.DTOs;
+﻿using MediMove.Shared.Models.Enums;
+
+namespace MediMove.Shared.Models.DTOs;
 
 /// <summary>
 /// Response of getting transports by day and shift.
 /// </summary>
-/// <param name="Transports">dictionary of (Transport ID, TransportDTO) pairs</param>
-public record GetTransportsByDayAndShiftResponse(Dictionary<int, TransportDTO> Transports);
+/// <param name="Transports">dictionary of Transport ID -> TransportInfo</param>
+public record GetTransportsByDayAndShiftResponse {
+    public Dictionary<int, TransportInfo> Transports { get; set; }
+
+    public record TransportInfo(
+        int? TeamId,
+        string PatientFirstName,
+        string PatientLastName,
+        string PatientPhoneNumber,
+        string PatientStreetAddress,
+        string PatientHouseNumber,
+        int? PatientApartmentNumber,
+        string PatientPostalCode,
+        string PatientCity,
+        DateTime StartTime,
+        string Destination,
+        TransportType TransportType);
+}

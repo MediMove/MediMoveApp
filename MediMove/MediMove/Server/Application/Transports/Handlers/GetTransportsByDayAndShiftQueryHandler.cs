@@ -41,23 +41,21 @@ namespace MediMove.Server.Application.Transports.Handlers
                 .Select(t => new
                 {
                     t.Id,
-                    TransportInfo = new TransportDTO
-                    {
-                        PatientFirstName = t.Patient.PersonalInformation.FirstName,
-                        PatientLastName = t.Patient.PersonalInformation.LastName,
-                        PatientPhoneNumber = t.Patient.PersonalInformation.PhoneNumber,
-                        PatientStreetAddress = t.Patient.PersonalInformation.StreetAddress,
-                        PatientHouseNumber = t.Patient.PersonalInformation.HouseNumber,
-                        PatientApartmentNumber = t.Patient.PersonalInformation.ApartmentNumber,
-                        PatientPostalCode = t.Patient.PersonalInformation.PostalCode,
-                        PatientCity = t.Patient.PersonalInformation.City,
-                        PatientWeight = t.Patient.Weight,
-                        StartTime = t.StartTime,
-                        Financing = t.Financing,
-                        PatientPosition = t.PatientPosition,
-                        Destination = t.Destination,
-                        TransportType = t.TransportType
-                    }
+                    TransportInfo = new GetTransportsByDayAndShiftResponse.TransportInfo
+                    (
+                        t.TeamId,
+                        t.Patient.PersonalInformation.FirstName,
+                        t.Patient.PersonalInformation.LastName,
+                        t.Patient.PersonalInformation.PhoneNumber,
+                        t.Patient.PersonalInformation.StreetAddress,
+                        t.Patient.PersonalInformation.HouseNumber,
+                        t.Patient.PersonalInformation.ApartmentNumber,
+                        t.Patient.PersonalInformation.PostalCode,
+                        t.Patient.PersonalInformation.City,
+                        t.StartTime,
+                        t.Destination,
+                        t.TransportType
+                    )
                 })
                 .ToDictionaryAsync(
                     keySelector: t => t.Id,
@@ -67,7 +65,10 @@ namespace MediMove.Server.Application.Transports.Handlers
             if (transports is null)
                 return Errors.Errors.MappingError;
 
-            return new GetTransportsByDayAndShiftResponse(transports);
+            return new GetTransportsByDayAndShiftResponse
+            {
+                Transports = transports
+            };
         }
     }
 }
