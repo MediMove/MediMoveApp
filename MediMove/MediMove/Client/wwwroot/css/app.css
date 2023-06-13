@@ -43,6 +43,9 @@ a, .btn-link {
     border-radius: 20px;
 }
 
+.cart-box {
+    max-width: 100px;
+}
 
 #blazor-error-ui {
     background: lightyellow;

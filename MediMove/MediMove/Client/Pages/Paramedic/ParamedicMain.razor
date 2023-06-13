@@ -3,37 +3,62 @@
 @using MediMove.Shared.Models.DTOs;
 @inject TransportService _transportService
 
-@*<RadzenDataList WrapItems="true" Data="@transports" TItem="TransportDTO">
+<div class="rz-p-12 rz-text-align-center">
+    <RadzenDatePicker @bind-Value=@value Inline="true" Change="Change" />
+</div>
+
+<RadzenDataList WrapItems="true" Data="@transports" TItem="TransportDTO">
     <Template Context="transport">
-        <RadzenCard>
-            <div class="row">
+        <RadzenCard class="cart-box">
+           
                 <div class="col-md-6">
                     <div>Patient: @transport.PatientFirstName @transport.PatientLastName</div>
+                    <div>PhoneNumber: @transport.PatientPhoneNumber</div>
+                    <br />
+                    <div>Destination: @transport.Destination</div>
+                    <div>Time: @transport.StartTime</div>
                     <br />
                     <div>
-                        Address: @transport.PatientCity @transport.PatientStreetAddress
-                        @transport.PatientHouseNumber @transport.PatientPostalCode
+                        Address: @transport.PatientStreetAddress
+                        @transport.PatientHouseNumber @if (transport.PatientApartmentNumber != null) { @transport.PatientApartmentNumber }  
+                        <br />
+                        @transport.PatientPostalCode @transport.PatientCity
                     </div>
                     <br />
-                    <div>PhoneNumber: @transport.PatientPhoneNumber</div>
+                    <div>Position: @transport.PatientPosition</div>
+                    <div>Weight: @transport.PatientWeight</div>
+                    <br />
+                    <div>Type: @transport.TransportType</div>
+                    <div>Financing: @transport.Financing</div>
+
+                    
+                   
+                    
+                    
+                    
                 </div>
-            </div>
+           
 
         </RadzenCard>
     </Template>
-</RadzenDataList>*@
+</RadzenDataList>
 
 
-<h3>ParamedicMain</h3>
 
 @code {
     private IEnumerable<TransportDTO> transports;
+    DateTime? value = DateTime.Now;
+
     protected override async Task OnInitializedAsync()
     {
-        //transports = await _transportService.GetTransportByDay(10, 6, 2023);
+        await Change();
 
     }
-    //Data
-    // tabela godzin i w niej transporty? coś ala u nas na planie polsl
+    private async Task Change()
+    {
+        transports = await _transportService.GetTransportByDay(value.Value.Day, value.Value.Month, value.Value.Year);
+    }
+
+    // Przenieśc logout na NavMenu na dół a imie i nazwisko zamiast MediMove w rogu
 
 }
