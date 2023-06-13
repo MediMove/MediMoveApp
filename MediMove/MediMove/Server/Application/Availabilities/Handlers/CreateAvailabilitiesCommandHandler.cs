@@ -34,7 +34,7 @@ namespace MediMove.Server.Application.Availabilities.Handlers
         /// <returns>Unit wrapped in ErrorOr</returns>
         public async Task<ErrorOr<Unit>> Handle(CreateAvailabilitiesCommand command, CancellationToken cancellationToken)
         {
-            var availabilities = _mapper.Map<IEnumerable<Availability>>(command);
+            var availabilities = _mapper.Map<Availability[]>(command);
 
             if (availabilities is null)
                 return Errors.Errors.MappingError;

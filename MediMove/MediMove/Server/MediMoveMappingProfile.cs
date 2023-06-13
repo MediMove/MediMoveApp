@@ -111,16 +111,17 @@ namespace MediMove.Server
         /// <returns>IEnumerable of Availabilities</returns>
         public IEnumerable<Availability> Convert(CreateAvailabilitiesCommand source, IEnumerable<Availability> destination, ResolutionContext context)
         {
-            var availabilities = new List<Availability>();
-
+            var availabilities = new Availability[source.Request.Availabilities.Count];
+            int i = 0;
             foreach (var declaration in source.Request.Availabilities)
             {
-                availabilities.Add(new Availability
+                availabilities[i] = new Availability
                 {
                     ParamedicId = source.ParamedicId,
-                    Day = declaration.Day,
-                    ShiftType = declaration.Shift
-                });
+                    Day = declaration.Key,
+                    ShiftType = declaration.Value
+                };
+                i++;
             }
 
             return availabilities;
