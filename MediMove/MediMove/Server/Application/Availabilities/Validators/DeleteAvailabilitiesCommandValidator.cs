@@ -27,9 +27,9 @@ namespace MediMove.Server.Application.Availabilities.Validators
                 .NotEmpty().WithMessage("Request cannot be empty");
 
             RuleFor(x => x.Request.AvailabilityDates)
-                .NotEmpty().WithMessage("AvailabilityDates array cannot be empty")
-                .Must(a => a.All(day => day >= DateTime.Today))
-                .WithMessage("Dates cannot be in the past");
+                .NotEmpty().WithMessage("AvailabilityDates set cannot be empty")
+                .Must(a => a.All(day => day >= DateTime.Today && day < DateTime.Today.AddYears(1)))
+                .WithMessage("AvailabilityDates must be between today and one year from now");
 
             RuleFor(x => x)
                 .CustomAsync(async (command, context, cancellationToken) =>
@@ -40,7 +40,7 @@ namespace MediMove.Server.Application.Availabilities.Validators
                         .Select(a => new { a.Day.Date, ShiftType = a.ShiftType == null ? ShiftType.Morning : a.ShiftType })
                         .ToArrayAsync(cancellationToken);
 
-                    if (availabilities.Length != command.Request.AvailabilityDates.Length)
+                    if (availabilities.Length != command.Request.AvailabilityDates.Count)
                     {
                         context.AddFailure("Request.AvailabilityDates", "Paramedic does not have availability on one or more of the provided days");
                         return;
