@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using ErrorOr;
+﻿using ErrorOr;
 using MediatR;
 using MediMove.Server.Application.Teams.Queries;
 using MediMove.Server.Data;
@@ -11,57 +10,63 @@ namespace MediMove.Server.Application.Teams.Handlers
     /// <summary>
     /// Handler for getting teams by day and shift.
     /// </summary>
-    public class GetTeamsByDayAndShiftHandler : IRequestHandler<GetTeamsByDayAndShiftQuery, ErrorOr<GetTeamsByDayAndShiftResponse>>
+    public class GetTeamsByDayAndShiftQueryHandler : IRequestHandler<GetTeamsByDayAndShiftQuery, ErrorOr<GetTeamsByDayAndShiftResponse>>
     {
-        private readonly IMapper _mapper;
         private readonly MediMoveDbContext _dbContext;
 
         /// <summary>
-        /// Constructor for GetTeamsByDayAndShiftHandler.
+        /// Constructor for GetTeamsByDayAndShiftQueryHandler.
         /// </summary>
-        /// <param name="mapper">mapper to inject</param>
         /// <param name="dbContext">dbContext to inject</param>
-        public GetTeamsByDayAndShiftHandler(IMapper mapper, MediMoveDbContext dbContext)
+        public GetTeamsByDayAndShiftQueryHandler(MediMoveDbContext dbContext)
         {
-            _mapper = mapper;
             _dbContext = dbContext;
         }
 
         /// <summary>
         /// Method for handling the GetTeamsByDayAndShiftQuery.
         /// </summary>
-        /// <param name="request">GetTeamsByDayAndShiftQuery</param>
+        /// <param name="query">GetTeamsByDayAndShiftQuery</param>
         /// <param name="cancellationToken">CancellationToken</param>
         /// <returns>GetTeamsByDayAndShiftResponse wrapped in ErrorOr</returns>
-        public async Task<ErrorOr<GetTeamsByDayAndShiftResponse>> Handle(GetTeamsByDayAndShiftQuery request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<GetTeamsByDayAndShiftResponse>> Handle(GetTeamsByDayAndShiftQuery query, CancellationToken cancellationToken)
         {
-            var dict = await _dbContext.Teams
-                .Where(t => t.Day.Date == request.Day.Date)
+            var teamsDict = await _dbContext.Teams
+                .Where(t => t.Day.Date == query.Day.Date &&
+                    t.ShiftType == query.Shift)
                 .Include(t => t.Driver)
                     .ThenInclude(p => p.PersonalInformation)
                 .Include(t => t.Driver)
                     .ThenInclude(p => p.Availabilities)
                 .Include(t => t.Paramedic)
                     .ThenInclude(p => p.PersonalInformation)
-                .Where(t => t.Driver.Availabilities
-                    .Any(a => a.Day.Date == request.Day.Date
-                        && a.ShiftType == request.Shift))
                 .Select(t => new
                 {
                     t.Id,
-                    TeamInfo = _mapper.Map<GetTeamsByDayAndShiftResponse.TeamInfo>(t)
+                    TeamInfo = new GetTeamsByDayAndShiftResponse.TeamInfo
+                    {
+                        DriverId = t.Driver.Id,
+                        DriverFirstName = t.Driver.PersonalInformation.FirstName,
+                        DriverLastName = t.Driver.PersonalInformation.LastName,
+                        DriverPhoneNumber = t.Driver.PersonalInformation.PhoneNumber,
+
+                        ParamedicId = t.Paramedic.Id,
+                        ParamedicFirstName = t.Paramedic.PersonalInformation.FirstName,
+                        ParamedicLastName = t.Paramedic.PersonalInformation.LastName,
+                        ParamedicPhoneNumber = t.Paramedic.PersonalInformation.PhoneNumber,
+                    }
                 })
                 .ToDictionaryAsync(
                     keySelector: t => t.Id,
                     elementSelector: t => t.TeamInfo,
                     cancellationToken);
 
-            if (dict is null)
+            if (teamsDict is null)
                 return Errors.Errors.MappingError;
 
             var response = new GetTeamsByDayAndShiftResponse
             {
-                Teams = dict
+                Teams = teamsDict
             };
 
             return response;

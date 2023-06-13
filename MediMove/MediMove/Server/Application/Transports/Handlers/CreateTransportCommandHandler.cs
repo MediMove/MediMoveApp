@@ -7,12 +7,12 @@ using MediMove.Server.Data;
 
 namespace MediMove.Server.Application.Transports.Handlers
 {
-    public class CreateTransportHandler : IRequestHandler<CreateTransportCommand, ErrorOr<Transport>>
+    public class CreateTransportCommandHandler : IRequestHandler<CreateTransportCommand, ErrorOr<Transport>>
     {
         private readonly IMapper _mapper;
         private readonly MediMoveDbContext _dbContext;
 
-        public CreateTransportHandler(IMapper mapper, MediMoveDbContext dbContext)
+        public CreateTransportCommandHandler(IMapper mapper, MediMoveDbContext dbContext)
         {
             _mapper = mapper;
             _dbContext = dbContext;

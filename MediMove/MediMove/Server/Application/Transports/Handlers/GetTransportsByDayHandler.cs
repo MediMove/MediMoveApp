@@ -5,10 +5,11 @@ using MediMove.Server.Application.Transports.Queries;
 using MediMove.Server.Data;
 using MediMove.Shared.Models.DTOs;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace MediMove.Server.Application.Transports.Handlers
 {
-    public class GetTransportsByDayHandler : IRequestHandler<GetTransportsByDayQuery, ErrorOr<IEnumerable<TransportDTO>>>
+    public class GetTransportsByDayHandler : IRequestHandler<GetTransportsByDayQuery, ErrorOr<GetTransportsResponse>>
     {
         private readonly IMapper _mapper;
         private readonly MediMoveDbContext _dbContext;
@@ -18,20 +19,35 @@ namespace MediMove.Server.Application.Transports.Handlers
             _mapper = mapper;
             _dbContext = dbContext;
         }
-        public async Task<ErrorOr<IEnumerable<TransportDTO>>> Handle(GetTransportsByDayQuery request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<GetTransportsResponse>> Handle(GetTransportsByDayQuery request, CancellationToken cancellationToken)
         {
-            var transports = await _dbContext.Transports
-                .Where(t => t.StartTime.Date == request.Day.Date)
+            var query = await _dbContext.Transports
+                .Where(t => 
+                    t.StartTime.Date == request.Day.Date &&
+                    !t.IsCancelled
+                    )
                 .Include(t => t.Patient)
                 .ThenInclude(p => p.PersonalInformation)
-                .ToListAsync(cancellationToken: cancellationToken);
+                .Select(t => new
+                {
+                    t.Id,
+                    GetTransportResponse = _mapper.Map<TransportDTO>(t)
+                })
+                .ToDictionaryAsync(
+                    keySelector: t => t.Id,
+                    elementSelector: t => t.GetTransportResponse, cancellationToken
+                );
 
-            var transportDTOs = _mapper.Map<IEnumerable<TransportDTO>>(transports);
 
-            if (transportDTOs is null)
+            if (query is null)
                 return Errors.Errors.MappingError;
 
-            return ErrorOr.ErrorOr.From(transportDTOs);
+            var response = new GetTransportsResponse
+            {
+                Transports = query
+            };
+
+            return ErrorOr.ErrorOr.From(response);
         }
     }
 }

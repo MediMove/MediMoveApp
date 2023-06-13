@@ -26,6 +26,35 @@ namespace MediMove.Server.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Transport.TeamId is a nullable foreign key to Team.Id and is set to null when Team is deleted
+            modelBuilder.Entity<Transport>()
+                .HasOne(t => t.Team)
+                .WithMany(t => t.Transports)
+                .HasForeignKey(t => t.TeamId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Team>()
+                .HasOne(t => t.Paramedic)
+                .WithMany()
+                .HasForeignKey(t => t.ParamedicId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Team>()
+                .HasOne(t => t.Driver)
+                .WithMany()
+                .HasForeignKey(t => t.DriverId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+            //modelBuilder.Entity<Team>()
+            //    .HasOne(t => t.Paramedic)
+            //    .WithMany(p => p.Teams)
+            //    .HasForeignKey(t => t.DriverId)
+            //    .OnDelete(DeleteBehavior.Restrict);
+
             base.OnModelCreating(modelBuilder);
 
             var seeders = new List<IDbSeeder>

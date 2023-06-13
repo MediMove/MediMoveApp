@@ -47,5 +47,9 @@
     <ProjectReference Include="..\Shared\MediMove.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 
 </Project>

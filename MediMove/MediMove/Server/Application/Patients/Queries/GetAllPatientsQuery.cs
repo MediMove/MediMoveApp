@@ -7,5 +7,5 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MediMove.Server.Application.Patients.Queries;
 
-public record GetAllPatientsQuery : IRequest<ErrorOr<IEnumerable<PatientDTO>>>;
+public record GetAllPatientsQuery : IRequest<ErrorOr<GetAllPatientsResponse>>;
 
