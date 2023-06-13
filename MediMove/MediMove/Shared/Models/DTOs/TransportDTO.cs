@@ -21,6 +21,9 @@ namespace MediMove.Shared.Models.DTOs
         public string PatientCity { get; set; }
         public int PatientWeight { get; set; }
 
+        public string? StartLocation { get; set; }
+        public string? ReturnLocation { get; set; }
+        public string? Note { get; set; }
         public DateTime StartTime { get; set; }
         public Financing Financing { get; set; }
         public PatientPosition PatientPosition { get; set; }

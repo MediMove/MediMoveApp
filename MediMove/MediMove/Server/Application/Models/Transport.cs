@@ -12,6 +12,10 @@ namespace MediMove.Server.Application.Models
         public TransportType TransportType { get; set; }
         public bool IsCancelled { get; set; } = false;
 
+        public string? StartLocation { get; set; }
+        public string? ReturnLocation { get; set; }
+        public string? Note { get; set; }
+
         public int? TeamId { get; set; }
         public virtual Team Team { get; set; }
 

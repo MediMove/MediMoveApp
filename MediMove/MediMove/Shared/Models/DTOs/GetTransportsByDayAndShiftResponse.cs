@@ -14,12 +14,11 @@ public record GetTransportsByDayAndShiftResponse {
         string PatientFirstName,
         string PatientLastName,
         string PatientPhoneNumber,
-        string PatientStreetAddress,
-        string PatientHouseNumber,
-        int? PatientApartmentNumber,
-        string PatientPostalCode,
-        string PatientCity,
         DateTime StartTime,
         string Destination,
-        TransportType TransportType);
+        TransportType TransportType,
+        string? StartLocation,
+        string? ReturnLocation,
+        string? Note
+        );
 }

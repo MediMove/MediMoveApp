@@ -20,17 +20,6 @@ namespace MediMove.Server.Controllers.V1
         }
 
 
-        //[HttpGet("Paramedic/{id}")]
-        //[Authorize(Roles = "Dispatcher")]// akcja dla roli dispacher // autoryzacja rolą dispacher
-        //public async Task<IActionResult> GetTransportsByParamedicAndDay([FromRoute] int id, [FromQuery] int day, [FromQuery] int month, [FromQuery] int year) 
-        //{
-        //    var date = new DateTime(year, month, day);
-        //    var result = await Mediator.Send(new GetTransportsByParamedicAndDateRangeQuery(id, date, date));
-
-        //    return result.Match(
-        //        result => Ok(result),
-        //        errors => Problem(errors));
-        //}
 
         /// <summary>
         /// Action for getting transports for paramedic by date range.
@@ -73,16 +62,6 @@ namespace MediMove.Server.Controllers.V1
         }
 
 
-        [HttpGet("Team")]
-        [Authorize(Roles = "Dispatcher")]
-        public async Task<IActionResult> GetTransportsByTeamAndDay([FromQuery] int year, [FromQuery] int month, [FromQuery] int day, [FromQuery] int TeamId)
-        {
-            var result = await Mediator.Send(new GetTransportsByTeamAndDayQuery(TeamId, new DateTime(year, month, day)));
-
-            return result.Match(
-                result => Ok(result),
-                errors => Problem(errors));
-        }
 
         [HttpPost]
         [Authorize(Roles = "Dispatcher")]

@@ -1,4 +1,5 @@
 ﻿using MediMove.Shared.Models.Enums;
+using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,10 @@ namespace MediMove.Shared.Models.DTOs
         public TransportType TransportType { get; set; }
 
         public int? TeamId { get; set; }
+
+        public string? StartLocation { get; set; }
+        public string? ReturnLocation { get; set; }
+        public string? Note { get; set; }
 
         public string FirstName { get; set; }
         public string LastName { get; set; }

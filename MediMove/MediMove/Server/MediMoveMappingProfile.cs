@@ -28,7 +28,10 @@ namespace MediMove.Server
                 .ForMember(m => m.PatientApartmentNumber, c => c.MapFrom(s => s.Patient.PersonalInformation.ApartmentNumber))
                 .ForMember(m => m.PatientPostalCode, c => c.MapFrom(s => s.Patient.PersonalInformation.PostalCode))
                 .ForMember(m => m.PatientCity, c => c.MapFrom(s => s.Patient.PersonalInformation.City))
-                .ForMember(m => m.PatientWeight, c => c.MapFrom(s => s.Patient.Weight));
+                .ForMember(m => m.PatientWeight, c => c.MapFrom(s => s.Patient.Weight))
+                .ForMember(m => m.StartLocation, c => c.MapFrom(s => s.StartLocation))
+                .ForMember(m => m.ReturnLocation, c => c.MapFrom(s => s.ReturnLocation))
+                .ForMember(m => m.Note, c => c.MapFrom(s => s.Note));
 
             CreateMap<CreateTransportDTO, Transport>();
 
@@ -49,70 +52,7 @@ namespace MediMove.Server
             CreateMap<CreateTransportWithBillingDTO, Transport>()
                 .ConvertUsing<TransportWithBillingConverter>();
 
-            //CreateMap<CreatePatientDTO, Patient>()
-            //    .ForMember(m => m.PersonalInformation.FirstName, c => c.MapFrom(s => s.FirstName))
-            //    .ForMember(m => m.PersonalInformation.LastName, c => c.MapFrom(s => s.LastName))
-            //    .ForMember(m => m.PersonalInformation.StreetAddress, c => c.MapFrom(s => s.StreetAddress))
-            //    .ForMember(m => m.PersonalInformation.HouseNumber, c => c.MapFrom(s => s.HouseNumber))
-            //    .ForMember(m => m.PersonalInformation.ApartmentNumber, c => c.MapFrom(s => s.ApartmentNumber))
-            //    .ForMember(m => m.PersonalInformation.PostalCode, c => c.MapFrom(s => s.PostalCode))
-            //    .ForMember(m => m.PersonalInformation.StateProvince, c => c.MapFrom(s => s.StateProvince))
-            //    .ForMember(m => m.PersonalInformation.City, c => c.MapFrom(s => s.City))
-            //    .ForMember(m => m.PersonalInformation.Country, c => c.MapFrom(s => s.Country))
-            //    .ForMember(m => m.PersonalInformation.PhoneNumber, c => c.MapFrom(s => s.PhoneNumber));
-
-
-
-
-
-
-
-
-
-
-
-            //CreateMap<Patient, SelectPatientDTO>()
-            //    //.ForMember(m => m.Id, c => c.MapFrom(s => s.Id))
-            //    .ForMember(m => m.FirstName, c => c.MapFrom(s => s.PersonalInformation.FirstName))
-            //    .ForMember(m => m.LastName, c => c.MapFrom(s => s.PersonalInformation.LastName))
-            //    .ForMember(m => m.StreetAddress, c => c.MapFrom(s => s.PersonalInformation.StreetAddress))
-            //    .ForMember(m => m.HouseNumber, c => c.MapFrom(s => s.PersonalInformation.HouseNumber))
-            //    .ForMember(m => m.ApartmentNumber, c => c.MapFrom(s => s.PersonalInformation.ApartmentNumber))
-            //    .ForMember(m => m.PostalCode, c => c.MapFrom(s => s.PersonalInformation.PostalCode))
-            //    .ForMember(m => m.StateProvince, c => c.MapFrom(s => s.PersonalInformation.StateProvince))
-            //    .ForMember(m => m.City, c => c.MapFrom(s => s.PersonalInformation.City))
-            //    .ForMember(m => m.PhoneNumber, c => c.MapFrom(s => s.PersonalInformation.PhoneNumber));
-
-            //CreateMap<Paramedic, ParamedicsForShiftDTO>()
-            //.ForMember(m => m.Paramedics, c => c.MapFrom(s => new List<(int, string, string, bool)>
-            //{
-
-            //    (s.Id, s.PersonalInformation.FirstName, s.PersonalInformation.LastName, s.IsDriver)
-            //}));
-
-            //CreateMap<Paramedic, ParamedicDTO>()
-            //    //.ForMember(m => m.PayPerHour, c => c.MapFrom(s => s.Rates.First())) // Jak ma działac data w rate?
-            //    .ForMember(m => m.FirstName, c => c.MapFrom(s => s.PersonalInformation.FirstName))
-            //    .ForMember(m => m.LastName, c => c.MapFrom(s => s.PersonalInformation.LastName))
-            //    .ForMember(m => m.StreetAddress, c => c.MapFrom(s => s.PersonalInformation.StreetAddress))
-            //    .ForMember(m => m.HouseNumber, c => c.MapFrom(s => s.PersonalInformation.HouseNumber))
-            //    .ForMember(m => m.ApartmentNumber, c => c.MapFrom(s => s.PersonalInformation.ApartmentNumber))
-            //    .ForMember(m => m.PostalCode, c => c.MapFrom(s => s.PersonalInformation.PostalCode))
-            //    .ForMember(m => m.StateProvince, c => c.MapFrom(s => s.PersonalInformation.StateProvince))
-            //    .ForMember(m => m.City, c => c.MapFrom(s => s.PersonalInformation.City))
-            //    .ForMember(m => m.Country, c => c.MapFrom(s => s.PersonalInformation.Country));
-
-            //CreateMap<Dispatcher,DispatcherDTO>()
-            //    //Dodać mapowanie Salary
-            //    .ForMember(m => m.FirstName, c => c.MapFrom(s => s.PersonalInformation.FirstName))
-            //    .ForMember(m => m.LastName, c => c.MapFrom(s => s.PersonalInformation.LastName))
-            //    .ForMember(m => m.StreetAddress, c => c.MapFrom(s => s.PersonalInformation.StreetAddress))
-            //    .ForMember(m => m.HouseNumber, c => c.MapFrom(s => s.PersonalInformation.HouseNumber))
-            //    .ForMember(m => m.ApartmentNumber, c => c.MapFrom(s => s.PersonalInformation.ApartmentNumber))
-            //    .ForMember(m => m.PostalCode, c => c.MapFrom(s => s.PersonalInformation.PostalCode))
-            //    .ForMember(m => m.StateProvince, c => c.MapFrom(s => s.PersonalInformation.StateProvince))
-            //    .ForMember(m => m.City, c => c.MapFrom(s => s.PersonalInformation.City))
-            //    .ForMember(m => m.Country, c => c.MapFrom(s => s.PersonalInformation.Country));
+            
 
 
             CreateMap<RegisterUserDTO, User>();
@@ -251,7 +191,9 @@ namespace MediMove.Server
                 PatientId = source.PatientId,
                 PatientPosition = source.PatientPosition,
                 StartTime = source.StartTime,
-
+                StartLocation = source.StartLocation,
+                ReturnLocation = source.ReturnLocation,
+                Note = source.Note
             };
 
 

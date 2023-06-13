@@ -47,14 +47,12 @@ namespace MediMove.Server.Application.Transports.Handlers
                         t.Patient.PersonalInformation.FirstName,
                         t.Patient.PersonalInformation.LastName,
                         t.Patient.PersonalInformation.PhoneNumber,
-                        t.Patient.PersonalInformation.StreetAddress,
-                        t.Patient.PersonalInformation.HouseNumber,
-                        t.Patient.PersonalInformation.ApartmentNumber,
-                        t.Patient.PersonalInformation.PostalCode,
-                        t.Patient.PersonalInformation.City,
                         t.StartTime,
                         t.Destination,
-                        t.TransportType
+                        t.TransportType,
+                        t.StartLocation,
+                        t.ReturnLocation,
+                        t.Note
                     )
                 })
                 .ToDictionaryAsync(
