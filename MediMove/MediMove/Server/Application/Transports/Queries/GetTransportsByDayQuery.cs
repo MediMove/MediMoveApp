@@ -5,7 +5,7 @@ using MediMove.Server.Data;
 using MediMove.Shared.Models.DTOs;
 using Microsoft.EntityFrameworkCore;
 
-namespace MediMove.Server.Application.Patients.Queries;
+namespace MediMove.Server.Application.Transports.Queries;
 
-public record GetAllPatientsQuery : IRequest<ErrorOr<GetAllPatientsResponse>>;
+public record GetTransportsByDayQuery(DateTime Day) : IRequest<ErrorOr<GetTransportsResponse>>;
 

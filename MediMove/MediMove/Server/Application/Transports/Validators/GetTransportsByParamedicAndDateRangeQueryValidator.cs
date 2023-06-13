@@ -13,6 +13,7 @@ namespace MediMove.Server.Application.Transports.Validators
         /// </summary>
         public GetTransportsByParamedicAndDateRangeQueryValidator()
         {
+
             RuleFor(x => x.ParamedicId)
                 .GreaterThan(0).WithMessage("ParamedicId must be greater than 0");
 
