@@ -19,10 +19,12 @@
                     <div>Time: @transport.StartTime</div>
                     <br />
                     <div>
-                        Address: @transport.PatientStreetAddress
-                        @transport.PatientHouseNumber @if (transport.PatientApartmentNumber != null) { @transport.PatientApartmentNumber }  
+                        Start Location: @transport.StartLocation
+                        Return Location: @transport.ReturnLocation
+                        Return Location: @transport.ReturnLocation
+                        @*@transport.PatientHouseNumber @if (transport.PatientApartmentNumber != null) { @transport.PatientApartmentNumber }  
                         <br />
-                        @transport.PatientPostalCode @transport.PatientCity
+                        @transport.PatientPostalCode @transport.PatientCity*@
                     </div>
                     <br />
                     <div>Position: @transport.PatientPosition</div>

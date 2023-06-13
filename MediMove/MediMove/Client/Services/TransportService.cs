@@ -4,6 +4,7 @@ using Microsoft.JSInterop;
 using System.Linq.Dynamic.Core.Tokenizer;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using Newtonsoft.Json;
 
 namespace MediMove.Client.Services
 {
@@ -24,15 +25,20 @@ namespace MediMove.Client.Services
         {
 
             var baseUri = new Uri(_navigationManager.BaseUri);
-            var requestUri = new Uri(baseUri, "/api/v1/transport/paramedic");
+            var requestUri = new Uri(baseUri, "/api/v1/Transport/Paramedic");
 
             //"https://localhost:7244/api/v1/paramedic?day=10&month=6&year=2023");//
             var uriBuilder = new UriBuilder(requestUri); 
 
             var query = System.Web.HttpUtility.ParseQueryString(uriBuilder.Query);
-            query["day"] = day.ToString();
-            query["month"] = month.ToString();
-            query["year"] = year.ToString();
+
+            //query["startDateInclusive"] = $"{year}-{month}-{day}";
+            //query["endDateInclusive"] = $"{year}-{month}-{day}";  //dowolność 
+
+            query["startDateInclusive"] = new DateTime(year, month, day).ToString("yyyy-MM-dd"); //dowolność 
+            query["endDateInclusive"] = new DateTime(year, month, day).ToString("yyyy-MM-dd");
+
+            //Można poszerzyć zakres dat i flitrować ją,żeby nie strzelać do api za każdym razem
 
             uriBuilder.Query = query.ToString();
           
@@ -40,17 +46,19 @@ namespace MediMove.Client.Services
 
             var token = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", "token");
             
-            //Jakiś wyjątek jeśli null?
             
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
+            Console.WriteLine("I'm here auth");
             var response = await _httpClient.SendAsync(request);
-
             response.EnsureSuccessStatusCode(); // Rzuca wyjątek w przypadku niepowodzenia
+            Console.WriteLine(response.StatusCode);
+            var result = await response.Content.ReadFromJsonAsync<GetTransportsByParamedicAndDateRangeResponse>();
 
-            var result = await response.Content.ReadFromJsonAsync<IEnumerable<TransportDTO>>();
             //var result = await response.Content.ReadAsStringAsync();
-            return result;
+            
+            result.Transports.TryGetValue(new DateTime(year, month, day), out IEnumerable<TransportDTO> toReturn);
+
+            return toReturn;
 
 
 
