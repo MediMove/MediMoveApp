@@ -31,7 +31,7 @@ namespace MediMove.Server.Application.Transports.Handlers
         /// <returns>GetTransportsByParamedicAndDateRangeResponse wrapped in ErrorOr</returns>
         public async Task<ErrorOr<GetTransportsByParamedicAndDateRangeResponse>> Handle(GetTransportsByParamedicAndDateRangeQuery query, CancellationToken cancellationToken)
         {
-            var transports = await _dbContext.Transports
+            var transports =  _dbContext.Transports
                 .Where(t => !t.IsCancelled &&
                     (!query.StartDateInclusive.HasValue || t.StartTime.Date >= query.StartDateInclusive.Value.Date) &&
                     (!query.EndDateInclusive.HasValue || t.StartTime.Date <= query.EndDateInclusive.Value.Date) &&
@@ -55,10 +55,15 @@ namespace MediMove.Server.Application.Transports.Handlers
                     Destination = t.Destination,
                     TransportType = t.TransportType
                 })
-                .ToArrayAsync(cancellationToken);
+                .GroupBy(t=> t.StartTime.Date)
+                .ToDictionary(
+                    x=> x.Key,
+                    x => (IEnumerable<TransportDTO>)x
+                    );
 
+            
             return new GetTransportsByParamedicAndDateRangeResponse(
-                transports.ToLookup(t => t.StartTime.Date));
+                transports);
         }
     }
 }

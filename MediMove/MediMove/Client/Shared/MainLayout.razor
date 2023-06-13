@@ -1,12 +1,29 @@
-﻿@inherits LayoutComponentBase
+﻿@using MediMove.Client.temp;
+@inject MediMoveAuthenticationStateProvider stateProvider
+@inject NavigationManager NavManager
+@inherits LayoutComponentBase
+
 
 <div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
-
+   @* @if (IsAuthorized)
+    {
+        <div class="sidebar">
+            <NavMenu />
+        </div>
+    }*@
+    <AuthorizeView>
+        <div class="sidebar">
+            <NavMenu />
+        </div>
+    </AuthorizeView>
     <main>
         <div class="top-row px-4">
+            <AuthorizeView>
+                
+                <a href="" @onclick="@HandleLogout" @onclick:preventDefault>Logout</a>
+
+            </AuthorizeView>
+            
             <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
         </div>
 
@@ -15,3 +32,20 @@
         </article>
     </main>
 </div>
+
+@code {
+    //private bool IsAuthorized = false;
+
+    //protected override async Task OnInitializedAsync()
+    //{
+
+    //    var state = await stateProvider.GetAuthenticationStateAsync();
+    //    IsAuthorized = state.User.Identity.IsAuthenticated;
+    //}
+
+    private async Task HandleLogout()
+    {
+        await stateProvider.Logout();
+        NavManager.NavigateTo("/login/", true);
+    }
+}

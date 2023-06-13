@@ -34,6 +34,19 @@ a, .btn-link {
     color: red;
 }
 
+.middle-box {
+    margin: auto;
+    margin-top: 150px;
+    width: 500px;
+    padding: 35px;
+    box-shadow: 10px 15px 20px #888888;
+    border-radius: 20px;
+}
+
+.cart-box {
+    max-width: 100px;
+}
+
 #blazor-error-ui {
     background: lightyellow;
     bottom: 0;
