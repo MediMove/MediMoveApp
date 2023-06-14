@@ -60,7 +60,7 @@ namespace MediMove.Server.Application.Availabilities.Handlers
                 TeamShift = teams.SingleOrDefault(t => t.Date == a.Date)?.ShiftType
             })
             .ToDictionary(r => r.Date,
-                r => new GetAvailabilitiesForParamedicByDateRangeResponse.DayInfo
+                r => new GetAvailabilitiesForParamedicByDateRangeResponse.DateInfo
                 (
                     r.DeclaredShift,
                     r.TeamShift
@@ -82,7 +82,7 @@ namespace MediMove.Server.Application.Availabilities.Handlers
 
             return new GetAvailabilitiesForParamedicByDateRangeResponse
             {
-                DayToDayInfo = dayToDayInfo
+                DateToDateInfo = dayToDayInfo
             };
         }
     }
