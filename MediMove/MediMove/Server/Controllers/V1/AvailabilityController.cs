@@ -45,7 +45,7 @@ namespace MediMove.Server.Controllers.V1
         [Authorize(Roles = "Paramedic")]
         public async Task<IActionResult> GetAvailabilitiesForParamedicByDateRange([FromQuery] DateTime? startDateInclusive, [FromQuery] DateTime? endDateInclusive)
         {
-            var result = await Mediator.Send(new GetAvailabilitiesByParamedicAndDateRangeQuery(getUserId(), startDateInclusive, endDateInclusive));
+            var result = await Mediator.Send(new GetAvailabilitiesByParamedicAndDateRangeQuery(GetUserId(), startDateInclusive, endDateInclusive));
 
             return result.Match(
                 result => Ok(result),
@@ -70,7 +70,7 @@ namespace MediMove.Server.Controllers.V1
         [Authorize(Roles = "Paramedic")]
         public async Task<IActionResult> CreateAvailabilities([FromBody] CreateAvailabilitiesRequest request)
         {
-            var result = await Mediator.Send(new CreateAvailabilitiesCommand(getUserId(), request));
+            var result = await Mediator.Send(new CreateAvailabilitiesCommand(GetUserId(), request));
 
             return result.Match(
                 success => NoContent(),
@@ -86,7 +86,7 @@ namespace MediMove.Server.Controllers.V1
         [Authorize(Roles = "Paramedic")]
         public async Task<IActionResult> DeleteAvailabilities([FromBody] DeleteAvailabilitiesRequest request)
         {
-            var result = await Mediator.Send(new DeleteAvailabilitiesCommand(getUserId(), request));
+            var result = await Mediator.Send(new DeleteAvailabilitiesCommand(GetUserId(), request));
 
             return result.Match(
                 success => NoContent(),

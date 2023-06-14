@@ -34,7 +34,7 @@ namespace MediMove.Server.Controllers.V1
         [Authorize(Roles = "Paramedic")]
         public async Task<IActionResult> GetTransportsByParamedicAndDateRange([FromQuery] DateTime? startDateInclusive, [FromQuery] DateTime? endDateInclusive)
         {
-            var result = await Mediator.Send(new GetTransportsByParamedicAndDateRangeQuery(getUserId(), startDateInclusive, endDateInclusive));
+            var result = await Mediator.Send(new GetTransportsByParamedicAndDateRangeQuery(GetUserId(), startDateInclusive, endDateInclusive));
 
             return result.Match(
                 result => Ok(result),
