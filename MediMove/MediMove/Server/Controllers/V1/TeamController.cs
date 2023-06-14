@@ -18,7 +18,7 @@ namespace MediMove.Server.Controllers.V1
             var result = await Mediator.Send(new GetTeamQuery(id));
 
             return result.Match(
-                result => Ok(result),
+                success => Ok(success),
                 errors => Problem(errors));
         }
 
@@ -38,7 +38,7 @@ namespace MediMove.Server.Controllers.V1
             var result = await Mediator.Send(new GetTeamsByDayAndShiftQuery(date, shift));
 
             return result.Match(
-                result => Ok(result),
+                success => Ok(success),
                 errors => Problem(errors));
         }
 

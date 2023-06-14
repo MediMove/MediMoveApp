@@ -48,7 +48,7 @@ namespace MediMove.Server.Controllers.V1
             var result = await Mediator.Send(new GetAvailabilitiesByParamedicAndDateRangeQuery(GetUserId(), startDateInclusive, endDateInclusive));
 
             return result.Match(
-                result => Ok(result),
+                success => Ok(success),
                 errors => Problem(errors));
         }
 
