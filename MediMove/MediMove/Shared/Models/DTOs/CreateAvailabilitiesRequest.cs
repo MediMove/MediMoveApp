@@ -1,9 +1,11 @@
 ﻿using MediMove.Shared.Models.Enums;
 
-namespace MediMove.Shared.Models.DTOs
+namespace MediMove.Shared.Models.DTOs;
+
+/// <summary>
+/// Request for creating availabilities.
+/// </summary>
+public record CreateAvailabilitiesRequest
 {
-    public class CreateAvailabilitiesRequest
-    {
-        public Dictionary<DateTime, ShiftType?> Availabilities { get; set; }
-    }
+    public Dictionary<DateTime, ShiftType?> Availabilities { get; set; }
 }

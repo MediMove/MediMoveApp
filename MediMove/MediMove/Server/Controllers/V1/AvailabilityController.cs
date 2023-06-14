@@ -57,6 +57,15 @@ namespace MediMove.Server.Controllers.V1
         /// </summary>
         /// <param name="request">CreateAvailabilitiesRequest</param>
         /// <returns>no content</returns>
+        /// <remarks>
+        /// {
+        ///     "Availabilities": {
+        ///         "2023-06-14": null,
+        ///         "2023-06-15": 0,
+        ///         "2023-06-16": 1
+        ///     }
+        /// }
+        /// </remarks>
         [HttpPost]
         [Authorize(Roles = "Paramedic")]
         public async Task<IActionResult> CreateAvailabilities([FromBody] CreateAvailabilitiesRequest request)

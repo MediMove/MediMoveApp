@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
 using MediMove.Server.Application.Availabilities.Commands;
 using MediMove.Server.Data;
-using MediMove.Shared.Extensions;
 using MediMove.Shared.Models.Enums;
+using MediMove.Shared.Validators;
 using Microsoft.EntityFrameworkCore;
 
 namespace MediMove.Server.Application.Availabilities.Validators
@@ -18,39 +18,44 @@ namespace MediMove.Server.Application.Availabilities.Validators
         /// <param name="dbContext">MediMoveDbContext</param>
         public CreateAvailabilitiesCommandValidator(MediMoveDbContext dbContext)
         {
-            RuleFor(x => x.Request)
-                .NotNull().WithMessage("Request cannot be empty.");
+            RuleFor(command => command.ParamedicId)
+                .GreaterThan(0).WithMessage("{PropertyName} with value {PropertyValue} must be greater than 0");
 
-            RuleFor(x => x.Request.Availabilities)
-                .NotEmpty().WithMessage("Availabilities dictionary cannot be empty.")
-                .When(x => x != null && x.Request.Availabilities != null && x.Request.Availabilities.Any())
-                .Must(declatations => declatations.All(a => a.Key.Date > DateTime.Today.Date || (a.Key.Date == DateTime.Today && (a.Value == null ? ShiftType.Morning : a.Value).Value.StartTime() > DateTime.Now.TimeOfDay) && a.Key.Date < DateTime.Today.AddYears(1))).WithMessage("At least one of the provided dates is not valid")
-                .Must(declatations => declatations.All(a => !a.Value.HasValue || Enum.IsDefined(typeof(ShiftType), a.Value))).WithMessage("Shift must be null or a valid ShiftType");
-
-            RuleFor(x => x)
-                .Must(p => p.ParamedicId > 0).WithMessage("ParamedicId must be greater than 0")
-                .When(p => p.ParamedicId > 0)
-                .CustomAsync(async (x, context, cancellationToken) =>
-                {
-                    var paramedic = await dbContext.Paramedics
-                        .Where(p => p.IsWorking)
-                        .Include(p => p.Availabilities)
-                        .Select(p => new
-                        {
-                            p.Id,
-                            Availabilities = p.Availabilities.Select(a => a.Day.Date).ToHashSet()
-                        })
-                        .SingleOrDefaultAsync(p => p.Id == x.ParamedicId, cancellationToken);
-
-                    if (paramedic is null)
+            RuleFor(command => command.Request)
+                .NotEmpty().WithMessage("{PropertyName} cannot be empty");
+            
+            When(command => command.Request != null, () =>
+            {
+                RuleFor(command => command.Request.Availabilities)
+                    .Must(declatations => declatations.All(a => AvailabilityValidatiors.CanParamedicModifyAvailability(a.Key.Date, a.Value))).WithMessage("At least one of the provided dates is invalid")
+                    .Must(declatations => declatations.All(a => !a.Value.HasValue || Enum.IsDefined(typeof(ShiftType), a.Value))).WithMessage("Shift must be null or a valid ShiftType")
+                    .When(command => command.Request.Availabilities != null)
+                    .NotEmpty().WithMessage("{PropertyName} cannot be empty");
+                
+                RuleFor(command => command)
+                    .CustomAsync(async (command, context, cancellationToken) =>
                     {
-                        context.AddFailure("ParamedicId", "Paramedic with provided id does not exist or is not working");
-                        return;
-                    }
+                        var paramedic = await dbContext.Paramedics
+                            .Where(p => p.IsWorking)
+                            .Include(p => p.Availabilities)
+                            .Select(p => new
+                            {
+                                p.Id,
+                                Availabilities = p.Availabilities.Select(a => a.Day.Date).ToHashSet()
+                            })
+                            .SingleOrDefaultAsync(p => p.Id == command.ParamedicId, cancellationToken);
 
-                    if (x.Request.Availabilities.Any(a => paramedic.Availabilities.Contains(a.Key.Date)))
-                        context.AddFailure("Availabilities", "Paramedic already has availability on one or more of the provided days");
-                });
+                        if (paramedic is null)
+                        {
+                            context.AddFailure("ParamedicId", "Paramedic with provided ID does not exist or is not working");
+                            return;
+                        }
+
+                        if (command.Request.Availabilities.Any(a => paramedic.Availabilities.Contains(a.Key.Date)))
+                            context.AddFailure("Request.Availabilities", "Paramedic already has availability on one or more of the provided days");
+                    })
+                    .When(command => command.ParamedicId > 0 && command.Request.Availabilities != null && command.Request.Availabilities.Any());
+            });
         }
     }
 }
