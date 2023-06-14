@@ -13,8 +13,8 @@ namespace MediMove.Server.Application.Availabilities.Validators
         /// </summary>
         public GetAvailableParamedicsByDateAndShiftQueryValidator()
         {
-            RuleFor(x => x.Shift).IsInEnum().WithMessage("Shift must be a valid ShiftType");
-            RuleFor(x => x.Date).NotEmpty().WithMessage("Date cannot be empty");
+            RuleFor(query => query.Shift).IsInEnum().WithMessage("Shift must be a valid ShiftType");
+            RuleFor(query => query.Date).NotEmpty().WithMessage("Date cannot be empty");
         }
     }
 }

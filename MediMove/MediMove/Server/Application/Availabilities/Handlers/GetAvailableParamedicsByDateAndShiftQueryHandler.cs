@@ -31,37 +31,34 @@ namespace MediMove.Server.Application.Availabilities.Handlers
         /// <returns>GetAvailableParamedicsByDateAndShiftResponse wrapped in ErrorOr</returns>
         public async Task<ErrorOr<GetAvailableParamedicsByDateAndShiftResponse>> Handle(GetAvailableParamedicsByDateAndShiftQuery request, CancellationToken cancellationToken)
         {
-            var query = await _dbContext.Availabilities
+            var paramedics = await _dbContext.Availabilities
                 .Where(a => a.Day.Date == request.Date.Date &&
-                    (a.ShiftType == null || a.ShiftType == request.Shift))
+                    (!a.ShiftType.HasValue || a.ShiftType == request.Shift) &&
+                    a.Paramedic.IsWorking)
                 .Include(a => a.Paramedic)
                 .ThenInclude(p => p.PersonalInformation)
-                .Where(p => p.Paramedic.IsWorking)
-                .Select(p => new
+                .Select(a => new
                 {
-                    p.Paramedic.Id,
-                    p.Paramedic.PersonalInformation.FirstName,
-                    p.Paramedic.PersonalInformation.LastName,
-                    p.Paramedic.PersonalInformation.PhoneNumber,
-                    p.Paramedic.IsDriver
+                    a.ParamedicId,
+                    ParamedicInfo = new GetAvailableParamedicsByDateAndShiftResponse.ParamedicInfo(
+                        a.Paramedic.PersonalInformation.FirstName,
+                        a.Paramedic.PersonalInformation.LastName,
+                        a.Paramedic.PersonalInformation.PhoneNumber,
+                        a.Paramedic.IsDriver
+                    )
                 })
                 .ToDictionaryAsync(
-                    result => result.Id,
-                    result => new GetAvailableParamedicsByDateAndShiftResponse.ParamedicInfo(
-                        result.FirstName,
-                        result.LastName,
-                        result.PhoneNumber,
-                        result.IsDriver
-                    ),
+                    p => p.ParamedicId,
+                    p => p.ParamedicInfo,
                     cancellationToken
                 );
 
-            if (query is null)
+            if (paramedics is null)
                 return Errors.Errors.MappingError;
 
             return new GetAvailableParamedicsByDateAndShiftResponse
             {
-                Paramedics = query
+                Paramedics = paramedics
             };
         }
     }

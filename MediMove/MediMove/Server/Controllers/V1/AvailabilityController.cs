@@ -23,7 +23,7 @@ namespace MediMove.Server.Controllers.V1
         /// </remarks>
         [HttpGet]
         [Authorize(Roles = "Dispatcher")]
-        public async Task<IActionResult> GetAvailableParamedicsByDayAndShift([FromQuery] DateTime date, [FromQuery] ShiftType shift)
+        public async Task<IActionResult> GetAvailableParamedicsByDateAndShift([FromQuery] DateTime date, [FromQuery] ShiftType shift)
         { 
             var result = await Mediator.Send(new GetAvailableParamedicsByDateAndShiftQuery(date, shift));
 
