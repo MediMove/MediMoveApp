@@ -17,7 +17,7 @@ namespace MediMove.Server.Controllers.V1
         /// </summary>
         /// <param name="date">date as DateTime</param>
         /// <param name="shift">shift as ShiftType</param>
-        /// <returns>GetAvailableParamedicsByDayAndShiftResponse</returns>
+        /// <returns>GetAvailableParamedicsByDateAndShiftResponse</returns>
         /// <remarks>
         /// Example date: 2023-06-11T12:34:56Z
         /// </remarks>
@@ -25,10 +25,10 @@ namespace MediMove.Server.Controllers.V1
         [Authorize(Roles = "Dispatcher")]
         public async Task<IActionResult> GetAvailableParamedicsByDayAndShift([FromQuery] DateTime date, [FromQuery] ShiftType shift)
         { 
-            var result = await Mediator.Send(new GetAvailableParamedicsByDayAndShiftQuery(date, shift));
+            var result = await Mediator.Send(new GetAvailableParamedicsByDateAndShiftQuery(date, shift));
 
             return result.Match(
-                result => Ok(result),
+                success => Ok(success),
                 errors => Problem(errors));
         }
 
