@@ -47,6 +47,7 @@ namespace MediMove.Server.Data.Seeders
                     PersonalInformationId = 5,
                     BankAccountNumber = "982301231238812",
                     IsDriver = true,
+                    IsWorking = false,
                 },
             });
         }
