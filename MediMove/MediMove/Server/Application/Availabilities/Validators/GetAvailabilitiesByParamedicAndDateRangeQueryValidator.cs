@@ -4,14 +4,14 @@ using MediMove.Server.Application.Availabilities.Queries;
 namespace MediMove.Server.Application.Availabilities.Validators
 {
     /// <summary>
-    /// Validator for GetAvailabilitiesForParamedicByDateRangeQuery.
+    /// Validator for GetAvailabilitiesByParamedicAndDateRangeQuery.
     /// </summary>
-    public class GetAvailabilitiesForParamedicByDateRangeQueryValidator : AbstractValidator<GetAvailabilitiesForParamedicByDateRangeQuery>
+    public class GetAvailabilitiesByParamedicAndDateRangeQueryValidator : AbstractValidator<GetAvailabilitiesByParamedicAndDateRangeQuery>
     {
         /// <summary>
-        /// Constructor for GetAvailabilitiesForParamedicByDateRangeQueryValidator.
+        /// Constructor for GetAvailabilitiesByParamedicAndDateRangeQueryValidator.
         /// </summary>
-        public GetAvailabilitiesForParamedicByDateRangeQueryValidator()
+        public GetAvailabilitiesByParamedicAndDateRangeQueryValidator()
         {
             RuleFor(x => x.ParamedicId)
                 .GreaterThan(0).WithMessage("ParamedicId must be greater than 0");
