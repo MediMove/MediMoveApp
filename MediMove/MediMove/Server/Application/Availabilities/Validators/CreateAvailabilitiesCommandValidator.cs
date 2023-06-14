@@ -22,11 +22,10 @@ namespace MediMove.Server.Application.Availabilities.Validators
                 .NotNull().WithMessage("Request cannot be empty.");
 
             RuleFor(x => x.Request.Availabilities)
-                .NotEmpty().WithMessage("Availabilities list cannot be empty.")
+                .NotEmpty().WithMessage("Availabilities dictionary cannot be empty.")
                 .When(x => x != null && x.Request.Availabilities != null && x.Request.Availabilities.Any())
-                .Must(declatations => declatations.Select(a => a.Day.Date).Distinct().Count() == declatations.Count()).WithMessage("Days must be unique")
-                .Must(declatations => declatations.All(a => a.Day.Date > DateTime.Today.Date || (a.Day.Date == DateTime.Today && (a.Shift == null ? ShiftType.Morning : a.Shift).Value.StartTime() > DateTime.Now.TimeOfDay))).WithMessage("Days must be in the future")
-                .Must(declatations => declatations.All(a => !a.Shift.HasValue || Enum.IsDefined(typeof(ShiftType), a.Shift))).WithMessage("Shift must be null or a valid ShiftType");
+                .Must(declatations => declatations.All(a => a.Key.Date > DateTime.Today.Date || (a.Key.Date == DateTime.Today && (a.Value == null ? ShiftType.Morning : a.Value).Value.StartTime() > DateTime.Now.TimeOfDay) && a.Key.Date < DateTime.Today.AddYears(1))).WithMessage("At least one of the provided dates is not valid")
+                .Must(declatations => declatations.All(a => !a.Value.HasValue || Enum.IsDefined(typeof(ShiftType), a.Value))).WithMessage("Shift must be null or a valid ShiftType");
 
             RuleFor(x => x)
                 .Must(p => p.ParamedicId > 0).WithMessage("ParamedicId must be greater than 0")
@@ -49,7 +48,7 @@ namespace MediMove.Server.Application.Availabilities.Validators
                         return;
                     }
 
-                    if (x.Request.Availabilities.Any(a => paramedic.Availabilities.Contains(a.Day.Date)))
+                    if (x.Request.Availabilities.Any(a => paramedic.Availabilities.Contains(a.Key.Date)))
                         context.AddFailure("Availabilities", "Paramedic already has availability on one or more of the provided days");
                 });
         }

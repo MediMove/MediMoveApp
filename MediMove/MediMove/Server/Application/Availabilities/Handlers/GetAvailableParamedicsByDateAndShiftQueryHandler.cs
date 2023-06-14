@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using ErrorOr;
+﻿using ErrorOr;
 using MediatR;
 using MediMove.Server.Application.Availabilities.Queries;
 using MediMove.Server.Data;
@@ -9,31 +8,31 @@ using Microsoft.EntityFrameworkCore;
 namespace MediMove.Server.Application.Availabilities.Handlers
 {
     /// <summary>
-    /// Handler for getting available paramedics by day and shift.
+    /// Handler for getting available paramedics by date and shift.
     /// </summary>
-    public class GetAvailableParamedicsByDayAndShiftQueryHandler : IRequestHandler<GetAvailableParamedicsByDayAndShiftQuery, ErrorOr<GetAvailableParamedicsByDayAndShiftResponse>>
+    public class GetAvailableParamedicsByDateAndShiftQueryHandler : IRequestHandler<GetAvailableParamedicsByDateAndShiftQuery, ErrorOr<GetAvailableParamedicsByDateAndShiftResponse>>
     {
         private readonly MediMoveDbContext _dbContext;
 
         /// <summary>
-        /// Constructor for GetAvailableParamedicsByDayAndShiftQueryHandler.
+        /// Constructor for GetAvailableParamedicsByDateAndShiftQueryHandler.
         /// </summary>
         /// <param name="dbContext">dbContext to inject</param>
-        public GetAvailableParamedicsByDayAndShiftQueryHandler(MediMoveDbContext dbContext)
+        public GetAvailableParamedicsByDateAndShiftQueryHandler(MediMoveDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
         /// <summary>
-        /// Method for handling the GetAvailableParamedicsByDayAndShiftQuery.
+        /// Method for handling the GetAvailableParamedicsByDateAndShiftQuery.
         /// </summary>
-        /// <param name="request">GetAvailableParamedicsByDayAndShiftQuery</param>
+        /// <param name="request">GetAvailableParamedicsByDateAndShiftQuery</param>
         /// <param name="cancellationToken">CancellationToken</param>
-        /// <returns>GetAvailableParamedicsByDayAndShiftResponse wrapped in ErrorOr</returns>
-        public async Task<ErrorOr<GetAvailableParamedicsByDayAndShiftResponse>> Handle(GetAvailableParamedicsByDayAndShiftQuery request, CancellationToken cancellationToken)
+        /// <returns>GetAvailableParamedicsByDateAndShiftResponse wrapped in ErrorOr</returns>
+        public async Task<ErrorOr<GetAvailableParamedicsByDateAndShiftResponse>> Handle(GetAvailableParamedicsByDateAndShiftQuery request, CancellationToken cancellationToken)
         {
             var query = await _dbContext.Availabilities
-                .Where(a => a.Day.Date == request.Day.Date &&
+                .Where(a => a.Day.Date == request.Date.Date &&
                     (a.ShiftType == null || a.ShiftType == request.Shift))
                 .Include(a => a.Paramedic)
                 .ThenInclude(p => p.PersonalInformation)
@@ -48,7 +47,7 @@ namespace MediMove.Server.Application.Availabilities.Handlers
                 })
                 .ToDictionaryAsync(
                     result => result.Id,
-                    result => new GetAvailableParamedicsByDayAndShiftResponse.ParamedicInfo(
+                    result => new GetAvailableParamedicsByDateAndShiftResponse.ParamedicInfo(
                         result.FirstName,
                         result.LastName,
                         result.PhoneNumber,
@@ -60,12 +59,10 @@ namespace MediMove.Server.Application.Availabilities.Handlers
             if (query is null)
                 return Errors.Errors.MappingError;
 
-            var response = new GetAvailableParamedicsByDayAndShiftResponse
+            return new GetAvailableParamedicsByDateAndShiftResponse
             {
                 Paramedics = query
             };
-
-            return response;
         }
     }
 }

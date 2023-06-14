@@ -8,28 +8,28 @@ using Microsoft.EntityFrameworkCore;
 namespace MediMove.Server.Application.Availabilities.Handlers
 {
     /// <summary>
-    /// Handler for getting availabilities by paramedic by date range.
+    /// Handler for getting availabilities by paramedic and date range.
     /// </summary>
-    public class GetAvailabilitiesForParamedicByDateRangeQueryHandler : IRequestHandler<GetAvailabilitiesForParamedicByDateRangeQuery, ErrorOr<GetAvailabilitiesForParamedicByDateRangeResponse>>
+    public class GetAvailabilitiesByParamedicAndDateRangeQueryHandler : IRequestHandler<GetAvailabilitiesByParamedicAndDateRangeQuery, ErrorOr<GetAvailabilitiesForParamedicByDateRangeResponse>>
     {
         private readonly MediMoveDbContext _dbContext;
 
         /// <summary>
-        /// Constructor for GetAvailabilitiesForParamedicByDateRangeQueryHandler.
+        /// Constructor for GetAvailabilitiesByParamedicAndDateRangeQueryHandler.
         /// </summary>
         /// <param name="dbContext">dbContext to inject</param>
-        public GetAvailabilitiesForParamedicByDateRangeQueryHandler(MediMoveDbContext dbContext)
+        public GetAvailabilitiesByParamedicAndDateRangeQueryHandler(MediMoveDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
         /// <summary>
-        /// Method for handling the GetAvailabilitiesForParamedicByDateRangeQuery.
+        /// Method for handling the GetAvailabilitiesByParamedicAndDateRangeQuery.
         /// </summary>
-        /// <param name="query">GetAvailabilitiesForParamedicByDateRangeQuery</param>
+        /// <param name="query">GetAvailabilitiesByParamedicAndDateRangeQuery</param>
         /// <param name="cancellationToken">CancellationToken</param>
-        /// <returns>GetAvailabilitiesForParamedicByDateRangeResponse wrapped in ErrorOr</returns>
-        public async Task<ErrorOr<GetAvailabilitiesForParamedicByDateRangeResponse>> Handle(GetAvailabilitiesForParamedicByDateRangeQuery query, CancellationToken cancellationToken)
+        /// <returns>GetAvailabilitiesByParamedicAndDateRangeResponse wrapped in ErrorOr</returns>
+        public async Task<ErrorOr<GetAvailabilitiesForParamedicByDateRangeResponse>> Handle(GetAvailabilitiesByParamedicAndDateRangeQuery query, CancellationToken cancellationToken)
         {
             var teams = await _dbContext.Teams
                 .Where(t => (t.DriverId == query.ParamedicId || t.ParamedicId == query.ParamedicId) &&
@@ -53,17 +53,19 @@ namespace MediMove.Server.Application.Availabilities.Handlers
                 })
                 .ToArrayAsync(cancellationToken);
 
-            var dict = availabilities.Select(a => new
+            var dayToDayInfo = availabilities.Select(a => new
             {
                 a.Date,
                 DeclaredShift = a.ShiftType,
-                TeamShift = teams.FirstOrDefault(t => t.Date == a.Date)?.ShiftType
+                TeamShift = teams.SingleOrDefault(t => t.Date == a.Date)?.ShiftType
             })
-            .ToDictionary(r => r.Date, r => new GetAvailabilitiesForParamedicByDateRangeResponse.DayInfo
-            (
-                r.DeclaredShift,
-                r.TeamShift
-            ));
+            .ToDictionary(r => r.Date,
+                r => new GetAvailabilitiesForParamedicByDateRangeResponse.DateInfo
+                (
+                    r.DeclaredShift,
+                    r.TeamShift
+                )
+            );
 
             /*
             var records = from a in _dbContext.Availabilities
@@ -80,7 +82,7 @@ namespace MediMove.Server.Application.Availabilities.Handlers
 
             return new GetAvailabilitiesForParamedicByDateRangeResponse
             {
-                DayToDayInfo = dict
+                DateToDateInfo = dayToDayInfo
             };
         }
     }

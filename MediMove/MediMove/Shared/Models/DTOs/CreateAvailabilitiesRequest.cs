@@ -4,7 +4,6 @@ namespace MediMove.Shared.Models.DTOs
 {
     public class CreateAvailabilitiesRequest
     {
-        public IEnumerable<Declaration> Availabilities { get; set; }
-        public record Declaration(DateTime Day, ShiftType? Shift);
+        public Dictionary<DateTime, ShiftType?> Availabilities { get; set; }
     }
 }
