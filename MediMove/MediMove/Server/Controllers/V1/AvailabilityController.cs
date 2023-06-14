@@ -19,7 +19,7 @@ namespace MediMove.Server.Controllers.V1
         /// <param name="shift">shift as ShiftType</param>
         /// <returns>GetAvailableParamedicsByDateAndShiftResponse</returns>
         /// <remarks>
-        /// Example date: 2023-06-11T12:34:56Z
+        /// Example date: 2023-06-11
         /// </remarks>
         [HttpGet]
         [Authorize(Roles = "Dispatcher")]
@@ -39,7 +39,7 @@ namespace MediMove.Server.Controllers.V1
         /// <param name="endDateInclusive">inclusive end date as nullable DateTime</param>
         /// <returns>GetAvailabilitiesForParamedicByDateRangeResponse</returns>
         /// <remarks>
-        /// Example date: 2023-06-11T12:34:56Z
+        /// Example date: 2023-06-11
         /// </remarks>
         [HttpGet("Paramedic")]
         [Authorize(Roles = "Paramedic")]
@@ -73,7 +73,7 @@ namespace MediMove.Server.Controllers.V1
             var result = await Mediator.Send(new CreateAvailabilitiesCommand(getUserId(), request));
 
             return result.Match(
-                result => NoContent(),
+                success => NoContent(),
                 errors => Problem(errors));
         }
 
@@ -89,7 +89,7 @@ namespace MediMove.Server.Controllers.V1
             var result = await Mediator.Send(new DeleteAvailabilitiesCommand(getUserId(), request));
 
             return result.Match(
-                result => NoContent(),
+                success => NoContent(),
                 errors => Problem(errors));
         }
     }

@@ -1,11 +1,9 @@
 ﻿using FluentValidation;
 using MediMove.Server.Application.Availabilities.Commands;
 using MediMove.Server.Data;
-using MediMove.Shared.Extensions;
 using MediMove.Shared.Models.Enums;
+using MediMove.Shared.Validators;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
 
 namespace MediMove.Server.Application.Availabilities.Validators
 {
@@ -20,48 +18,50 @@ namespace MediMove.Server.Application.Availabilities.Validators
         /// <param name="dbContext">MediMoveDbContext</param>
         public DeleteAvailabilitiesCommandValidator(MediMoveDbContext dbContext)
         {
-            RuleFor(x => x.ParamedicId)
-                .GreaterThan(0).WithMessage("ParamedicId must be greater than 0");
+            RuleFor(command => command.ParamedicId)
+                .GreaterThan(0).WithMessage("{PropertyName} with value {PropertyValue} must be greater than 0");
 
-            RuleFor(x => x.Request)
-                .NotEmpty().WithMessage("Request cannot be empty");
+            RuleFor(command => command.Request)
+                .NotEmpty().WithMessage("{PropertyName} cannot be empty");
 
-            RuleFor(x => x.Request.AvailabilityDates)
-                .NotEmpty().WithMessage("AvailabilityDates set cannot be empty")
-                .Must(a => a.All(day => day >= DateTime.Today && day < DateTime.Today.AddYears(1)))
-                .WithMessage("AvailabilityDates must be between today and one year from now");
+            When(command => command.Request != null, () =>
+            {
+                RuleFor(command => command.Request.AvailabilityDates)
+                    .Must(AvailabilityDates => AvailabilityDates.All(date => AvailabilityValidatiors.IsAvailabilityWithinFutureRange(date) || date.Date == DateTime.Today)).WithMessage("At least one of the provided dates in {PropertyName} is invalid")
+                    .When(command => command.Request.AvailabilityDates != null)
+                    .NotEmpty().WithMessage("{PropertyName} cannot be empty");
 
-            RuleFor(x => x)
-                .CustomAsync(async (command, context, cancellationToken) =>
-                {
-                    var availabilityDatesNormalized = command.Request.AvailabilityDates.Select(d => d.Date);
-                    var availabilities = await dbContext.Availabilities
-                        .Where(a => a.ParamedicId == command.ParamedicId && availabilityDatesNormalized.Contains(a.Day.Date))
-                        .Select(a => new { a.Day.Date, ShiftType = a.ShiftType == null ? ShiftType.Morning : a.ShiftType })
-                        .ToArrayAsync(cancellationToken);
-
-                    if (availabilities.Length != command.Request.AvailabilityDates.Count)
+                RuleFor(command => command)
+                    .CustomAsync(async (command, context, cancellationToken) =>
                     {
-                        context.AddFailure("Request.AvailabilityDates", "Paramedic does not have availability on one or more of the provided days");
-                        return;
-                    }
+                        var availabilityDatesNormalized = command.Request.AvailabilityDates.Select(d => d.Date);
+                        var availabilities = await dbContext.Availabilities
+                            .Where(a => a.ParamedicId == command.ParamedicId && availabilityDatesNormalized.Contains(a.Day.Date))
+                            .Select(a => new { a.Day.Date, ShiftType = a.ShiftType ?? ShiftType.Morning })
+                            .ToArrayAsync(cancellationToken);
 
-                    if (availabilities.Any(a => a.Date == DateTime.Today && a.ShiftType.Value.StartTime() <= DateTime.Now.TimeOfDay))
-                    {
-                        context.AddFailure("Request.AvailabilityDates", "Shift has already started today");
-                        return;
-                    }
+                        if (availabilities.Length != command.Request.AvailabilityDates.Count)
+                        {
+                            context.AddFailure("Request.AvailabilityDates", "Paramedic does not have availability on one or more of the provided dates");
+                            return;
+                        }
 
-                    if (await dbContext.Teams
-                        .AnyAsync(t => (t.DriverId == command.ParamedicId || t.ParamedicId == command.ParamedicId) &&
-                            availabilityDatesNormalized.Contains(t.Day.Date), cancellationToken))
-                        context.AddFailure("Request.AvailabilityDates", "Paramedic has a team on one or more of the provided days");
-                })
-                .When(x =>
-                    x.ParamedicId > 0 &&
-                    x.Request != null &&
-                    x.Request.AvailabilityDates != null &&
-                    x.Request.AvailabilityDates.Any());
+                        if (availabilities.Any(a => a.Date == DateTime.Today && !AvailabilityValidatiors.IsBeforeShift(a.Date, a.ShiftType)))
+                        {
+                            context.AddFailure("Request.AvailabilityDates", "Shift has already started today");
+                            return;
+                        }
+
+                        if (await dbContext.Teams
+                            .AnyAsync(t => (t.DriverId == command.ParamedicId || t.ParamedicId == command.ParamedicId) &&
+                                availabilityDatesNormalized.Contains(t.Day.Date), cancellationToken))
+                            context.AddFailure("Request.AvailabilityDates", "Paramedic has a team on one or more of the provided dates");
+                    })
+                    .When(command =>
+                        command.ParamedicId > 0 &&
+                        command.Request.AvailabilityDates != null &&
+                        command.Request.AvailabilityDates.Any());
+            });
         }
     }
 }
