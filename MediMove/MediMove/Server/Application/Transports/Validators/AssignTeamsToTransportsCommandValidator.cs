@@ -2,6 +2,7 @@
 using MediMove.Server.Application.Transports.Commands;
 using MediMove.Server.Data;
 using MediMove.Shared.Extensions;
+using MediMove.Shared.Validators;
 using Microsoft.EntityFrameworkCore;
 
 namespace MediMove.Server.Application.Transports.Validators
@@ -17,9 +18,9 @@ namespace MediMove.Server.Application.Transports.Validators
         /// <param name="dbContext">MediMoveDbContext</param>
         public AssignTeamsToTransportsCommandValidator(MediMoveDbContext dbContext)
         {
-            RuleFor(x => x.Request).NotEmpty().WithMessage("Request cannot be empty");
-            RuleFor(x => x.Request.TransportsToTeams)
-                .NotNull().WithMessage("TransportsToTeams cannot be null")
+            RuleFor(command => command.Request).NotEmpty().WithMessage("{PropertyName} cannot be empty");
+
+            RuleFor(command => command.Request.TransportsToTeams)
                 .CustomAsync(async (transportsToTeams, context, cancellationToken) =>
                 {
                     if (!transportsToTeams.Keys.Any())
@@ -27,6 +28,7 @@ namespace MediMove.Server.Application.Transports.Validators
                         context.AddFailure("Request.TransportsToTeams", "TransportsToTeams cannot be empty");
                         return;
                     }
+
 
                     var transports = await dbContext.Transports
                         .Where(t => !t.IsCancelled && transportsToTeams.Keys.Contains(t.Id))
@@ -47,16 +49,25 @@ namespace MediMove.Server.Application.Transports.Validators
                         return;
                     }
 
+                    if (!TransportValidator.CanAssignTeam(datesAndShifts[0].Day))
+                    {
+                        context.AddFailure("Request.TransportsToTeams", "Cannot assign teams to this transport due to its date");
+                        return;
+                    }
+
                     var teamsOk = dbContext.Teams
                         .Count(t => transportsToTeams.Values.Contains(t.Id) &&
                                     t.Day.Date == datesAndShifts[0].Day &&
                                     t.ShiftType == datesAndShifts[0].ShiftType)
-                        .Equals(transportsToTeams.Values.Count);
+                        .Equals(transportsToTeams.Values.Distinct().Count());
 
                     if (!teamsOk)
                         context.AddFailure("Request.TransportsToTeams", "All teams must exist and have the same date and shiftType");
 
-                }).Unless(x => x.Request == null || x.Request.TransportsToTeams == null);
+                })
+                .When(command => command.Request != null &&
+                    command.Request.TransportsToTeams != null)
+                .NotNull().WithMessage("{PropertyName} cannot be null");
         }
     }
 }

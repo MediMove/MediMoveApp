@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using MediMove.Server.Application.Availabilities.Commands;
 using MediMove.Server.Data;
+using MediMove.Shared.Extensions;
 using MediMove.Shared.Models.Enums;
 using MediMove.Shared.Validators;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +28,7 @@ namespace MediMove.Server.Application.Availabilities.Validators
             When(command => command.Request != null, () =>
             {
                 RuleFor(command => command.Request.AvailabilityDates)
-                    .Must(AvailabilityDates => AvailabilityDates.All(date => AvailabilityValidatiors.IsAvailabilityWithinFutureRange(date) || date.Date == DateTime.Today)).WithMessage("At least one of the provided dates in {PropertyName} is invalid")
+                    .Must(AvailabilityDates => AvailabilityDates.All(date => AvailabilityValidatiors.IsValidFutureDate(date) || date.Date == DateTime.Today)).WithMessage("At least one of the provided dates in {PropertyName} is invalid")
                     .When(command => command.Request.AvailabilityDates != null)
                     .NotEmpty().WithMessage("{PropertyName} cannot be empty");
 
@@ -46,7 +47,7 @@ namespace MediMove.Server.Application.Availabilities.Validators
                             return;
                         }
 
-                        if (availabilities.Any(a => a.Date == DateTime.Today && !AvailabilityValidatiors.IsBeforeShift(a.Date, a.ShiftType)))
+                        if (availabilities.Any(a => a.Date == DateTime.Today && !AvailabilityValidatiors.IsBeforeShift(a.ShiftType)))
                         {
                             context.AddFailure("Request.AvailabilityDates", "Shift has already started today");
                             return;

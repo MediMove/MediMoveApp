@@ -27,7 +27,7 @@ namespace MediMove.Server.Application.Availabilities.Validators
             When(command => command.Request != null, () =>
             {
                 RuleFor(command => command.Request.Availabilities)
-                    .Must(declatations => declatations.All(a => AvailabilityValidatiors.CanParamedicModifyAvailability(a.Key.Date, a.Value))).WithMessage("At least one of the provided dates is invalid")
+                    .Must(declatations => declatations.All(a => AvailabilityValidatiors.CanExecuteCommands(a.Key.Date, a.Value))).WithMessage("At least one of the provided dates is invalid")
                     .Must(declatations => declatations.All(a => !a.Value.HasValue || Enum.IsDefined(typeof(ShiftType), a.Value))).WithMessage("Shift must be null or a valid ShiftType")
                     .When(command => command.Request.Availabilities != null)
                     .NotEmpty().WithMessage("{PropertyName} cannot be empty");

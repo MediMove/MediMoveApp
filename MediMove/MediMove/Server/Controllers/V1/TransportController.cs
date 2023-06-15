@@ -48,7 +48,7 @@ namespace MediMove.Server.Controllers.V1
         /// <param name="shift">shift as ShiftType</param>
         /// <returns>>GetTransportsByDayAndShiftResponse</returns>
         /// <remarks>
-        /// Example date: 2023-06-11T12:34:56Z
+        /// Example date: 2023-06-11
         /// </remarks>
         [HttpGet("Date")]
         [Authorize(Roles = "Dispatcher")]

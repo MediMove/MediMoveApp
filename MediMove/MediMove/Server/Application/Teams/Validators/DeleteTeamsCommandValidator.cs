@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using MediMove.Server.Application.Teams.Commands;
 using MediMove.Server.Data;
+using MediMove.Shared.Validators;
 using Microsoft.EntityFrameworkCore;
 
 namespace MediMove.Server.Application.Teams.Validators
@@ -17,20 +18,26 @@ namespace MediMove.Server.Application.Teams.Validators
         public DeleteTeamsCommandValidator(MediMoveDbContext dbContext)
         {
             RuleFor(x => x.Request)
-                .NotEmpty().WithMessage("Request cannot be empty.");
+                .NotEmpty().WithMessage("{PropertyName} cannot be empty");
 
             RuleFor(x => x.Request.TeamIds)
-                .NotEmpty().WithMessage("TeamIds cannot be empty.")
                 .CustomAsync(async (TeamIds, context, cancellationToken) =>
                 {
-                    if (!dbContext.Teams
-                        .Where(t => TeamIds.Contains(t.Id))
-                        .Count().Equals(TeamIds.Length))
-                        context.AddFailure("TeamIds", "One or more teams do not exist");
+                    var teams = await dbContext.Teams.Where(t => TeamIds.Contains(t.Id))
+                        .Select(t => new { t.Day.Date, t.ShiftType })
+                        .Distinct()
+                        .ToArrayAsync(cancellationToken);
+
+                    if (teams.Length != TeamIds.Count)
+                        context.AddFailure("Request.TeamIds", "One or more teams are invalid");
+
+                    if (teams.Any(t => !TeamValidatiors.CanExecuteCommands(t.Date, t.ShiftType)))
+                        context.AddFailure("Request", "One or more teams cannot be deleted");
                 })
-                .When(x => x.Request != null
-                    && x.Request.TeamIds != null
-                    && x.Request.TeamIds.Any());
+                .When(command => command.Request != null
+                    && command.Request.TeamIds != null
+                    && command.Request.TeamIds.Any())
+                .NotEmpty().WithMessage("{PropertyName} cannot be empty");
         }
     }
 }

@@ -53,7 +53,7 @@ namespace MediMove.Server.Application.Availabilities.Handlers
                 })
                 .ToArrayAsync(cancellationToken);
 
-            var dayToDayInfo = availabilities.Select(a => new
+            var dateToDateInfo = availabilities.Select(a => new
             {
                 a.Date,
                 DeclaredShift = a.ShiftType,
@@ -67,22 +67,9 @@ namespace MediMove.Server.Application.Availabilities.Handlers
                 )
             );
 
-            /*
-            var records = from a in _dbContext.Availabilities
-                          join t in _dbContext.Teams on a.Day.Date equals t.Day.Date into at_jointable
-                          from m in at_jointable.DefaultIfEmpty()
-                            where a.ParamedicId == query.ParamedicId &&
-                                (!query.StartDateInclusive.HasValue || a.Day.Date >= query.StartDateInclusive.Value.Date) &&
-                                (!query.EndDateInclusive.HasValue || a.Day.Date <= query.EndDateInclusive.Value.Date) &&
-                                (!query.StartDateInclusive.HasValue || m.Day.Date >= query.StartDateInclusive.Value.Date) &&
-                                (!query.EndDateInclusive.HasValue || m.Day.Date <= query.EndDateInclusive.Value.Date) &&
-                                (m.DriverId == query.ParamedicId || m.ParamedicId == query.ParamedicId)
-                            select new { a.Day.Date, a.ShiftType, Id = m.ParamedicId };
-            */
-
             return new GetAvailabilitiesForParamedicByDateRangeResponse
             {
-                DateToDateInfo = dayToDayInfo
+                DateToDateInfo = dateToDateInfo
             };
         }
     }
