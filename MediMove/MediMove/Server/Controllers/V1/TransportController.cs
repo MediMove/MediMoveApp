@@ -35,9 +35,9 @@ namespace MediMove.Server.Controllers.V1
         public async Task<IActionResult> GetTransportsByParamedicAndDateRange([FromQuery] DateTime? startDateInclusive, [FromQuery] DateTime? endDateInclusive)
         {
             var result = await Mediator.Send(new GetTransportsByParamedicAndDateRangeQuery(GetUserId(), startDateInclusive, endDateInclusive));
-
+            
             return result.Match(
-                result => Ok(result),
+                success => Ok(success),
                 errors => Problem(errors));
         }
 
@@ -57,7 +57,7 @@ namespace MediMove.Server.Controllers.V1
             var result = await Mediator.Send(new GetTransportsByDayAndShiftQuery(date, shift));
 
             return result.Match(
-                result => Ok(result),
+                success => Ok(success),
                 errors => Problem(errors));
         }
 
