@@ -5,8 +5,8 @@ using MediMove.Shared.Models.Enums;
 
 namespace MediMove.Server.Application.Teams.Queries;
 /// <summary>
-/// Query for getting teams by day and shift.
+/// Query for getting teams by date and shift.
 /// </summary>
-/// <param name="Day">day as DateTime</param>
+/// <param name="Date">date as DateTime</param>
 /// <param name="Shift">shift as ShiftType</param>
-public record GetTeamsByDayAndShiftQuery(DateTime Day, ShiftType Shift) : IRequest<ErrorOr<GetTeamsByDayAndShiftResponse>>;
+public record GetTeamsByDateAndShiftQuery(DateTime Date, ShiftType Shift) : IRequest<ErrorOr<GetTeamsByDateAndShiftResponse>>;

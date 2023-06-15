@@ -10,7 +10,7 @@ namespace MediMove.Server.Application.Availabilities.Handlers
     /// <summary>
     /// Handler for creating availabilities.
     /// </summary>
-    public class CreateAvailabilitiesCommandHandler : IRequestHandler<CreateAvailabilitiesCommand, ErrorOr<Unit>>
+    public class CreateAvailabilitiesCommandHandler : IRequestHandler<CreateAvailabilitiesCommand, ErrorOr<Availability[]>>
     {
         private readonly IMapper _mapper;
         private readonly MediMoveDbContext _dbContext;
@@ -32,7 +32,7 @@ namespace MediMove.Server.Application.Availabilities.Handlers
         /// <param name="command">CreateAvailabilitiesCommand</param>
         /// <param name="cancellationToken">CancellationToken</param>
         /// <returns>Unit wrapped in ErrorOr</returns>
-        public async Task<ErrorOr<Unit>> Handle(CreateAvailabilitiesCommand command, CancellationToken cancellationToken)
+        public async Task<ErrorOr<Availability[]>> Handle(CreateAvailabilitiesCommand command, CancellationToken cancellationToken)
         {
             var availabilities = _mapper.Map<Availability[]>(command);
 
@@ -42,7 +42,7 @@ namespace MediMove.Server.Application.Availabilities.Handlers
             await _dbContext.Availabilities.AddRangeAsync(availabilities, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
 
-            return new ErrorOr<Unit>();
+            return availabilities;
         }
     }
 }

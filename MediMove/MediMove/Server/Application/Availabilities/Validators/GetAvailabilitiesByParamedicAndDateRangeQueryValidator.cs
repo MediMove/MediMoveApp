@@ -13,11 +13,11 @@ namespace MediMove.Server.Application.Availabilities.Validators
         /// </summary>
         public GetAvailabilitiesByParamedicAndDateRangeQueryValidator()
         {
-            RuleFor(x => x.ParamedicId)
-                .GreaterThan(0).WithMessage("ParamedicId must be greater than 0");
+            RuleFor(query => query.ParamedicId)
+                .GreaterThan(0).WithMessage("{PropertyName} must be greater than 0");
 
-            RuleFor(x => x.StartDateInclusive)
-                .LessThanOrEqualTo(x => x.EndDateInclusive).WithMessage("StartDateInclusive must be less than or equal to EndDateInclusive");
+            RuleFor(query => query.StartDateInclusive)
+                .LessThanOrEqualTo(x => x.EndDateInclusive).WithMessage("{PropertyName} must be less than or equal to EndDateInclusive");
         }
     }
 }

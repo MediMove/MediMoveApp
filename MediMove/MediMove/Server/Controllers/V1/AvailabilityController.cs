@@ -19,11 +19,11 @@ namespace MediMove.Server.Controllers.V1
         /// <param name="shift">shift as ShiftType</param>
         /// <returns>GetAvailableParamedicsByDateAndShiftResponse</returns>
         /// <remarks>
-        /// Example date: 2023-06-11T12:34:56Z
+        /// Example date: 2023-06-11
         /// </remarks>
         [HttpGet]
         [Authorize(Roles = "Dispatcher")]
-        public async Task<IActionResult> GetAvailableParamedicsByDayAndShift([FromQuery] DateTime date, [FromQuery] ShiftType shift)
+        public async Task<IActionResult> GetAvailableParamedicsByDateAndShift([FromQuery] DateTime date, [FromQuery] ShiftType shift)
         { 
             var result = await Mediator.Send(new GetAvailableParamedicsByDateAndShiftQuery(date, shift));
 
@@ -39,16 +39,16 @@ namespace MediMove.Server.Controllers.V1
         /// <param name="endDateInclusive">inclusive end date as nullable DateTime</param>
         /// <returns>GetAvailabilitiesForParamedicByDateRangeResponse</returns>
         /// <remarks>
-        /// Example date: 2023-06-11T12:34:56Z
+        /// Example date: 2023-06-11
         /// </remarks>
         [HttpGet("Paramedic")]
         [Authorize(Roles = "Paramedic")]
         public async Task<IActionResult> GetAvailabilitiesForParamedicByDateRange([FromQuery] DateTime? startDateInclusive, [FromQuery] DateTime? endDateInclusive)
         {
-            var result = await Mediator.Send(new GetAvailabilitiesByParamedicAndDateRangeQuery(getUserId(), startDateInclusive, endDateInclusive));
+            var result = await Mediator.Send(new GetAvailabilitiesByParamedicAndDateRangeQuery(GetUserId(), startDateInclusive, endDateInclusive));
 
             return result.Match(
-                result => Ok(result),
+                success => Ok(success),
                 errors => Problem(errors));
         }
 
@@ -57,14 +57,23 @@ namespace MediMove.Server.Controllers.V1
         /// </summary>
         /// <param name="request">CreateAvailabilitiesRequest</param>
         /// <returns>no content</returns>
+        /// <remarks>
+        /// {
+        ///     "Availabilities": {
+        ///         "2023-06-14": null,
+        ///         "2023-06-15": 0,
+        ///         "2023-06-16": 1
+        ///     }
+        /// }
+        /// </remarks>
         [HttpPost]
         [Authorize(Roles = "Paramedic")]
         public async Task<IActionResult> CreateAvailabilities([FromBody] CreateAvailabilitiesRequest request)
         {
-            var result = await Mediator.Send(new CreateAvailabilitiesCommand(getUserId(), request));
+            var result = await Mediator.Send(new CreateAvailabilitiesCommand(GetUserId(), request));
 
             return result.Match(
-                result => NoContent(),
+                success => NoContent(),
                 errors => Problem(errors));
         }
 
@@ -77,10 +86,10 @@ namespace MediMove.Server.Controllers.V1
         [Authorize(Roles = "Paramedic")]
         public async Task<IActionResult> DeleteAvailabilities([FromBody] DeleteAvailabilitiesRequest request)
         {
-            var result = await Mediator.Send(new DeleteAvailabilitiesCommand(getUserId(), request));
+            var result = await Mediator.Send(new DeleteAvailabilitiesCommand(GetUserId(), request));
 
             return result.Match(
-                result => NoContent(),
+                success => NoContent(),
                 errors => Problem(errors));
         }
     }
