@@ -5,5 +5,5 @@ using MediMove.Shared.Models.DTOs;
 
 namespace MediMove.Server.Application.Patients.Commands
 {
-    public record UpdatePatientCommand(CreatePatientDTO Dto, int Id) : IRequest<ErrorOr<Patient>>;
+    public record UpdatePatientCommand(CreatePatientRequest Dto, int Id) : IRequest<ErrorOr<Patient>>;
 }

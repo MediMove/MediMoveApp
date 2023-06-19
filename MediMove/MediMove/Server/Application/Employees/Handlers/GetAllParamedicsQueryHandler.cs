@@ -56,7 +56,7 @@ namespace MediMove.Server.Application.Employees.Handlers
                     BankAccountNumber = x.Paramedic.BankAccountNumber,
                     IsWorking = x.Paramedic.IsWorking,
                     IsDriver = x.Paramedic.IsDriver,
-                    Rate = x.Paramedic.Rates
+                    PayPerHour = x.Paramedic.Rates
                         .OrderByDescending(r => r.Date)
                         .First()
                         .PayPerHour
