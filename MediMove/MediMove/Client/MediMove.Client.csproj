@@ -24,8 +24,4 @@
     <ProjectReference Include="..\Shared\MediMove.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Pages\Admin\" />
-  </ItemGroup>
-
 </Project>
