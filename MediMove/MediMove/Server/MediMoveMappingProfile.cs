@@ -71,7 +71,8 @@ namespace MediMove.Server
                 .ForPath(m => m.PersonalInformation.PostalCode, c => c.MapFrom(s => s.PostalCode))
                 .ForPath(m => m.PersonalInformation.City, c => c.MapFrom(s => s.City))
                 .ForPath(m => m.PersonalInformation.StateProvince, c => c.MapFrom(s => s.StateProvince))
-                .ForPath(m => m.PersonalInformation.Country, c => c.MapFrom(s => s.Country));
+                .ForPath(m => m.PersonalInformation.Country, c => c.MapFrom(s => s.Country))
+                .ForPath(m => m.PersonalInformation.PhoneNumber, c => c.MapFrom(s => s.PhoneNumber));
 
             CreateMap<DispatcherDTO, Dispatcher>()
                 .ForPath(m => m.PersonalInformation.FirstName, c => c.MapFrom(s => s.FirstName))
@@ -82,7 +83,8 @@ namespace MediMove.Server
                 .ForPath(m => m.PersonalInformation.PostalCode, c => c.MapFrom(s => s.PostalCode))
                 .ForPath(m => m.PersonalInformation.City, c => c.MapFrom(s => s.City))
                 .ForPath(m => m.PersonalInformation.StateProvince, c => c.MapFrom(s => s.StateProvince))
-                .ForPath(m => m.PersonalInformation.Country, c => c.MapFrom(s => s.Country));
+                .ForPath(m => m.PersonalInformation.Country, c => c.MapFrom(s => s.Country))
+                .ForPath(m => m.PersonalInformation.PhoneNumber, c => c.MapFrom(s => s.PhoneNumber));
 
             CreateMap<RegisterParamedicRequest, Paramedic>();
             CreateMap<RegisterDispatcherRequest, Dispatcher>();
