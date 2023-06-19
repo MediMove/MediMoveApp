@@ -18,27 +18,27 @@ namespace MediMove.Server.Controllers.V1
             var result = await Mediator.Send(new GetTeamQuery(id));
 
             return result.Match(
-                result => Ok(result),
+                success => Ok(success),
                 errors => Problem(errors));
         }
 
         /// <summary>
-        /// Action for getting teams by day and shift.
+        /// Action for getting teams by date and shift.
         /// </summary>
         /// <param name="date">date as DateTime</param>
         /// <param name="shift">shift as ShiftType</param>
-        /// <returns>GetTeamsByDayAndShiftResponse</returns>
+        /// <returns>GetTeamsByDateAndShiftResponse</returns>
         /// <remarks>
-        /// Example date: 2023-06-11T12:34:56Z
+        /// Example date: 2023-06-11
         /// </remarks>
         [HttpGet]
         [Authorize(Roles = "Dispatcher")]
-        public async Task<IActionResult> GetTeamsByDayAndShift([FromQuery] DateTime date, [FromQuery] ShiftType shift)
+        public async Task<IActionResult> GetTeamsByDateAndShift([FromQuery] DateTime date, [FromQuery] ShiftType shift)
         {
-            var result = await Mediator.Send(new GetTeamsByDayAndShiftQuery(date, shift));
+            var result = await Mediator.Send(new GetTeamsByDateAndShiftQuery(date, shift));
 
             return result.Match(
-                result => Ok(result),
+                success => Ok(success),
                 errors => Problem(errors));
         }
 

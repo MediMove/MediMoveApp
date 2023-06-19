@@ -10,7 +10,7 @@ namespace MediMove.Server.Application.Teams.Handlers
     /// <summary>
     /// Handler for creating teams.
     /// </summary>
-    public class CreateTeamsCommandHandler : IRequestHandler<CreateTeamsCommand, ErrorOr<IEnumerable<Team>>>
+    public class CreateTeamsCommandHandler : IRequestHandler<CreateTeamsCommand, ErrorOr<Team[]>>
     {
         private readonly IMapper _mapper;
         private readonly MediMoveDbContext _dbContext;
@@ -32,9 +32,9 @@ namespace MediMove.Server.Application.Teams.Handlers
         /// <param name="command">CreateTeamsCommand</param>
         /// <param name="cancellationToken">CancellationToken</param>
         /// <returns>IEnumerable of Teams wrapped in ErrorOr</returns>
-        public async Task<ErrorOr<IEnumerable<Team>>> Handle(CreateTeamsCommand command, CancellationToken cancellationToken)
+        public async Task<ErrorOr<Team[]>> Handle(CreateTeamsCommand command, CancellationToken cancellationToken)
         {
-            var teams = _mapper.Map<IEnumerable<Team>>(command);
+            var teams = _mapper.Map<Team[]>(command);
 
             if (teams is null)
                 return Errors.Errors.MappingError;

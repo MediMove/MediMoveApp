@@ -11,14 +11,10 @@ public record GetTransportsByDayAndShiftResponse {
 
     public record TransportInfo(
         int? TeamId,
-        string PatientFirstName,
-        string PatientLastName,
-        string PatientPhoneNumber,
-        DateTime StartTime,
+
+        string StartLocation,
         string Destination,
-        TransportType TransportType,
-        string? StartLocation,
         string? ReturnLocation,
-        string? Note
-        );
+        DateTime StartTime,
+        string? Note);
 }

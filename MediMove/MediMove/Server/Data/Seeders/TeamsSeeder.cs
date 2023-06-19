@@ -51,14 +51,14 @@ namespace MediMove.Server.Data.Seeders
                 {
                     Id = 5,
                     DriverId = 1,
-                    ParamedicId = 2,
+                    ParamedicId = 3,
                     Day = DateTime.Today,
                     ShiftType = ShiftType.Morning,
                 },
                 new Team
                 {
                     Id = 6,
-                    DriverId = 5,
+                    DriverId = 2,
                     ParamedicId = 4,
                     Day = DateTime.Today,
                     ShiftType = ShiftType.Evening,

@@ -23,7 +23,7 @@ namespace MediMove.Server.Data.Seeders
                 new Role
                 {
                     RoleId = 3,
-                    Name ="Dispatcher"
+                    Name = "Dispatcher"
 
                 },
                 new Role

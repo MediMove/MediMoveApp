@@ -21,7 +21,9 @@ namespace MediMove.Server.Data.Seeders
                     TransportType = TransportType.Visit,
                     Financing = Financing.FullyFunded,
                     StartTime = new DateTime(DateTime.Today.AddDays(-2).Year, DateTime.Today.AddDays(-2).Month, DateTime.Today.AddDays(-2).Day, 7, 0, 0),
-                    Destination =  "Saska 43 Rybnik"
+                    Destination =  "Saska 43 Rybnik",
+                    StartLocation = "Kwiatowa 1 Katowice",
+                    Note = "Wizyta potrwa około 30 minut",
                 },
                 new Transport
                 {
@@ -33,8 +35,8 @@ namespace MediMove.Server.Data.Seeders
                     Financing = Financing.FullyPaid,
                     BillingId = 1,
                     StartTime = new DateTime(DateTime.Today.AddDays(-2).Year, DateTime.Today.AddDays(-2).Month, DateTime.Today.AddDays(-2).Day, 9, 10, 0),
-                    Destination = "Nadrzeczna 55 Mysłowice"
-
+                    Destination = "Nadrzeczna 55 Mysłowice",
+                    ReturnLocation = "Nadrzeczna 70 Mysłowice"
                 },
                 new Transport
                 {
@@ -45,7 +47,7 @@ namespace MediMove.Server.Data.Seeders
                     TransportType = TransportType.Handover,
                     Financing = Financing.PartiallyFunded,
                     BillingId = 2,
-                    StartTime = new DateTime(DateTime.Today.AddDays(-2).Year, DateTime.Today.AddDays(-2).Month, DateTime.Today.AddDays(-2).Day, 14, 0, 0),
+                    StartTime = new DateTime(DateTime.Today.AddDays(-2).Year, DateTime.Today.AddDays(-2).Month, DateTime.Today.AddDays(-2).Day, 13, 0, 0),
                     Destination = "Wyszogrodzka 44 Bytom"
                 },
 
@@ -59,7 +61,7 @@ namespace MediMove.Server.Data.Seeders
                     TransportType = TransportType.Handover,
                     Financing = Financing.PartiallyFunded,
                     BillingId = 3,
-                    StartTime = new DateTime(DateTime.Today.AddDays(-2).Year, DateTime.Today.AddDays(-2).Month, DateTime.Today.AddDays(-2).Day, 7, 30, 0),
+                    StartTime = new DateTime(DateTime.Today.AddDays(-2).Year, DateTime.Today.AddDays(-2).Month, DateTime.Today.AddDays(-2).Day, 15, 30, 0),
                     Destination = "Dobosza 101 Zabrze"
                 },
                 new Transport
@@ -70,8 +72,8 @@ namespace MediMove.Server.Data.Seeders
                     PatientPosition = PatientPosition.Lying,
                     TransportType = TransportType.Visit,
                     Financing = Financing.FullyFunded,
-                    StartTime = new DateTime(DateTime.Today.AddDays(-2).Year, DateTime.Today.AddDays(-2).Month, DateTime.Today.AddDays(-2).Day, 12, 0, 0),
-                    Destination = "Dyngus 30 Chorzów"
+                    StartTime = new DateTime(DateTime.Today.AddDays(-2).Year, DateTime.Today.AddDays(-2).Month, DateTime.Today.AddDays(-2).Day, 18, 0, 0),
+                    Destination = "Dyngus 30 Chorzów",
                 },
 
                 // Yesterday
@@ -106,7 +108,7 @@ namespace MediMove.Server.Data.Seeders
                     PatientPosition = PatientPosition.Walking,
                     TransportType = TransportType.Visit,
                     Financing = Financing.FullyFunded,
-                    StartTime = new DateTime(DateTime.Today.AddDays(-1).Year, DateTime.Today.AddDays(-1).Month, DateTime.Today.AddDays(-1).Day, 13, 0, 0),
+                    StartTime = new DateTime(DateTime.Today.AddDays(-1).Year, DateTime.Today.AddDays(-1).Month, DateTime.Today.AddDays(-1).Day, 12, 0, 0),
                     Destination = "Ustronna 70 Gliwice"
                 },
 
@@ -139,7 +141,7 @@ namespace MediMove.Server.Data.Seeders
                     TeamId = 4,
                     PatientId = 5,
                     PatientPosition = PatientPosition.Lying,
-                    TransportType = TransportType.Visit,
+                    TransportType = TransportType.Handover,
                     Financing = Financing.FullyFunded,
                     StartTime = new DateTime(DateTime.Today.AddDays(-1).Year, DateTime.Today.AddDays(-1).Month, DateTime.Today.AddDays(-1).Day, 20, 0, 0),
                     Destination = "Rycerska 13 Sosnowiec"

@@ -2,11 +2,11 @@
 
 namespace MediMove.Shared.Models.DTOs
 {
-    public class CreateTeamsRequest
+    public record CreateTeamsRequest
     {
-        public DateTime Day { get; set; }
+        public DateTime Date { get; set; }
         public ShiftType Shift { get; set; }
-        public IEnumerable<TeamInfo> Teams { get; set; }
+        public HashSet<TeamInfo> Teams { get; set; }
         public record TeamInfo(int DriverId, int ParamedicId);
     }
 }
