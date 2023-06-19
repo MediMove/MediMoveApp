@@ -7,4 +7,4 @@ using MediMove.Shared.Models.DTOs;
 
 namespace MediMove.Server.Application.Patients.Commands;
 
-public record CreatePatientCommand(CreatePatientRequest Request) : IRequest<ErrorOr<Patient>>;
+public record CreatePatientCommand(CreatePatientDTO Dto) : IRequest<ErrorOr<Patient>>;
