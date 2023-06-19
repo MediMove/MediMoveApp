@@ -125,6 +125,8 @@
                 modifiedEmployees.Add(employees.ElementAt(i));
 
         updateResult = await _employeeService.UpdateEmployees(modifiedEmployees);
+        if (updateResult == "")
+            employeesSave = employees.Select(e => e with {}).ToList(); // deep copy
         //Console.WriteLine($"update result: {updateResult}");
     }
 }
