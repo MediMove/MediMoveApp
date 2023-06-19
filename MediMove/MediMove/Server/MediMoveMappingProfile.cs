@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using MediMove.Server.Application.Authentication.Commands;
 using MediMove.Server.Application.Availabilities.Commands;
 using MediMove.Server.Application.Models;
 using MediMove.Server.Application.Teams.Commands;
 using MediMove.Shared.Models.DTOs;
+using System;
 
 namespace MediMove.Server
 {
@@ -42,16 +44,14 @@ namespace MediMove.Server
                 .ForMember(m => m.StateProvince, c => c.MapFrom(s => s.PersonalInformation.StateProvince))
                 .ForMember(m => m.Country, c => c.MapFrom(s => s.PersonalInformation.Country));
 
-            CreateMap<CreatePatientDTO, Patient>()
+            CreateMap<CreatePatientRequest, Patient>()
                 .ConvertUsing<PatientConverter>();
 
             CreateMap<CreateTransportWithBillingDTO, Transport>()
                 .ConvertUsing<TransportWithBillingConverter>();
 
-            
 
-
-            CreateMap<RegisterUserDTO, User>();
+            CreateMap<RegisterUserCommand, User>();
 
             CreateMap<Team, GetTeamsByDateAndShiftResponse.TeamInfo>()
                 .ForMember(m => m.DriverFirstName, c => c.MapFrom(s => s.Driver.PersonalInformation.FirstName))
@@ -61,6 +61,36 @@ namespace MediMove.Server
 
             CreateMap<CreateTeamsCommand, Team[]>()
                 .ConvertUsing<CreateTeamsCommandToTeamIEnumerableConverter>();
+
+            CreateMap<ParamedicDTO, Paramedic>()
+                .ForPath(m => m.PersonalInformation.FirstName, c => c.MapFrom(s => s.FirstName))
+                .ForPath(m => m.PersonalInformation.LastName, c => c.MapFrom(s => s.LastName))
+                .ForPath(m => m.PersonalInformation.StreetAddress, c => c.MapFrom(s => s.StreetAddress))
+                .ForPath(m => m.PersonalInformation.HouseNumber, c => c.MapFrom(s => s.HouseNumber))
+                .ForPath(m => m.PersonalInformation.ApartmentNumber, c => c.MapFrom(s => s.ApartmentNumber))
+                .ForPath(m => m.PersonalInformation.PostalCode, c => c.MapFrom(s => s.PostalCode))
+                .ForPath(m => m.PersonalInformation.City, c => c.MapFrom(s => s.City))
+                .ForPath(m => m.PersonalInformation.StateProvince, c => c.MapFrom(s => s.StateProvince))
+                .ForPath(m => m.PersonalInformation.Country, c => c.MapFrom(s => s.Country))
+                .ForPath(m => m.PersonalInformation.PhoneNumber, c => c.MapFrom(s => s.PhoneNumber));
+
+            CreateMap<DispatcherDTO, Dispatcher>()
+                .ForPath(m => m.PersonalInformation.FirstName, c => c.MapFrom(s => s.FirstName))
+                .ForPath(m => m.PersonalInformation.LastName, c => c.MapFrom(s => s.LastName))
+                .ForPath(m => m.PersonalInformation.StreetAddress, c => c.MapFrom(s => s.StreetAddress))
+                .ForPath(m => m.PersonalInformation.HouseNumber, c => c.MapFrom(s => s.HouseNumber))
+                .ForPath(m => m.PersonalInformation.ApartmentNumber, c => c.MapFrom(s => s.ApartmentNumber))
+                .ForPath(m => m.PersonalInformation.PostalCode, c => c.MapFrom(s => s.PostalCode))
+                .ForPath(m => m.PersonalInformation.City, c => c.MapFrom(s => s.City))
+                .ForPath(m => m.PersonalInformation.StateProvince, c => c.MapFrom(s => s.StateProvince))
+                .ForPath(m => m.PersonalInformation.Country, c => c.MapFrom(s => s.Country))
+                .ForPath(m => m.PersonalInformation.PhoneNumber, c => c.MapFrom(s => s.PhoneNumber));
+
+            CreateMap<RegisterParamedicRequest, Paramedic>();
+            CreateMap<RegisterDispatcherRequest, Dispatcher>();
+
+            CreateMap<RegisterParamedicRequest, PersonalInformation>();
+            CreateMap<RegisterDispatcherRequest, PersonalInformation>();
         }
     }
 
@@ -129,9 +159,9 @@ namespace MediMove.Server
         }
     }
 
-    public class PatientConverter : ITypeConverter<CreatePatientDTO, Patient>
+    public class PatientConverter : ITypeConverter<CreatePatientRequest, Patient>
     {
-        public Patient Convert(CreatePatientDTO source, Patient destination, ResolutionContext context)
+        public Patient Convert(CreatePatientRequest source, Patient destination, ResolutionContext context)
         {
             var patient = new Patient();
 

@@ -1,19 +1,19 @@
 ﻿using FluentValidation;
-using MediMove.Server.Application.Patients.Commands;
+using MediMove.Server.Application.Authentication.Commands;
 using MediMove.Server.Application.Shared;
 using MediMove.Shared.Validators;
 
-namespace MediMove.Server.Application.Patients.Validators
+namespace MediMove.Server.Application.Authentication.Validators
 {
     /// <summary>
-    /// Validator for <see cref="CreatePatientCommand"/>.
+    /// Validator for <see cref="RegisterParamedicCommand"/>.
     /// </summary>
-    public class CreatePatientCommandValidator : AbstractValidator<CreatePatientCommand>
+    public class RegisterParamedicCommandValidator : AbstractValidator<RegisterParamedicCommand>
     {
         /// <summary>
-        /// Constructor for <see cref="CreatePatientCommandValidator"/>.
+        /// Constructor for <see cref="RegisterParamedicCommandValidator"/>.
         /// </summary>
-        public CreatePatientCommandValidator()
+        public RegisterParamedicCommandValidator()
         {
             RuleFor(x => x.Request.FirstName).FirstName();
 
@@ -35,7 +35,9 @@ namespace MediMove.Server.Application.Patients.Validators
 
             RuleFor(x => x.Request.PhoneNumber).PhoneNumber();
 
-            RuleFor(x => x.Request.Weight).Must(i => i.IsValidWeight()).WithMessage("Invalid {PropertyName}");
+            RuleFor(x => x.Request.BankAccountNumber).BankAccountNumber();
+
+            RuleFor(x => x.Request.PayPerHour).Must(s => s.IsValidPayPerHour()).WithMessage("Invalid {PropertyName}");
         }
     }
 }
