@@ -7,7 +7,7 @@
     <RadzenDatePicker @bind-Value=@value Inline="true" Change="Change" />
 </div>
 
-<RadzenDataList WrapItems="true" Data="@transports" TItem="TransportDTO">
+<RadzenDataList WrapItems="true" Data="@transports" TItem="GetTransportsByParamedicAndDateRangeResponse.TransportInfo">
     <Template Context="transport">
         <RadzenCard class="cart-box">
            
@@ -20,22 +20,17 @@
                     <br />
                     <div>
                         Start Location: @transport.StartLocation
-                        Return Location: @transport.ReturnLocation
-                        Return Location: @transport.ReturnLocation
-                        @*@transport.PatientHouseNumber @if (transport.PatientApartmentNumber != null) { @transport.PatientApartmentNumber }  
-                        <br />
-                        @transport.PatientPostalCode @transport.PatientCity*@
+                        @if (transport.ReturnLocation != null) {
+                            <div>Return location: @transport.ReturnLocation</div>
+                        }
+
                     </div>
                     <br />
                     <div>Position: @transport.PatientPosition</div>
                     <div>Weight: @transport.PatientWeight</div>
                     <br />
-                    <div>Type: @transport.TransportType</div>
                     <div>Financing: @transport.Financing</div>
 
-                    
-                   
-                    
                     
                     
                 </div>
@@ -48,7 +43,7 @@
 
 
 @code {
-    private IEnumerable<TransportDTO> transports;
+    private IEnumerable<GetTransportsByParamedicAndDateRangeResponse.TransportInfo> transports;
     DateTime? value = DateTime.Now;
 
     protected override async Task OnInitializedAsync()

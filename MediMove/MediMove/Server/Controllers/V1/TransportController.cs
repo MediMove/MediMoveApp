@@ -34,10 +34,10 @@ namespace MediMove.Server.Controllers.V1
         [Authorize(Roles = "Paramedic")]
         public async Task<IActionResult> GetTransportsByParamedicAndDateRange([FromQuery] DateTime? startDateInclusive, [FromQuery] DateTime? endDateInclusive)
         {
-            var result = await Mediator.Send(new GetTransportsByParamedicAndDateRangeQuery(getUserId(), startDateInclusive, endDateInclusive));
-
+            var result = await Mediator.Send(new GetTransportsByParamedicAndDateRangeQuery(GetUserId(), startDateInclusive, endDateInclusive));
+            
             return result.Match(
-                result => Ok(result),
+                success => Ok(success),
                 errors => Problem(errors));
         }
 
@@ -48,7 +48,7 @@ namespace MediMove.Server.Controllers.V1
         /// <param name="shift">shift as ShiftType</param>
         /// <returns>>GetTransportsByDayAndShiftResponse</returns>
         /// <remarks>
-        /// Example date: 2023-06-11T12:34:56Z
+        /// Example date: 2023-06-11
         /// </remarks>
         [HttpGet("Date")]
         [Authorize(Roles = "Dispatcher")]
@@ -57,7 +57,7 @@ namespace MediMove.Server.Controllers.V1
             var result = await Mediator.Send(new GetTransportsByDayAndShiftQuery(date, shift));
 
             return result.Match(
-                result => Ok(result),
+                success => Ok(success),
                 errors => Problem(errors));
         }
 
@@ -130,7 +130,7 @@ namespace MediMove.Server.Controllers.V1
         /// <returns>no content</returns>
         [HttpPatch]
         [Authorize(Roles = "Dispatcher")]
-        public async Task<IActionResult> DeleteTransports([FromBody] CancelTransportsRequest request)
+        public async Task<IActionResult> CancelTransports([FromBody] CancelTransportsRequest request)
         {
             var result = await Mediator.Send(new CancelTransportsCommand(request));
 

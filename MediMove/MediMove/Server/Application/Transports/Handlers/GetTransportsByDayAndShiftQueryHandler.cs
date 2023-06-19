@@ -1,9 +1,11 @@
 ﻿using ErrorOr;
 using MediatR;
+using MediMove.Server.Application.Shared;
 using MediMove.Server.Application.Transports.Queries;
 using MediMove.Server.Data;
 using MediMove.Shared.Extensions;
 using MediMove.Shared.Models.DTOs;
+using MediMove.Shared.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace MediMove.Server.Application.Transports.Handlers
@@ -44,14 +46,10 @@ namespace MediMove.Server.Application.Transports.Handlers
                     TransportInfo = new GetTransportsByDayAndShiftResponse.TransportInfo
                     (
                         t.TeamId,
-                        t.Patient.PersonalInformation.FirstName,
-                        t.Patient.PersonalInformation.LastName,
-                        t.Patient.PersonalInformation.PhoneNumber,
-                        t.StartTime,
+                        t.StartLocation ?? PersonalInformationToLocationConverter.Convert(t.Patient.PersonalInformation.HouseNumber, t.Patient.PersonalInformation.ApartmentNumber, t.Patient.PersonalInformation.StreetAddress, t.Patient.PersonalInformation.PostalCode, t.Patient.PersonalInformation.City),
                         t.Destination,
-                        t.TransportType,
-                        t.StartLocation,
-                        t.ReturnLocation,
+                        t.TransportType == TransportType.Visit ? t.ReturnLocation ?? PersonalInformationToLocationConverter.Convert(t.Patient.PersonalInformation.HouseNumber, t.Patient.PersonalInformation.ApartmentNumber, t.Patient.PersonalInformation.StreetAddress, t.Patient.PersonalInformation.PostalCode, t.Patient.PersonalInformation.City) : null,
+                        t.StartTime,
                         t.Note
                     )
                 })

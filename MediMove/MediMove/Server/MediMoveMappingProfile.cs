@@ -10,13 +10,9 @@ namespace MediMove.Server
     {
         public MediMoveMappingProfile()
         {
-
-            
-
-
             CreateMap<Team, TeamDTO>();
 
-            CreateMap<CreateAvailabilitiesCommand, IEnumerable<Availability>>()
+            CreateMap<CreateAvailabilitiesCommand, Availability[]>()
                 .ConvertUsing<CreateAvailabilitiesCommandToAvailabilityListConverter>();
 
             CreateMap<Transport, TransportDTO>()
@@ -57,70 +53,76 @@ namespace MediMove.Server
 
             CreateMap<RegisterUserDTO, User>();
 
-            CreateMap<Team, GetTeamsByDayAndShiftResponse.TeamInfo>()
+            CreateMap<Team, GetTeamsByDateAndShiftResponse.TeamInfo>()
                 .ForMember(m => m.DriverFirstName, c => c.MapFrom(s => s.Driver.PersonalInformation.FirstName))
                 .ForMember(m => m.DriverLastName, c => c.MapFrom(s => s.Driver.PersonalInformation.LastName))
                 .ForMember(m => m.ParamedicFirstName, c => c.MapFrom(s => s.Paramedic.PersonalInformation.FirstName))
                 .ForMember(m => m.ParamedicLastName, c => c.MapFrom(s => s.Paramedic.PersonalInformation.LastName));
 
-            CreateMap<CreateTeamsCommand, IEnumerable<Team>>()
+            CreateMap<CreateTeamsCommand, Team[]>()
                 .ConvertUsing<CreateTeamsCommandToTeamIEnumerableConverter>();
         }
     }
 
 
     /// <summary>
-    /// Converter from CreateTeamsCommand to IEnumerable of Teams
+    /// Converter from CreateTeamsCommand to array of teams
     /// </summary>
-    public class CreateTeamsCommandToTeamIEnumerableConverter : ITypeConverter<CreateTeamsCommand, IEnumerable<Team>>
+    public class CreateTeamsCommandToTeamIEnumerableConverter : ITypeConverter<CreateTeamsCommand, Team[]>
     {
         /// <summary>
-        /// Method that converts CreateTeamsCommand to IEnumerable of Teams
+        /// Method that converts CreateTeamsCommand to array of teams
         /// </summary>
         /// <param name="source">CreateTeamsCommand</param>
-        /// <param name="destination">IEnumerable of Teams</param>
+        /// <param name="destination">array of teams</param>
         /// <param name="context">ResolutionContext</param>
-        /// <returns></returns>
-        public IEnumerable<Team> Convert(CreateTeamsCommand source, IEnumerable<Team> destination, ResolutionContext context)
+        /// <returns>array of teams</returns>
+        public Team[] Convert(CreateTeamsCommand source, Team[] destination, ResolutionContext context)
         {
-            var teams = new List<Team>();
-
+            var teams = new Team[source.Request.Teams.Count];
+            int i = 0;
             foreach (var team in source.Request.Teams)
-                teams.Add(new Team
+            {
+                teams[i] = new Team
                 {
                     DriverId = team.DriverId,
                     ParamedicId = team.ParamedicId,
-                    Day = source.Request.Day.Date
-                });
+                    Day = source.Request.Date.Date,
+                    ShiftType = source.Request.Shift
 
+                };
+                i++;
+            }
+                
             return teams;
         }
     }
 
     /// <summary>
-    /// Converter for CreateAvailabilitiesCommand to IEnumerable of Availabilities
+    /// Converter for CreateAvailabilitiesCommand to availabilities array
     /// </summary>
-    public class CreateAvailabilitiesCommandToAvailabilityListConverter : ITypeConverter<CreateAvailabilitiesCommand, IEnumerable<Availability>>
+    public class CreateAvailabilitiesCommandToAvailabilityListConverter : ITypeConverter<CreateAvailabilitiesCommand, Availability[]>
     {
         /// <summary>
-        /// Method that converts CreateAvailabilitiesCommand to IEnumerable of Availabilities
+        /// Method that converts CreateAvailabilitiesCommand to availabilities array
         /// </summary>
         /// <param name="source">CreateAvailabilitiesCommand object</param>
-        /// <param name="destination">IEnumerable of Availabilities</param>
+        /// <param name="destination">array of availabilities</param>
         /// <param name="context">ResolutionContext object</param>
-        /// <returns>IEnumerable of Availabilities</returns>
-        public IEnumerable<Availability> Convert(CreateAvailabilitiesCommand source, IEnumerable<Availability> destination, ResolutionContext context)
+        /// <returns>array of availabilities</returns>
+        public Availability[] Convert(CreateAvailabilitiesCommand source, Availability[] destination, ResolutionContext context)
         {
-            var availabilities = new List<Availability>();
-
+            var availabilities = new Availability[source.Request.Availabilities.Count];
+            int i = 0;
             foreach (var declaration in source.Request.Availabilities)
             {
-                availabilities.Add(new Availability
+                availabilities[i] = new Availability
                 {
                     ParamedicId = source.ParamedicId,
-                    Day = declaration.Day,
-                    ShiftType = declaration.Shift
-                });
+                    Day = declaration.Key,
+                    ShiftType = declaration.Value
+                };
+                i++;
             }
 
             return availabilities;

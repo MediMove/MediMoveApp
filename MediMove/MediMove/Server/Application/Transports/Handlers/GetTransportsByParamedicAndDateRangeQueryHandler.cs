@@ -1,9 +1,13 @@
-﻿using ErrorOr;
+﻿using AutoMapper;
+using ErrorOr;
 using MediatR;
+using MediMove.Server.Application.Shared;
 using MediMove.Server.Application.Transports.Queries;
 using MediMove.Server.Data;
 using MediMove.Shared.Models.DTOs;
+using MediMove.Shared.Models.Enums;
 using Microsoft.EntityFrameworkCore;
+using Radzen.Blazor.Rendering;
 
 namespace MediMove.Server.Application.Transports.Handlers
 {
@@ -12,14 +16,16 @@ namespace MediMove.Server.Application.Transports.Handlers
     /// </summary>
     public class GetTransportsByParamedicAndDateRangeQueryHandler : IRequestHandler<GetTransportsByParamedicAndDateRangeQuery, ErrorOr<GetTransportsByParamedicAndDateRangeResponse>>
     {
+        private readonly IMapper _mapper;
         private readonly MediMoveDbContext _dbContext;
 
         /// <summary>
         /// Constructor for GetTransportsByParamedicAndDateRangeQueryHandler.
         /// </summary>
         /// <param name="dbContext">dbContext to inject</param>
-        public GetTransportsByParamedicAndDateRangeQueryHandler(MediMoveDbContext dbContext)
+        public GetTransportsByParamedicAndDateRangeQueryHandler(IMapper mapper, MediMoveDbContext dbContext)
         {
+            _mapper = mapper;
             _dbContext = dbContext;
         }
 
@@ -31,39 +37,37 @@ namespace MediMove.Server.Application.Transports.Handlers
         /// <returns>GetTransportsByParamedicAndDateRangeResponse wrapped in ErrorOr</returns>
         public async Task<ErrorOr<GetTransportsByParamedicAndDateRangeResponse>> Handle(GetTransportsByParamedicAndDateRangeQuery query, CancellationToken cancellationToken)
         {
-            var transports =  _dbContext.Transports
+            var transportInfos = await _dbContext.Transports
                 .Where(t => !t.IsCancelled &&
                     (!query.StartDateInclusive.HasValue || t.StartTime.Date >= query.StartDateInclusive.Value.Date) &&
                     (!query.EndDateInclusive.HasValue || t.StartTime.Date <= query.EndDateInclusive.Value.Date) &&
                     (t.Team.DriverId == query.ParamedicId || t.Team.ParamedicId == query.ParamedicId))
-                .Include(t => t.Patient)
-                .ThenInclude(p => p.PersonalInformation)
-                .Select(t => new TransportDTO
-                {
-                    PatientFirstName = t.Patient.PersonalInformation.FirstName,
-                    PatientLastName = t.Patient.PersonalInformation.LastName,
-                    PatientPhoneNumber = t.Patient.PersonalInformation.PhoneNumber,
-                    PatientStreetAddress = t.Patient.PersonalInformation.StreetAddress,
-                    PatientHouseNumber = t.Patient.PersonalInformation.HouseNumber,
-                    PatientApartmentNumber = t.Patient.PersonalInformation.ApartmentNumber,
-                    PatientPostalCode = t.Patient.PersonalInformation.PostalCode,
-                    PatientCity = t.Patient.PersonalInformation.City,
-                    PatientWeight = t.Patient.Weight,
-                    StartTime = t.StartTime,
-                    Financing = t.Financing,
-                    PatientPosition = t.PatientPosition,
-                    Destination = t.Destination,
-                    TransportType = t.TransportType
-                })
-                .GroupBy(t=> t.StartTime.Date)
-                .ToDictionary(
-                    x=> x.Key,
-                    x => (IEnumerable<TransportDTO>)x
-                    );
+                .Select(t => new GetTransportsByParamedicAndDateRangeResponse.TransportInfo(
+                    t.Patient.PersonalInformation.FirstName,
+                    t.Patient.PersonalInformation.LastName,
+                    t.Patient.PersonalInformation.PhoneNumber,
+                    t.Patient.Weight,
+                    t.StartLocation ?? PersonalInformationToLocationConverter.Convert(t.Patient.PersonalInformation.HouseNumber, t.Patient.PersonalInformation.ApartmentNumber, t.Patient.PersonalInformation.StreetAddress, t.Patient.PersonalInformation.PostalCode, t.Patient.PersonalInformation.City),
+                    t.Destination,
+                    t.TransportType == TransportType.Visit ? t.ReturnLocation ?? PersonalInformationToLocationConverter.Convert(t.Patient.PersonalInformation.HouseNumber, t.Patient.PersonalInformation.ApartmentNumber, t.Patient.PersonalInformation.StreetAddress, t.Patient.PersonalInformation.PostalCode, t.Patient.PersonalInformation.City) : null,
+                    t.StartTime,
+                    t.Financing,
+                    t.PatientPosition,
+                    t.Note)
+                ).ToListAsync(cancellationToken);
 
-            
-            return new GetTransportsByParamedicAndDateRangeResponse(
-                transports);
+            var DateToTransportInfos = transportInfos
+                .GroupBy(t => t.StartTime.Date)
+                .ToDictionary(
+                    x => x.Key,
+                    x => x.ToArray()
+                );
+
+
+            return new GetTransportsByParamedicAndDateRangeResponse
+            {
+                Transports = DateToTransportInfos
+            };
         }
     }
 }

@@ -85,7 +85,7 @@ namespace MediMove.Server.Data.Seeders
                 {
                     Id = 11,
                     Day = DateTime.Today,
-                    ShiftType = ShiftType.Morning,
+                    ShiftType = ShiftType.Evening,
                     ParamedicId = 2,
                 },
                 new Availability

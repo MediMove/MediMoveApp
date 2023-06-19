@@ -14,7 +14,7 @@ namespace MediMove.Server.Controllers
 
         protected ISender Mediator => _mediator ??= HttpContext.RequestServices.GetRequiredService<ISender>();
 
-        protected int getUserId() => int.Parse(HttpContext.User.Claims
+        protected int GetUserId() => int.Parse(HttpContext.User.Claims
             .Single(c => c.Type.Equals("AccountId")).Value);
 
         protected IActionResult Problem(List<Error> errors)

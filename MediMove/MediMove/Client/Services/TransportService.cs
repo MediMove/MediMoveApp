@@ -21,7 +21,7 @@ namespace MediMove.Client.Services
             _navigationManager = navigationManager;
         }
 
-        public async Task<IEnumerable<TransportDTO>> GetTransportByDay(int day, int month, int year)
+        public async Task<GetTransportsByParamedicAndDateRangeResponse.TransportInfo[]> GetTransportByDay(int day, int month, int year)
         {
 
             var baseUri = new Uri(_navigationManager.BaseUri);
@@ -56,7 +56,7 @@ namespace MediMove.Client.Services
 
             //var result = await response.Content.ReadAsStringAsync();
             
-            result.Transports.TryGetValue(new DateTime(year, month, day), out IEnumerable<TransportDTO> toReturn);
+            result.Transports.TryGetValue(new DateTime(year, month, day), out GetTransportsByParamedicAndDateRangeResponse.TransportInfo[] toReturn);
 
             return toReturn;
 
