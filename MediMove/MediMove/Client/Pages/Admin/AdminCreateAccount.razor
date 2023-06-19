@@ -1,0 +1,56 @@
+﻿@page "/admin/account/create"
+@using MediMove.Client.temp;
+@using MediMove.Shared.Models.DTOs
+@using MediMove.Shared.Models.Enums
+@using MediMove.Client.Services
+@using System.Globalization
+@inject MediMoveAuthenticationStateProvider _stcateProvider
+
+
+<h3>Create Account</h3>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Account Details</h5>
+                    <EditForm Model="@registerUserDTO" OnValidSubmit="HandleValidSubmit">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <InputText id="email" class="form-control" @bind-Value="registerUserDTO.Email" />
+                            <ValidationMessage For="@(() => registerUserDTO.Email)" />
+                        </div>
+                        <div class="form-group">
+                            <label for="Password">Password:</label>
+                            <RadzenPassword id="Password" class="form-control" @bind-Value="registerUserDTO.Password"></RadzenPassword>   @*Placeholder="Enter password..."*@
+                            <ValidationMessage For="@(() => registerUserDTO.Password)" />
+                        </div>
+                        <div class="form-group">
+                            <label for="ConfirmPassword">Confirm Password:</label>
+                            <RadzenPassword id="ConfirmPassword" class="form-control" @bind-Value="registerUserDTO.ConfirmPassword"></RadzenPassword>   @*Placeholder="Enter password..."*@
+                            <ValidationMessage For="@(() => registerUserDTO.ConfirmPassword)" />
+                        </div>
+
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@code {
+    private RegisterUserDTO registerUserDTO = new();
+
+    
+
+    public async Task HandleValidSubmit()
+    {
+        
+    }
+}

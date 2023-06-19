@@ -36,6 +36,9 @@
                         </div>
                     </EditForm>
                     <div>
+                        <br />
+                        <br />
+
                         <button type="button" class="btn btn-primary" @onclick="Save"> Submit avability</button>
                     </div>
                 </div>
@@ -50,7 +53,7 @@
         <h5>Availabilities Log:</h5>
         @foreach (var availability in availabilities)
         {
-            <p>@availability.Key.ToString("dd.MM.yyyy") - @availability.Value.ToString()</p>
+            <p>@availability.Key.ToString("dd.MM.yyyy") - @availability.Value.ToString()</p> @*Podgląd*@
         }
     </div>
 }
@@ -77,9 +80,9 @@
     {
         if (value.HasValue)
         {
-            if (shiftType == null)
+            if (shiftType is null)
             {
-                availabilities[value.Value.Date] = null; // Oznaczanie dostępności na cały dzień
+                availabilities[value.Value.Date] = null; 
             }
             else
             {
@@ -88,7 +91,7 @@
         }
 
         shiftType = null;
-        StateHasChanged(); // Odświeżanie stanu komponentu
+        StateHasChanged(); 
     }
 
 
@@ -109,115 +112,3 @@
 
 }
 
-
-
-
-@*
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Avabilities</h5>
-
-                    <div class="rz-p-12 rz-text-align-center">
-                        <RadzenDatePicker @bind-Value=@value Inline="true" Change="Change" DateRender=@DateRenderSpecial />
-                    </div>
-                    <EditForm Model="@avability" OnValidSubmit="HandleValidSubmit">
-                        <div class="form-group">
-                            <label>@value.Value.Date.ToString("dd.MM.yyyy")</label>
-                        </div>
-                        
-                        
-
-                        <div class="form-group">
-                            <label for="shiftType">Shift Type:</label>
-                        <InputSelect id="shiftType" class="form-control" @bind-Value="avability.shift">
-                            <option value="">Whole Day</option>
-                            @foreach (var shiftTypes in Enum.GetValues(typeof(ShiftType)))
-                            {
-                                <option value="@shiftTypes">@shiftTypes</option>
-                            }
-                            </InputSelect>
-                            
-                        </div>
-
-                     
-
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </div>
-                    
-                    </EditForm>
-
-                    
-
-
-
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<style>
-    .confirmed-date {
-        background-color: green;
-        color: white;
-    }
-</style>
-
-@code {
-    private void HandleValidSubmit()
-    {
-        if (value.HasValue)
-        {
-            avability.date = value.Value.Date;
-            avabilities.Add(avability);
-        }
-
-        avability = new Avability();
-    }
-
-
-
-    private class Avability
-    {
-
-        public DateTime date;
-        public ShiftType shift;
-    }
-    private List<Avability> avabilities = new List<Avability>();
-    private Avability avability = new();
-    DateTime? value = DateTime.Now;
-    List<DateTime> dates = new List<DateTime>();
-
-    private void Change()
-    {
-        
-    }
-
-
-    void DateRenderSpecial(DateRenderEventArgs args)
-    {
-        if (avabilities.Any(a => a.date.Date == args.Date.Date))
-        {
-            args.Attributes.Add("style", "background-color: green; color: white;");
-        }
-    }
-
-
-}
-
-
-@*if (dates.Contains(args.Date))
-        {
-            args.Attributes.Add("style", "background-color: #ff6d41; border-color: white;");
-        }
-        
-        if(value is not null)
-        {
-            dates.Add((DateTime)value);
-            StateHasChanged();
-        }
-      *@  

@@ -30,6 +30,11 @@ namespace MediMove.Client.temp
             AuthenticationStateChanged += OnAuthenticationStateChanged;
         }
 
+        public async Task Register(RegisterUserDTO dto)
+        {
+            throw new NotImplementedException();
+        }
+
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             var tokenHandler = new JwtSecurityTokenHandler();
