@@ -18,9 +18,9 @@ namespace MediMove.Server.Application.Patients.Handlers
             _mapper = mapper;
             _dbContext = dbContext;
         }
-        public async Task<ErrorOr<Patient>> Handle(CreatePatientCommand command, CancellationToken cancellationToken)
+        public async Task<ErrorOr<Patient>> Handle(CreatePatientCommand request, CancellationToken cancellationToken)
         {
-            var patient = _mapper.Map<Patient>(command.Request);
+            var patient = _mapper.Map<Patient>(request.Dto);
 
             if (patient is null)
                 return Errors.Errors.MappingError;

@@ -1,14 +1,9 @@
 ﻿using ErrorOr;
 using MediatR;
 using MediMove.Server.Application.Models;
+using MediMove.Shared.Models.DTOs;
 
-namespace MediMove.Server.Application.Authentication.Commands;
-
-/// <summary>
-/// Command for registering a user.
-/// </summary>
-/// <param name="Email">email as string</param>
-/// <param name="Password">password as string</param>
-/// <param name="AccountId">id of related entity</param>
-/// <param name="RoleName">role name</param>
-public record RegisterUserCommand(string Email, string Password, int? AccountId, string RoleName) : IRequest<ErrorOr<User>>;
+namespace MediMove.Server.Application.Authentication.Commands
+{
+    public record RegisterUserCommand(RegisterUserDTO dto) : IRequest<ErrorOr<User>>;
+}

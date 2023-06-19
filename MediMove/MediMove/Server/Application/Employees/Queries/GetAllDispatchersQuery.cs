@@ -7,5 +7,5 @@ namespace MediMove.Server.Application.Employees.Queries;
 /// <summary>
 /// Query for getting all dispatchers.
 /// </summary>
-/// <param name="IsWorking">specifies whether to filter employees by their working status</param>
+/// <param name="IsWorking">Specifies whether to filter employees by their working status</param>
 public record GetAllDispatchersQuery(bool? IsWorking = null) : IRequest<ErrorOr<GetAllDispatchersResponse>>;

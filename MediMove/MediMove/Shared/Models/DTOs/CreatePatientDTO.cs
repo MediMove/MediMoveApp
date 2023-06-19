@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MediMove.Shared.Models.DTOs
 {
-    public class CreatePatientRequest
+    public class CreatePatientDTO
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

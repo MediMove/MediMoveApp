@@ -1,41 +1,42 @@
 ﻿using FluentValidation;
 using MediMove.Server.Application.Patients.Commands;
-using MediMove.Server.Application.Shared;
-using MediMove.Shared.Validators;
 
 namespace MediMove.Server.Application.Patients.Validators
 {
-    /// <summary>
-    /// Validator for <see cref="CreatePatientCommand"/>.
-    /// </summary>
     public class CreatePatientCommandValidator : AbstractValidator<CreatePatientCommand>
     {
-        /// <summary>
-        /// Constructor for <see cref="CreatePatientCommandValidator"/>.
-        /// </summary>
         public CreatePatientCommandValidator()
         {
-            RuleFor(x => x.Request.FirstName).FirstName();
+            RuleFor(x => x.Dto.FirstName).NotEmpty()
+                .Matches(@"^[a-zA-Z\s-]+$").Length(2, 25);
 
-            RuleFor(x => x.Request.LastName).LastName();
+            RuleFor(x => x.Dto.LastName).NotEmpty()
+                .Matches(@"^[a-zA-Z\s-]+$").Length(2, 25);
 
-            RuleFor(x => x.Request.StreetAddress).StreetAddress();
+            RuleFor(x => x.Dto.StreetAddress).NotEmpty()
+                .Matches(@"^[a-zA-Z\s-]+$").Length(2, 30);
 
-            RuleFor(x => x.Request.HouseNumber).HouseNumber();
+            RuleFor(x => x.Dto.HouseNumber).NotEmpty()
+                .Matches(@"^[a-zA-Z0-9\s-]+$").Length(1, 10);
 
-            RuleFor(x => x.Request.ApartmentNumber).ApartmentNumber();
+            RuleFor(x => x.Dto.ApartmentNumber).LessThanOrEqualTo(200);
 
-            RuleFor(x => x.Request.PostalCode).PostalCode();
+            RuleFor(x => x.Dto.PostalCode).NotEmpty()
+                .Matches(@"^\d{2}-\d{3}(\d{2})?$");
 
-            RuleFor(x => x.Request.StateProvince).StateProvince();
+            RuleFor(x => x.Dto.StateProvince).NotEmpty()
+                .Matches(@"^[a-zA-Z\s-]+$").Length(2, 30);
 
-            RuleFor(x => x.Request.City).City();
+            RuleFor(x => x.Dto.City).NotEmpty()
+                .Matches(@"^[a-zA-Z\s-]+$").Length(2, 30);
 
-            RuleFor(x => x.Request.Country).Country();
+            RuleFor(x => x.Dto.Country).NotEmpty()
+                .Matches(@"^[a-zA-Z\s-]+$").Length(2, 30);
 
-            RuleFor(x => x.Request.PhoneNumber).PhoneNumber();
+            RuleFor(x => x.Dto.PhoneNumber).NotEmpty()
+                .Matches(@"^[0-9]+([- ]?[0-9]+)*$").Length(2, 30);
 
-            RuleFor(x => x.Request.Weight).Must(i => i.IsValidWeight()).WithMessage("Invalid {PropertyName}");
+            RuleFor(x => x.Dto.Weight).NotEmpty();
         }
     }
 }
