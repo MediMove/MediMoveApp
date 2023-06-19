@@ -1,0 +1,197 @@
+﻿@page "/dispacher/CreateTransport"
+@using MediMove.Shared.Models.DTOs
+@using MediMove.Shared.Models.Enums
+@using MediMove.Client.Services
+@using System.Globalization
+@inject PatientService _PatientService
+
+<h3>Create Transport</h3>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Transport Details</h5>
+
+                    <EditForm Model="@createTransportDTO" OnValidSubmit="HandleValidSubmit">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+
+                        <div class="form-group">
+                            <label for="patientId">Patient ID:</label>
+                            <input type="text" id="patientId" class="form-control" readonly value="@createTransportDTO.PatientId" />
+                            <ValidationMessage For="@(() => createTransportDTO.PatientId)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="startTime">Start Time:</label>
+                            <InputDate id="startTime" class="form-control" @bind-Value="createTransportDTO.StartTime" />
+                            <ValidationMessage For="@(() => createTransportDTO.StartTime)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="financing">Financing:</label>
+                            <InputSelect id="financing" class="form-control" @bind-Value="createTransportDTO.Financing">
+                                @foreach (var financingOption in Enum.GetValues(typeof(Financing)))
+                                {
+                                    <option value="@financingOption">@financingOption</option>
+                                }
+                            </InputSelect>
+                            <ValidationMessage For="@(() => createTransportDTO.Financing)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="patientPosition">Patient Position:</label>
+                            <InputSelect id="patientPosition" class="form-control" @bind-Value="createTransportDTO.PatientPosition">
+                                @foreach (var positionOption in Enum.GetValues(typeof(PatientPosition)))
+                                {
+                                    <option value="@positionOption">@positionOption</option>
+                                }
+                            </InputSelect>
+                            <ValidationMessage For="@(() => createTransportDTO.PatientPosition)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="destination">Destination:</label>
+                            <InputText id="destination" class="form-control" @bind-Value="createTransportDTO.Destination" />
+                            <ValidationMessage For="@(() => createTransportDTO.Destination)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="transportType">Transport Type:</label>
+                            <InputSelect id="transportType" class="form-control" @bind-Value="createTransportDTO.TransportType">
+                                @foreach (var typeOption in Enum.GetValues(typeof(TransportType)))
+                                {
+                                    <option value="@typeOption">@typeOption</option>
+                                }
+                            </InputSelect>
+                            <ValidationMessage For="@(() => createTransportDTO.TransportType)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="teamId">Team ID:</label>
+                            <InputNumber id="teamId" class="form-control" @bind-Value="createTransportDTO.TeamId" />
+                            <ValidationMessage For="@(() => createTransportDTO.TeamId)" />
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="patient-list-container">
+                        <h5>List of Patients</h5>
+                        <div class="scrollable-list">
+                            @if (allPatientsResponse != null)
+                            {
+                                foreach (var patient in allPatientsResponse.Patients)
+                                {
+                                    <div class="@GetPatientItemClass(patient.Key)" @onclick="() => SelectPatient(patient.Key)">
+                                        <div class="patient-details">
+                                            <p><strong>Name:</strong> @patient.Value.FirstName @patient.Value.LastName</p>
+                                            <p><strong>Address:</strong> @patient.Value.StreetAddress @patient.Value.HouseNumber</p>
+                                            <p><strong>City:</strong> @patient.Value.City</p>
+                                            <p><strong>Phone Number:</strong> #TO ADD#</p>
+                                            <p><strong>Country:</strong> @patient.Value.Country</p>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+
+                    <h5>Add New Patient</h5>
+                    <div class="add-patient-form">
+                        <div class="form-group">
+                            <label for="firstName">First Name:</label>
+                            <input type="text" id="firstName" class="form-control" @bind="@createPatientDTO.FirstName" />
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name:</label>
+                            <input type="text" id="lastName" class="form-control" @bind="@createPatientDTO.LastName" />
+                        </div>
+                        <div class="form-group">
+                            <label for="streetAddress">Street Address:</label>
+                            <input type="text" id="streetAddress" class="form-control" @bind="@createPatientDTO.StreetAddress" />
+                        </div>
+                        <!-- Rest of the patient form fields -->
+                        @*<button class="btn btn-primary" @onclick="AddPatient">Add Patient</button>*@
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .patient-list-container {
+        height: 500px; /* Adjust the height as needed */
+        overflow-y: auto;
+    }
+
+    .patient-item {
+        background-color: #f2f2f2;
+        padding: 10px;
+        margin-bottom: 10px;
+        cursor: pointer;
+    }
+
+    .patient-item.selected {
+        background-color: #c8e6c9;
+    }
+
+    .patient-details {
+        /* Add additional styling as desired */
+    }
+
+    .add-patient-form {
+        margin-top: 20px;
+    }
+</style>
+
+
+@code {
+    private int? _selectedPatientId;
+    private CreateTransportDTO createTransportDTO = new CreateTransportDTO();
+    private GetAllPatientsResponse allPatientsResponse; // Replace with the appropriate type and initialization
+    private CreatePatientDTO createPatientDTO = new CreatePatientDTO();
+
+    protected override async Task OnInitializedAsync()
+    {
+        allPatientsResponse = await _PatientService.GetPatients();
+        createTransportDTO.StartTime = DateTime.Now;
+    }
+
+    private void SelectPatient(int patientId)
+    {
+        if (_selectedPatientId == patientId)
+        {
+            _selectedPatientId = null; // Deselect if the same patient is clicked
+            createTransportDTO.PatientId = 0; // Update the Patient ID field to a default value
+        }
+        else
+        {
+            _selectedPatientId = patientId;
+            createTransportDTO.PatientId = patientId;
+        }
+    }
+
+    private string GetPatientItemClass(int patientId)
+    {
+        return patientId == _selectedPatientId ? "patient-item selected" : "patient-item";
+    }
+
+    private void HandleValidSubmit()
+    {
+    // Perform your desired action with the createTransportDTO object, such as saving it
+        // to a database or sending it to an API endpoint
+    }
+}
+
