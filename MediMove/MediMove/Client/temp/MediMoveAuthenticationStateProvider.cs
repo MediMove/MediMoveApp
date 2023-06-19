@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Components;
 using MediatR.NotificationPublishers;
 using MediMove.Shared.Models.DTOs;
 using System.Net.Http.Json;
+using System.Net.Http.Formatting;
+using System.Net.Http.Headers;
 
 namespace MediMove.Client.temp
 {
@@ -30,9 +32,20 @@ namespace MediMove.Client.temp
             AuthenticationStateChanged += OnAuthenticationStateChanged;
         }
 
-        public async Task Register(RegisterUserDTO dto)
+        public async Task Register(RegisterUserDTO content)
         {
-            throw new NotImplementedException();
+
+            var token = await _jSRuntime.InvokeAsync<string>("localStorage.getItem", "token");
+
+            var request = new HttpRequestMessage(HttpMethod.Post, "/api/v1/Accounts/Register");
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            request.Content = new ObjectContent<RegisterUserDTO>(content, new JsonMediaTypeFormatter());
+
+            _ = await _httpClient.SendAsync(request);
+            //Dodac logikę odnośnie odpowiedzi.
+            
+            
+            
         }
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
