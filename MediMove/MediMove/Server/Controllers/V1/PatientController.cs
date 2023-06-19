@@ -33,7 +33,7 @@ namespace MediMove.Server.Controllers.V1
 
         [HttpPost]
         [Authorize(Roles = "Dispatcher")]
-        public async Task<IActionResult> CreatePatient([FromBody] CreatePatientDTO dto)
+        public async Task<IActionResult> CreatePatient([FromBody] CreatePatientRequest dto)
         {
             var entity = await Mediator.Send(new CreatePatientCommand(dto));
 
@@ -44,7 +44,7 @@ namespace MediMove.Server.Controllers.V1
 
         [HttpPatch("{id}")]
         [Authorize(Roles = "Dispatcher")]
-        public async Task<IActionResult> EditPatient([FromRoute] int id, [FromBody] CreatePatientDTO dto)
+        public async Task<IActionResult> EditPatient([FromRoute] int id, [FromBody] CreatePatientRequest dto)
         {
             var result = await Mediator.Send(new UpdatePatientCommand(dto, id));
 
