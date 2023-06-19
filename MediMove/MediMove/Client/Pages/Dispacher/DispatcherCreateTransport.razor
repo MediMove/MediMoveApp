@@ -97,7 +97,7 @@
                                             <p><strong>Name:</strong> @patient.Value.FirstName @patient.Value.LastName</p>
                                             <p><strong>Address:</strong> @patient.Value.StreetAddress @patient.Value.HouseNumber</p>
                                             <p><strong>City:</strong> @patient.Value.City</p>
-                                            <p><strong>Phone Number:</strong> #TO ADD#</p>
+                                            <p><strong>Phone Number:</strong> Value.PhoneNumber</p>
                                             <p><strong>Country:</strong> @patient.Value.Country</p>
                                         </div>
                                     </div>
@@ -161,7 +161,7 @@
     private int? _selectedPatientId;
     private CreateTransportDTO createTransportDTO = new CreateTransportDTO();
     private GetAllPatientsResponse allPatientsResponse; // Replace with the appropriate type and initialization
-    private CreatePatientDTO createPatientDTO = new CreatePatientDTO();
+    private PatientDTO createPatientDTO = new PatientDTO();
 
     protected override async Task OnInitializedAsync()
     {
