@@ -16,6 +16,7 @@ builder.Services.AddScoped<MediMoveAuthenticationStateProvider>();
 builder.Services.AddScoped<AuthenticationStateProvider>(sp => sp.GetRequiredService<MediMoveAuthenticationStateProvider>());
 //builder.Services.AddScoped<ErrorResponse>();
 builder.Services.AddScoped<TransportService>();
+builder.Services.AddScoped<EmployeeService>();
 builder.Services.AddAuthorizationCore();
 
 await builder.Build().RunAsync();
