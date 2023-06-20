@@ -4,53 +4,230 @@
 @using MediMove.Shared.Models.Enums
 @using MediMove.Client.Services
 @using System.Globalization
+@using Microsoft.AspNetCore.Components.Web
+@using System.ComponentModel.DataAnnotations;
 @inject MediMoveAuthenticationStateProvider _stcateProvider
 
 
-<h3>Create Account</h3>
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Account Details</h5>
-                    <EditForm Model="@registerUserDTO" OnValidSubmit="HandleValidSubmit">
-                        <DataAnnotationsValidator />
-                        <ValidationSummary />
 
-                        <div class="form-group">
-                            <label for="email">Email:</label>
-                            <InputText id="email" class="form-control" @bind-Value="registerUserDTO.Email" />
-                            <ValidationMessage For="@(() => registerUserDTO.Email)" />
-                        </div>
-                        <div class="form-group">
-                            <label for="Password">Password:</label>
-                            <RadzenPassword id="Password" class="form-control" @bind-Value="registerUserDTO.Password"></RadzenPassword>   @*Placeholder="Enter password..."*@
-                            <ValidationMessage For="@(() => registerUserDTO.Password)" />
-                        </div>
-                        <div class="form-group">
-                            <label for="ConfirmPassword">Confirm Password:</label>
-                            <RadzenPassword id="ConfirmPassword" class="form-control" @bind-Value="registerUserDTO.ConfirmPassword"></RadzenPassword>   @*Placeholder="Enter password..."*@
-                            <ValidationMessage For="@(() => registerUserDTO.ConfirmPassword)" />
-                        </div>
 
-                    </EditForm>
-                </div>
-            </div>
-        </div>
+
+
+
+<RadzenCard>
+<h3>Select User Type</h3>
+<div class="rz-text-align-left">
+    <div style="width: 100%; max-width: 400px;">
+        <RadzenDropDown @bind-Value="@selectedUserType" TValue="AccountType" Data=@accountTypes />
     </div>
 </div>
 
 
+@if (selectedUserType == AccountType.Admin)
+{
+<RadzenForm TItem="adminModel" Submit="HandleAdminSubmit">
+    <RadzenCardHeader>
+            <h3 class="rz-text-align-left">Admin Registration</h3>
+    </RadzenCardHeader>
+    <RadzenCardBody >
+        <div class="rz-text-align-left">
+            <div style="margin-bottom: 10px;">
+                    <label style="display: block; margin-bottom: 5px;">Email:</label>
+                    <RadzenTextBox @bind-Value="adminModel.Email" />
+            </div>
+            <div style="margin-bottom: 10px;">
+                    <label style="display: block; margin-bottom: 5px;">Password:</label>
+                    <RadzenPassword @bind-Value="adminModel.Password" />
+            </div>
+        </div>
+    </RadzenCardBody>
+    <RadzenButton Text="Register" Type="ButtonType.Submit" Click="@HandleAdminSubmit" />
+</RadzenForm>
+}
+else if (selectedUserType == AccountType.Paramedic)
+{
+    <RadzenForm TItem="paramedicModel" Submit="HandleParamedicSubmit">
+        <RadzenCardHeader>
+                    <h3 class="rz-text-align-left">Paramedic Registration</h3>
+        </RadzenCardHeader>
+        <RadzenCardBody>
+                    <div class="rz-text-align-left">
+                <div style="margin-bottom: 10px;">
+                    <label style="display: block; margin-bottom: 5px;">Email:</label>
+                    <RadzenTextBox @bind-Value="paramedicModel.Email" />
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label style="display: block; margin-bottom: 5px;">Password:</label>
+                    <RadzenPassword @bind-Value="paramedicModel.Password" />
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label style="display: block; margin-bottom: 5px;">First Name:</label>
+                    <RadzenTextBox @bind-Value="paramedicModel.FirstName" />
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label style="display: block; margin-bottom: 5px;">Last Name:</label>
+                    <RadzenTextBox @bind-Value="paramedicModel.LastName" />
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label style="display: block; margin-bottom: 5px;">Street Address:</label>
+                    <RadzenTextBox @bind-Value="paramedicModel.StreetAddress" />
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label style="display: block; margin-bottom: 5px;">House Number:</label>
+                    <RadzenTextBox @bind-Value="paramedicModel.HouseNumber" />
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label style="display: block; margin-bottom: 5px;">Apartment Number:</label>
+                    <RadzenNumeric @bind-Value="paramedicModel.ApartmentNumber" />
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label style="display: block; margin-bottom: 5px;">City:</label>
+                    <RadzenTextBox @bind-Value="paramedicModel.City" />
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label style="display: block; margin-bottom: 5px;">Postal Code:</label>
+                    <RadzenTextBox @bind-Value="paramedicModel.PostalCode" />
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label style="display: block; margin-bottom: 5px;">State/Province:</label>
+                    <RadzenTextBox @bind-Value="paramedicModel.StateProvince" />
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label style="display: block; margin-bottom: 5px;">Country:</label>
+                    <RadzenTextBox @bind-Value="paramedicModel.Country" />
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label style="display: block; margin-bottom: 5px;">Phone Number:</label>
+                    <RadzenTextBox @bind-Value="paramedicModel.PhoneNumber" />
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label style="display: block; margin-bottom: 5px;">Bank Account Number:</label>
+                    <RadzenTextBox @bind-Value="paramedicModel.BankAccountNumber" />
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label style="display: block; margin-bottom: 5px;">Is Driver:</label>
+                    <RadzenCheckBox @bind-Value="paramedicModel.IsDriver" />
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label style="display: block; margin-bottom: 5px;">Pay Per Hour:</label>
+                    <RadzenNumeric @bind-Value="paramedicModel.PayPerHour" />
+                </div>
+                <!-- Add more fields as needed -->
+            </div>
+        </RadzenCardBody>
+    <RadzenButton Text="Register" Type="ButtonType.Submit" Click="@HandleParamedicSubmit" />
+</RadzenForm>
+}
 
+else if (selectedUserType == AccountType.Dispatcher) 
+{
+    <RadzenForm TItem="dispatcherModel" Submit="HandleDispatcherSubmit">
+        <RadzenCardHeader>
+                    <h3 class="rz-text-align-left">Dispatcher Registration</h3>
+        </RadzenCardHeader>
+        <RadzenCardBody>
+                    <div class="rz-text-align-left">
+                <div style="margin-bottom: 10px;">
+                    <label style="display: block; margin-bottom: 5px;">Email:</label>
+                    <RadzenTextBox @bind-Value="dispatcherModel.Email" />
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label style="display: block; margin-bottom: 5px;">Password:</label>
+                    <RadzenPassword @bind-Value="dispatcherModel.Password" />
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label style="display: block; margin-bottom: 5px;">First Name:</label>
+                    <RadzenTextBox @bind-Value="dispatcherModel.FirstName" />
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label style="display: block; margin-bottom: 5px;">Last Name:</label>
+                    <RadzenTextBox @bind-Value="dispatcherModel.LastName" />
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label style="display: block; margin-bottom: 5px;">Street Address:</label>
+                    <RadzenTextBox @bind-Value="dispatcherModel.StreetAddress" />
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label style="display: block; margin-bottom: 5px;">House Number:</label>
+                    <RadzenTextBox @bind-Value="dispatcherModel.HouseNumber" />
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label style="display: block; margin-bottom: 5px;">Apartment Number:</label>
+                    <RadzenNumeric @bind-Value="dispatcherModel.ApartmentNumber" />
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label style="display: block; margin-bottom: 5px;">City:</label>
+                    <RadzenTextBox @bind-Value="dispatcherModel.City" />
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label style="display: block; margin-bottom: 5px;">Postal Code:</label>
+                    <RadzenTextBox @bind-Value="dispatcherModel.PostalCode" />
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label style="display: block; margin-bottom: 5px;">State/Province:</label>
+                    <RadzenTextBox @bind-Value="dispatcherModel.StateProvince" />
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label style="display: block; margin-bottom: 5px;">Country:</label>
+                    <RadzenTextBox @bind-Value="dispatcherModel.Country" />
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label style="display: block; margin-bottom: 5px;">Phone Number:</label>
+                    <RadzenTextBox @bind-Value="dispatcherModel.PhoneNumber" />
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label style="display: block; margin-bottom: 5px;">Bank Account Number:</label>
+                    <RadzenTextBox @bind-Value="dispatcherModel.BankAccountNumber" />
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label style="display: block; margin-bottom: 5px;">Salary:</label>
+                    <RadzenNumeric @bind-Value="dispatcherModel.Salary" />
+                </div>
+                <!-- Add more fields as needed -->
+            </div>
+        </RadzenCardBody>
+    <RadzenButton Text="Register" Type="ButtonType.Submit" Click="@HandleDispatcherSubmit"/>
+</RadzenForm>
+}
+</RadzenCard>
 @code {
-    private RegisterUserDTO registerUserDTO = new();
+    private AccountType selectedUserType;
+    private RegisterAdminRequest adminModel = new();
+    private RegisterParamedicRequest paramedicModel = new();
+    private RegisterDispatcherRequest dispatcherModel = new();
 
-    
+    IEnumerable<AccountType> accountTypes = Enum.GetValues(typeof(AccountType)).Cast<AccountType>();
 
-    public async Task HandleValidSubmit()
+
+
+    private async Task HandleAdminSubmit()
     {
-        
+        await _stcateProvider.Register(adminModel);
+    }
+
+    private async Task HandleParamedicSubmit()
+    {
+        await _stcateProvider.Register(paramedicModel);
+    }
+
+    private async Task HandleDispatcherSubmit()
+    {
+        await _stcateProvider.Register(dispatcherModel);
+    }
+    
+    public enum AccountType
+    {
+        [Display(Name = "Admin")]
+        Admin,
+
+        [Display(Name = "Dispatcher")]
+        Dispatcher,
+
+        [Display(Name = "Paramedic")]
+        Paramedic
     }
 }
+
+
+
