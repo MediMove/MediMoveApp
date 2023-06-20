@@ -1,0 +1,108 @@
+﻿@page "/paramedic/availabilities"
+@using MediMove.Client.Services;
+@using MediMove.Shared.Models.Enums;
+@inject AvailabilityService _availabilityService
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Availabilities</h5>
+
+                    <div class="rz-p-12 rz-text-align-center">
+                        <RadzenDatePicker @bind-Value=@value Inline="true" DateRender=@DateRenderSpecial />
+                    </div>
+
+                    <EditForm EditContext="editContext" OnValidSubmit="HandleValidSubmit">
+
+                        <div class="form-group">
+                            <label>@(value.HasValue ? value.Value.Date.ToString("dd.MM.yyyy") : "")</label>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="shiftType">Shift Type:</label>
+                            <InputSelect id="shiftType" class="form-control" @bind-Value="shiftType">
+                                <option value="">Whole Day</option>
+                                @foreach (var shiftTypeOption in Enum.GetValues(typeof(ShiftType)))
+                                {
+                                    <option value="@shiftTypeOption">@shiftTypeOption</option>
+                                }
+                            </InputSelect>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Submit Shift Type</button>
+                        </div>
+                    </EditForm>
+                    <div>
+                        <br />
+                        <br />
+
+                        <button type="button" class="btn btn-primary" @onclick="Save"> Submit avability</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (showAvailabilities)
+{
+    <div>
+        <h5>Availabilities Log:</h5>
+        @foreach (var availability in availabilities)
+        {
+            <p>@availability.Key.ToString("dd.MM.yyyy") - @availability.Value.ToString()</p> @*Podgląd*@
+        }
+    </div>
+}
+
+@code {
+    private Dictionary<DateTime, ShiftType?> availabilities = new Dictionary<DateTime, ShiftType?>();
+    private DateTime? value = DateTime.Now;
+    private ShiftType? shiftType;
+    private EditContext editContext;
+    private bool showAvailabilities = false; // do podglądu
+
+
+    protected override void OnInitialized()
+    {
+        var model = new Avability();
+        editContext = new EditContext(model);
+    }
+    public async Task Save()
+    {
+        showAvailabilities = true; // do podglądu
+        await _availabilityService.SaveAvailabilities(availabilities);
+    }
+    private void HandleValidSubmit()
+    {
+        if (value.HasValue)
+        {            
+            availabilities[value.Value.Date] = shiftType;
+        }
+
+        shiftType = null;
+        StateHasChanged(); 
+    }
+
+
+    void DateRenderSpecial(DateRenderEventArgs args)
+    {
+        if (availabilities.ContainsKey(args.Date.Date))
+        {
+            args.Attributes.Add("style", "background-color: green; color: white;");
+            args.Disabled = true;
+        }
+    }
+
+    private class Avability
+    {
+        public ShiftType? ShiftType { get; set; }
+    }
+
+
+}
+

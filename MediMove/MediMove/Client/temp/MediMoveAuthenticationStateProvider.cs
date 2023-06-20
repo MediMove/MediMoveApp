@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Components;
 using MediatR.NotificationPublishers;
 using MediMove.Shared.Models.DTOs;
 using System.Net.Http.Json;
+using System.Net.Http.Formatting;
+using System.Net.Http.Headers;
 
 namespace MediMove.Client.temp
 {
@@ -28,6 +30,43 @@ namespace MediMove.Client.temp
             _httpClient = httpClient;
             _jSRuntime = jSRuntime;
             AuthenticationStateChanged += OnAuthenticationStateChanged;
+        }
+
+        public async Task Register(RegisterAdminRequest content)
+        {
+
+            var token = await _jSRuntime.InvokeAsync<string>("localStorage.getItem", "token");
+
+            var request = new HttpRequestMessage(HttpMethod.Post, "/api/v1/Accounts/Register/Admin");
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            request.Content = new ObjectContent<RegisterAdminRequest>(content, new JsonMediaTypeFormatter());
+
+            _ = await _httpClient.SendAsync(request);
+            //Dodac logikę odnośnie odpowiedzi.
+        }
+        public async Task Register(RegisterParamedicRequest content)
+        {
+
+            var token = await _jSRuntime.InvokeAsync<string>("localStorage.getItem", "token");
+
+            var request = new HttpRequestMessage(HttpMethod.Post, "/api/v1/Accounts/Register/Paramedic");
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            request.Content = new ObjectContent<RegisterParamedicRequest>(content, new JsonMediaTypeFormatter());
+
+            _ = await _httpClient.SendAsync(request);
+            //Dodac logikę odnośnie odpowiedzi.
+        }
+        public async Task Register(RegisterDispatcherRequest content)
+        {
+
+            var token = await _jSRuntime.InvokeAsync<string>("localStorage.getItem", "token");
+
+            var request = new HttpRequestMessage(HttpMethod.Post, "/api/v1/Accounts/Register/Dispatcher");
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            request.Content = new ObjectContent<RegisterDispatcherRequest>(content, new JsonMediaTypeFormatter());
+
+            _ = await _httpClient.SendAsync(request);
+            //Dodac logikę odnośnie odpowiedzi.
         }
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
