@@ -28,6 +28,23 @@ namespace MediMove.Server.Controllers.V1
                 errors => Problem(errors));
         }
 
+        [HttpGet("Raport")]
+        //[Authorize(Roles = "Paramedic")]
+        public async Task<IActionResult> GetEmployeesInMonthByHoursAndSalary(
+            [FromQuery] DateTime startTime,
+            [FromQuery] DateTime endTime,
+            [FromQuery] decimal startPaymentsHours,
+            [FromQuery] decimal endPaymentsHours,
+            [FromQuery] decimal startPaymentsSum,
+            [FromQuery] decimal endPaymentsSum)
+        {
+            var result = await Mediator.Send(new GetEmployeesInMonthByHoursAndSalaryQuery(startTime, endTime, startPaymentsHours, endPaymentsHours, startPaymentsSum, endPaymentsSum));
+
+            return result.Match(
+                success => Ok(success),
+                errors => Problem(errors));
+        }
+
         /// <summary>
         /// Action for updating employees.
         /// </summary>
