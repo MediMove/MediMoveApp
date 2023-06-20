@@ -1,0 +1,132 @@
+﻿@page "/admin/employees"
+@using MediMove.Client.Services
+@using MediMove.Shared.Models.DTOs
+@inject EmployeeService _employeeService
+
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    .edit-input {
+        width: 100%;
+    }
+</style>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Street Address</th>
+            <th>House Number</th>
+            <th>Apartment Number</th>
+            <th>City</th>
+            <th>Postal Code</th>
+            <th>State/Province</th>
+            <th>Country</th>
+            <th>Phone Number</th>
+            <th>Bank Account Number</th>
+            <th>Is Working</th>
+            <th>Salary/Pay Per Hour</th>
+            <th>Is Driver</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (employees != null)
+        {
+            @foreach (var employee in employees)
+            {
+                <tr>
+                    <td>@employee.Id</td>
+                    <td><input type="text" @bind="@employee.Email" class="edit-input" /></td>
+                    <td><input type="text" @bind="@employee.FirstName" class="edit-input" /></td>
+                    <td><input type="text" @bind="@employee.LastName" class="edit-input" /></td>
+                    <td><input type="text" @bind="@employee.StreetAddress" class="edit-input" /></td>
+                    <td><input type="text" @bind="@employee.HouseNumber" class="edit-input" /></td>
+                    <td><input type="text" @bind="@employee.ApartmentNumber" class="edit-input" /></td>
+                    <td><input type="text" @bind="@employee.City" class="edit-input" /></td>
+                    <td><input type="text" @bind="@employee.PostalCode" class="edit-input" /></td>
+                    <td><input type="text" @bind="@employee.StateProvince" class="edit-input" /></td>
+                    <td><input type="text" @bind="@employee.Country" class="edit-input" /></td>
+                    <td><input type="text" @bind="@employee.PhoneNumber" class="edit-input" /></td>
+                    <td><input type="text" @bind="@employee.BankAccountNumber" class="edit-input" /></td>
+                    <td><input type="checkbox" @bind="@employee.IsWorking" /></td>
+                    @if (employee is DispatcherDTO dispatcher)
+                    {
+                        <td><input type="text" @bind="@dispatcher.Salary" class="edit-input" /></td>
+                        <td></td>
+                    }
+                    else if (employee is ParamedicDTO paramedic)
+                    {
+                        <td><input type="text" @bind="@paramedic.PayPerHour" class="edit-input" /></td>
+                        <td><input type="checkbox" @bind="@paramedic.IsDriver" /></td>
+                    }
+                    else
+                    {
+                        <td></td>
+                        <td></td>
+                    }
+                </tr>
+            }
+        }
+        </tbody>
+</table>
+
+@if (!string.IsNullOrEmpty(updateResult))
+{
+    <div class="alert alert-danger">
+        @updateResult
+    </div>
+}
+
+<div style="margin-top: 10px;">
+    <button class="btn btn-primary" @onclick="SaveChanges">Save Changes</button>
+</div>
+
+@code {
+    private IEnumerable<EmployeeDTO> employees;
+    private IEnumerable<EmployeeDTO> employeesSave;
+    private string updateResult;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Change();
+    }
+
+    private async Task Change()
+    {
+        employees = await _employeeService.GetAllEmployees();
+        employeesSave = employees.Select(e => e with {}).ToList(); // deep copy
+    }
+
+    private async void SaveChanges()
+    {
+        var modifiedEmployees = new List<EmployeeDTO>();
+        for (int i = 0; i < employees.Count(); i++)
+            if (employees.ElementAt(i) != employeesSave.ElementAt(i))
+                modifiedEmployees.Add(employees.ElementAt(i));
+
+        updateResult = await _employeeService.UpdateEmployees(modifiedEmployees);
+        if (updateResult == "")
+            employeesSave = employees.Select(e => e with {}).ToList(); // deep copy
+        //Console.WriteLine($"update result: {updateResult}");
+    }
+}

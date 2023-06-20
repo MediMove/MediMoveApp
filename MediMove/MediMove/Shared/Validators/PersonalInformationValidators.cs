@@ -4,8 +4,8 @@ namespace MediMove.Shared.Validators;
 
 public static class PersonalInformationValidators
 {
-    private static readonly Regex NameRegex = new(@"^[a-zA-Z\s-]+$");
-    private static readonly Regex HouseNumberRegex = new(@"^[a-zA-Z0-9\s-]+$");
+    private static readonly Regex NameRegex = new(@"^[\p{L}\s-]+$");
+    private static readonly Regex HouseNumberRegex = new(@"^[\p{L}\p{N}\s-]+$");
     private static readonly Regex PostalCodeRegex = new(@"^\d{2}-\d{3}(\d{2})?$");
     private static readonly Regex PhoneNumberRegex = new(@"^[0-9]+([- ]?[0-9]+)*$");
 
@@ -22,7 +22,7 @@ public static class PersonalInformationValidators
         !string.IsNullOrEmpty(value) && value.Length >= 1 && value.Length <= 10 && HouseNumberRegex.IsMatch(value);
 
     public static bool IsValidApartmentNumber(this int? value) =>
-        value.HasValue && value <= 200;
+        !value.HasValue || value <= 200;
 
     public static bool IsValidPostalCode(this string value) =>
         !string.IsNullOrEmpty(value) && PostalCodeRegex.IsMatch(value);

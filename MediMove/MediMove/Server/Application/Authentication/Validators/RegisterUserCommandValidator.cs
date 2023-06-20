@@ -18,7 +18,7 @@ namespace MediMove.Server.Application.Authentication.Validators
         public RegisterUserCommandValidator(MediMoveDbContext _dbContext)
         {
             RuleFor(command => command.Email)
-                .Custom(async (email, context) =>
+                .CustomAsync(async (email, context, cancellationToken) =>
                 {
                     if (await _dbContext.Users.AnyAsync(u => u.Email == email))
                         context.AddFailure("Email", "Email already in use");
