@@ -4,6 +4,8 @@ using Microsoft.JSInterop;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System;
+using System.Net.Http.Formatting;
+using MediMove.Shared.Validators;
 
 namespace MediMove.Client.Services
 {
@@ -37,6 +39,26 @@ namespace MediMove.Client.Services
             Console.WriteLine(response.StatusCode);
             var result = await response.Content.ReadFromJsonAsync<GetAllPatientsResponse>();
             return result;
+        }
+
+        public async Task PostPatient(CreatePatientRequest content)
+        {
+            
+            var baseUri = new Uri(_navigationManager.BaseUri);
+            var requestUri = new Uri(baseUri, "/api/v1/Patient");
+            Console.WriteLine($"I'm here {requestUri}");
+            var request = new HttpRequestMessage(HttpMethod.Post, requestUri);
+
+            var token = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", "token");
+
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            request.Content = new ObjectContent<CreatePatientRequest>(content, new JsonMediaTypeFormatter()); // to działa ale jest tu dodatkowy nuGet, jak wysłać po prostu klase?
+
+            Console.WriteLine("I'm here auth");
+            var response = await _httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode(); // Rzuca wyjątek w przypadku niepowodzenia
+            Console.WriteLine(response.StatusCode);
         }
     }
 }
