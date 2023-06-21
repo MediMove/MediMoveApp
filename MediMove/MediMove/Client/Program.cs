@@ -17,7 +17,9 @@ builder.Services.AddScoped<AuthenticationStateProvider>(sp => sp.GetRequiredServ
 //builder.Services.AddScoped<ErrorResponse>();
 builder.Services.AddScoped<TransportService>();
 builder.Services.AddScoped<PatientService>();
+builder.Services.AddScoped<TeamService>();
 builder.Services.AddScoped<AvailabilityService>();
+builder.Services.AddScoped<EmployeeService>();
 builder.Services.AddAuthorizationCore();
 
 await builder.Build().RunAsync();

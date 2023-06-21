@@ -42,7 +42,7 @@
             </div>
         </div>
     </RadzenCardBody>
-    <RadzenButton Text="Register" Type="ButtonType.Submit" />
+    <RadzenButton Text="Register" Type="ButtonType.Submit" Click="@HandleAdminSubmit" />
 </RadzenForm>
 }
 else if (selectedUserType == AccountType.Paramedic)
@@ -116,7 +116,7 @@ else if (selectedUserType == AccountType.Paramedic)
                 <!-- Add more fields as needed -->
             </div>
         </RadzenCardBody>
-    <RadzenButton Text="Register" Type="ButtonType.Submit" />
+    <RadzenButton Text="Register" Type="ButtonType.Submit" Click="@HandleParamedicSubmit" />
 </RadzenForm>
 }
 else if (selectedUserType == AccountType.Dispatcher) 
@@ -186,7 +186,7 @@ else if (selectedUserType == AccountType.Dispatcher)
                 <!-- Add more fields as needed -->
             </div>
         </RadzenCardBody>
-    <RadzenButton Text="Register" Type="ButtonType.Submit" />
+    <RadzenButton Text="Register" Type="ButtonType.Submit" Click="@HandleDispatcherSubmit"/>
 </RadzenForm>
 }
 </RadzenCard>
