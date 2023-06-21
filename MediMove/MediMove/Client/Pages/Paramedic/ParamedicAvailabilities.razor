@@ -1,4 +1,4 @@
-﻿@page "/paramedic/avabilities"
+﻿@page "/paramedic/availabilities"
 @using MediMove.Client.Services;
 @using MediMove.Shared.Models.Enums;
 @inject AvailabilityService _availabilityService
@@ -16,6 +16,7 @@
                     </div>
 
                     <EditForm EditContext="editContext" OnValidSubmit="HandleValidSubmit">
+
                         <div class="form-group">
                             <label>@(value.HasValue ? value.Value.Date.ToString("dd.MM.yyyy") : "")</label>
                         </div>
@@ -79,15 +80,8 @@
     private void HandleValidSubmit()
     {
         if (value.HasValue)
-        {
-            if (shiftType is null)
-            {
-                availabilities[value.Value.Date] = null; 
-            }
-            else
-            {
-                availabilities[value.Value.Date] = shiftType;
-            }
+        {            
+            availabilities[value.Value.Date] = shiftType;
         }
 
         shiftType = null;

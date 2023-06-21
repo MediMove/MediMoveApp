@@ -38,7 +38,7 @@ namespace MediMove.Client.Services
             query["startDateInclusive"] = new DateTime(year, month, day).ToString("yyyy-MM-dd"); //dowolność 
             query["endDateInclusive"] = new DateTime(year, month, day).ToString("yyyy-MM-dd");
 
-            //Można poszerzyć zakres dat i flitrować ją,żeby nie strzelać do api za każdym razem
+            //można poszerzyć zakres dat i flitrować ją,żeby nie strzelać do api za każdym razem
 
             uriBuilder.Query = query.ToString();
           

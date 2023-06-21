@@ -12,16 +12,11 @@
             <RadzenCard>
                 <DataAnnotationsValidator/>
                 <ValidationSummary/>
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <InputText id="email" class="form-control" @bind-Value="dto.Email" />
-                    <ValidationMessage For="@(() => dto.Email)" />
-                </div>
-                <div class="form-group">
-                    <label for="Password">Password:</label>
-                    <RadzenPassword id="Password" class="form-control" @bind-Value="dto.Password"></RadzenPassword>   @*Placeholder="Enter password..."*@
-                    <ValidationMessage For="@(() => dto.Password)" />
-                </div>
+
+                <label>Email</label> <br />
+                <RadzenTextBox @bind-Value="dto.Email"></RadzenTextBox> <br />   @*Placeholder="Enter email..."*@
+                <label>Password</label> <br />
+                <RadzenPassword @bind-Value="dto.Password"></RadzenPassword> <br />   @*Placeholder="Enter password..."*@
                 <hr />
                 <RadzenButton ButtonType="Radzen.ButtonType.Submit" Text="Login" ButtonStyle="Radzen.ButtonStyle.Primary" class="btn-block mr-2"/>
             </RadzenCard>
@@ -48,12 +43,13 @@
             switch (role)
             {
                 case "Paramedic":
-                    _navigationManager.NavigateTo("/paramedic");
+                    _navigationManager.NavigateTo("/paramedicRazor");
                     break;
                 case "Dispatcher":
                     _navigationManager.NavigateTo("/dispacher");
                     break;
                 case "Admin":
+                    _navigationManager.NavigateTo("/admin");
                     break;
                 default:
                     break;

@@ -19,21 +19,22 @@
 /// <param name="IsDriver">bool indicating if paramedic is a driver</param>
 /// <param name="PayPerHour">starting pay per hour</param>
 /// <param name="IsWorking">bool indicating if paramedic is currently working at company</param>
-public record RegisterParamedicRequest(
-    string Email,
-    string Password,
-    string FirstName,
-    string LastName,
-    string StreetAddress,
-    string HouseNumber,
-    int? ApartmentNumber,
-    string City,
-    string PostalCode,
-    string StateProvince,
-    string Country,
-    string PhoneNumber,
-    string BankAccountNumber,
-    bool IsDriver,
-    decimal PayPerHour,
-    bool IsWorking = true
-);
+public class RegisterParamedicRequest
+{
+    public string Email { get; set; }
+    public string Password { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public string StreetAddress { get; set; }
+    public string HouseNumber { get; set; }
+    public int? ApartmentNumber { get; set; }
+    public string City { get; set; }
+    public string PostalCode { get; set; }
+    public string StateProvince { get; set; }
+    public string Country { get; set; }
+    public string PhoneNumber { get; set; }
+    public string BankAccountNumber { get; set; }
+    public bool IsDriver { get; set; }
+    public decimal PayPerHour { get; set; }
+    public bool IsWorking { get; set; } = true;
+}
