@@ -119,7 +119,6 @@ else if (selectedUserType == AccountType.Paramedic)
     <RadzenButton Text="Register" Type="ButtonType.Submit" />
 </RadzenForm>
 }
-
 else if (selectedUserType == AccountType.Dispatcher) 
 {
     <RadzenForm TItem="dispatcherModel" Submit="HandleDispatcherSubmit">
@@ -191,8 +190,17 @@ else if (selectedUserType == AccountType.Dispatcher)
 </RadzenForm>
 }
 </RadzenCard>
+
+@if (statusCode is not null)
+{
+    <div>
+        @statusCode.statusCode.ToString();
+    </div>
+}
+
 @code {
     private AccountType selectedUserType;
+    private StandardResponse? statusCode = null;
     private RegisterAdminRequest adminModel = new();
     private RegisterParamedicRequest paramedicModel = new();
     private RegisterDispatcherRequest dispatcherModel = new();
@@ -203,19 +211,35 @@ else if (selectedUserType == AccountType.Dispatcher)
 
     private async Task HandleAdminSubmit()
     {
-        await _stcateProvider.Register(adminModel);
+        var response = await _stcateProvider.Register(adminModel);
+        statusCode = CheckForErrors(response);
+
+        
     }
 
     private async Task HandleParamedicSubmit()
     {
-        await _stcateProvider.Register(paramedicModel);
+        var response = await _stcateProvider.Register(paramedicModel);
+        statusCode = CheckForErrors(response);
     }
 
     private async Task HandleDispatcherSubmit()
     {
-        await _stcateProvider.Register(dispatcherModel);
+        var response = await _stcateProvider.Register(dispatcherModel);
+        statusCode = CheckForErrors(response);
     }
-    
+
+    private  StandardResponse? CheckForErrors(MediMoveResponse<StandardResponse> response)
+    {
+        if(response.CorrectResponse is not null)
+        {
+            return response.CorrectResponse;
+        }
+
+        //Dodać logikę wyświetlającą errory
+        return null;
+    }
+
     public enum AccountType
     {
         [Display(Name = "Admin")]

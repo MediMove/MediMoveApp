@@ -10,6 +10,7 @@ using MediMove.Shared.Models.DTOs;
 using System.Net.Http.Json;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
+using System.Reflection.Metadata.Ecma335;
 
 namespace MediMove.Client.temp
 {
@@ -32,7 +33,7 @@ namespace MediMove.Client.temp
             AuthenticationStateChanged += OnAuthenticationStateChanged;
         }
 
-        public async Task Register(RegisterAdminRequest content)
+        public async Task<MediMoveResponse<StandardResponse>> Register(RegisterAdminRequest content)
         {
 
             var token = await _jSRuntime.InvokeAsync<string>("localStorage.getItem", "token");
@@ -41,10 +42,14 @@ namespace MediMove.Client.temp
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
             request.Content = new ObjectContent<RegisterAdminRequest>(content, new JsonMediaTypeFormatter());
 
-            _ = await _httpClient.SendAsync(request);
-            //Dodac logikę odnośnie odpowiedzi.
+            var httpResponse = await _httpClient.SendAsync(request);
+
+
+            var response = await CheckStandardResponse(httpResponse);
+
+            return response;
         }
-        public async Task Register(RegisterParamedicRequest content)
+        public async Task<MediMoveResponse<StandardResponse>> Register(RegisterParamedicRequest content)
         {
 
             var token = await _jSRuntime.InvokeAsync<string>("localStorage.getItem", "token");
@@ -53,10 +58,14 @@ namespace MediMove.Client.temp
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
             request.Content = new ObjectContent<RegisterParamedicRequest>(content, new JsonMediaTypeFormatter());
 
-            _ = await _httpClient.SendAsync(request);
-            //Dodac logikę odnośnie odpowiedzi.
+            var httpResponse = await _httpClient.SendAsync(request);
+
+
+            var response = await CheckStandardResponse(httpResponse);
+
+            return response;
         }
-        public async Task Register(RegisterDispatcherRequest content)
+        public async Task<MediMoveResponse<StandardResponse>> Register(RegisterDispatcherRequest content)
         {
 
             var token = await _jSRuntime.InvokeAsync<string>("localStorage.getItem", "token");
@@ -65,8 +74,12 @@ namespace MediMove.Client.temp
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
             request.Content = new ObjectContent<RegisterDispatcherRequest>(content, new JsonMediaTypeFormatter());
 
-            _ = await _httpClient.SendAsync(request);
-            //Dodac logikę odnośnie odpowiedzi.
+            var httpResponse = await _httpClient.SendAsync(request);
+           
+
+            var response = await CheckStandardResponse(httpResponse);
+
+            return response;
         }
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
@@ -112,6 +125,29 @@ namespace MediMove.Client.temp
             await _jSRuntime.InvokeVoidAsync("localStorage.removeItem", "token");
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
         }
+
+        private async Task<MediMoveResponse<StandardResponse>> CheckStandardResponse(HttpResponseMessage? httpResponse)
+        {
+            var responseContent = await httpResponse.Content.ReadAsStringAsync();
+            MediMoveResponse<StandardResponse> response = null;
+            if (httpResponse.IsSuccessStatusCode)
+            {
+                if (!string.IsNullOrEmpty(responseContent))
+                {
+
+                    var standardResponse = new StandardResponse(httpResponse.StatusCode);
+                    response = new(standardResponse);
+                }
+            }
+            else
+            {
+                var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(responseContent);
+                response = new(errorResponse);
+            }
+
+            return response;
+        }
+
 
         public async Task<MediMoveResponse<HttpResponseMessage>> LoginAsync(LoginUserDTO content)
         {
