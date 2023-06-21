@@ -22,37 +22,42 @@
         <RadzenDropDown @bind-Value="@selectedUserType" TValue="AccountType" Data=@accountTypes />
     </div>
 </div>
-
+</RadzenCard>
 
 @if (selectedUserType == AccountType.Admin)
 {
-<RadzenForm TItem="adminModel" Submit="HandleAdminSubmit">
-    <RadzenCardHeader>
-            <h3 class="rz-text-align-left">Admin Registration</h3>
-    </RadzenCardHeader>
-    <RadzenCardBody >
-        <div class="rz-text-align-left">
+<div class="rz-text-align-left">
+    <EditForm Model="adminModel" OnValidSubmit="HandleAdminSubmit">
+        <RadzenCard>
+            <RadzenLabel>
+                <h3 class="rz-text-align-left">Admin Registration</h3>
+            </RadzenLabel>
+            <DataAnnotationsValidator />
+            <ValidationSummary />
             <div style="margin-bottom: 10px;">
-                    <label style="display: block; margin-bottom: 5px;">Email:</label>
-                    <RadzenTextBox @bind-Value="adminModel.Email" />
+                <label style="display: block; margin-bottom: 5px;">Email:</label>
+                <RadzenTextBox @bind-Value="adminModel.Email" />
             </div>
             <div style="margin-bottom: 10px;">
-                    <label style="display: block; margin-bottom: 5px;">Password:</label>
-                    <RadzenPassword @bind-Value="adminModel.Password" />
+                <label style="display: block; margin-bottom: 5px;">Password:</label>
+                <RadzenPassword @bind-Value="adminModel.Password" />
             </div>
-        </div>
-    </RadzenCardBody>
-    <RadzenButton Text="Register" Type="ButtonType.Submit" Click="@HandleAdminSubmit" />
-</RadzenForm>
+            <RadzenButton ButtonType="Radzen.ButtonType.Submit" Text="Register" ButtonStyle="Radzen.ButtonStyle.Primary" class="btn-block mr-2" />
+        </RadzenCard>
+    </EditForm>
+</div>
+
 }
 else if (selectedUserType == AccountType.Paramedic)
 {
-    <RadzenForm TItem="paramedicModel" Submit="HandleParamedicSubmit">
-        <RadzenCardHeader>
+    <EditForm Model="paramedicModel" OnValidSubmit="HandleParamedicSubmit">
+        <RadzenCard>
+            <RadzenLabel>
                     <h3 class="rz-text-align-left">Paramedic Registration</h3>
-        </RadzenCardHeader>
-        <RadzenCardBody>
-                    <div class="rz-text-align-left">
+            </RadzenLabel>
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="rz-text-align-left">
                 <div style="margin-bottom: 10px;">
                     <label style="display: block; margin-bottom: 5px;">Email:</label>
                     <RadzenTextBox @bind-Value="paramedicModel.Email" />
@@ -115,18 +120,20 @@ else if (selectedUserType == AccountType.Paramedic)
                 </div>
                 <!-- Add more fields as needed -->
             </div>
-        </RadzenCardBody>
-    <RadzenButton Text="Register" Type="ButtonType.Submit" Click="@HandleParamedicSubmit" />
-</RadzenForm>
+            <RadzenButton ButtonType="Radzen.ButtonType.Submit" Text="Register" ButtonStyle="Radzen.ButtonStyle.Primary" class="btn-block mr-2" />
+        </RadzenCard>
+    </EditForm>
 }
 else if (selectedUserType == AccountType.Dispatcher) 
 {
-    <RadzenForm TItem="dispatcherModel" Submit="HandleDispatcherSubmit">
-        <RadzenCardHeader>
+    <EditForm Model="dispatcherModel" OnValidSubmit="HandleDispatcherSubmit">
+        <RadzenCard>
+            <RadzenLabel>
                     <h3 class="rz-text-align-left">Dispatcher Registration</h3>
-        </RadzenCardHeader>
-        <RadzenCardBody>
-                    <div class="rz-text-align-left">
+            </RadzenLabel>
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="rz-text-align-left">
                 <div style="margin-bottom: 10px;">
                     <label style="display: block; margin-bottom: 5px;">Email:</label>
                     <RadzenTextBox @bind-Value="dispatcherModel.Email" />
@@ -185,11 +192,11 @@ else if (selectedUserType == AccountType.Dispatcher)
                 </div>
                 <!-- Add more fields as needed -->
             </div>
-        </RadzenCardBody>
-    <RadzenButton Text="Register" Type="ButtonType.Submit" Click="@HandleDispatcherSubmit"/>
-</RadzenForm>
+            <RadzenButton ButtonType="Radzen.ButtonType.Submit" Text="Register" ButtonStyle="Radzen.ButtonStyle.Primary" class="btn-block mr-2" />
+        </RadzenCard>
+    </EditForm>
 }
-</RadzenCard>
+
 
 @if (statusCode is not null)
 {
@@ -197,10 +204,45 @@ else if (selectedUserType == AccountType.Dispatcher)
         @statusCode.statusCode.ToString();
     </div>
 }
+@if(errorResponse is not null)
+{
+    <RadzenCard>
+            <h3>Errors</h3>
+            <div class="rz-text-align-left">
+                <div style="width: 100%; max-width: 400px;">
+                    <p>Error type: @errorResponse.Type</p>
+                </div>
+                <p>Error Title: @errorResponse.Title</p>
+            </div>
+            <div>
+                <p>Error status: @errorResponse.Status</p>
+            </div>
+        <div class="rz-text-align-left">
+            <p>Error TraceId: @errorResponse.TraceId</p>
+        </div>
+        @foreach(var error in errorResponse.Errors)
+        {
+            <div>
+                <p>Key: @error.Key</p>
+            </div>
+            <div>
+                <p>ErrorList:</p>
+                @foreach( var message in error.Value)
+                {
+                    <div>
+                        <p>Message:</p>
+                        <p>@message</p>
+                    </div>
+                }
+            </div>
+        }
+    </RadzenCard>
+}
 
 @code {
     private AccountType selectedUserType;
     private StandardResponse? statusCode = null;
+    private ErrorResponse? errorResponse = null;
     private RegisterAdminRequest adminModel = new();
     private RegisterParamedicRequest paramedicModel = new();
     private RegisterDispatcherRequest dispatcherModel = new();
@@ -212,32 +254,27 @@ else if (selectedUserType == AccountType.Dispatcher)
     private async Task HandleAdminSubmit()
     {
         var response = await _stcateProvider.Register(adminModel);
-        statusCode = CheckForErrors(response);
+        CheckForErrors(response);
 
-        
+
     }
 
     private async Task HandleParamedicSubmit()
     {
         var response = await _stcateProvider.Register(paramedicModel);
-        statusCode = CheckForErrors(response);
+        CheckForErrors(response);
     }
 
     private async Task HandleDispatcherSubmit()
     {
         var response = await _stcateProvider.Register(dispatcherModel);
-        statusCode = CheckForErrors(response);
+        CheckForErrors(response);
     }
 
-    private  StandardResponse? CheckForErrors(MediMoveResponse<StandardResponse> response)
-    {
-        if(response.CorrectResponse is not null)
-        {
-            return response.CorrectResponse;
-        }
-
-        //Dodać logikę wyświetlającą errory
-        return null;
+    private  void CheckForErrors(MediMoveResponse<StandardResponse> response)
+    {    
+        statusCode = response.CorrectResponse;
+        errorResponse = response.ErrorResponse;
     }
 
     public enum AccountType

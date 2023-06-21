@@ -1,4 +1,6 @@
 ﻿
+using System.ComponentModel.DataAnnotations;
+
 namespace MediMove.Shared.Models.DTOs;
 
 /// <summary>
@@ -8,6 +10,9 @@ namespace MediMove.Shared.Models.DTOs;
 /// <param name="Password">password as string</param>
 public record RegisterAdminRequest
 {
+    [Required]
+    [EmailAddress]
     public string Email { get; set; }
+    [Required]
     public string Password { get; set; }
 }
