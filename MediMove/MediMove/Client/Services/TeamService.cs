@@ -5,6 +5,7 @@ using System;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using MediMove.Shared.Extensions;
+using MediMove.Shared.Models.Enums;
 
 namespace MediMove.Client.Services
 {
@@ -20,7 +21,7 @@ namespace MediMove.Client.Services
             _jsRuntime = jsRuntime;
             _navigationManager = navigationManager;
         }
-        public async Task<GetTeamsByDateAndShiftResponse> GetTeamsByDAyAndShift(DateTime dateTime)
+        public async Task<GetTeamsByDateAndShiftResponse> GetTeamsByDayAndShift(DateTime dateTime)
         {
             var baseUri = new Uri(_navigationManager.BaseUri);
             var requestUri = new Uri(baseUri, "/api/v1/Team");
@@ -29,11 +30,16 @@ namespace MediMove.Client.Services
             var query = System.Web.HttpUtility.ParseQueryString(uriBuilder.Query);
 
             query["date"] = dateTime.ToString("yyyy-MM-dd");
-            query["shift"] = dateTime.ToShiftType().ToString();
+            Console.WriteLine($"Date query: {query["date"]}");
+            if(dateTime.ToShiftType().Value == ShiftType.Morning)       //to refactor
+                query["shift"] = "0";
+            else if(dateTime.ToShiftType().Value == ShiftType.Evening)
+                query["shift"] = "1";
+            Console.WriteLine($"Shift query: {query["shift"]}");
 
 
             uriBuilder.Query = query.ToString();
-
+            Console.WriteLine(uriBuilder.ToString());
             var request = new HttpRequestMessage(HttpMethod.Get, uriBuilder.ToString());
 
             var token = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", "token");

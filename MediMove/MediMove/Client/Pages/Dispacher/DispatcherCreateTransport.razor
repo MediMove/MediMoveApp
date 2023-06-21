@@ -19,20 +19,19 @@
                     <EditForm Model="@createTransportDTO" OnValidSubmit="HandleValidSubmit">
                         <DataAnnotationsValidator />
                         <ValidationSummary />
-                        
-                        
 
                         <div class="form-group">
                             <label for="patientId">Patient ID:</label>
                             <input type="text" id="patientId" class="form-control" readonly value="@createTransportDTO.PatientId" />
                             <ValidationMessage For="@(() => createTransportDTO.PatientId)" />
                         </div>
-
+                        
                         <div class="form-group">
-                            <label for="startTime">Start Time:</label>
-                            <InputDate id="startTime" class="form-control" @bind-Value="createTransportDTO.StartTime" oninput="HandleStartTimeInput" />
-                            <ValidationMessage For="@(() => createTransportDTO.StartTime)" />
+                            <label for="teamId">Team ID:</label>
+                            <input type="text" id="teamId" class="form-control" readonly value="@createTransportDTO.TeamId" />
+                            <ValidationMessage For="@(() => createTransportDTO.TeamId)" />
                         </div>
+
 
                         <div class="form-group">
                             <label for="financing">Financing:</label>
@@ -55,13 +54,7 @@
                             </InputSelect>
                             <ValidationMessage For="@(() => createTransportDTO.PatientPosition)" />
                         </div>
-
-                        <div class="form-group">
-                            <label for="destination">Destination:</label>
-                            <InputText id="destination" class="form-control" @bind-Value="createTransportDTO.Destination" />
-                            <ValidationMessage For="@(() => createTransportDTO.Destination)" />
-                        </div>
-
+                        
                         <div class="form-group">
                             <label for="transportType">Transport Type:</label>
                             <InputSelect id="transportType" class="form-control" @bind-Value="createTransportDTO.TransportType">
@@ -72,12 +65,36 @@
                             </InputSelect>
                             <ValidationMessage For="@(() => createTransportDTO.TransportType)" />
                         </div>
+
                         <div class="form-group">
-                            <label for="teamId">Team ID:</label>
-                            <input type="text" id="teamId" class="form-control" readonly value="@createTransportDTO.TeamId" />
-                            <ValidationMessage For="@(() => createTransportDTO.TeamId)" />
+                            <label for="destination">Destination:</label>
+                            <InputText id="destination" class="form-control" @bind-Value="createTransportDTO.Destination" />
+                            <ValidationMessage For="@(() => createTransportDTO.Destination)" />
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="startLocation">Start Location:</label>
+                            <InputText id="startLocation" class="form-control" @bind-Value="createTransportDTO.StartLocation" />
+                            <ValidationMessage For="@(() => createTransportDTO.StartLocation)" />
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="returnLocation">Return Location:</label>
+                            <InputText id="returnLocation" class="form-control" @bind-Value="createTransportDTO.ReturnLocation" />
+                            <ValidationMessage For="@(() => createTransportDTO.ReturnLocation)" />
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="note">Note:</label>
+                            <InputText id="note" class="form-control" @bind-Value="createTransportDTO.Note" />
+                            <ValidationMessage For="@(() => createTransportDTO.Note)" />
                         </div>
 
+                        
+                        
+                        <div class="rz-p-12 rz-text-align-right">
+                            <RadzenDatePicker  @bind-Value="createTransportDTO.StartTime" Change="ChosenDateValueChanged" />
+                        </div>
                         
 
                         <div class="form-group">
@@ -86,31 +103,32 @@
                     </EditForm>
                 </div>
 
-                @*<div class="card">
-                <h3>Transports</h3>
+                <div class="card">
+                <div class="form-group"><h5>List of Teams</h5></div>
+                <div class="card-body">
 
-                
-
-                <div class="patient-list-container">
-
-                    <div class="scrollable-list">
-                        @if (teamResponse.Teams.Count > 0)
-                        {
-                            foreach (var team in teamResponse.Teams)
+                    <div class="patient-list-container">
+                        <div class="scrollable-list">
+                                @if (teamResponse != null)
                             {
-                                <div class="@GetTeamItemClass(team.Key)" @onclick="() => SelectPatient(team.Key)">
-                                    <div class="patient-details">
-                                        <p><strong>Driver:</strong> @team.Value.DriverFirstName @team.Value.DriverFirstName</p>
-                                        <p><strong>Driver phone number:</strong> @team.Value.DriverPhoneNumber, </p>
-                                        <p><strong>Paramedic:</strong> @team.Value.ParamedicFirstName @team.Value.ParamedicLastName</p>
-                                        <p><strong>City:</strong> @team.Value.ParamedicPhoneNumber, </p>
+                                foreach (var team in teamResponse.Teams)
+                                {
+                                    <div class="@GetTeamItemClass(team.Key)" @onclick="() => SelectTeam(team.Key)">
+                                            <div class="patient-details">
+                                            <p><strong>Driver:</strong> @team.Value.DriverFirstName @team.Value.DriverLastName</p>
+                                            <p><strong>Driver Phone Number:</strong> @team.Value.DriverPhoneNumber</p>
+                                            <p><strong>Paramedic:</strong> @team.Value.ParamedicFirstName @team.Value.ParamedicLastName</p>
+                                            <p><strong>Paramedic Phone Number:</strong> @team.Value.ParamedicPhoneNumber</p>
+                                        </div>
                                     </div>
-                                </div>
+                                }
                             }
-                        }
+                        </div>
                     </div>
                 </div>
-                </div>*@
+                </div>
+
+                
             </div>
         </div>
         <div class="col-md-6">
@@ -122,7 +140,6 @@
                     <div class="search-bar">
                         <input type="text" class="form-control" placeholder="Search by phone number" @bind="@phoneNumberSearch"/>
                         <button type="button" class="btn btn-primary m-2" @onclick="SearchByPhoneNumber">Search</button>
-                        <button type="button" class="btn btn-primary m-2" @onclick="Refresh">Refresh</button>
                     </div>
 
                     <div class="patient-list-container">
@@ -250,31 +267,53 @@
 
 @code {
     private string? phoneNumberSearch;
+
     private int? _selectedPatientId;
     private int? _selectedTeamId;
+    
+
     private CreateTransportDTO createTransportDTO = new CreateTransportDTO();
     private GetAllPatientsResponse allPatients;
     private GetAllPatientsResponse allPatientsResponse;// Replace with the appropriate type and initialization
     private CreatePatientRequest createPatientDTO = new CreatePatientRequest();
-    private GetTeamsByDateAndShiftResponse teamResponse = new GetTeamsByDateAndShiftResponse();
+    private GetTeamsByDateAndShiftResponse teamResponse;
+    
     protected override async Task OnInitializedAsync()
     {
         allPatientsResponse = await _PatientService.GetPatients();
-        allPatients = allPatientsResponse;
+        teamResponse = await _TeamService.GetTeamsByDayAndShift(DateTime.Now);
         createTransportDTO.StartTime = DateTime.Now;
+        allPatients = allPatientsResponse;
     }
 
-    private async void HandleStartTimeInput(ChangeEventArgs e)
+    
+
+    private async void ChosenDateValueChanged()
     {
-        teamResponse = await _TeamService.GetTeamsByDAyAndShift(createTransportDTO.StartTime);
+        Console.WriteLine(createTransportDTO.StartTime);
+
+        teamResponse =  await _TeamService.GetTeamsByDayAndShift(createTransportDTO.StartTime);
+        DeselectTeam();
+        StateHasChanged();
+    }
+
+    private void DeselectPatient()
+    {
+        _selectedPatientId = null; // Deselect if the same patient is clicked
+        createTransportDTO.PatientId = 0; // Update the Patient ID field to a default value
+    }
+
+    private void DeselectTeam()
+    {
+        _selectedTeamId = null; // Deselect if the same team is clicked
+        createTransportDTO.TeamId = 0; // Update the Team ID field to a default value
     }
 
     private void SelectPatient(int patientId)
     {
         if (_selectedPatientId == patientId)
         {
-            _selectedPatientId = null; // Deselect if the same patient is clicked
-            createTransportDTO.PatientId = 0; // Update the Patient ID field to a default value
+            DeselectPatient();
         }
         else
         {
@@ -283,17 +322,16 @@
         }
     }
 
-    private void SelectTeam(int patientId)
+    private void SelectTeam(int teamId)
     {
-        if (_selectedTeamId == patientId)
+        if (_selectedTeamId == teamId)
         {
-            _selectedTeamId = null; // Deselect if the same patient is clicked
-            createTransportDTO.TeamId = 0; // Update the Patient ID field to a default value
+            DeselectTeam();
         }
         else
         {
-            _selectedTeamId = patientId;
-            createTransportDTO.TeamId = patientId;
+            _selectedTeamId = teamId;
+            createTransportDTO.TeamId = teamId;
         }
     }
 
@@ -311,7 +349,7 @@
 
 
 
-    private async void SearchByPhoneNumber()
+    private void SearchByPhoneNumber()
     {
         Dictionary<int, PatientDTO> filteredPatients = allPatients.Patients
             .Where(p => p.Value.PhoneNumber == phoneNumberSearch) // Filter based on phone number
@@ -321,19 +359,19 @@
         if (filteredPatients.Count > 0)
             allPatients = new GetAllPatientsResponse(filteredPatients);
         else 
-            allPatients = new GetAllPatientsResponse(new Dictionary<int, PatientDTO>());
-
+            allPatients = allPatientsResponse;
+            DeselectPatient();
+            StateHasChanged();
     }
 
-    private async void Refresh()
-    {
-        allPatients = await _PatientService.GetPatients();
-    }
 
     private async void AddPatient()
     {
         await _PatientService.PostPatient(createPatientDTO);
-
+        allPatientsResponse = await _PatientService.GetPatients();
+        allPatients = allPatientsResponse;
+        createPatientDTO = new CreatePatientRequest();
+        StateHasChanged();
     }
 
     private void HandleValidSubmit()
