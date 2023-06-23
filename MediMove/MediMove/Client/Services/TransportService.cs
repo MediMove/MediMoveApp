@@ -60,12 +60,7 @@ namespace MediMove.Client.Services
 
             return toReturn;
 
-
-
-
-            //var build = new UriBuilder()//($"{_httpClient.BaseAddress}/api/paramedic/");
-            //build.Query
-            //var uri = new Uri($"{_httpClient.BaseAddress}/api/paramedic/", );
         }
+
     }
 }
