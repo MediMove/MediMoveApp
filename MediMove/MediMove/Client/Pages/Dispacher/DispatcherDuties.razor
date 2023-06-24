@@ -232,6 +232,8 @@
     {
         _transportResponse = await _TransportService.GetTransportByDayAndShift(_selectedDate, _selectedShift);
         _teamResponse = await _TeamService.GetTeamsByDayAndShift(_selectedDate, _selectedShift);
+        DeselectTransport();
+        DeselectTeam();
         StateHasChanged();
     }
 
