@@ -1,7 +1,12 @@
 ﻿@page "/paramedic/availabilities"
 @using MediMove.Client.Services;
 @using MediMove.Shared.Models.Enums;
+@using static MediMove.Shared.Models.DTOs.GetAvailabilitiesForParamedicByDateRangeResponse;
 @inject AvailabilityService _availabilityService
+
+
+
+
 
 
 <div class="container-fluid">
@@ -10,7 +15,20 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Availabilities</h5>
+                      <div class="shift morning"></div>
+                      <span class="shift-description">
+                        <span class="morning"></span> Morning Shift
+                      </span>
 
+                      <div class="shift evening"></div>
+                      <span class="shift-description">
+                        <span class="evening"></span> Evening Shift
+                      </span>
+
+                      <div class="shift wholeday"></div>
+                      <span class="shift-description">
+                        <span class="wholeday"></span> Whole day shift
+                      </span>
                     <div class="rz-p-12 rz-text-align-center">
                         <RadzenDatePicker @bind-Value=@value Inline="true" DateRender=@DateRenderSpecial />
                     </div>
@@ -34,7 +52,11 @@
 
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary">Submit Shift Type</button>
-                        </div>
+                            @if(cannotChange)
+                            {
+                                <p>You have assignated to team in this day, you cannot change it without consulting with dispatcher.</p>
+                            }
+                            </div>
                     </EditForm>
                     <div>
                         <br />
@@ -59,18 +81,60 @@
     </div>
 }
 
+
+<style>
+    .shift {
+        width: 1.5em;
+        height: 1.5em;
+        margin: 10px;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    .morning {
+        background-color: cornflowerblue;
+    }
+
+    .evening {
+        background-color: coral;
+    }
+
+    .wholeday {
+        background-color: limegreen;
+    }
+
+    .shift-description {
+        display: inline-block;
+        vertical-align: middle;
+    }
+</style>
+
 @code {
+    private bool cannotChange = false;
+    private Dictionary<DateTime, ShiftType?> DeclaredShifts = new Dictionary<DateTime, ShiftType?>();
+    private Dictionary<DateTime, ShiftType> AssignedTeams = new Dictionary<DateTime, ShiftType>();
     private Dictionary<DateTime, ShiftType?> availabilities = new Dictionary<DateTime, ShiftType?>();
+    private Dictionary<DateTime, DateInfo> AllAvailabilities { get; set; } // null => na team cos to mozna usunac, druga to deklaracja
     private DateTime? value = DateTime.Now;
     private ShiftType? shiftType;
     private EditContext editContext;
     private bool showAvailabilities = false; // do podglądu
 
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         var model = new Avability();
         editContext = new EditContext(model);
+        AllAvailabilities = await _availabilityService.GetAvailabilities();
+        foreach(var ava in AllAvailabilities)
+        {
+            DeclaredShifts[ava.Key] = ava.Value.DeclaredShift;
+            if(ava.Value.AssignedTeamShift is not null)
+            {
+                AssignedTeams[ava.Key] = (ShiftType)ava.Value.AssignedTeamShift;
+            }
+        }
+
     }
     public async Task Save()
     {
@@ -79,22 +143,54 @@
     }
     private void HandleValidSubmit()
     {
-        if (value.HasValue)
-        {            
+        if (!AssignedTeams.ContainsKey(value.Value.Date))
+        {
+            cannotChange = false;
             availabilities[value.Value.Date] = shiftType;
+            StateHasChanged();
+        }
+        else
+        {
+            cannotChange = true;
         }
 
-        shiftType = null;
-        StateHasChanged(); 
     }
 
 
     void DateRenderSpecial(DateRenderEventArgs args)
     {
-        if (availabilities.ContainsKey(args.Date.Date))
+        if(DeclaredShifts.ContainsKey(args.Date.Date))
         {
-            args.Attributes.Add("style", "background-color: green; color: white;");
-            args.Disabled = true;
+            if (DeclaredShifts[args.Date.Date].HasValue is false)
+            {
+                args.Attributes.Add("style", "background-color: limegreen;");
+            }
+            else if (DeclaredShifts[args.Date.Date].Value == ShiftType.Morning)
+            {
+                args.Attributes.Add("style", "background-color: cornflowerblue;");
+            }
+            else if (DeclaredShifts[args.Date.Date].Value == ShiftType.Evening)
+            {
+                args.Attributes.Add("style", "background-color: coral;");
+            }
+        }
+        else if (availabilities.ContainsKey(args.Date.Date))
+        {
+            if (availabilities[args.Date.Date].HasValue is false)
+            {
+                args.Attributes.Add("style", "background-color: limegreen;");
+                //args.Disabled = true;
+            }
+            else if (availabilities[args.Date.Date].Value == ShiftType.Morning)
+            {
+                args.Attributes.Add("style", "background-color: cornflowerblue;");
+                //args.Disabled = true;
+            }
+            else if (availabilities[args.Date.Date].Value == ShiftType.Evening)
+            {
+                args.Attributes.Add("style", "background-color: coral;");
+                //args.Disabled = true;
+            }                   
         }
     }
 

@@ -5,6 +5,9 @@ using Microsoft.JSInterop;
 using System.Net.Http.Headers;
 using System.Net.Http;
 using System.Net.Http.Formatting;
+using static MediMove.Shared.Models.DTOs.GetAvailabilitiesForParamedicByDateRangeResponse;
+using System.Net.Http.Json;
+using System;
 
 namespace MediMove.Client.Services
 {
@@ -41,6 +44,30 @@ namespace MediMove.Client.Services
             Console.WriteLine(response.StatusCode);
             //var result = await response.Content.ReadFromJsonAsync<GetAllPatientsResponse>();
 
+        }
+
+        public async Task<Dictionary<DateTime, DateInfo>> GetAvailabilities()
+        {
+
+
+            var baseUri = new Uri(_navigationManager.BaseUri);
+            var requestUri = new Uri(baseUri, "/api/v1/Availability/Paramedic");
+            var uriBuilder = new UriBuilder(requestUri);
+            var query = System.Web.HttpUtility.ParseQueryString(uriBuilder.Query);
+
+            query["startDateInclusive"] = null;
+            query["endDateInclusive"] = null;
+
+            uriBuilder.Query = query.ToString();
+
+
+            var request = new HttpRequestMessage(HttpMethod.Get, uriBuilder.ToString());
+            var token = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", "token");
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var response = await _httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode(); // Rzuca wyjątek w przypadku niepowodzenia
+            var result = await response.Content.ReadFromJsonAsync<GetAvailabilitiesForParamedicByDateRangeResponse>();
+            return result.DateToDateInfo;
         }
     }
 }

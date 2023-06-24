@@ -207,19 +207,22 @@ else if (selectedUserType == AccountType.Dispatcher)
 @if(errorResponse is not null)
 {
     <RadzenCard>
-            <h3>Errors</h3>
-            <div class="rz-text-align-left">
-                <div style="width: 100%; max-width: 400px;">
+        <h3>Errors</h3>
+        <div class="rz-text-align-left">
+            <div style="width: 100%; max-width: 400px;">
+                <div style="margin-bottom: 10px;">
                     <p>Error type: @errorResponse.Type</p>
                 </div>
-                <p>Error Title: @errorResponse.Title</p>
+                <div style="margin-bottom: 10px;">
+                    <p>Error Title: @errorResponse.Title</p>
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <p>Error status: @errorResponse.Status</p>
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <p>Error TraceId: @errorResponse.TraceId</p>
+                </div>
             </div>
-            <div>
-                <p>Error status: @errorResponse.Status</p>
-            </div>
-        <div class="rz-text-align-left">
-            <p>Error TraceId: @errorResponse.TraceId</p>
-        </div>
         @foreach(var error in errorResponse.Errors)
         {
             <div>
@@ -236,6 +239,8 @@ else if (selectedUserType == AccountType.Dispatcher)
                 }
             </div>
         }
+        </div>
+
     </RadzenCard>
 }
 
