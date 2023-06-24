@@ -3,11 +3,34 @@
 @using MediMove.Shared.Models.Enums
 @using MediMove.Client.Services
 @using System.Globalization
+@using MediMove.Shared.Extensions
 @using MediMove.Shared.Validators
 @inject PatientService _PatientService
 @inject TeamService _TeamService
+@inject TransportService _TransportService
 
 <h3>Create Transport</h3>
+
+@if (_popupIsVisible)
+{
+    <div class="modal fade show" style="display: block;" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Message</h5>
+                    <button type="button" class="btn-close" @onclick="ClosePopup"></button>
+                </div>
+                <div class="modal-body">
+                    <p>@_popupMessage</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="ClosePopup">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-backdrop fade show"></div>
+}
 
 <div class="container-fluid">
     <div class="row">
@@ -472,11 +495,13 @@
     private CreatePatientRequest createPatientDTO = new CreatePatientRequest();
     private GetTeamsByDateAndShiftResponse teamResponse;
     private CreateTransportWithBillingDTO createTransportWithBillingDTO = new CreateTransportWithBillingDTO();
+    private bool _popupIsVisible = false;
+    private string _popupMessage = "";
     
     protected override async Task OnInitializedAsync()
     {
         allPatientsResponse = await _PatientService.GetPatients();
-        teamResponse = await _TeamService.GetTeamsByDayAndShift(DateTime.Now);
+        teamResponse = await _TeamService.GetTeamsByDayAndShift(DateTime.Now, DateTime.Now.ToShiftType().Value);
         createTransportDTO.StartTime = DateTime.Now;
         createTransportWithBillingDTO.InvoiceDate = DateTime.Today;
         createTransportWithBillingDTO.StartTime = DateTime.Now;
@@ -489,9 +514,9 @@
     {
         
         if(_isWithBilling)
-            teamResponse =  await _TeamService.GetTeamsByDayAndShift(createTransportWithBillingDTO.StartTime);
+            teamResponse =  await _TeamService.GetTeamsByDayAndShift(createTransportWithBillingDTO.StartTime, createTransportWithBillingDTO.StartTime.ToShiftType().Value);
         else
-            teamResponse = await _TeamService.GetTeamsByDayAndShift(createTransportDTO.StartTime);
+            teamResponse = await _TeamService.GetTeamsByDayAndShift(createTransportDTO.StartTime,createTransportDTO.StartTime.ToShiftType().Value);
 
         DeselectTeam();
         StateHasChanged();
@@ -500,13 +525,15 @@
     private void DeselectPatient()
     {
         _selectedPatientId = null; // Deselect if the same patient is clicked
-        createTransportDTO.PatientId = 0; // Update the Patient ID field to a default value
+        createTransportDTO.PatientId = 0;
+        createTransportWithBillingDTO.PatientId = 0;// Update the Patient ID field to a default value
     }
 
     private void DeselectTeam()
     {
         _selectedTeamId = null; // Deselect if the same team is clicked
-        createTransportDTO.TeamId = 0; // Update the Team ID field to a default value
+        createTransportDTO.TeamId = null;
+        createTransportWithBillingDTO.TeamId = null; // Update the Team ID field to a default value
     }
 
     private void SelectPatient(int patientId)
@@ -533,7 +560,7 @@
         {
             _selectedTeamId = teamId;
             createTransportDTO.TeamId = teamId;
-            createTransportWithBillingDTO.PatientId = teamId;
+            createTransportWithBillingDTO.TeamId = teamId;
         }
     }
 
@@ -547,8 +574,20 @@
         return teamId == _selectedTeamId ? "patient-item selected" : "patient-item";
     }
 
-    
 
+    private void ShowPopup(string message)
+    {
+        _popupIsVisible = true;
+        _popupMessage = message;
+        StateHasChanged();
+    }
+
+    private void ClosePopup()
+    {
+        _popupIsVisible = false;
+        _popupMessage = "";
+        StateHasChanged();
+    }
 
 
     private void SearchByPhoneNumber()
@@ -569,16 +608,28 @@
 
     private async void AddPatient()
     {
-        await _PatientService.PostPatient(createPatientDTO);
-        allPatientsResponse = await _PatientService.GetPatients();
-        allPatients = allPatientsResponse;
-        createPatientDTO = new CreatePatientRequest();
+        var message = "";
+        message = await _PatientService.PostPatient(createPatientDTO);
+        if (message == "Success")
+        {
+            allPatientsResponse = await _PatientService.GetPatients();
+            allPatients = allPatientsResponse;
+            createPatientDTO = new CreatePatientRequest();
+        }
         StateHasChanged();
+        ShowPopup(message);
     }
 
-    private void HandleValidSubmit()
+
+    private async void HandleValidSubmit()
     {
-        throw new NotImplementedException();
+        var message = "";
+        if (_isWithBilling)
+           message = await _TransportService.PostTransportWithBilling(createTransportWithBillingDTO);
+        else
+            message = await _TransportService.PostTransport(createTransportDTO);
+
+        ShowPopup(message);
     }
 
     private void DisplayTabWithoutBilling()

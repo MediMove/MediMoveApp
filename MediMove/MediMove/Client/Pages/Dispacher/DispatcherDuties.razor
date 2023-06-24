@@ -1,0 +1,238 @@
+﻿@page "/dispacher/Duties"
+@using MediMove.Shared.Models.DTOs
+@using MediMove.Shared.Models.Enums
+@using MediMove.Client.Services
+@using System.Globalization
+@using MediMove.Shared.Validators
+@inject TeamService _TeamService
+@inject TransportService _TransportService
+
+
+@if (_popupIsVisible)
+{
+    <div class="modal fade show" style="display: block;" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Message</h5>
+                    <button type="button" class="btn-close" @onclick="ClosePopup"></button>
+                </div>
+                <div class="modal-body">
+                    <p>@_popupMessage</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="ClosePopup">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-backdrop fade show"></div>
+}
+
+<nav class="nav nav-pills nav-fill">
+    <div class=@MorningSelection() @onclick="() => { _selectedShift = ShiftType.Morning; DateChanged();}">Morning</div>
+    <div class=@EveningSelection() @onclick="() => { _selectedShift = ShiftType.Evening; DateChanged();}" >Evening</div>
+</nav>
+
+<div class="rz-p-12 rz-text-align-center">
+    <RadzenDatePicker @bind-Value=@_selectedDate Inline="true" Change="DateChanged" />
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <h5 class="card-title">Transports</h5>
+                <div class="card-body">
+
+                    <div class="patient-list-container">
+                        <div class="scrollable-list">
+                            @if (_transportResponse != null)
+                            {
+                                foreach (var transport in _transportResponse.Transports)
+                                {
+                                    <div class="@GetTransportItemClass(transport.Key)" @onclick="() => SelectTransport(transport.Key)">
+                                        <div class="patient-details">
+                                            <p><strong>Team ID:</strong> @transport.Value.TeamId </p>
+                                            <p><strong>Start Time:</strong> @transport.Value.StartTime</p>
+                                            <p><strong>Start Location:</strong> @transport.Value.StartLocation </p>
+                                            <p><strong>Destination:</strong> @transport.Value.Destination </p>
+                                            <p><strong>Return Location:</strong> @transport.Value.ReturnLocation </p>
+                                            <p><strong>Note:</strong> @transport.Value.Note </p>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <h5 class="card-title">Teams</h5>
+                <div class="card-body">
+
+                    <div class="patient-list-container">
+                        <div class="scrollable-list">
+                            @if (_teamResponse != null)
+                            {
+                                foreach (var team in _teamResponse.Teams)
+                                {
+                                    <div class="@GetTeamItemClass(team.Key)" @onclick="() => SelectTeam(team.Key)">
+                                        <div class="patient-details">
+                                            <p><strong>Driver:</strong> @team.Value.DriverFirstName @team.Value.DriverLastName</p>
+                                            <p><strong>Driver Phone Number:</strong> @team.Value.DriverPhoneNumber</p>
+                                            <p><strong>Paramedic:</strong> @team.Value.ParamedicFirstName @team.Value.ParamedicLastName</p>
+                                            <p><strong>Paramedic Phone Number:</strong> @team.Value.ParamedicPhoneNumber</p>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .patient-list-container {
+        height: 500px; /* Adjust the height as needed */
+        overflow-y: auto;
+    }
+
+    .patient-item {
+        background-color: #f2f2f2;
+        padding: 10px;
+        margin-bottom: 10px;
+        cursor: pointer;
+    }
+
+        .patient-item.selected {
+            background-color: #5177b8;
+        }
+
+    .form-group {
+        margin: 20px;
+    }
+
+    .title {
+        margin: 30px;
+    }
+
+    .patient-details {
+        margin-left: 10px;
+    }
+
+    .add-patient-form {
+        margin-top: 20px;
+    }
+
+    .search-bar {
+        display: flex;
+        align-items: center;
+    }
+
+</style>
+
+@code {
+    private AssignTeamsToTransportsRequest _assignRequest = new AssignTeamsToTransportsRequest();
+    private GetTeamsByDateAndShiftResponse? _teamResponse;
+    private GetTransportsByDayAndShiftResponse? _transportResponse;
+    private GetAvailableParamedicsByDateAndShiftResponse _paramedicResponse = new GetAvailableParamedicsByDateAndShiftResponse();
+    private DateTime _selectedDate = DateTime.Now;
+    private ShiftType _selectedShift = ShiftType.Morning;
+    private int? _selectedTeamId;
+    private int? _selectedTransportId;
+    private bool _popupIsVisible = false;
+    private string _popupMessage = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        _transportResponse = await _TransportService.GetTransportByDayAndShift(_selectedDate, _selectedShift);
+        _teamResponse = await _TeamService.GetTeamsByDayAndShift(_selectedDate, _selectedShift);
+
+    }
+
+    private string MorningSelection()
+    {
+        return _selectedShift == ShiftType.Morning ? "nav-item nav-link active" : "nav-item nav-link";
+    }
+
+    private string EveningSelection()
+    {
+        return _selectedShift == ShiftType.Evening ? "nav-item nav-link active" : "nav-item nav-link";
+    }
+    
+    private void DeselectTeam()
+    {
+        _selectedTeamId = null;
+
+    }
+
+    private void SelectTeam(int teamId)
+    {
+        if (_selectedTeamId == teamId)
+        {
+            DeselectTeam();
+        }
+        else
+        {
+            _selectedTeamId = teamId;
+        }
+    }
+
+  
+
+    private string GetTeamItemClass(int teamId)
+    {
+        return teamId == _selectedTeamId ? "patient-item selected" : "patient-item";
+    }
+
+    private string GetTransportItemClass(int transportId)
+    {
+        return transportId == _selectedTransportId ? "patient-item selected" : "patient-item";
+    }
+
+    private void DeselectTransport()
+    {
+        _selectedTransportId = null;
+
+    }
+
+    private void SelectTransport(int transportId)
+    {
+        if (_selectedTransportId == transportId)
+        {
+            DeselectTransport();
+        }
+        else
+        {
+            _selectedTransportId = transportId;
+        }
+    }
+
+    private void ShowPopup(string message)
+    {
+        _popupIsVisible = true;
+        _popupMessage = message;
+        StateHasChanged();
+    }
+
+    private void ClosePopup()
+    {
+        _popupIsVisible = false;
+        _popupMessage = "";
+        StateHasChanged();
+    }
+
+    private async void DateChanged()
+    {
+        _transportResponse = await _TransportService.GetTransportByDayAndShift(_selectedDate, _selectedShift);
+        _teamResponse = await _TeamService.GetTeamsByDayAndShift(_selectedDate, _selectedShift);
+        StateHasChanged();
+    }
+
+}

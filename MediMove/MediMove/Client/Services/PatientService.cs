@@ -6,6 +6,8 @@ using System.Net.Http.Json;
 using System;
 using System.Net.Http.Formatting;
 using MediMove.Shared.Validators;
+using MediMove.Client.temp;
+using Newtonsoft.Json;
 
 namespace MediMove.Client.Services
 {
@@ -41,7 +43,7 @@ namespace MediMove.Client.Services
             return result;
         }
 
-        public async Task PostPatient(CreatePatientRequest content)
+        public async Task<string> PostPatient(CreatePatientRequest content)
         {
             
             var baseUri = new Uri(_navigationManager.BaseUri);
@@ -57,8 +59,26 @@ namespace MediMove.Client.Services
 
             Console.WriteLine("I'm here auth");
             var response = await _httpClient.SendAsync(request);
-            response.EnsureSuccessStatusCode(); // Rzuca wyjątek w przypadku niepowodzenia
-            Console.WriteLine(response.StatusCode);
+            if (!response.IsSuccessStatusCode)
+            {
+
+                var responseContent = await response.Content.ReadAsStringAsync();
+                return DeserializeError(responseContent);
+
+            }
+            return "Success";
+        }
+
+        private string DeserializeError(string? content)
+        {
+            var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(content);
+            var errorMessage = "";
+            foreach (var field in errorResponse.Errors)
+            {
+                errorMessage += field.Key + ": " + string.Join("; ", field.Value) + "\n";
+            }
+
+            return errorMessage;
         }
     }
 }

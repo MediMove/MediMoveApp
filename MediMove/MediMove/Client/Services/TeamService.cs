@@ -21,7 +21,7 @@ namespace MediMove.Client.Services
             _jsRuntime = jsRuntime;
             _navigationManager = navigationManager;
         }
-        public async Task<GetTeamsByDateAndShiftResponse> GetTeamsByDayAndShift(DateTime dateTime)
+        public async Task<GetTeamsByDateAndShiftResponse> GetTeamsByDayAndShift(DateTime dateTime, ShiftType shift)
         {
             var baseUri = new Uri(_navigationManager.BaseUri);
             var requestUri = new Uri(baseUri, "/api/v1/Team");
@@ -31,9 +31,9 @@ namespace MediMove.Client.Services
 
             query["date"] = dateTime.ToString("yyyy-MM-dd");
             Console.WriteLine($"Date query: {query["date"]}");
-            if(dateTime.ToShiftType().Value == ShiftType.Morning)       //to refactor
+            if (shift == ShiftType.Morning)
                 query["shift"] = "0";
-            else if(dateTime.ToShiftType().Value == ShiftType.Evening)
+            else if (shift == ShiftType.Evening)
                 query["shift"] = "1";
             Console.WriteLine($"Shift query: {query["shift"]}");
 
