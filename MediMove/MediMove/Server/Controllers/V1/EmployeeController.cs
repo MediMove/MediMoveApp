@@ -28,8 +28,8 @@ namespace MediMove.Server.Controllers.V1
                 errors => Problem(errors));
         }
 
-        [HttpGet("Raport")]
-        //[Authorize(Roles = "Paramedic")]
+        [HttpGet("Report")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetEmployeesInMonthByHoursAndSalary(
             [FromQuery] DateTime startTime,
             [FromQuery] DateTime endTime,

@@ -6,4 +6,4 @@ using System.Threading.Tasks;
 
 namespace MediMove.Shared.Models.DTOs;
 
-public record GetEmployeesInMonthByHoursAndSalaryRow(GetEmployeesInMonthByHoursAndSalaryDTO[] Paramedics, GetEmployeesInMonthByHoursAndSalaryDTO[] Dispatchers);
+public record GetEmployeesInMonthByHoursAndSalaryResponse(GetEmployeesInMonthByHoursAndSalaryDTO[] Paramedics);
