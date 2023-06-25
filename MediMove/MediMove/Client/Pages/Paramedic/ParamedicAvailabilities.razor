@@ -81,16 +81,7 @@
     </div>
 </div>
 
-@if (showAvailabilities)
-{
-    <div>
-        <h5>Availabilities Log:</h5>
-        @foreach (var availability in availabilities)
-        {
-            <p>@availability.Key.ToString("dd.MM.yyyy") - @availability.Value.ToString()</p> @*Podgląd*@
-        }
-    </div>
-}
+
 
 
 <style>
@@ -121,16 +112,13 @@
 </style>
 
 @code {
-    private bool cannotChange = false;
     private Dictionary<DateTime, ShiftType?> DeclaredShifts = new();
     private Dictionary<DateTime, ShiftType> AssignedTeams = new();
     private Dictionary<DateTime, ShiftType?> availabilities = new();
     private HashSet<DateTime> AvailabilityToDelete = new();
-    //private Dictionary<DateTime, DateInfo> AllAvailabilities { get; set; } // null => na team cos to mozna usunac, druga to deklaracja
     private DateTime? value = DateTime.Now;
     private ShiftType? shiftType;
     private EditContext editContext;
-    private bool showAvailabilities = false; // do podglądu
 
 
     protected override async Task OnInitializedAsync()
@@ -157,7 +145,6 @@
         {
             await _availabilityService.DeleteAvailabilities(AvailabilityToDelete);
         }
-        showAvailabilities = true; // do podglądu
         if(availabilities.Any())
         {
             await _availabilityService.SaveAvailabilities(availabilities);
@@ -184,15 +171,9 @@
             {
                 AvailabilityToDelete.Add(value.Value.Date);
             }
-            cannotChange = false;
             availabilities[value.Value.Date] = shiftType;
             StateHasChanged();
         }
-        else
-        {
-            cannotChange = true;
-        }
-
     }
 
 
@@ -204,8 +185,23 @@
             return;
         }
 
-
-        if(DeclaredShifts.ContainsKey(args.Date.Date))
+        if(AssignedTeams.ContainsKey(args.Date.Date))
+        {
+            args.Disabled = true; 
+            if (DeclaredShifts[args.Date.Date].HasValue is false)
+            {
+                args.Attributes.Add("style", "background-color: limegreen;");
+            }
+            else if (DeclaredShifts[args.Date.Date].Value == ShiftType.Morning)
+            {
+                args.Attributes.Add("style", "background-color: cornflowerblue;");
+            }
+            else if (DeclaredShifts[args.Date.Date].Value == ShiftType.Evening)
+            {
+                args.Attributes.Add("style", "background-color: coral;");
+            }
+        }
+        else if(DeclaredShifts.ContainsKey(args.Date.Date))
         {
             if (DeclaredShifts[args.Date.Date].HasValue is false)
             {
