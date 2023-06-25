@@ -32,38 +32,49 @@
                     <div class="rz-p-12 rz-text-align-center">
                         <RadzenDatePicker @bind-Value=@value Inline="true" DateRender=@DateRenderSpecial />
                     </div>
+                    
+                    @if (value.Value > DateTime.Now)
+                    {
+                        <EditForm EditContext="editContext" OnValidSubmit="HandleValidSubmit">
 
-                    <EditForm EditContext="editContext" OnValidSubmit="HandleValidSubmit">
-
-                        <div class="form-group">
-                            <label>@(value.HasValue ? value.Value.Date.ToString("dd.MM.yyyy") : "")</label>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="shiftType">Shift Type:</label>
-                            <InputSelect id="shiftType" class="form-control" @bind-Value="shiftType">
-                                <option value="">Whole Day</option>
-                                @foreach (var shiftTypeOption in Enum.GetValues(typeof(ShiftType)))
-                                {
-                                    <option value="@shiftTypeOption">@shiftTypeOption</option>
-                                }
-                            </InputSelect>
-                        </div>
-
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary">Submit Shift Type</button>
-                            @if(cannotChange)
-                            {
-                                <p>You have assignated to team in this day, you cannot change it without consulting with dispatcher.</p>
-                            }
+                            <div class="form-group">
+                                <label>@(value.HasValue ? value.Value.Date.ToString("dd.MM.yyyy") : "")</label>
                             </div>
-                    </EditForm>
-                    <div>
-                        <br />
-                        <br />
 
-                        <button type="button" class="btn btn-primary" @onclick="Save"> Submit avability</button>
-                    </div>
+                            <div class="form-group">
+                                <label for="shiftType">Shift Type:</label>
+                                <InputSelect id="shiftType" class="form-control" @bind-Value="shiftType">
+                                    <option value="">Whole Day</option>
+                                    @foreach (var shiftTypeOption in Enum.GetValues(typeof(ShiftType)))
+                                    {
+                                        <option value="@shiftTypeOption">@shiftTypeOption</option>
+                                    }
+                                </InputSelect>
+                            </div>
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Submit Shift Type</button>
+                                @if (DeclaredShifts.ContainsKey(value.Value.Date))
+                                {
+                                    @if (AssignedTeams.ContainsKey(value.Value.Date))
+                                    {
+                                        <p>You have assignated to team in this day, you cannot change it without consulting with dispatcher.</p>
+                                    }
+                                    else
+                                    {
+                                        <button type="button" class="btn btn-primary" @onclick="HandleDelete">Delete Declared Shift</button>
+                                    }
+                                }   
+                            </div>   
+
+                        </EditForm>
+                        <div>
+                            <br />
+                            <br />
+
+                            <button type="button" class="btn btn-primary" @onclick="Save"> Submit avability</button>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
@@ -111,10 +122,11 @@
 
 @code {
     private bool cannotChange = false;
-    private Dictionary<DateTime, ShiftType?> DeclaredShifts = new Dictionary<DateTime, ShiftType?>();
-    private Dictionary<DateTime, ShiftType> AssignedTeams = new Dictionary<DateTime, ShiftType>();
-    private Dictionary<DateTime, ShiftType?> availabilities = new Dictionary<DateTime, ShiftType?>();
-    private Dictionary<DateTime, DateInfo> AllAvailabilities { get; set; } // null => na team cos to mozna usunac, druga to deklaracja
+    private Dictionary<DateTime, ShiftType?> DeclaredShifts = new();
+    private Dictionary<DateTime, ShiftType> AssignedTeams = new();
+    private Dictionary<DateTime, ShiftType?> availabilities = new();
+    private HashSet<DateTime> AvailabilityToDelete = new();
+    //private Dictionary<DateTime, DateInfo> AllAvailabilities { get; set; } // null => na team cos to mozna usunac, druga to deklaracja
     private DateTime? value = DateTime.Now;
     private ShiftType? shiftType;
     private EditContext editContext;
@@ -125,26 +137,53 @@
     {
         var model = new Avability();
         editContext = new EditContext(model);
-        AllAvailabilities = await _availabilityService.GetAvailabilities();
+        var AllAvailabilities = await _availabilityService.GetAvailabilities();
         foreach(var ava in AllAvailabilities)
         {
             DeclaredShifts[ava.Key] = ava.Value.DeclaredShift;
             if(ava.Value.AssignedTeamShift is not null)
             {
                 AssignedTeams[ava.Key] = (ShiftType)ava.Value.AssignedTeamShift;
+
             }
         }
 
     }
+
     public async Task Save()
     {
+        //usunąć wszystkie z listy do usunięcia
+        if(AvailabilityToDelete.Any())
+        {
+            await _availabilityService.DeleteAvailabilities(AvailabilityToDelete);
+        }
         showAvailabilities = true; // do podglądu
-        await _availabilityService.SaveAvailabilities(availabilities);
+        if(availabilities.Any())
+        {
+            await _availabilityService.SaveAvailabilities(availabilities);
+        }
     }
+
+    private void HandleDelete()
+    {
+        if (!AssignedTeams.ContainsKey(value.Value.Date))
+        {
+            if (DeclaredShifts.ContainsKey(value.Value.Date))
+            {
+                AvailabilityToDelete.Add(value.Value.Date);
+                StateHasChanged();
+            }
+        }
+    }
+
     private void HandleValidSubmit()
     {
         if (!AssignedTeams.ContainsKey(value.Value.Date))
         {
+            if (DeclaredShifts.ContainsKey(value.Value.Date))
+            {
+                AvailabilityToDelete.Add(value.Value.Date);
+            }
             cannotChange = false;
             availabilities[value.Value.Date] = shiftType;
             StateHasChanged();
@@ -159,6 +198,13 @@
 
     void DateRenderSpecial(DateRenderEventArgs args)
     {
+        if (AvailabilityToDelete.Contains(args.Date.Date))
+        {
+            args.Attributes.Clear();
+            return;
+        }
+
+
         if(DeclaredShifts.ContainsKey(args.Date.Date))
         {
             if (DeclaredShifts[args.Date.Date].HasValue is false)
