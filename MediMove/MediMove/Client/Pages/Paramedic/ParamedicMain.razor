@@ -1,17 +1,17 @@
-﻿@page "/paramedic/"
+﻿@page "/paramedic/transports"
 @using MediMove.Client.Services;
 @using MediMove.Shared.Models.DTOs;
 @inject TransportService _transportService
 
-<div class="rz-p-12 rz-text-align-center">
+<div class="container-fluid">
     <RadzenDatePicker @bind-Value=@value Inline="true" Change="Change" />
 </div>
 
 <RadzenDataList WrapItems="true" Data="@transports" TItem="GetTransportsByParamedicAndDateRangeResponse.TransportInfo">
     <Template Context="transport">
-        <RadzenCard class="cart-box">
+        <RadzenCard Class="rz-my-12 rz-mx-auto" Style="max-width: 250px">
            
-                <div class="col-md-6">
+                
                     <div>Patient: @transport.PatientFirstName @transport.PatientLastName</div>
                     <div>PhoneNumber: @transport.PatientPhoneNumber</div>
                     <br />
@@ -33,7 +33,7 @@
 
                     
                     
-                </div>
+                
            
 
         </RadzenCard>

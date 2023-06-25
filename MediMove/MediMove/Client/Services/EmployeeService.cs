@@ -10,7 +10,7 @@ using System.Text.Json;
 
 namespace MediMove.Client.Services
 {
-    public class EmployeeService
+    public class EmployeeService : BaseService
     {
         private readonly HttpClient _httpClient;
         private readonly IJSRuntime _jsRuntime;
@@ -132,24 +132,7 @@ namespace MediMove.Client.Services
             string serializedRequest = JsonSerializer.Serialize(new PutEmployeesRequest(paramedics.ToArray(), dispatchers.ToArray()));
             request.Content = new StringContent(serializedRequest, Encoding.UTF8, "application/json");
             var response = await _httpClient.SendAsync(request);
-            if (!response.IsSuccessStatusCode)
-            {
-                //Console.WriteLine("Error updating data");
-                return "Error updating data";
-                /*
-                var responseContent = await response.Content.ReadAsStringAsync();
-                var errorResponse = JsonSerializer.Deserialize<ErrorResponse>(responseContent);
-                var errorMessage = "";
-                foreach (var field in errorResponse.Errors)
-                {
-                    errorMessage += field.Key + ": " + string.Join("; ", field.Value) + "\n";
-                }
-
-                return errorMessage;
-                */
-            }
-            //Console.WriteLine("OK updating data");
-            return "";
+            return await DeserializeError(response);
         }
     }
 }

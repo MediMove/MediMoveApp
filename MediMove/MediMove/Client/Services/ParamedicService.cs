@@ -1,33 +1,30 @@
 ﻿using MediMove.Shared.Models.DTOs;
+using MediMove.Shared.Models.Enums;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using System;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using MediMove.Shared.Extensions;
-using MediMove.Shared.Models.Enums;
-using System.Net.Http.Formatting;
-using MediMove.Client.temp;
-using Newtonsoft.Json;
 
 namespace MediMove.Client.Services
 {
-    public class TeamService : BaseService
+    public class ParamedicService : BaseService
     {
+
         private readonly HttpClient _httpClient;
         private readonly IJSRuntime _jsRuntime;
         private readonly NavigationManager _navigationManager;
 
-        public TeamService(HttpClient httpClient, IJSRuntime jsRuntime, NavigationManager navigationManager)
+        public ParamedicService(HttpClient httpClient, IJSRuntime jsRuntime, NavigationManager navigationManager)
         {
             _httpClient = httpClient;
             _jsRuntime = jsRuntime;
             _navigationManager = navigationManager;
         }
-        public async Task<GetTeamsByDateAndShiftResponse> GetTeamsByDayAndShift(DateTime dateTime, ShiftType shift)
+
+        public async Task<GetAvailableParamedicsByDateAndShiftResponse> GetParamedicsByDayAndShift(DateTime dateTime, ShiftType shift)
         {
             var baseUri = new Uri(_navigationManager.BaseUri);
-            var requestUri = new Uri(baseUri, "/api/v1/Team");
+            var requestUri = new Uri(baseUri, "/api/v1/Availability");
 
             var uriBuilder = new UriBuilder(requestUri);
             var query = System.Web.HttpUtility.ParseQueryString(uriBuilder.Query);
@@ -53,28 +50,8 @@ namespace MediMove.Client.Services
             var response = await _httpClient.SendAsync(request);
             response.EnsureSuccessStatusCode(); // Rzuca wyjątek w przypadku niepowodzenia
             Console.WriteLine(response.StatusCode);
-            var result = await response.Content.ReadFromJsonAsync<GetTeamsByDateAndShiftResponse>();
+            var result = await response.Content.ReadFromJsonAsync<GetAvailableParamedicsByDateAndShiftResponse>();
             return result;
         }
-
-        public async Task<string> PostTeam(CreateTeamsRequest content)
-        {
-
-            var baseUri = new Uri(_navigationManager.BaseUri);
-            var requestUri = new Uri(baseUri, "/api/v1/Team");
-            Console.WriteLine($"I'm here {requestUri}");
-            var request = new HttpRequestMessage(HttpMethod.Post, requestUri);
-
-            var token = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", "token");
-
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            request.Content = new ObjectContent<CreateTeamsRequest>(content, new JsonMediaTypeFormatter());
-
-            Console.WriteLine("I'm here auth");
-            var response = await _httpClient.SendAsync(request);
-            return await DeserializeError(response);
-        }
-
     }
 }

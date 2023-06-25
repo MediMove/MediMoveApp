@@ -3,6 +3,9 @@
 @using MediMove.Shared.Models.Enums;
 @inject AvailabilityService _availabilityService
 
+<div class="container-fluid">
+    <RadzenDatePicker @bind-Value=@value Inline="true" DateRender=@DateRenderSpecial />
+</div>
 
 <div class="container-fluid">
     <div class="row">
@@ -11,9 +14,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Availabilities</h5>
 
-                    <div class="rz-p-12 rz-text-align-center">
-                        <RadzenDatePicker @bind-Value=@value Inline="true" DateRender=@DateRenderSpecial />
-                    </div>
+                    
 
                     <EditForm EditContext="editContext" OnValidSubmit="HandleValidSubmit">
 
