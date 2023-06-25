@@ -3,6 +3,7 @@
 @using MediMove.Shared.Models.Enums
 @using MediMove.Client.Services
 @using System.Globalization
+@using System.Reflection.Metadata.Ecma335
 @using MediMove.Shared.Validators
 @inject TeamService _TeamService
 @inject TransportService _TransportService
@@ -69,7 +70,9 @@
                     </div>
                 </div>
             </div>
+                <button type="button" class="btn btn-primary" @onclick="AddTeamToTransport">Add team to selected transport</button>
         </div>
+            
     </div>
     <div class="col-md-4">
         <div class="card">
@@ -84,6 +87,7 @@
                             {
                                 <div class="@GetTeamItemClass(team.Key)" @onclick="() => SelectTeam(team.Key)">
                                     <div class="patient-details">
+                                        <p><strong>Team ID:</strong> @team.Key</p>
                                         <p><strong>Driver:</strong> @team.Value.DriverFirstName @team.Value.DriverLastName</p>
                                         <p><strong>Driver Phone Number:</strong> @team.Value.DriverPhoneNumber</p>
                                         <p><strong>Paramedic:</strong> @team.Value.ParamedicFirstName @team.Value.ParamedicLastName</p>
@@ -103,30 +107,31 @@
                 
             <div class="card-body form-group">
                 <div class="row">
+                        
                     <div class="col-8 col-sm-6 min-width">
+                            <h5 class="title">All paramedics:</h5>
                         <div class="patient-list-container">
                             <div class="scrollable-list">
                                 @if (_paramedicResponse != null)
                                 {
                                     foreach (var paramedic in _paramedicResponse.Paramedics)
                                     {
-                                        if (!@paramedic.Value.IsDriver)
-                                        {
-                                            <div class="@GetParamedicItemClass(paramedic.Key)" @onclick="() => SelectParamedic(paramedic.Key)">
-                                                <div class="patient-details">
-                                                    <p><strong>Name: </strong> @paramedic.Value.FirstName @paramedic.Value.LastName</p>
-                                                    <p><strong>Phone Number:</strong> @paramedic.Value.PhoneNumber</p>
-                                                    <p><strong>Driver:</strong> @((paramedic.Value.IsDriver) ? "True" : "False")</p>
+                                        <div class="@GetParamedicItemClass(paramedic.Key)" @onclick="() => { if (_teamResponse is not null){ if (_teamResponse.Teams.All(x => x.Value.ParamedicId != paramedic.Key && x.Value.DriverId != paramedic.Key) && paramedic.Key != _selectedDriverId){ SelectParamedic(paramedic.Key); } } }">
+                                            <div class="patient-details">
+                                                <p><strong>Name: </strong> @paramedic.Value.FirstName @paramedic.Value.LastName</p>
+                                                <p><strong>Phone Number:</strong> @paramedic.Value.PhoneNumber</p>
+                                                <p><strong>Driver:</strong> @((paramedic.Value.IsDriver) ? "True" : "False")</p>
 
-                                                </div>
                                             </div>
-                                        }
+                                        </div>
                                     }
                                 }
                             </div>
                         </div>
                     </div>
+                        
                     <div class="col-8 col-sm-6 min-width">
+                            <h5 class="title">Drivers:</h5>
                         <div class="patient-list-container">
                             <div class="scrollable-list">
                                 @if (_paramedicResponse != null)
@@ -135,7 +140,7 @@
                                     {
                                         if (@driver.Value.IsDriver)
                                         {
-                                            <div class="@GetDriverItemClass(driver.Key)" @onclick="() => SelectDriver(driver.Key)">
+                                            <div class="@GetDriverItemClass(driver.Key)" @onclick="() => { if (_teamResponse is not null){ if (_teamResponse.Teams.All(x => x.Value.DriverId != driver.Key && x.Value.ParamedicId != driver.Key) && driver.Key != _selectedParamedicId){ SelectDriver(driver.Key); } } }">
                                                 <div class="patient-details">
                                                     <p><strong>Name: </strong> @driver.Value.FirstName @driver.Value.LastName</p>
                                                     <p><strong>Phone Number:</strong> @driver.Value.PhoneNumber</p>
@@ -175,6 +180,10 @@
             background-color: #5177b8;
         }
 
+    .list-item.notActive {
+            background-color: #575757;
+    }
+
     .form-group {
         margin: 20px;
     }
@@ -202,7 +211,7 @@
 </style>
 
 @code {
-    private AssignTeamsToTransportsRequest _assignRequest = new AssignTeamsToTransportsRequest();
+    private AssignTeamsToTransportsRequest? _assignRequest;
     private GetTeamsByDateAndShiftResponse? _teamResponse;
     private GetTransportsByDayAndShiftResponse? _transportResponse;
     private GetAvailableParamedicsByDateAndShiftResponse? _paramedicResponse;
@@ -252,6 +261,24 @@
         }
     }
 
+    private async void AddTeamToTransport()
+    {
+        if (_selectedTeamId is not null && _selectedTransportId is not null)
+        {
+            
+            var teamAndTransport = new SortedDictionary<int, int>();
+            teamAndTransport.Add((int)_selectedTransportId, (int)_selectedTeamId);
+            _assignRequest = new AssignTeamsToTransportsRequest
+            {
+                TransportsToTeams = teamAndTransport
+            };
+            var message = await _TransportService.AddTeamToTransport(_assignRequest);
+            ShowPopup(message);
+        }
+        else 
+            ShowPopup("You must select transport and team to assign.");
+    }
+
     private async void CreateTeam()
     {
         if (_selectedDriverId is not null && _selectedParamedicId is not null)
@@ -298,6 +325,12 @@
 
     private string GetParamedicItemClass(int paramedicId)
     {
+        if (_teamResponse is null) return "list-item";
+        if (_teamResponse.Teams.Any(x => x.Value.ParamedicId == paramedicId || x.Value.DriverId == paramedicId))
+        {
+            return "list-item notActive";
+        }
+                
         return paramedicId == _selectedParamedicId ? "list-item selected" : "list-item";
     }
 
@@ -322,6 +355,12 @@
 
         private string GetDriverItemClass(int driverId)
         {
+            if (_teamResponse is null) return "list-item";
+            if(_teamResponse.Teams.Any(x => x.Value.DriverId == driverId || x.Value.ParamedicId == driverId))
+            {
+                return "list-item notActive";
+            }
+                
             return driverId == _selectedDriverId ? "list-item selected" : "list-item";
         }
 
