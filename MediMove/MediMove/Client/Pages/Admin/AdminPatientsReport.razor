@@ -1,4 +1,4 @@
-﻿@page "/admin/employeesreport"
+﻿@page "/admin/patientsreport"
 
 @using MediMove.Client.temp;
 @using MediMove.Shared.Models.DTOs
@@ -8,10 +8,10 @@
 @using System.ComponentModel.DataAnnotations;
 @using Radzen.Blazor
 @inject MediMoveAuthenticationStateProvider _stcateProvider
-@inject EmployeeService _employeeService
+@inject PatientService _patientService
 @inject NavigationManager _navigationManager
 
-<h3>AdminEmployeeReport</h3>
+<h3>AdminPatientsReport</h3>
 
 @*<form>
     <label for="monthPicker">Select Month and Year:</label>
@@ -30,23 +30,13 @@
     </div>
 
     <div class="input-group">
-        <RadzenLabel Text="Start Payments Sum" />
-        <RadzenNumeric TValue="decimal" Format="0.00 zł" @bind-Value=@startPaymentsSum />
+        <RadzenLabel Text="Start Amount Sum" />
+        <RadzenNumeric TValue="decimal" Format="0.00 zł" @bind-Value="@startAmount"/>
     </div>
 
     <div class="input-group">
-        <RadzenLabel Text="End Payments Sum" />
-        <RadzenNumeric TValue="decimal" Format="0.00 zł" @bind-Value="@endPaymentsSum" />
-    </div>
-
-    <div class="input-group">
-        <RadzenLabel Text="Start Payments Hours" />
-        <RadzenNumeric TValue="decimal" Format="0 h" @bind-Value="@startPaymentsHours" />
-    </div>
-
-    <div class="input-group">
-        <RadzenLabel Text="End Payments Hours" />
-        <RadzenNumeric TValue="decimal" Format="0 h" @bind-Value="@endPaymentsHours" />
+        <RadzenLabel Text="End Amount Sum" />
+        <RadzenNumeric TValue="decimal" Format="0.00 zł" @bind-Value="@endAmount" />
     </div>
 </div>
 <div>
@@ -57,25 +47,33 @@
 {
     <div style="display: flex; align-items: center; margin-bottom: 16px">
         <RadzenButton Click="@ClearSelection" Text="Clear Selection" />
-        @if (selectedEmployee?.Any() == true)
+        @if (selectedPatient?.Any() == true)
         {
             <div style="margin-left: 16px">
-                Selected Employee: @selectedEmployee[0].FirstName @selectedEmployee[0].LastName
+                Selected Employee: @selectedPatient[0].FirstName @selectedPatient[0].LastName
             </div>
         }
     </div>
     <div>
-        <RadzenDataGrid TItem="GetEmployeesInMonthByHoursAndSalaryDTO.GetEmployeesInMonthByHoursAndSalaryRow" Data="@allPatients.Rows" AllowFiltering="true"
-                    AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" SelectionMode="DataGridSelectionMode.Single" @bind-Value=@selectedEmployee>
+        <RadzenDataGrid TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Data="@allPatients.Rows" AllowFiltering="true"
+                    AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" SelectionMode="DataGridSelectionMode.Single" @bind-Value=@selectedPatient>
             <Columns>
-                <RadzenDataGridColumn TItem="GetEmployeesInMonthByHoursAndSalaryDTO.GetEmployeesInMonthByHoursAndSalaryRow" Property="Id" Title="ID" />
-                <RadzenDataGridColumn TItem="GetEmployeesInMonthByHoursAndSalaryDTO.GetEmployeesInMonthByHoursAndSalaryRow" Property="FirstName" Title="First Name" />
-                <RadzenDataGridColumn TItem="GetEmployeesInMonthByHoursAndSalaryDTO.GetEmployeesInMonthByHoursAndSalaryRow" Property="LastName" Title="Last Name" />
-                <RadzenDataGridColumn TItem="GetEmployeesInMonthByHoursAndSalaryDTO.GetEmployeesInMonthByHoursAndSalaryRow" Property="PhoneNumber" Title="Phone Number" />
-                <RadzenDataGridColumn TItem="GetEmployeesInMonthByHoursAndSalaryDTO.GetEmployeesInMonthByHoursAndSalaryRow" Property="SalarySum" Title="Salary Sum" />
-              @* <Template Context="detail">
-                    <RadzenLabel Text="@detail.SalarySum.ToString("C", new System.Globalization.CultureInfo("pl-PL"))" />
-                </Template>*@
+                <RadzenDataGridColumn TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Property="Id" Title = "Id"/>
+                <RadzenDataGridColumn TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Property="Weight" Title = "Weight"/>
+                <RadzenDataGridColumn TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Property="FirstName" Title = "First Name"/>
+                <RadzenDataGridColumn TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Property="LastName" Title = "Last Name"/>
+                <RadzenDataGridColumn TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Property="StreetAddress" Title = "Street Adress"/>
+                <RadzenDataGridColumn TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Property="HouseNumber" Title = "House Number"/>
+                <RadzenDataGridColumn TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Property="ApartmentNumber" Title = "Apartment Number"/>
+                <RadzenDataGridColumn TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Property="City" Title = "City"/>
+                <RadzenDataGridColumn TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Property="PostalCode" Title = "Postal Code"/>
+                <RadzenDataGridColumn TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Property="StateProvince" Title = "State Province"/>
+                <RadzenDataGridColumn TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Property="Country" Title = "Country"/>
+                <RadzenDataGridColumn TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Property="PhoneNumber" Title = "Phone Number"/>
+                <RadzenDataGridColumn TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Property="PaymentsSum" Title = "Payments Sum"/>
+@* <Template Context="detail
+            <RadzenLabel Text="@detail.SalarySum.ToString("C", new System.Globalization.CultureInfo("pl-PL"))" />
+            </Template>*@
             </Columns>
         </RadzenDataGrid>
     </div>
@@ -84,22 +82,18 @@
 @code {
     private DateTime startTime = DateTime.Today;
     private DateTime endTime = DateTime.Today;
-    private decimal startPaymentsSum = (decimal)0;
-    private decimal endPaymentsSum = (decimal)0;
-    private decimal startPaymentsHours = (decimal)0;
-    private decimal endPaymentsHours = (decimal)0;
+    private decimal startAmount = (decimal)0;
+    private decimal endAmount = (decimal)0;
     private bool everythingSelected = false;
     private bool isFetched = false;
-    IList<GetEmployeesInMonthByHoursAndSalaryDTO.GetEmployeesInMonthByHoursAndSalaryRow> selectedEmployee;
+    IList<GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow> selectedPatient;
 
-    private GetEmployeesInMonthByHoursAndSalaryDTO allPatients;
-    private GetEmployeesInMonthByHoursAndSalaryDTO allEmployeesInMonthByHoursAndSalaryResponse;// Replace with the appropriate type and initialization
+    private GetPatientsByDateAndPaymentsSumDTO allPatients;
+    private GetPatientsByDateAndPaymentsSumDTO allEmployeesInMonthByHoursAndSalaryResponse;// Replace with the appropriate type and initialization
                                                                                                //private CreatePatientRequest createPatientDTO = new CreatePatientRequest();
-    private GetTeamsByDateAndShiftResponse teamResponse = new GetTeamsByDateAndShiftResponse();
- 
     void ClearSelection()
     {
-        selectedEmployee = null;
+        selectedPatient = null;
     }
     private void CheckSelection()
     {
@@ -133,16 +127,16 @@
     //}
 
 
-   
+
     private async void Refresh()
     {
         //CheckSelection();
         CheckSelection();
         //teamResponse = await _teamService.GetTeamsByDAyAndShift(DateTime.UtcNow.AddDays(-9));
-        allEmployeesInMonthByHoursAndSalaryResponse = await _employeeService.GetEmployeesReport(startTime, endTime, startPaymentsSum, endPaymentsSum, startPaymentsHours, endPaymentsHours);
+        allEmployeesInMonthByHoursAndSalaryResponse = await _patientService.GetPatientsReport(startTime, endTime, startAmount , endAmount);
         allPatients = allEmployeesInMonthByHoursAndSalaryResponse;
         //NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
-         StateHasChanged();
+        StateHasChanged();
 
     }
 }

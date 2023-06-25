@@ -52,8 +52,8 @@ namespace MediMove.Server.Controllers.V1
                 result => NoContent(),
                 errors => Problem(errors));
         }
-        [HttpGet("Raport")]
-       //[Authorize(Roles = "Admin")]
+        [HttpGet("Report")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetPatientsByDateAndPaymentsSum(
             [FromQuery] DateTime startTime,
             [FromQuery] DateTime endTime,

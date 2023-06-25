@@ -34,8 +34,8 @@ namespace MediMove.Server.Application.Patients.Handlers
 
         public async Task<ErrorOr<GetPatientsByDateAndPaymentsSumDTO>> Handle(GetPatientsByDateAndPaymentsSumQuery request, CancellationToken cancellationToken)
         {
-            DateTime StartDate = DateTime.UtcNow.AddDays(-10);
-            DateTime EndDate = DateTime.UtcNow.AddDays(10);
+            //DateTime StartDate = DateTime.UtcNow.AddDays(-10);
+            //DateTime EndDate = DateTime.UtcNow.AddDays(10);
             var patients = await _dbContext.Transports
             //.Include(t => t.Billing)
             .Include(t => t.Patient)
