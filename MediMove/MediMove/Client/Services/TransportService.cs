@@ -11,6 +11,7 @@ using MediMove.Client.temp;
 using MediMove.Shared.Models.Enums;
 using System;
 using MediMove.Shared.Extensions;
+using System.Reflection.Metadata;
 
 namespace MediMove.Client.Services
 {
@@ -143,6 +144,23 @@ namespace MediMove.Client.Services
             return await DeserializeError(response);
         }
 
-        
+        public async Task<string> AddTeamToTransport(AssignTeamsToTransportsRequest content)
+        {
+            var baseUri = new Uri(_navigationManager.BaseUri);
+            var requestUri = new Uri(baseUri, "/api/v1/Transport/AssignTeams");
+            Console.WriteLine($"I'm here {requestUri}");
+            var request = new HttpRequestMessage(HttpMethod.Patch, requestUri);
+
+            var token = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", "token");
+
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            request.Content = new ObjectContent<AssignTeamsToTransportsRequest>(content, new JsonMediaTypeFormatter());
+
+            Console.WriteLine("I'm here auth");
+            var response = await _httpClient.SendAsync(request);
+            return await DeserializeError(response);
+        }
+
     }
 }
