@@ -449,14 +449,14 @@
         overflow-y: auto;
     }
 
-    .patient-item {
+    .list-item {
         background-color: #f2f2f2;
         padding: 10px;
         margin-bottom: 10px;
         cursor: pointer;
     }
 
-    .patient-item.selected {
+    .list-item.selected {
             background-color: #5177b8;
     }
 
@@ -566,12 +566,12 @@
 
     private string GetPatientItemClass(int patientId)
     {
-        return patientId == _selectedPatientId ? "patient-item selected" : "patient-item";
+        return patientId == _selectedPatientId ? "list-item selected" : "list-item";
     }
 
     private string GetTeamItemClass(int teamId)
     {
-        return teamId == _selectedTeamId ? "patient-item selected" : "patient-item";
+        return teamId == _selectedTeamId ? "list-item selected" : "list-item";
     }
 
 

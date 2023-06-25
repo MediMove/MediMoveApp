@@ -8,7 +8,7 @@ using System.Net.Http.Formatting;
 
 namespace MediMove.Client.Services
 {
-    public class AvailabilityService
+    public class AvailabilityService : BaseService
     {
         private readonly HttpClient _httpClient;
         private readonly IJSRuntime _jsRuntime;
@@ -21,7 +21,7 @@ namespace MediMove.Client.Services
             _navigationManager = navigationManager;
         }
 
-        public async Task SaveAvailabilities(Dictionary<DateTime, ShiftType?> availabilities)
+        public async Task<string> SaveAvailabilities(Dictionary<DateTime, ShiftType?> availabilities)
         {
             var content = new CreateAvailabilitiesRequest(availabilities);
             var baseUri = new Uri(_navigationManager.BaseUri);
@@ -37,9 +37,7 @@ namespace MediMove.Client.Services
 
             Console.WriteLine("I'm here auth");
             var response = await _httpClient.SendAsync(request);
-            response.EnsureSuccessStatusCode(); // Rzuca wyjątek w przypadku niepowodzenia
-            Console.WriteLine(response.StatusCode);
-            //var result = await response.Content.ReadFromJsonAsync<GetAllPatientsResponse>();
+            return await DeserializeError(response);
 
         }
     }

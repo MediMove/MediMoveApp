@@ -14,7 +14,7 @@ using MediMove.Shared.Extensions;
 
 namespace MediMove.Client.Services
 {
-    public class TransportService
+    public class TransportService: BaseService
     {
         private readonly HttpClient _httpClient;
         private readonly IJSRuntime _jsRuntime;
@@ -121,14 +121,7 @@ namespace MediMove.Client.Services
 
             Console.WriteLine("I'm here auth");
             var response = await _httpClient.SendAsync(request);
-            if (!response.IsSuccessStatusCode)
-            {
-                
-                var responseContent = await response.Content.ReadAsStringAsync();
-                return DeserializeError(responseContent);
-
-            }
-            return "Success";
+            return await DeserializeError(response);
         }
 
         public async Task<string> PostTransportWithBilling(CreateTransportWithBillingDTO content)
@@ -147,26 +140,9 @@ namespace MediMove.Client.Services
 
             Console.WriteLine("I'm here auth");
             var response = await _httpClient.SendAsync(request);
-            if (!response.IsSuccessStatusCode)
-            {
-
-                var responseContent = await response.Content.ReadAsStringAsync();
-                return DeserializeError(responseContent);
-
-            }
-            return "Success";
+            return await DeserializeError(response);
         }
 
-        private string DeserializeError(string? content)
-        {
-            var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(content);
-            var errorMessage = "";
-            foreach (var field in errorResponse.Errors)
-            {
-                errorMessage += field.Key + ": " + string.Join("; ", field.Value) + "\n";
-            }
-
-            return errorMessage;
-        }
+        
     }
 }
