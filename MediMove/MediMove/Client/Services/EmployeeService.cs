@@ -82,14 +82,9 @@ namespace MediMove.Client.Services
             return toReturn;
         }
 
-        public async Task<GetEmployeesInMonthByHoursAndSalaryDTO> GetEmployeesReport(DateTime start, DateTime end, decimal startAmount, decimal endAmount, decimal startHours, decimal endHours)
+        public async Task<ErrorOr<GetEmployeesInMonthByHoursAndSalaryDTO>> GetEmployeesReport(DateTime start, DateTime end, decimal startAmount, decimal endAmount, decimal startHours, decimal endHours)
         {
-            var baseUri = new Uri(_navigationManager.BaseUri);
-            var requestUri = new Uri(baseUri, "/api/v1/Employee/Report/Multiple");
-
-            Console.WriteLine($"I'm here {requestUri}");
-            var uriBuilder = new UriBuilder(requestUri);
-
+            var uriBuilder = GenerateUriBuilder("api/v1/Employee/Report/Multiple");
             var query = System.Web.HttpUtility.ParseQueryString(uriBuilder.Query);
 
             query["startTime"] = start.ToString("yyyy-MM-dd");
@@ -101,49 +96,12 @@ namespace MediMove.Client.Services
 
             uriBuilder.Query = query.ToString();
 
-            var request = new HttpRequestMessage(HttpMethod.Get, uriBuilder.ToString());
-
-            var token = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", "token");
-
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            var response = await _httpClient.SendAsync(request);
-            response.EnsureSuccessStatusCode();
-
-            //var content = await response.Content.ReadAsStringAsync();
-
-            //// Deserialize the JSON content to the GetEmployeesInMonthByHoursAndSalaryDTO object
-            //var options = new JsonSerializerOptions
-            //{
-            //    PropertyNameCaseInsensitive = true // Enable case-insensitive property matching
-            //};
-
-            //var result = JsonSerializer.Deserialize<GetEmployeesInMonthByHoursAndSalaryDTO>(content, options);
-
-
-            var result = await response.Content.ReadFromJsonAsync<GetEmployeesInMonthByHoursAndSalaryDTO>();
-            Console.WriteLine(result);
-            var paramedics = result;
-
-            // merge paramedics and dispatchers
-            //var toReturn = new EmployeeDTO[paramedics.Length + dispatchers.Length];
-            //paramedics.CopyTo(toReturn, 0);
-            //dispatchers.CopyTo(toReturn, paramedics.Length);
-            //foreach (var employee in paramedics)
-            //{
-            //    Console.WriteLine(employee);
-            //}
-
-            return paramedics;
+          return await HandleQueryAsync<GetEmployeesInMonthByHoursAndSalaryDTO>(uriBuilder, HttpMethod.Get);
         }
-        public async Task<GetEmployeeRatesByIdAndDatesDTO> GetParamedicReport(int id, DateTime start, DateTime end)
+        public async Task<ErrorOr<GetEmployeeRatesByIdAndDatesDTO>> GetParamedicReport(int id, DateTime start, DateTime end)
         {
-            var baseUri = new Uri(_navigationManager.BaseUri);
-            var requestUri = new Uri(baseUri, "/api/v1/Employee/Report/Single");
 
-            Console.WriteLine($"I'm here {requestUri}");
-            var uriBuilder = new UriBuilder(requestUri);
-
+            var uriBuilder = GenerateUriBuilder("api/v1/Employee/Report/Single");
             var query = System.Web.HttpUtility.ParseQueryString(uriBuilder.Query);
 
             query["id"] = id.ToString();
@@ -152,40 +110,7 @@ namespace MediMove.Client.Services
            
             uriBuilder.Query = query.ToString();
 
-            var request = new HttpRequestMessage(HttpMethod.Get, uriBuilder.ToString());
-
-            var token = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", "token");
-
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            var response = await _httpClient.SendAsync(request);
-            response.EnsureSuccessStatusCode();
-
-            //var content = await response.Content.ReadAsStringAsync();
-
-            //// Deserialize the JSON content to the GetEmployeesInMonthByHoursAndSalaryDTO object
-            //var options = new JsonSerializerOptions
-            //{
-            //    PropertyNameCaseInsensitive = true // Enable case-insensitive property matching
-            //};
-
-            //var result = JsonSerializer.Deserialize<GetEmployeesInMonthByHoursAndSalaryDTO>(content, options);
-
-
-            var result = await response.Content.ReadFromJsonAsync<GetEmployeeRatesByIdAndDatesDTO>();
-            Console.WriteLine(result);
-            var paramedics = result;
-
-            // merge paramedics and dispatchers
-            //var toReturn = new EmployeeDTO[paramedics.Length + dispatchers.Length];
-            //paramedics.CopyTo(toReturn, 0);
-            //dispatchers.CopyTo(toReturn, paramedics.Length);
-            //foreach (var employee in paramedics)
-            //{
-            //    Console.WriteLine(employee);
-            //}
-
-            return paramedics;
+            return await HandleQueryAsync<GetEmployeeRatesByIdAndDatesDTO>(uriBuilder, HttpMethod.Get);
         }
 
         public async Task<ErrorOr<Unit>> UpdateEmployees(List<EmployeeDTO> employees)
