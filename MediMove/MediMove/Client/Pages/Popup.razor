@@ -11,7 +11,7 @@
                     <button type="button" class="btn-close" @onclick="ClosePopup"></button>
                 </div>
                 <div class="modal-body">
-                    <p>@Message</p>
+                    <p>@((MarkupString)Message)</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @onclick="ClosePopup">Close</button>
@@ -44,22 +44,26 @@
         var sb = new StringBuilder();
 
         foreach (var error in errors)
-            sb.Append($"{error.Code}: {error.Description}\n");
+            sb.Append($"{error.Description}<br/>");
 
         Message = sb.ToString();
         IsVisible = true;
         StateHasChanged();
     }
 
-    public void ShowErrorsOrMessage<T>(ErrorOr<T> result, string messageOnSuccess = "Changes saved successfully.") =>
-        result.Switch(
-            success => Show(messageOnSuccess),
-            errors => ShowErrors(errors)
-        );
-
-    public void ShowErrorsOrAssign<T>(ErrorOr<T> result, ref T values)
+    public bool ShowErrorsOrMessage<T>(ErrorOr<T> result, string messageOnSuccess = "Changes saved successfully.")
     {
-        if (result.IsError) ShowErrors(result.Errors);   
+        if (result.IsError) ShowErrors(result.Errors);
+        else Show(messageOnSuccess);
+
+        return result.IsError;
+    }
+
+    public bool ShowErrorsOrAssign<T>(ErrorOr<T> result, ref T values)
+    {
+        if (result.IsError) ShowErrors(result.Errors);
         else values = result.Value;
+
+        return result.IsError;
     }
 }
