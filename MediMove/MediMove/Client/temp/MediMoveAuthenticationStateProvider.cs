@@ -10,6 +10,7 @@ using MediMove.Shared.Models.DTOs;
 using System.Net.Http.Json;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
+using System.Reflection.Metadata.Ecma335;
 
 namespace MediMove.Client.temp
 {
@@ -17,34 +18,47 @@ namespace MediMove.Client.temp
     {
         private readonly HttpClient _httpClient;
         private readonly IJSRuntime _jSRuntime;
-        //private readonly AuthenticationDataStorage _authenticationDataStorage;
-        //private string loginResponse;
-        //private ErrorResponse errorResponse;
+        private readonly NavigationManager _navigationManager;
 
         public string Role { get; set; } = "";
         public string Name { get; set; } = "";
 
 
-        public MediMoveAuthenticationStateProvider( HttpClient httpClient, IJSRuntime jSRuntime)
+        public MediMoveAuthenticationStateProvider( HttpClient httpClient, IJSRuntime jSRuntime, NavigationManager navigationManager)
         {
             _httpClient = httpClient;
             _jSRuntime = jSRuntime;
+            _navigationManager = navigationManager;
             AuthenticationStateChanged += OnAuthenticationStateChanged;
         }
 
-        public async Task Register(RegisterAdminRequest content)
+        public async Task<MediMoveResponse<StandardResponse>> Register(RegisterAdminRequest content)
         {
+            var baseUri = new Uri(_navigationManager.BaseUri);
+            var requestUri = new Uri(baseUri, "/api/v1/Accounts/Register/Admin");
 
+            var uriBuilder = new UriBuilder(requestUri);
+            Console.WriteLine("I'm here 1");
             var token = await _jSRuntime.InvokeAsync<string>("localStorage.getItem", "token");
 
-            var request = new HttpRequestMessage(HttpMethod.Post, "/api/v1/Accounts/Register/Admin");
+            var request = new HttpRequestMessage(HttpMethod.Post, uriBuilder.ToString());
+            Console.WriteLine("I'm here 1");
+            Console.WriteLine($"{request}");
+
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
             request.Content = new ObjectContent<RegisterAdminRequest>(content, new JsonMediaTypeFormatter());
 
-            _ = await _httpClient.SendAsync(request);
-            //Dodac logikę odnośnie odpowiedzi.
+            Console.WriteLine("I'm here 2");
+            var httpResponse = await _httpClient.SendAsync(request);
+            Console.WriteLine("I'm here 3");
+
+
+            var response = await CheckStandardResponse(httpResponse);
+
+            Console.WriteLine($"{response.CorrectResponse}, {response.ErrorResponse}");
+            return response;
         }
-        public async Task Register(RegisterParamedicRequest content)
+        public async Task<MediMoveResponse<StandardResponse>> Register(RegisterParamedicRequest content)
         {
 
             var token = await _jSRuntime.InvokeAsync<string>("localStorage.getItem", "token");
@@ -53,10 +67,14 @@ namespace MediMove.Client.temp
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
             request.Content = new ObjectContent<RegisterParamedicRequest>(content, new JsonMediaTypeFormatter());
 
-            _ = await _httpClient.SendAsync(request);
-            //Dodac logikę odnośnie odpowiedzi.
+            var httpResponse = await _httpClient.SendAsync(request);
+
+
+            var response = await CheckStandardResponse(httpResponse);
+
+            return response;
         }
-        public async Task Register(RegisterDispatcherRequest content)
+        public async Task<MediMoveResponse<StandardResponse>> Register(RegisterDispatcherRequest content)
         {
 
             var token = await _jSRuntime.InvokeAsync<string>("localStorage.getItem", "token");
@@ -65,8 +83,12 @@ namespace MediMove.Client.temp
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
             request.Content = new ObjectContent<RegisterDispatcherRequest>(content, new JsonMediaTypeFormatter());
 
-            _ = await _httpClient.SendAsync(request);
-            //Dodac logikę odnośnie odpowiedzi.
+            var httpResponse = await _httpClient.SendAsync(request);
+           
+
+            var response = await CheckStandardResponse(httpResponse);
+
+            return response;
         }
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
@@ -112,6 +134,29 @@ namespace MediMove.Client.temp
             await _jSRuntime.InvokeVoidAsync("localStorage.removeItem", "token");
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
         }
+
+        private async Task<MediMoveResponse<StandardResponse>> CheckStandardResponse(HttpResponseMessage? httpResponse)
+        {
+            var responseContent = await httpResponse.Content.ReadAsStringAsync();
+            MediMoveResponse<StandardResponse> response = null;
+            if (httpResponse.IsSuccessStatusCode)
+            {
+                if (!string.IsNullOrEmpty(responseContent))
+                {
+
+                    var standardResponse = new StandardResponse(httpResponse.StatusCode);
+                    response = new(standardResponse);
+                }
+            }
+            else
+            {
+                var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(responseContent);
+                response = new(errorResponse);
+            }
+
+            return response;
+        }
+
 
         public async Task<MediMoveResponse<HttpResponseMessage>> LoginAsync(LoginUserDTO content)
         {
@@ -159,31 +204,3 @@ namespace MediMove.Client.temp
 
 }
 
-
-
-/*
- * 
- * private readonly HttpClient _httpClient;
-    private readonly AuthenticationDataMemoryStorage _authenticationDataMemoryStorage;
-
-    public BlazorSchoolAuthenticationStateProvider(HttpClient httpClient, AuthenticationDataMemoryStorage authenticationDataMemoryStorage)
-    {
-        _httpClient = httpClient;
-        _authenticationDataMemoryStorage = authenticationDataMemoryStorage;
-    }
-
-    public override Task<AuthenticationState> GetAuthenticationStateAsync()
-    {
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var identity = new ClaimsIdentity();
-
-        
-
-        var principal = new ClaimsPrincipal(identity);
-        var authenticationState = new AuthenticationState(principal);
-        var authenticationTask = Task.FromResult(authenticationState);
-
-        return authenticationTask;
-    }
- * 
- */

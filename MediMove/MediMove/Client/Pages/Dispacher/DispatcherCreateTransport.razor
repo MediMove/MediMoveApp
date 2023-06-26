@@ -3,114 +3,329 @@
 @using MediMove.Shared.Models.Enums
 @using MediMove.Client.Services
 @using System.Globalization
+@using MediMove.Shared.Extensions
 @using MediMove.Shared.Validators
+@using MediatR
 @inject PatientService _PatientService
 @inject TeamService _TeamService
+@inject TransportService _TransportService
 
 <h3>Create Transport</h3>
+
+<Popup @ref="popup" />
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-6">
             <div class="card">
+                
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class=@(!_isWithBilling ? "nav-link active" : "nav-link") @onclick="(DisplayTabWithoutBilling)" id="tab1">Without billing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class=@(_isWithBilling ? "nav-link active" : "nav-link") @onclick="(DisplayTabWithBilling)" id="tab2">With billing</a>
+                    </li>
+                </ul>
+
+
                 <div class="card-body">
                     <h5 class="card-title">Transport Details</h5>
+                    @if (!_isWithBilling)
+                    {
+                        <EditForm Model="@createTransportDTO" OnValidSubmit="HandleValidSubmit">
+                            <DataAnnotationsValidator/>
+                            <ValidationSummary/>
 
-                    <EditForm Model="@createTransportDTO" OnValidSubmit="HandleValidSubmit">
-                        <DataAnnotationsValidator />
-                        <ValidationSummary />
-                        
-                        
+                            <div class="form-group">
+                                <label for="patientId">Patient ID:</label>
+                                <input type="text" id="patientId" class="form-control" readonly value="@createTransportDTO.PatientId"/>
+                                <ValidationMessage For="@(() => createTransportDTO.PatientId)"/>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="patientId">Patient ID:</label>
-                            <input type="text" id="patientId" class="form-control" readonly value="@createTransportDTO.PatientId" />
-                            <ValidationMessage For="@(() => createTransportDTO.PatientId)" />
-                        </div>
+                            <div class="form-group">
+                                <label for="teamId">Team ID:</label>
+                                <input type="text" id="teamId" class="form-control" readonly value="@createTransportDTO.TeamId"/>
+                                <ValidationMessage For="@(() => createTransportDTO.TeamId)"/>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="startTime">Start Time:</label>
-                            <InputDate id="startTime" class="form-control" @bind-Value="createTransportDTO.StartTime" oninput="HandleStartTimeInput" />
-                            <ValidationMessage For="@(() => createTransportDTO.StartTime)" />
-                        </div>
 
-                        <div class="form-group">
-                            <label for="financing">Financing:</label>
-                            <InputSelect id="financing" class="form-control" @bind-Value="createTransportDTO.Financing">
-                                @foreach (var financingOption in Enum.GetValues(typeof(Financing)))
-                                {
-                                    <option value="@financingOption">@financingOption</option>
-                                }
-                            </InputSelect>
-                            <ValidationMessage For="@(() => createTransportDTO.Financing)" />
-                        </div>
+                            <div class="form-group">
+                                <label for="financing">Financing:</label>
+                                <InputSelect id="financing" class="form-control" @bind-Value="createTransportDTO.Financing">
+                                    @foreach (var financingOption in Enum.GetValues(typeof(Financing)))
+                                    {
+                                        <option value="@financingOption">@financingOption</option>
+                                    }
+                                </InputSelect>
+                                <ValidationMessage For="@(() => createTransportDTO.Financing)"/>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="patientPosition">Patient Position:</label>
-                            <InputSelect id="patientPosition" class="form-control" @bind-Value="createTransportDTO.PatientPosition">
-                                @foreach (var positionOption in Enum.GetValues(typeof(PatientPosition)))
-                                {
-                                    <option value="@positionOption">@positionOption</option>
-                                }
-                            </InputSelect>
-                            <ValidationMessage For="@(() => createTransportDTO.PatientPosition)" />
-                        </div>
+                            <div class="form-group">
+                                <label for="patientPosition">Patient Position:</label>
+                                <InputSelect id="patientPosition" class="form-control" @bind-Value="createTransportDTO.PatientPosition">
+                                    @foreach (var positionOption in Enum.GetValues(typeof(PatientPosition)))
+                                    {
+                                        <option value="@positionOption">@positionOption</option>
+                                    }
+                                </InputSelect>
+                                <ValidationMessage For="@(() => createTransportDTO.PatientPosition)"/>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="destination">Destination:</label>
-                            <InputText id="destination" class="form-control" @bind-Value="createTransportDTO.Destination" />
-                            <ValidationMessage For="@(() => createTransportDTO.Destination)" />
-                        </div>
+                            <div class="form-group">
+                                <label for="transportType">Transport Type:</label>
+                                <InputSelect id="transportType" class="form-control" @bind-Value="createTransportDTO.TransportType">
+                                    @foreach (var typeOption in Enum.GetValues(typeof(TransportType)))
+                                    {
+                                        <option value="@typeOption">@typeOption</option>
+                                    }
+                                </InputSelect>
+                                <ValidationMessage For="@(() => createTransportDTO.TransportType)"/>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="transportType">Transport Type:</label>
-                            <InputSelect id="transportType" class="form-control" @bind-Value="createTransportDTO.TransportType">
-                                @foreach (var typeOption in Enum.GetValues(typeof(TransportType)))
-                                {
-                                    <option value="@typeOption">@typeOption</option>
-                                }
-                            </InputSelect>
-                            <ValidationMessage For="@(() => createTransportDTO.TransportType)" />
-                        </div>
-                        <div class="form-group">
-                            <label for="teamId">Team ID:</label>
-                            <input type="text" id="teamId" class="form-control" readonly value="@createTransportDTO.TeamId" />
-                            <ValidationMessage For="@(() => createTransportDTO.TeamId)" />
-                        </div>
+                            <div class="form-group">
+                                <label for="destination">Destination:</label>
+                                <InputText id="destination" class="form-control" @bind-Value="createTransportDTO.Destination"/>
+                                <ValidationMessage For="@(() => createTransportDTO.Destination)"/>
+                            </div>
 
-                        
+                            <div class="form-group">
+                                <label for="startLocation">Start Location:</label>
+                                <InputText id="startLocation" class="form-control" @bind-Value="createTransportDTO.StartLocation"/>
+                                <ValidationMessage For="@(() => createTransportDTO.StartLocation)"/>
+                            </div>
 
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </div>
-                    </EditForm>
+                            <div class="form-group">
+                                <label for="returnLocation">Return Location:</label>
+                                <InputText id="returnLocation" class="form-control" @bind-Value="createTransportDTO.ReturnLocation"/>
+                                <ValidationMessage For="@(() => createTransportDTO.ReturnLocation)"/>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="note">Note:</label>
+                                <InputText id="note" class="form-control" @bind-Value="createTransportDTO.Note"/>
+                                <ValidationMessage For="@(() => createTransportDTO.Note)"/>
+                            </div>
+
+
+
+                            <div class="rz-p-12 rz-text-align-right">
+                                <RadzenDatePicker @bind-Value="createTransportDTO.StartTime" Change="ChosenDateValueChanged"/>
+                            </div>
+
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </EditForm>
+                    }
+                    @if (_isWithBilling)
+                    {
+                        <EditForm Model="@createTransportWithBillingDTO" OnValidSubmit="HandleValidSubmit">
+                            <DataAnnotationsValidator />
+                            <ValidationSummary />
+
+                            <div class="form-group">
+                                <label for="patientId">Patient ID:</label>
+                                <input type="text" id="patientId" class="form-control" readonly value="@createTransportWithBillingDTO.PatientId" />
+                                <ValidationMessage For="@(() => createTransportWithBillingDTO.PatientId)" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="teamId">Team ID:</label>
+                                <input type="text" id="teamId" class="form-control" readonly value="@createTransportWithBillingDTO.TeamId" />
+                                <ValidationMessage For="@(() => createTransportWithBillingDTO.TeamId)" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="financing">Financing:</label>
+                                <InputSelect id="financing" class="form-control" @bind-Value="createTransportWithBillingDTO.Financing">
+                                    @foreach (var financingOption in Enum.GetValues(typeof(Financing)))
+                                    {
+                                        <option value="@financingOption">@financingOption</option>
+                                    }
+                                </InputSelect>
+                                <ValidationMessage For="@(() => createTransportWithBillingDTO.Financing)" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="patientPosition">Patient Position:</label>
+                                <InputSelect id="patientPosition" class="form-control" @bind-Value="createTransportWithBillingDTO.PatientPosition">
+                                    @foreach (var positionOption in Enum.GetValues(typeof(PatientPosition)))
+                                    {
+                                        <option value="@positionOption">@positionOption</option>
+                                    }
+                                </InputSelect>
+                                <ValidationMessage For="@(() => createTransportWithBillingDTO.PatientPosition)" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="transportType">Transport Type:</label>
+                                <InputSelect id="transportType" class="form-control" @bind-Value="createTransportWithBillingDTO.TransportType">
+                                    @foreach (var typeOption in Enum.GetValues(typeof(TransportType)))
+                                    {
+                                        <option value="@typeOption">@typeOption</option>
+                                    }
+                                </InputSelect>
+                                <ValidationMessage For="@(() => createTransportWithBillingDTO.TransportType)" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="destination">Destination:</label>
+                                <InputText id="destination" class="form-control" @bind-Value="createTransportWithBillingDTO.Destination" />
+                                <ValidationMessage For="@(() => createTransportWithBillingDTO.Destination)" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="startLocation">Start Location:</label>
+                                <InputText id="startLocation" class="form-control" @bind-Value="createTransportWithBillingDTO.StartLocation" />
+                                <ValidationMessage For="@(() => createTransportWithBillingDTO.StartLocation)" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="returnLocation">Return Location:</label>
+                                <InputText id="returnLocation" class="form-control" @bind-Value="createTransportWithBillingDTO.ReturnLocation" />
+                                <ValidationMessage For="@(() => createTransportWithBillingDTO.ReturnLocation)" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="note">Note:</label>
+                                <InputText id="note" class="form-control" @bind-Value="createTransportWithBillingDTO.Note" />
+                                <ValidationMessage For="@(() => createTransportWithBillingDTO.Note)" />
+                            </div>
+
+                            <!-- Billing Information -->
+                            
+                            <div class="card">
+                                <div class="title">
+                                    <h5 class="card-title">Billing Details</h5>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="firstName">First Name:</label>
+                                    <InputText id="firstName" class="form-control" @bind-Value="createTransportWithBillingDTO.FirstName"/>
+                                    <ValidationMessage For="@(() => createTransportWithBillingDTO.FirstName)"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="lastName">Last Name:</label>
+                                    <InputText id="lastName" class="form-control" @bind-Value="createTransportWithBillingDTO.LastName"/>
+                                    <ValidationMessage For="@(() => createTransportWithBillingDTO.LastName)"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="streetAddress">Street Address:</label>
+                                    <InputText id="streetAddress" class="form-control" @bind-Value="createTransportWithBillingDTO.StreetAddress"/>
+                                    <ValidationMessage For="@(() => createTransportWithBillingDTO.StreetAddress)"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="houseNumber">House Number:</label>
+                                    <InputText id="houseNumber" class="form-control" @bind-Value="createTransportWithBillingDTO.HouseNumber"/>
+                                    <ValidationMessage For="@(() => createTransportWithBillingDTO.HouseNumber)"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="apartmentNumber">Apartment Number:</label>
+                                    <InputNumber id="apartmentNumber" class="form-control" @bind-Value="createTransportWithBillingDTO.ApartmentNumber"/>
+                                    <ValidationMessage For="@(() => createTransportWithBillingDTO.ApartmentNumber)"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="postalCode">Postal Code:</label>
+                                    <InputText id="postalCode" class="form-control" @bind-Value="createTransportWithBillingDTO.PostalCode"/>
+                                    <ValidationMessage For="@(() => createTransportWithBillingDTO.PostalCode)"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="stateProvince">State/Province:</label>
+                                    <InputText id="stateProvince" class="form-control" @bind-Value="createTransportWithBillingDTO.StateProvince"/>
+                                    <ValidationMessage For="@(() => createTransportWithBillingDTO.StateProvince)"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="city">City:</label>
+                                    <InputText id="city" class="form-control" @bind-Value="createTransportWithBillingDTO.City"/>
+                                    <ValidationMessage For="@(() => createTransportWithBillingDTO.City)"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="country">Country:</label>
+                                    <InputText id="country" class="form-control" @bind-Value="createTransportWithBillingDTO.Country"/>
+                                    <ValidationMessage For="@(() => createTransportWithBillingDTO.Country)"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="phoneNumber">Phone Number:</label>
+                                    <InputText id="phoneNumber" class="form-control" @bind-Value="createTransportWithBillingDTO.PhoneNumber"/>
+                                    <ValidationMessage For="@(() => createTransportWithBillingDTO.PhoneNumber)"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="invoiceNumber">Invoice Number:</label>
+                                    <InputText id="invoiceNumber" class="form-control" @bind-Value="createTransportWithBillingDTO.InvoiceNumber"/>
+                                    <ValidationMessage For="@(() => createTransportWithBillingDTO.InvoiceNumber)"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="invoiceDate">Invoice Date:</label>
+                                    <input type="date" id="invoiceDate" class="form-control" @bind="@createTransportWithBillingDTO.InvoiceDate"/>
+                                    <ValidationMessage For="@(() => createTransportWithBillingDTO.InvoiceDate)"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="bankAccountNumber">Bank Account Number:</label>
+                                    <InputText id="bankAccountNumber" class="form-control" @bind-Value="createTransportWithBillingDTO.BankAccountNumber"/>
+                                    <ValidationMessage For="@(() => createTransportWithBillingDTO.BankAccountNumber)"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="cost">Cost:</label>
+                                    <InputNumber id="cost" class="form-control" @bind-Value="createTransportWithBillingDTO.Cost"/>
+                                    <ValidationMessage For="@(() => createTransportWithBillingDTO.Cost)"/>
+                                </div>
+                            </div>
+
+                            <div class="rz-p-12 rz-text-align-right">
+                                <RadzenDatePicker @bind-Value="createTransportWithBillingDTO.StartTime" Change="ChosenDateValueChanged" />
+                            </div>
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </EditForm>
+                    }
+                    
+
                 </div>
 
-                @*<div class="card">
-                <h3>Transports</h3>
 
-                
+                <div class="card">
+                    <div class="form-group"><h5>List of Teams</h5></div>
+                    <div class="card-body">
 
-                <div class="patient-list-container">
-
-                    <div class="scrollable-list">
-                        @if (teamResponse.Teams.Count > 0)
-                        {
-                            foreach (var team in teamResponse.Teams)
-                            {
-                                <div class="@GetTeamItemClass(team.Key)" @onclick="() => SelectPatient(team.Key)">
-                                    <div class="patient-details">
-                                        <p><strong>Driver:</strong> @team.Value.DriverFirstName @team.Value.DriverFirstName</p>
-                                        <p><strong>Driver phone number:</strong> @team.Value.DriverPhoneNumber, </p>
-                                        <p><strong>Paramedic:</strong> @team.Value.ParamedicFirstName @team.Value.ParamedicLastName</p>
-                                        <p><strong>City:</strong> @team.Value.ParamedicPhoneNumber, </p>
-                                    </div>
-                                </div>
-                            }
-                        }
+                        <div class="patient-list-container">
+                            <div class="scrollable-list">
+                                @if (teamResponse != null)
+                                {
+                                    foreach (var team in teamResponse.Teams)
+                                    {
+                                        <div class="@GetTeamItemClass(team.Key)" @onclick="() => SelectTeam(team.Key)">
+                                            <div class="patient-details">
+                                                <p><strong>Driver:</strong> @team.Value.DriverFirstName @team.Value.DriverLastName</p>
+                                                <p><strong>Driver Phone Number:</strong> @team.Value.DriverPhoneNumber</p>
+                                                <p><strong>Paramedic:</strong> @team.Value.ParamedicFirstName @team.Value.ParamedicLastName</p>
+                                                <p><strong>Paramedic Phone Number:</strong> @team.Value.ParamedicPhoneNumber</p>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
                     </div>
                 </div>
-                </div>*@
+
+
             </div>
         </div>
         <div class="col-md-6">
@@ -122,7 +337,6 @@
                     <div class="search-bar">
                         <input type="text" class="form-control" placeholder="Search by phone number" @bind="@phoneNumberSearch"/>
                         <button type="button" class="btn btn-primary m-2" @onclick="SearchByPhoneNumber">Search</button>
-                        <button type="button" class="btn btn-primary m-2" @onclick="Refresh">Refresh</button>
                     </div>
 
                     <div class="patient-list-container">
@@ -202,6 +416,8 @@
 
                         <button class="btn btn-primary form-group" @onclick="AddPatient">Add Patient</button>
                     </div>
+                    
+
 
                 </div>
             </div>
@@ -215,15 +431,15 @@
         overflow-y: auto;
     }
 
-    .patient-item {
+    .list-item {
         background-color: #f2f2f2;
         padding: 10px;
         margin-bottom: 10px;
         cursor: pointer;
     }
 
-    .patient-item.selected {
-        background-color: #c8e6c9;
+    .list-item.selected {
+            background-color: #5177b8;
     }
 
     .form-group {
@@ -249,69 +465,103 @@
 
 
 @code {
+    private Popup popup;
     private string? phoneNumberSearch;
+
     private int? _selectedPatientId;
     private int? _selectedTeamId;
+    private bool _isWithBilling = false;
+
     private CreateTransportDTO createTransportDTO = new CreateTransportDTO();
     private GetAllPatientsResponse allPatients;
     private GetAllPatientsResponse allPatientsResponse;// Replace with the appropriate type and initialization
     private CreatePatientRequest createPatientDTO = new CreatePatientRequest();
-    private GetTeamsByDateAndShiftResponse teamResponse = new GetTeamsByDateAndShiftResponse();
+    private GetTeamsByDateAndShiftResponse teamResponse;
+    private CreateTransportWithBillingDTO createTransportWithBillingDTO = new CreateTransportWithBillingDTO();
+    private bool _popupIsVisible = false;
+    private string _popupMessage = "";
+    
     protected override async Task OnInitializedAsync()
     {
         allPatientsResponse = await _PatientService.GetPatients();
-        allPatients = allPatientsResponse;
+        teamResponse = await _TeamService.GetTeamsByDayAndShift(DateTime.Now, DateTime.Now.ToShiftType().Value);
         createTransportDTO.StartTime = DateTime.Now;
+        createTransportWithBillingDTO.InvoiceDate = DateTime.Today;
+        createTransportWithBillingDTO.StartTime = DateTime.Now;
+        allPatients = allPatientsResponse;
     }
 
-    private async void HandleStartTimeInput(ChangeEventArgs e)
+    
+
+    private async void ChosenDateValueChanged()
     {
-        teamResponse = await _TeamService.GetTeamsByDAyAndShift(createTransportDTO.StartTime);
+        
+        if(_isWithBilling)
+            teamResponse =  await _TeamService.GetTeamsByDayAndShift(createTransportWithBillingDTO.StartTime, createTransportWithBillingDTO.StartTime.ToShiftType().Value);
+        else
+            teamResponse = await _TeamService.GetTeamsByDayAndShift(createTransportDTO.StartTime,createTransportDTO.StartTime.ToShiftType().Value);
+
+        DeselectTeam();
+        StateHasChanged();
+    }
+
+    private void DeselectPatient()
+    {
+        _selectedPatientId = null; // Deselect if the same patient is clicked
+        createTransportDTO.PatientId = 0;
+        createTransportWithBillingDTO.PatientId = 0;// Update the Patient ID field to a default value
+    }
+
+    private void DeselectTeam()
+    {
+        _selectedTeamId = null; // Deselect if the same team is clicked
+        createTransportDTO.TeamId = null;
+        createTransportWithBillingDTO.TeamId = null; // Update the Team ID field to a default value
     }
 
     private void SelectPatient(int patientId)
     {
         if (_selectedPatientId == patientId)
         {
-            _selectedPatientId = null; // Deselect if the same patient is clicked
-            createTransportDTO.PatientId = 0; // Update the Patient ID field to a default value
+            DeselectPatient();
         }
         else
         {
             _selectedPatientId = patientId;
             createTransportDTO.PatientId = patientId;
+            createTransportWithBillingDTO.PatientId = patientId;
         }
     }
 
-    private void SelectTeam(int patientId)
+    private void SelectTeam(int teamId)
     {
-        if (_selectedTeamId == patientId)
+        if (_selectedTeamId == teamId)
         {
-            _selectedTeamId = null; // Deselect if the same patient is clicked
-            createTransportDTO.TeamId = 0; // Update the Patient ID field to a default value
+            DeselectTeam();
         }
         else
         {
-            _selectedTeamId = patientId;
-            createTransportDTO.TeamId = patientId;
+            _selectedTeamId = teamId;
+            createTransportDTO.TeamId = teamId;
+            createTransportWithBillingDTO.TeamId = teamId;
         }
     }
 
     private string GetPatientItemClass(int patientId)
     {
-        return patientId == _selectedPatientId ? "patient-item selected" : "patient-item";
+        return patientId == _selectedPatientId ? "list-item selected" : "list-item";
     }
 
     private string GetTeamItemClass(int teamId)
     {
-        return teamId == _selectedTeamId ? "patient-item selected" : "patient-item";
+        return teamId == _selectedTeamId ? "list-item selected" : "list-item";
     }
+
 
     
 
 
-
-    private async void SearchByPhoneNumber()
+    private void SearchByPhoneNumber()
     {
         Dictionary<int, PatientDTO> filteredPatients = allPatients.Patients
             .Where(p => p.Value.PhoneNumber == phoneNumberSearch) // Filter based on phone number
@@ -321,24 +571,63 @@
         if (filteredPatients.Count > 0)
             allPatients = new GetAllPatientsResponse(filteredPatients);
         else 
-            allPatients = new GetAllPatientsResponse(new Dictionary<int, PatientDTO>());
-
+            allPatients = allPatientsResponse;
+            DeselectPatient();
+            StateHasChanged();
     }
 
-    private async void Refresh()
-    {
-        allPatients = await _PatientService.GetPatients();
-    }
 
     private async void AddPatient()
     {
-        await _PatientService.PostPatient(createPatientDTO);
+        var response = await _PatientService.PostPatient(createPatientDTO);
 
+        if (!response.IsError)
+        {
+            allPatientsResponse = await _PatientService.GetPatients();
+            allPatients = allPatientsResponse;
+            createPatientDTO = new CreatePatientRequest();
+        }
+        response.Switch(
+            success =>
+            {
+                popup.Show("Patient added.");
+            },
+            errors => popup.ShowErrors(errors)
+            );
+        StateHasChanged();
     }
 
-    private void HandleValidSubmit()
+
+    private async void HandleValidSubmit()
     {
-        throw new NotImplementedException();
+        ErrorOr.ErrorOr<Unit> response;
+        if (_isWithBilling)
+            response = await _TransportService.PostTransportWithBilling(createTransportWithBillingDTO);
+        else
+            response = await _TransportService.PostTransport(createTransportDTO);
+
+        response.Switch(
+            success =>
+            {
+                popup.Show("Transport added.");
+            },
+            errors => popup.ShowErrors(errors)
+            );
+        
+    }
+
+    private void DisplayTabWithoutBilling()
+    {
+        _isWithBilling = false;
+        ChosenDateValueChanged();
+        StateHasChanged();
+    }
+
+    private void DisplayTabWithBilling()
+    {
+        _isWithBilling = true;
+        ChosenDateValueChanged();
+        StateHasChanged();
     }
 
 }

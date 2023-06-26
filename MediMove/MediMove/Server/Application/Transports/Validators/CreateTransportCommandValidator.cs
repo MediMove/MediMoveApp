@@ -47,17 +47,17 @@ namespace MediMove.Server.Application.Transports.Validators
             RuleFor(x => x.Dto.StartTime)
                 .Must(startTime => startTime >= DateTime.Now).WithMessage("Date must be in the future");
 
-            RuleFor(x => x.Dto.Financing).NotEmpty()
+            RuleFor(x => x.Dto.Financing)
                 .Must(x => Enum.IsDefined(typeof(Financing), x)).WithMessage("Incorrect financing type"); ;
 
             RuleFor(x => x.Dto.Destination)
                 .NotEmpty()
                 .MaximumLength(70);
 
-            RuleFor(x => x.Dto.PatientPosition).NotEmpty()
+            RuleFor(x => x.Dto.PatientPosition)
                 .Must(x => Enum.IsDefined(typeof(PatientPosition), x)).WithMessage("Incorrect patient position");
 
-            RuleFor(x => x.Dto.TransportType).NotEmpty()
+            RuleFor(x => x.Dto.TransportType)
                 .Must(x => Enum.IsDefined(typeof(TransportType), x)).WithMessage("Incorrect transport type");
         }
     }
