@@ -69,10 +69,8 @@ namespace MediMove.Client.Services
 
             Console.WriteLine("I'm here auth");
             var response = await _httpClient.SendAsync(request);
-            if (response.IsSuccessStatusCode)
-                return new ErrorOr<Unit>();
 
-            return await DeserializeError(response);
+            return await UnpackResponse<Unit>(response);
         }
 
     }

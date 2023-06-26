@@ -5,6 +5,7 @@
 @using System.Globalization
 @using MediMove.Shared.Extensions
 @using MediMove.Shared.Validators
+@using MediatR
 @inject PatientService _PatientService
 @inject TeamService _TeamService
 @inject TransportService _TransportService
@@ -599,7 +600,7 @@
 
     private async void HandleValidSubmit()
     {
-        ErrorOr.ErrorOr<string> response;
+        ErrorOr.ErrorOr<Unit> response;
         if (_isWithBilling)
             response = await _TransportService.PostTransportWithBilling(createTransportWithBillingDTO);
         else

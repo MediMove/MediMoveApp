@@ -1,4 +1,5 @@
 ﻿using ErrorOr;
+using MediatR;
 using MediMove.Client.temp;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -9,9 +10,17 @@ namespace MediMove.Client.Services;
 
 public class BaseService
 {
-    protected static async Task<List<Error>> DeserializeError(HttpResponseMessage response)
+    protected static async Task<ErrorOr<T>> UnpackResponse<T>(HttpResponseMessage response)
     {
         var responseContent = await response.Content.ReadAsStringAsync();
+        if (response.IsSuccessStatusCode)
+        {
+            if (typeof(T) == typeof(Unit))
+                return new ErrorOr<T>();
+
+            var result = JsonConvert.DeserializeObject<T>(responseContent);
+            return result;
+        }
         var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(responseContent);
         List<Error> errors = new();
         foreach (var field in errorResponse.Errors)
@@ -32,11 +41,7 @@ public class BaseService
         _navigationManager = navigationManager;
     }
 
-    protected UriBuilder GenerateUriBuilder(string endpointPath)
-    {
-        Console.WriteLine($"URI: {_navigationManager.BaseUri + endpointPath}");
-        return new UriBuilder(_navigationManager.BaseUri + endpointPath);
-    }
+    protected UriBuilder GenerateUriBuilder(string endpointPath) => new(_navigationManager.BaseUri + endpointPath);
 
     protected async Task<HttpRequestMessage> GenerateRequestAsync(UriBuilder uriBuilder, HttpMethod httpMethod)
     {

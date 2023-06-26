@@ -16,7 +16,7 @@ namespace MediMove.Client.Services
         {
         }
 
-        private string? ValidateEmployee(EmployeeDTO employee)
+        private static string? ValidateEmployee(EmployeeDTO employee)
         {
             if (!employee.FirstName.IsValidFirstName())
                 return "Invalid first name";
@@ -70,12 +70,14 @@ namespace MediMove.Client.Services
 
             var response = await _httpClient.SendAsync(request);
 
-            if (!response.IsSuccessStatusCode)
-                return await DeserializeError(response);
+            var result = await UnpackResponse<GetAllEmployeesResponse>(response);
 
-            var result = await response.Content.ReadFromJsonAsync<GetAllEmployeesResponse>();
-            var paramedics = result.Paramedics;
-            var dispatchers = result.Dispatchers;
+            if (result.IsError)
+                return result.Errors;
+
+
+            var paramedics = result.Value.Paramedics;
+            var dispatchers = result.Value.Dispatchers;
 
             // merge paramedics and dispatchers
             var toReturn = new EmployeeDTO[paramedics.Length + dispatchers.Length];
@@ -104,10 +106,8 @@ namespace MediMove.Client.Services
             string serializedRequest = JsonSerializer.Serialize(new PutEmployeesRequest(paramedics.ToArray(), dispatchers.ToArray()));
             request.Content = new StringContent(serializedRequest, Encoding.UTF8, "application/json");
             var response = await _httpClient.SendAsync(request);
-            if (response.IsSuccessStatusCode)
-                return new ErrorOr<Unit>();
 
-            return await DeserializeError(response);
+            return await UnpackResponse<Unit>(response);
         }
     }
 }

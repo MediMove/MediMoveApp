@@ -103,7 +103,7 @@ namespace MediMove.Client.Services
 
         }
 
-        public async Task<ErrorOr<string>> PostTransport(CreateTransportDTO content)
+        public async Task<ErrorOr<Unit>> PostTransport(CreateTransportDTO content)
         {
 
             var baseUri = new Uri(_navigationManager.BaseUri);
@@ -119,10 +119,10 @@ namespace MediMove.Client.Services
 
             Console.WriteLine("I'm here auth");
             var response = await _httpClient.SendAsync(request);
-            return await DeserializeError(response);
+            return await UnpackResponse<Unit>(response);
         }
 
-        public async Task<ErrorOr<string>> PostTransportWithBilling(CreateTransportWithBillingDTO content)
+        public async Task<ErrorOr<Unit>> PostTransportWithBilling(CreateTransportWithBillingDTO content)
         {
 
             var baseUri = new Uri(_navigationManager.BaseUri);
@@ -138,7 +138,7 @@ namespace MediMove.Client.Services
 
             Console.WriteLine("I'm here auth");
             var response = await _httpClient.SendAsync(request);
-            return await DeserializeError(response);
+            return await UnpackResponse<Unit>(response);
         }
 
         public async Task<ErrorOr<Unit>> AddTeamToTransport(AssignTeamsToTransportsRequest content)
@@ -156,10 +156,8 @@ namespace MediMove.Client.Services
 
             Console.WriteLine("I'm here auth");
             var response = await _httpClient.SendAsync(request);
-            if (response.IsSuccessStatusCode)
-                return new ErrorOr<Unit>();
 
-            return await DeserializeError(response);
+            return await UnpackResponse<Unit>(response);
         }
 
     }
