@@ -5,17 +5,18 @@
 @inject MediMoveAuthenticationStateProvider _stcateProvider
 @inject NavigationManager _navigationManager
 
+
 <div class="row">
     <div class="col-12">
         @*<h4>Login</h4>*@
         <EditForm Model="dto" OnValidSubmit="HandleLogin">
-            <RadzenCard>
+            <RadzenCard Style="background: #2b2b2b">
                 <DataAnnotationsValidator/>
                 <ValidationSummary/>
 
-                <label>Email</label> <br />
+                <label class="text-light">Email</label> <br />
                 <RadzenTextBox @bind-Value="dto.Email"></RadzenTextBox> <br />   @*Placeholder="Enter email..."*@
-                <label>Password</label> <br />
+                <label class ="text-light">Password</label> <br />
                 <RadzenPassword @bind-Value="dto.Password"></RadzenPassword> <br />   @*Placeholder="Enter password..."*@
                 <hr />
                 <RadzenButton ButtonType="Radzen.ButtonType.Submit" Text="Login" ButtonStyle="Radzen.ButtonStyle.Primary" class="btn-block mr-2"/>
