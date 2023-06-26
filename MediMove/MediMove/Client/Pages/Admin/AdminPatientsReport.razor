@@ -18,6 +18,26 @@
     <input type="month" id="monthPicker" name="monthPicker" />
     <input type="submit" value="Submit" />
 </form>*@
+@if (_popupIsVisible)
+{
+    <div class="modal fade show" style="display: block;" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Message</h5>
+                    <button type="button" class="btn-close" @onclick="ClosePopup"></button>
+                </div>
+                <div class="modal-body">
+                    <p>@_popupMessage</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="ClosePopup">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-backdrop fade show"></div>
+}
 <div class="form-group" style="display:flex">
     <div class="input-group">
         <RadzenLabel Text="Start Time" Associated="startTime" />
@@ -90,17 +110,37 @@
 
     private GetPatientsByDateAndPaymentsSumDTO allPatients;
     private GetPatientsByDateAndPaymentsSumDTO allEmployeesInMonthByHoursAndSalaryResponse;// Replace with the appropriate type and initialization
-                                                                                               //private CreatePatientRequest createPatientDTO = new CreatePatientRequest();
+
+    private bool _popupIsVisible = false;
+    private string _popupMessage = "";
+    private string message = "";
+    //private CreatePatientRequest createPatientDTO = new CreatePatientRequest();
     void ClearSelection()
     {
         selectedPatient = null;
+        isFetched = false;
+        StateHasChanged();
     }
     private void CheckSelection()
     {
-        //if (!startTime.Equals("") && !endTime.Equals("") && startPaymentsHours != (decimal)0 && endPaymentsHours != (decimal)0 && startPaymentsSum != (decimal)0 && endPaymentsSum != (decimal)0)
-        everythingSelected = true;
-        //else
-        // everythingSelected = false;
+        if (endTime < startTime || endAmount < startAmount)
+        {
+            if (endTime < startTime)
+            {
+                everythingSelected = false;
+                message += "EndTime should be further in the future than StartTime\n";
+            }
+            if (endAmount < startAmount)
+            {
+                everythingSelected = false;
+                message += "EndAmount should be bigger than StartAmount\n";
+            }
+            ShowPopup(message);
+        }
+        else
+        {
+            everythingSelected = true;
+        }
     }
     //private void LoadData(LoadDataArgs args)
     //{
@@ -138,6 +178,19 @@
         //NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
         StateHasChanged();
 
+    }
+    private void ShowPopup(string message)
+    {
+        _popupIsVisible = true;
+        _popupMessage = message;
+        StateHasChanged();
+    }
+
+    private void ClosePopup()
+    {
+        _popupIsVisible = false;
+        _popupMessage = "";
+        StateHasChanged();
     }
 }
 

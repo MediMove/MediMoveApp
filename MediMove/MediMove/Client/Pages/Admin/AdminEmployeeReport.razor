@@ -18,25 +18,36 @@
     <input type="month" id="monthPicker" name="monthPicker" />
     <input type="submit" value="Submit" />
 </form>*@
+
+@if (_popupIsVisible)
+{
+    <div class="modal fade show" style="display: block;" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Message</h5>
+                    <button type="button" class="btn-close" @onclick="ClosePopup"></button>
+                </div>
+                <div class="modal-body">
+                    <p>@_popupMessage</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="ClosePopup">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-backdrop fade show"></div>
+}
 <div class="form-group" style="display:flex">
     <div class="input-group">
         <RadzenLabel Text="Start Time" Associated="startTime" />
         <RadzenDatePicker @bind-Value="@startTime" ShowTime="false" DateFormat="dd.MM.yyyy" />
-        <style>
-            .centered-text input{
-                text-align:center;
-            }
-        </style>
     </div>
 
     <div class="input-group">
         <RadzenLabel Text="End Time" Associated="endTime" />
         <RadzenDatePicker @bind-Value="@endTime" ShowTime="false" DateFormat="dd.MM.yyyy" />
-        <style>
-            .centered-text input {
-                text-align: center;
-            }
-        </style>
     </div>
 
     <div class="input-group">
@@ -131,6 +142,11 @@
                                                                                                //private CreatePatientRequest createPatientDTO = new CreatePatientRequest();
     private GetEmployeeRatesByIdAndDatesDTO paramedicResponse;
     private GetEmployeeRatesByIdAndDatesDTO currentParamedic;
+
+    private bool _popupIsVisible = false;
+    private string _popupMessage = "";
+
+    private string message = "";
     void ClearSelection()
     {
         selectedEmployee = null;
@@ -140,7 +156,30 @@
     private void CheckSelection()
     {
         //if (!startTime.Equals("") && !endTime.Equals("") && startPaymentsHours != (decimal)0 && endPaymentsHours != (decimal)0 && startPaymentsSum != (decimal)0 && endPaymentsSum != (decimal)0)
-        everythingSelected = true;
+
+        if (endTime < startTime || endPaymentsHours < startPaymentsHours || endPaymentsSum < startPaymentsSum)
+        {
+            if (endTime < startTime)
+            {
+                everythingSelected = false;
+                message += "EndTime should be further in the future than StartTime";
+            }
+            if (endPaymentsHours < startPaymentsHours)
+            {
+                everythingSelected = false;
+                message += "EndPaymentHours should be bigger than StartPaymentHours";
+            }
+            if (endPaymentsSum < startPaymentsSum)
+            {
+                everythingSelected = false;
+                message+="EndPaymentSum should be bigger than StartPaymentSum";
+            }
+            ShowPopup(message);
+        }
+        else
+        {
+            everythingSelected = true;
+        }
         //else
         // everythingSelected = false;
     }
@@ -186,6 +225,19 @@
         isFetched = true;
         paramedicResponse = await _employeeService.GetParamedicReport(selectedEmployee[0].Id, startTime, endTime);
         currentParamedic = paramedicResponse; 
+        StateHasChanged();
+    }
+    private void ShowPopup(string message)
+    {
+        _popupIsVisible = true;
+        _popupMessage = message;
+        StateHasChanged();
+    }
+
+    private void ClosePopup()
+    {
+        _popupIsVisible = false;
+        _popupMessage = "";
         StateHasChanged();
     }
     //private async void OnSelectionChanged()
