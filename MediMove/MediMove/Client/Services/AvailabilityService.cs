@@ -28,7 +28,7 @@ namespace MediMove.Client.Services
 
         public async Task<ErrorOr<Dictionary<DateTime, DateInfo>>> GetAvailabilities()
         {
-            var result = await HandleRequestAsync<GetAvailabilitiesForParamedicByDateRangeResponse>("api/v1/Availability", HttpMethod.Delete);
+            var result = await HandleRequestAsync<GetAvailabilitiesForParamedicByDateRangeResponse>("api/v1/Availability/Paramedic", HttpMethod.Get);
 
             return result.Match<ErrorOr<Dictionary<DateTime, DateInfo>>>(
                 response => response.DateToDateInfo,
