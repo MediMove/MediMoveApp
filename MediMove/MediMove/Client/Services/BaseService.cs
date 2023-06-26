@@ -9,11 +9,11 @@ namespace MediMove.Client.Services;
 
 public class BaseService
 {
-    protected static async Task<List<Error>> DeserializeError(HttpResponseMessage? response)
+    protected static async Task<List<Error>> DeserializeError(HttpResponseMessage response)
     {
         var responseContent = await response.Content.ReadAsStringAsync();
         var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(responseContent);
-        var errors = new List<Error>();
+        List<Error> errors = new();
         foreach (var field in errorResponse.Errors)
             foreach (var error in field.Value)
                 errors.Add(Error.Failure(field.Key, error));
@@ -32,18 +32,24 @@ public class BaseService
         _navigationManager = navigationManager;
     }
 
-    protected async Task<HttpRequestMessage> generateRequestAsync(string endpointPath, HttpMethod httpMethod)
+    protected UriBuilder GenerateUriBuilder(string endpointPath)
     {
-        var requestUri = new Uri(new Uri(_navigationManager.BaseUri),
-            endpointPath);
+        Console.WriteLine($"URI: {_navigationManager.BaseUri + endpointPath}");
+        return new UriBuilder(_navigationManager.BaseUri + endpointPath);
+    }
 
-        var uriBuilder = new UriBuilder(requestUri);
-
+    protected async Task<HttpRequestMessage> GenerateRequestAsync(UriBuilder uriBuilder, HttpMethod httpMethod)
+    {
         var request = new HttpRequestMessage(httpMethod, uriBuilder.ToString());
-
         var token = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", "token");
-
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
         return request;
+    }
+
+    protected async Task<HttpRequestMessage> GenerateRequestAsync(string endpointPath, HttpMethod httpMethod)
+    {
+        var uriBuilder = GenerateUriBuilder(endpointPath);
+        return await GenerateRequestAsync(uriBuilder, httpMethod);
     }
 }

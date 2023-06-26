@@ -66,13 +66,14 @@ namespace MediMove.Client.Services
 
         public async Task<ErrorOr<EmployeeDTO[]>> GetAllEmployees()
         {
-            var request = await generateRequestAsync("/api/v1/Employee", HttpMethod.Get);
+            var request = await GenerateRequestAsync("api/v1/Employee", HttpMethod.Get);
 
             var response = await _httpClient.SendAsync(request);
-            response.EnsureSuccessStatusCode();
+
+            if (!response.IsSuccessStatusCode)
+                return await DeserializeError(response);
 
             var result = await response.Content.ReadFromJsonAsync<GetAllEmployeesResponse>();
-            Console.WriteLine(result);
             var paramedics = result.Paramedics;
             var dispatchers = result.Dispatchers;
 
@@ -80,8 +81,6 @@ namespace MediMove.Client.Services
             var toReturn = new EmployeeDTO[paramedics.Length + dispatchers.Length];
             paramedics.CopyTo(toReturn, 0);
             dispatchers.CopyTo(toReturn, paramedics.Length);
-            foreach (var employee in toReturn)
-                Console.WriteLine(employee);
 
             return toReturn;
         }
@@ -100,7 +99,7 @@ namespace MediMove.Client.Services
                     dispatchers.Add(dispatcher);
             }
 
-            var request = await generateRequestAsync("/api/v1/Employee", HttpMethod.Put);
+            var request = await GenerateRequestAsync("api/v1/Employee", HttpMethod.Put);
 
             string serializedRequest = JsonSerializer.Serialize(new PutEmployeesRequest(paramedics.ToArray(), dispatchers.ToArray()));
             request.Content = new StringContent(serializedRequest, Encoding.UTF8, "application/json");
