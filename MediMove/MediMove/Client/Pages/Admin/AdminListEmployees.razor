@@ -101,12 +101,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var employeesRequestResult = await _employeeService.GetAllEmployees();
-
-        employeesRequestResult.Switch(
-            result => employees = result,
-            errors => popup.Show(errors)
-        );
+        var getEmployeesRequestResult = await _employeeService.GetAllEmployees();
+        popup.ShowErrorsOrAssign(getEmployeesRequestResult, ref employees);
     }
 
     private async void SaveChanges()
@@ -118,19 +114,7 @@
         }
 
         var updateResult = await _employeeService.UpdateEmployees(modifiedEmployees.ToList());
-        foreach (var employee in modifiedEmployees)
-        {
-            Console.WriteLine(employee);
-        }
-
-        updateResult.Switch(
-            success =>
-            {
-                modifiedEmployees.Clear();
-                popup.Show("Changes saved successfully.");
-            },
-            errors => popup.Show(errors)
-        );
+        popup.ShowErrorsOrMessage(updateResult);
     }
 
     private void HandleInputChange(ChangeEventArgs e, EmployeeDTO employee) =>

@@ -255,14 +255,8 @@
                 TransportsToTeams = teamAndTransport
             };
             var message = await _TransportService.AddTeamToTransport(_assignRequest);
-            message.Switch(
-                success =>
-                {
-                    popup.Show("Team assigned to transport.");
 
-                },
-                errors => popup.Show(errors)
-                );
+            popup.ShowErrorsOrMessage(message, "Team assigned to transport.");
             UpdateChanges();
         }
         else 
@@ -283,14 +277,7 @@
                 Teams = teams
             };
             var message = await _TeamService.PostTeam(_createTeamRequest);
-            message.Switch(
-                success =>
-                {
-                    popup.Show("Team added.");
-                    
-                },
-                errors => popup.Show(errors)
-                );
+            popup.ShowErrorsOrMessage(message, "Team added.");
             UpdateChanges();
         }
         else

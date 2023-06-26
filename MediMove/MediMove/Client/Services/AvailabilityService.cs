@@ -2,10 +2,9 @@
 using MediMove.Shared.Models.Enums;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using System.Net.Http.Headers;
-using System.Net.Http;
 using System.Net.Http.Formatting;
 using ErrorOr;
+using MediatR;
 
 namespace MediMove.Client.Services
 {
@@ -16,24 +15,17 @@ namespace MediMove.Client.Services
         {
         }
 
-        public async Task<ErrorOr<string>> SaveAvailabilities(Dictionary<DateTime, ShiftType?> availabilities)
+        public async Task<ErrorOr<Unit>> SaveAvailabilities(Dictionary<DateTime, ShiftType?> availabilities)
         {
             var content = new CreateAvailabilitiesRequest(availabilities);
-            var baseUri = new Uri(_navigationManager.BaseUri);
-            var requestUri = new Uri(baseUri, "/api/v1/Availability");
-            Console.WriteLine($"I'm here {requestUri}");
-            var request = new HttpRequestMessage(HttpMethod.Post, requestUri);
+          
+            var request = await GenerateRequestAsync("/api/v1/Availability", HttpMethod.Post);
 
-            var token = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", "token");
+            request.Content = new ObjectContent<CreateAvailabilitiesRequest>(content, new JsonMediaTypeFormatter());
 
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            request.Content = new ObjectContent<CreateAvailabilitiesRequest>(content, new JsonMediaTypeFormatter()); // to działa ale jest tu dodatkowy nuGet, jak wysłać po prostu klase?
-
-            Console.WriteLine("I'm here auth");
             var response = await _httpClient.SendAsync(request);
-            return await DeserializeError(response);
-
+            
+            return await UnpackResponse<Unit>(response);
         }
     }
 }
