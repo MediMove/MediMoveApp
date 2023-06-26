@@ -5,6 +5,7 @@ using Microsoft.JSInterop;
 using System.Net.Http.Headers;
 using System.Net.Http;
 using System.Net.Http.Formatting;
+using ErrorOr;
 
 namespace MediMove.Client.Services
 {
@@ -14,14 +15,11 @@ namespace MediMove.Client.Services
         private readonly IJSRuntime _jsRuntime;
         private readonly NavigationManager _navigationManager;
 
-        public AvailabilityService(HttpClient httpClient, IJSRuntime jsRuntime, NavigationManager navigationManager)
+        public AvailabilityService(HttpClient httpClient, IJSRuntime jsRuntime, NavigationManager navigationManager) : base(httpClient, jsRuntime, navigationManager)
         {
-            _httpClient = httpClient;
-            _jsRuntime = jsRuntime;
-            _navigationManager = navigationManager;
         }
 
-        public async Task<string> SaveAvailabilities(Dictionary<DateTime, ShiftType?> availabilities)
+        public async Task<ErrorOr<string>> SaveAvailabilities(Dictionary<DateTime, ShiftType?> availabilities)
         {
             var content = new CreateAvailabilitiesRequest(availabilities);
             var baseUri = new Uri(_navigationManager.BaseUri);

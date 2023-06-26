@@ -1,0 +1,55 @@
+﻿@using ErrorOr;
+
+@if (IsVisible)
+{
+    <div class="modal fade show" style="display: block;" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Message</h5>
+                    <button type="button" class="btn-close" @onclick="ClosePopup"></button>
+                </div>
+                <div class="modal-body">
+                    <p>@Message</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="ClosePopup">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-backdrop fade show"></div>
+}
+
+@code {
+    private bool IsVisible { get; set; }
+    private string Message { get; set; }
+
+    private void ClosePopup()
+    {
+        IsVisible = false;
+        StateHasChanged();
+    }
+
+    public void Show(string message)
+    {
+        Message = message;
+        IsVisible = true;
+        StateHasChanged();
+    }
+
+
+    public void Show(List<Error> errors)
+    {
+        Console.WriteLine(errors.Count);
+        Console.WriteLine(errors);
+        Message = "";
+        foreach (var error in errors)
+        {
+            Console.WriteLine(error);
+            Message += $"{error.Code}: {error.Description}\n";
+        }
+        IsVisible = true;
+        StateHasChanged();
+    }
+}

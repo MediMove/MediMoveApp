@@ -8,6 +8,7 @@ using System.Net.Http.Formatting;
 using MediMove.Shared.Validators;
 using MediMove.Client.temp;
 using Newtonsoft.Json;
+using ErrorOr;
 
 namespace MediMove.Client.Services
 {
@@ -17,11 +18,8 @@ namespace MediMove.Client.Services
         private readonly IJSRuntime _jsRuntime;
         private readonly NavigationManager _navigationManager;
 
-        public PatientService(HttpClient httpClient, IJSRuntime jsRuntime, NavigationManager navigationManager)
+        public PatientService(HttpClient httpClient, IJSRuntime jsRuntime, NavigationManager navigationManager) : base(httpClient, jsRuntime, navigationManager)
         {
-            _httpClient = httpClient;
-            _jsRuntime = jsRuntime;
-            _navigationManager = navigationManager;
         }
 
         public async Task<GetAllPatientsResponse> GetPatients()
@@ -43,7 +41,7 @@ namespace MediMove.Client.Services
             return result;
         }
 
-        public async Task<string> PostPatient(CreatePatientRequest content)
+        public async Task<ErrorOr<string>> PostPatient(CreatePatientRequest content)
         {
             
             var baseUri = new Uri(_navigationManager.BaseUri);
