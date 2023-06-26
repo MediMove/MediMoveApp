@@ -1,4 +1,7 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@using MediMove.Client.temp
+@inject MediMoveAuthenticationStateProvider stateProvider
+@inject NavigationManager NavManager
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">MediMove</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -7,19 +10,19 @@
     </div>
 </div>
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+<div class="@NavMenuCssClass " @onclick="ToggleNavMenu">
     <nav class="flex-column">
         <AuthorizeView Roles="Paramedic">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="paramedic">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="paramedic/transports">
+                    <span class="oi oi-home" aria-hidden="true"></span> Transports
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
                 <NavLink class="nav-link" href="paramedic/availabilities">
-                <span class="oi oi-plus" aria-hidden="true"></span> Avabilities
-            </NavLink>
-        </div>
+                    <span class="oi oi-plus" aria-hidden="true"></span> Availabilities
+                </NavLink>
+            </div>
         </AuthorizeView>
         <AuthorizeView Roles="Dispatcher">
             <div class="nav-item px-3">
@@ -28,11 +31,11 @@
                 </NavLink>
             </div>
             <div class="nav-item px-3">
-                <NavLink class="nav-link" href="fetchdata">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
+                <NavLink class="nav-link" href="dispacher/Duties">
+                    <span class="oi oi-calendar" aria-hidden="true"></span> Duties
                 </NavLink>
             </div>
-        </AuthorizeView>/admin/account/create
+        </AuthorizeView> @*/admin/account/create*@
         <AuthorizeView Roles="Admin">
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="admin" Match="NavLinkMatch.All">
@@ -60,7 +63,16 @@
                 </NavLink>
             </div>
         </AuthorizeView>
+        <AuthorizeView>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="#" @onclick="@HandleLogout">
+                    <span class="oi oi-account-logout" aria-hidden="true"></span> Logout
+                </NavLink>
+            </div>
+        </AuthorizeView>
+
     </nav>
+
 </div>
 
 @code {
@@ -73,5 +85,11 @@
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+
+    private async Task HandleLogout()
+    {
+        await stateProvider.Logout();
+        NavManager.NavigateTo("/login/", true);
     }
 }

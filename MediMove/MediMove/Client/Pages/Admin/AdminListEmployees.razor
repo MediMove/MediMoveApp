@@ -28,6 +28,8 @@
     }
 </style>
 
+<Popup @ref="popup" />
+
 <table>
     <thead>
         <tr>
@@ -50,83 +52,71 @@
         </tr>
     </thead>
     <tbody>
-        @if (employees != null)
+        @foreach (var employee in employees)
         {
-            @foreach (var employee in employees)
-            {
-                <tr>
-                    <td>@employee.Id</td>
-                    <td><input type="text" @bind="@employee.Email" class="edit-input" /></td>
-                    <td><input type="text" @bind="@employee.FirstName" class="edit-input" /></td>
-                    <td><input type="text" @bind="@employee.LastName" class="edit-input" /></td>
-                    <td><input type="text" @bind="@employee.StreetAddress" class="edit-input" /></td>
-                    <td><input type="text" @bind="@employee.HouseNumber" class="edit-input" /></td>
-                    <td><input type="text" @bind="@employee.ApartmentNumber" class="edit-input" /></td>
-                    <td><input type="text" @bind="@employee.City" class="edit-input" /></td>
-                    <td><input type="text" @bind="@employee.PostalCode" class="edit-input" /></td>
-                    <td><input type="text" @bind="@employee.StateProvince" class="edit-input" /></td>
-                    <td><input type="text" @bind="@employee.Country" class="edit-input" /></td>
-                    <td><input type="text" @bind="@employee.PhoneNumber" class="edit-input" /></td>
-                    <td><input type="text" @bind="@employee.BankAccountNumber" class="edit-input" /></td>
-                    <td><input type="checkbox" @bind="@employee.IsWorking" /></td>
-                    @if (employee is DispatcherDTO dispatcher)
-                    {
-                        <td><input type="text" @bind="@dispatcher.Salary" class="edit-input" /></td>
-                        <td></td>
-                    }
-                    else if (employee is ParamedicDTO paramedic)
-                    {
-                        <td><input type="text" @bind="@paramedic.PayPerHour" class="edit-input" /></td>
-                        <td><input type="checkbox" @bind="@paramedic.IsDriver" /></td>
-                    }
-                    else
-                    {
-                        <td></td>
-                        <td></td>
-                    }
-                </tr>
-            }
+            <tr>
+                <td>@employee.Id</td>
+                <td><input type="text" @bind="@employee.Email" @oninput="e => HandleInputChange(e, employee)" class="edit-input" /></td>
+                <td><input type="text" @bind="@employee.FirstName" @oninput="e => HandleInputChange(e, employee)" class="edit-input" /></td>
+                <td><input type="text" @bind="@employee.LastName" @oninput="e => HandleInputChange(e, employee)" class="edit-input" /></td>
+                <td><input type="text" @bind="@employee.StreetAddress" @oninput="e => HandleInputChange(e, employee)" class="edit-input" /></td>
+                <td><input type="text" @bind="@employee.HouseNumber" @oninput="e => HandleInputChange(e, employee)" class="edit-input" /></td>
+                <td><input type="text" @bind="@employee.ApartmentNumber" @oninput="e => HandleInputChange(e, employee)" class="edit-input" /></td>
+                <td><input type="text" @bind="@employee.City" @oninput="e => HandleInputChange(e, employee)" class="edit-input" /></td>
+                <td><input type="text" @bind="@employee.PostalCode" @oninput="e => HandleInputChange(e, employee)" class="edit-input" /></td>
+                <td><input type="text" @bind="@employee.StateProvince" @oninput="e => HandleInputChange(e, employee)" class="edit-input" /></td>
+                <td><input type="text" @bind="@employee.Country" @oninput="e => HandleInputChange(e, employee)" class="edit-input" /></td>
+                <td><input type="text" @bind="@employee.PhoneNumber" @oninput="e => HandleInputChange(e, employee)" class="edit-input" /></td>
+                <td><input type="text" @bind="@employee.BankAccountNumber" @oninput="e => HandleInputChange(e, employee)" class="edit-input" /></td>
+                <td><input type="checkbox" @bind="@employee.IsWorking" @oninput="e => HandleInputChange(e, employee)" /></td>
+                @if (employee is DispatcherDTO dispatcher)
+                {
+                    <td><input type="text" @bind="@dispatcher.Salary" @oninput="e => HandleInputChange(e, employee)" class="edit-input" /></td>
+                    <td>-</td>
+                }
+                else if (employee is ParamedicDTO paramedic)
+                {
+                    <td><input type="text" @bind="@paramedic.PayPerHour" @oninput="e => HandleInputChange(e, employee)" class="edit-input" /></td>
+                    <td><input type="checkbox" @bind="@paramedic.IsDriver" @oninput="e => HandleInputChange(e, employee)" /></td>
+                }
+                else
+                {
+                    <td></td>
+                    <td></td>
+                }
+            </tr>
         }
-        </tbody>
+    </tbody>
 </table>
-
-@if (!string.IsNullOrEmpty(updateResult))
-{
-    <div class="alert alert-danger">
-        @updateResult
-    </div>
-}
 
 <div style="margin-top: 10px;">
     <button class="btn btn-primary" @onclick="SaveChanges">Save Changes</button>
 </div>
 
 @code {
-    private IEnumerable<EmployeeDTO> employees;
-    private IEnumerable<EmployeeDTO> employeesSave;
-    private string updateResult;
+    private Popup popup;
+
+    private EmployeeDTO[] employees = new EmployeeDTO[0];
+    private HashSet<EmployeeDTO> modifiedEmployees = new HashSet<EmployeeDTO>();
 
     protected override async Task OnInitializedAsync()
     {
-        await Change();
-    }
-
-    private async Task Change()
-    {
-        employees = await _employeeService.GetAllEmployees();
-        employeesSave = employees.Select(e => e with {}).ToList(); // deep copy
+        var getEmployeesRequestResult = await _employeeService.GetAllEmployees();
+        popup.ShowErrorsOrAssign(getEmployeesRequestResult, ref employees);
     }
 
     private async void SaveChanges()
     {
-        var modifiedEmployees = new List<EmployeeDTO>();
-        for (int i = 0; i < employees.Count(); i++)
-            if (employees.ElementAt(i) != employeesSave.ElementAt(i))
-                modifiedEmployees.Add(employees.ElementAt(i));
+        if (!modifiedEmployees.Any())
+        {
+            popup.Show("No changes to save.");
+            return;
+        }
 
-        updateResult = await _employeeService.UpdateEmployees(modifiedEmployees);
-        if (updateResult == "")
-            employeesSave = employees.Select(e => e with {}).ToList(); // deep copy
-        //Console.WriteLine($"update result: {updateResult}");
+        var updateResult = await _employeeService.UpdateEmployees(modifiedEmployees.ToList());
+        popup.ShowErrorsOrMessage(updateResult);
     }
+
+    private void HandleInputChange(ChangeEventArgs e, EmployeeDTO employee) =>
+        modifiedEmployees.Add(employee);
 }

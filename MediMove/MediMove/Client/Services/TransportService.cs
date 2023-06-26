@@ -2,24 +2,30 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System.Linq.Dynamic.Core.Tokenizer;
+using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Newtonsoft.Json;
+using System.Net.Http.Formatting;
+using MediMove.Client.temp;
+using MediMove.Shared.Models.Enums;
+using System;
+using MediMove.Shared.Extensions;
+
+using ErrorOr;
+using MediatR;
+
 
 namespace MediMove.Client.Services
 {
-    public class TransportService
+    public class TransportService: BaseService
     {
-        private readonly HttpClient _httpClient;
-        private readonly IJSRuntime _jsRuntime;
-        private readonly NavigationManager _navigationManager;
+      
 
-        public TransportService(HttpClient httpClient, IJSRuntime jsRuntime, NavigationManager navigationManager)
+        public TransportService(HttpClient httpClient, IJSRuntime jsRuntime, NavigationManager navigationManager) : base(httpClient, jsRuntime, navigationManager)
         {
-            _httpClient = httpClient;
-            _jsRuntime = jsRuntime;
-            _navigationManager = navigationManager;
         }
+
 
         public async Task<GetTransportsByParamedicAndDateRangeResponse.TransportInfo[]> GetTransportByDay(int day, int month, int year)
         {
@@ -60,12 +66,99 @@ namespace MediMove.Client.Services
 
             return toReturn;
 
-
-
-
-            //var build = new UriBuilder()//($"{_httpClient.BaseAddress}/api/paramedic/");
-            //build.Query
-            //var uri = new Uri($"{_httpClient.BaseAddress}/api/paramedic/", );
         }
+
+        public async Task<GetTransportsByDayAndShiftResponse> GetTransportByDayAndShift(DateTime dateTime, ShiftType shift)
+        {
+
+            var baseUri = new Uri(_navigationManager.BaseUri);
+            var requestUri = new Uri(baseUri, "/api/v1/Transport/Date");
+            var uriBuilder = new UriBuilder(requestUri);
+            var query = System.Web.HttpUtility.ParseQueryString(uriBuilder.Query);
+
+            query["date"] = dateTime.ToString("yyyy-MM-dd");
+            Console.WriteLine($"Date query: {query["date"]}");
+            if (shift == ShiftType.Morning)
+                query["shift"] = "0";
+            else if (shift == ShiftType.Evening)
+                query["shift"] = "1";
+
+            Console.WriteLine($"Shift query: {query["shift"]}");
+
+
+            uriBuilder.Query = query.ToString();
+            Console.WriteLine(uriBuilder.ToString());
+            var request = new HttpRequestMessage(HttpMethod.Get, uriBuilder.ToString());
+
+            var token = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", "token");
+
+
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            Console.WriteLine("I'm here auth");
+            var response = await _httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+            Console.WriteLine(response.StatusCode);
+            var result = await response.Content.ReadFromJsonAsync<GetTransportsByDayAndShiftResponse>();
+            return result;
+
+        }
+
+        public async Task<ErrorOr<Unit>> PostTransport(CreateTransportDTO content)
+        {
+
+            var baseUri = new Uri(_navigationManager.BaseUri);
+            var requestUri = new Uri(baseUri, "/api/v1/Transport");
+            Console.WriteLine($"I'm here {requestUri}");
+            var request = new HttpRequestMessage(HttpMethod.Post, requestUri);
+
+            var token = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", "token");
+
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            request.Content = new ObjectContent<CreateTransportDTO>(content, new JsonMediaTypeFormatter());
+
+            Console.WriteLine("I'm here auth");
+            var response = await _httpClient.SendAsync(request);
+            return await UnpackResponse<Unit>(response);
+        }
+
+        public async Task<ErrorOr<Unit>> PostTransportWithBilling(CreateTransportWithBillingDTO content)
+        {
+
+            var baseUri = new Uri(_navigationManager.BaseUri);
+            var requestUri = new Uri(baseUri, "/api/v1/Transport/WithBilling");
+            Console.WriteLine($"I'm here {requestUri}");
+            var request = new HttpRequestMessage(HttpMethod.Post, requestUri);
+
+            var token = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", "token");
+
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            request.Content = new ObjectContent<CreateTransportWithBillingDTO>(content, new JsonMediaTypeFormatter());
+
+            Console.WriteLine("I'm here auth");
+            var response = await _httpClient.SendAsync(request);
+            return await UnpackResponse<Unit>(response);
+        }
+
+        public async Task<ErrorOr<Unit>> AddTeamToTransport(AssignTeamsToTransportsRequest content)
+        {
+            var baseUri = new Uri(_navigationManager.BaseUri);
+            var requestUri = new Uri(baseUri, "/api/v1/Transport/AssignTeams");
+            Console.WriteLine($"I'm here {requestUri}");
+            var request = new HttpRequestMessage(HttpMethod.Patch, requestUri);
+
+            var token = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", "token");
+
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            request.Content = new ObjectContent<AssignTeamsToTransportsRequest>(content, new JsonMediaTypeFormatter());
+
+            Console.WriteLine("I'm here auth");
+            var response = await _httpClient.SendAsync(request);
+
+            return await UnpackResponse<Unit>(response);
+        }
+
     }
 }

@@ -44,7 +44,7 @@ a, .btn-link {
 }
 
 .cart-box {
-    max-width: 100px;
+    max-width: 300px;
 }
 
 #blazor-error-ui {
