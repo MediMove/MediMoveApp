@@ -80,4 +80,11 @@ public class BaseService
         var response = await _httpClient.SendAsync(request);
         return await UnpackResponse<N>(response);
     }
+
+    protected async Task<ErrorOr<T>> HandleQueryAsync<T>(UriBuilder uriBuilder, HttpMethod httpMethod)
+    {
+        var request = await GenerateRequestAsync(uriBuilder, httpMethod);
+        var response = await _httpClient.SendAsync(request);
+        return await UnpackResponse<T>(response);
+    }
 }

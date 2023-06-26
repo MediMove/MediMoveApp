@@ -53,7 +53,7 @@
     }
     private async Task Change()
     {
-        transports = await _transportService.GetTransportByDay(value.Value.Day, value.Value.Month, value.Value.Year);
+        transports = (await _transportService.GetTransportByDay(value.Value.Day, value.Value.Month, value.Value.Year)).Value;
     }
 
     // Przenieśc logout na NavMenu na dół a imie i nazwisko zamiast MediMove w rogu

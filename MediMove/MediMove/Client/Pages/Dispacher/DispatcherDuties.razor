@@ -210,9 +210,9 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _transportResponse = await _TransportService.GetTransportByDayAndShift(_selectedDate, _selectedShift);
-        _teamResponse = await _TeamService.GetTeamsByDayAndShift(_selectedDate, _selectedShift);
-        _paramedicResponse = await _ParamedicService.GetParamedicsByDayAndShift(_selectedDate, _selectedShift);
+        _transportResponse = (await _TransportService.GetTransportByDayAndShift(_selectedDate, _selectedShift)).Value;
+        _teamResponse = (await _TeamService.GetTeamsByDayAndShift(_selectedDate, _selectedShift)).Value;
+        _paramedicResponse = (await _ParamedicService.GetParamedicsByDayAndShift(_selectedDate, _selectedShift)).Value;
     }
 
     private string MorningSelection()
@@ -373,9 +373,9 @@
 
     private async void UpdateChanges()
     {
-        _transportResponse = await _TransportService.GetTransportByDayAndShift(_selectedDate, _selectedShift);
-        _teamResponse = await _TeamService.GetTeamsByDayAndShift(_selectedDate, _selectedShift);
-        _paramedicResponse = await _ParamedicService.GetParamedicsByDayAndShift(_selectedDate, _selectedShift);
+        _transportResponse = (await _TransportService.GetTransportByDayAndShift(_selectedDate, _selectedShift)).Value;
+        _teamResponse = (await _TeamService.GetTeamsByDayAndShift(_selectedDate, _selectedShift)).Value;
+        _paramedicResponse = (await _ParamedicService.GetParamedicsByDayAndShift(_selectedDate, _selectedShift)).Value;
         DeselectDriver();
         DeselectParamedic();
         DeselectTransport();

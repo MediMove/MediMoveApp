@@ -483,8 +483,8 @@
     
     protected override async Task OnInitializedAsync()
     {
-        allPatientsResponse = await _PatientService.GetPatients();
-        teamResponse = await _TeamService.GetTeamsByDayAndShift(DateTime.Now, DateTime.Now.ToShiftType().Value);
+        allPatientsResponse = (await _PatientService.GetPatients()).Value;
+        teamResponse = (await _TeamService.GetTeamsByDayAndShift(DateTime.Now, DateTime.Now.ToShiftType().Value)).Value;
         createTransportDTO.StartTime = DateTime.Now;
         createTransportWithBillingDTO.InvoiceDate = DateTime.Today;
         createTransportWithBillingDTO.StartTime = DateTime.Now;
@@ -497,9 +497,9 @@
     {
         
         if(_isWithBilling)
-            teamResponse =  await _TeamService.GetTeamsByDayAndShift(createTransportWithBillingDTO.StartTime, createTransportWithBillingDTO.StartTime.ToShiftType().Value);
+            teamResponse =  (await _TeamService.GetTeamsByDayAndShift(createTransportWithBillingDTO.StartTime, createTransportWithBillingDTO.StartTime.ToShiftType().Value)).Value;
         else
-            teamResponse = await _TeamService.GetTeamsByDayAndShift(createTransportDTO.StartTime,createTransportDTO.StartTime.ToShiftType().Value);
+            teamResponse = (await _TeamService.GetTeamsByDayAndShift(createTransportDTO.StartTime,createTransportDTO.StartTime.ToShiftType().Value)).Value;
 
         DeselectTeam();
         StateHasChanged();
@@ -583,7 +583,7 @@
 
         if (!response.IsError)
         {
-            allPatientsResponse = await _PatientService.GetPatients();
+            allPatientsResponse = (await _PatientService.GetPatients()).Value;
             allPatients = allPatientsResponse;
             createPatientDTO = new CreatePatientRequest();
         }
