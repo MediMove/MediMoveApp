@@ -214,7 +214,7 @@
         //CheckSelection();
         CheckSelection();
         //teamResponse = await _teamService.GetTeamsByDAyAndShift(DateTime.UtcNow.AddDays(-9));
-        allEmployeesInMonthByHoursAndSalaryResponse = await _employeeService.GetEmployeesReport(startTime, endTime, startPaymentsSum, endPaymentsSum, startPaymentsHours, endPaymentsHours);
+        allEmployeesInMonthByHoursAndSalaryResponse = (await _employeeService.GetEmployeesReport(startTime, endTime, startPaymentsSum, endPaymentsSum, startPaymentsHours, endPaymentsHours)).Value;
         allPatients = allEmployeesInMonthByHoursAndSalaryResponse;
         //NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
         StateHasChanged();
@@ -223,7 +223,7 @@
     private async void FetchData()
     {
         isFetched = true;
-        paramedicResponse = await _employeeService.GetParamedicReport(selectedEmployee[0].Id, startTime, endTime);
+        paramedicResponse = (await _employeeService.GetParamedicReport(selectedEmployee[0].Id, startTime, endTime)).Value;
         currentParamedic = paramedicResponse; 
         StateHasChanged();
     }

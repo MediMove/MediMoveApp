@@ -8,7 +8,7 @@ namespace MediMove.Client.Services
 {
     public class PatientService : BaseService
     {
-        
+
         public PatientService(HttpClient httpClient, IJSRuntime jsRuntime, NavigationManager navigationManager) : base(httpClient, jsRuntime, navigationManager)
         {
         }
