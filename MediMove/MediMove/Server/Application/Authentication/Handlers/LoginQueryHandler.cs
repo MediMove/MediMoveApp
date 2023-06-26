@@ -5,6 +5,7 @@ using AutoMapper;
 using ErrorOr;
 using MediatR;
 using MediMove.Server.Application.Authentication.Queries;
+using MediMove.Server.Application.Errors;
 using MediMove.Server.Application.Models;
 using MediMove.Server.Data;
 using Microsoft.AspNetCore.Identity;
@@ -38,10 +39,14 @@ namespace MediMove.Server.Application.Authentication.Handlers
             if (user is null) 
                 return Errors.Errors.LoginError;
 
+
             var verificationResult =
                 _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.dto.Password);
 
             if(verificationResult == PasswordVerificationResult.Failed)
+                return Errors.Errors.LoginError;
+
+            if(!IsUserWorking(user))
                 return Errors.Errors.LoginError;
 
             var claims = new List<Claim>()
@@ -67,7 +72,26 @@ namespace MediMove.Server.Application.Authentication.Handlers
 
             var tokenHandler = new JwtSecurityTokenHandler();
             return tokenHandler.WriteToken(token);
+        }
 
+        public bool IsUserWorking(User user)
+        {
+            if (user.AccountId == null)
+                return true;
+
+            switch (user.RoleId)
+            {
+                case 2:
+                    var paramedic = _dbContext.Paramedics.FirstOrDefault(p => p.Id == user.AccountId);
+                    return paramedic?.IsWorking ?? false;
+
+                case 3:
+                    var dispatcher = _dbContext.Dispatchers.FirstOrDefault(d => d.Id == user.AccountId);
+                    return dispatcher?.IsWorking ?? false;
+
+                default:
+                    return false;
+            }
         }
     }
 }
