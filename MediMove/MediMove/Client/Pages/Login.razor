@@ -1,12 +1,14 @@
 ﻿@page "/login/"
 @using MediMove.Client.temp;
 @using MediMove.Shared.Models.DTOs;
+@using System.Text
 @layout AuthLayout
 @inject MediMoveAuthenticationStateProvider _stcateProvider
 @inject NavigationManager _navigationManager
 
+<Popup @ref="popup" />
 
-<div class="row">
+<div class="row" style="background: black">
     <div class="col-12">
         @*<h4>Login</h4>*@
         <EditForm Model="dto" OnValidSubmit="HandleLogin">
@@ -29,14 +31,17 @@
 
 
 @code {
+    private Popup popup;
     private LoginUserDTO dto = new();
 
     private MediMoveResponse<HttpResponseMessage> response = new();
-
+    
     private async Task HandleLogin()
     {
         
         response = await _stcateProvider.LoginAsync(dto);
+        if (response.CorrectResponse is null)
+        popup.Show("Invalid login or password");
 
         if (response.CorrectResponse is not null)
         {
@@ -61,4 +66,6 @@
         //    NavManager.NavigateTo("", true);
         //}
     }
+
+    
 }
