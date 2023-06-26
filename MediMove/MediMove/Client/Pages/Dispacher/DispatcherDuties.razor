@@ -266,7 +266,7 @@
                 Teams = teams
             };
             var message = await _TeamService.PostTeam(_createTeamRequest);
-            ShowPopup(message);
+            ShowPopup(message.Value);
         }
         else
          ShowPopup("You must select driver and paramedic to create team");

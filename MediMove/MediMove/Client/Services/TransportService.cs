@@ -11,6 +11,7 @@ using MediMove.Client.temp;
 using MediMove.Shared.Models.Enums;
 using System;
 using MediMove.Shared.Extensions;
+using ErrorOr;
 
 namespace MediMove.Client.Services
 {
@@ -20,14 +21,11 @@ namespace MediMove.Client.Services
         private readonly IJSRuntime _jsRuntime;
         private readonly NavigationManager _navigationManager;
 
-        public TransportService(HttpClient httpClient, IJSRuntime jsRuntime, NavigationManager navigationManager)
+        public TransportService(HttpClient httpClient, IJSRuntime jsRuntime, NavigationManager navigationManager) : base(httpClient, jsRuntime, navigationManager)
         {
-            _httpClient = httpClient;
-            _jsRuntime = jsRuntime;
-            _navigationManager = navigationManager;
         }
 
-        
+
 
         public async Task<GetTransportsByParamedicAndDateRangeResponse.TransportInfo[]> GetTransportByDay(int day, int month, int year)
         {
@@ -105,7 +103,7 @@ namespace MediMove.Client.Services
 
         }
 
-        public async Task<string> PostTransport(CreateTransportDTO content)
+        public async Task<ErrorOr<string>> PostTransport(CreateTransportDTO content)
         {
 
             var baseUri = new Uri(_navigationManager.BaseUri);
@@ -124,7 +122,7 @@ namespace MediMove.Client.Services
             return await DeserializeError(response);
         }
 
-        public async Task<string> PostTransportWithBilling(CreateTransportWithBillingDTO content)
+        public async Task<ErrorOr<string>> PostTransportWithBilling(CreateTransportWithBillingDTO content)
         {
 
             var baseUri = new Uri(_navigationManager.BaseUri);

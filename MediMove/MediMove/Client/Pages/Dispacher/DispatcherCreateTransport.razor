@@ -608,16 +608,16 @@
 
     private async void AddPatient()
     {
-        var message = "";
-        message = await _PatientService.PostPatient(createPatientDTO);
-        if (message == "Success")
+        var result = await _PatientService.PostPatient(createPatientDTO);
+
+        if (!result.IsError)
         {
             allPatientsResponse = await _PatientService.GetPatients();
             allPatients = allPatientsResponse;
             createPatientDTO = new CreatePatientRequest();
         }
         StateHasChanged();
-        ShowPopup(message);
+        ShowPopup(result.FirstError.Description);
     }
 
 
@@ -625,9 +625,9 @@
     {
         var message = "";
         if (_isWithBilling)
-           message = await _TransportService.PostTransportWithBilling(createTransportWithBillingDTO);
+           message = (await _TransportService.PostTransportWithBilling(createTransportWithBillingDTO)).Value;
         else
-            message = await _TransportService.PostTransport(createTransportDTO);
+            message = (await _TransportService.PostTransport(createTransportDTO)).Value;
 
         ShowPopup(message);
     }
