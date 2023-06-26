@@ -34,7 +34,7 @@ namespace MediMove.Client.Services
 
         public async Task<ErrorOr<GetTransportsByDayAndShiftResponse>> GetTransportByDayAndShift(DateTime dateTime, ShiftType shift)
         {
-            var uriBuilder = GenerateUriBuilder("/api/v1/Transport/Date");
+            var uriBuilder = GenerateUriBuilder("api/v1/Transport/Date");
             var query = System.Web.HttpUtility.ParseQueryString(uriBuilder.Query);
 
             query["date"] = dateTime.ToString("yyyy-MM-dd");
