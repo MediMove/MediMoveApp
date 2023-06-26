@@ -9,6 +9,7 @@ using MediMove.Shared.Validators;
 using MediMove.Client.temp;
 using Newtonsoft.Json;
 using ErrorOr;
+using MediatR;
 
 namespace MediMove.Client.Services
 {
@@ -38,7 +39,7 @@ namespace MediMove.Client.Services
             return result;
         }
 
-        public async Task<ErrorOr<string>> PostPatient(CreatePatientRequest content)
+        public async Task<ErrorOr<Unit>> PostPatient(CreatePatientRequest content)
         {
             
             var baseUri = new Uri(_navigationManager.BaseUri);
@@ -54,9 +55,7 @@ namespace MediMove.Client.Services
 
             Console.WriteLine("I'm here auth");
             var response = await _httpClient.SendAsync(request);
-            return await DeserializeError(response);
+            return await UnpackResponse<Unit>(response);
         }
-
-        
     }
 }

@@ -1,4 +1,5 @@
 ﻿using ErrorOr;
+using MediatR;
 using MediMove.Client.temp;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -9,11 +10,19 @@ namespace MediMove.Client.Services;
 
 public class BaseService
 {
-    protected static async Task<List<Error>> DeserializeError(HttpResponseMessage? response)
+    protected static async Task<ErrorOr<T>> UnpackResponse<T>(HttpResponseMessage response)
     {
         var responseContent = await response.Content.ReadAsStringAsync();
+        if (response.IsSuccessStatusCode)
+        {
+            if (typeof(T) == typeof(Unit))
+                return new ErrorOr<T>();
+
+            var result = JsonConvert.DeserializeObject<T>(responseContent);
+            return result;
+        }
         var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(responseContent);
-        var errors = new List<Error>();
+        List<Error> errors = new();
         foreach (var field in errorResponse.Errors)
             foreach (var error in field.Value)
                 errors.Add(Error.Failure(field.Key, error));
@@ -32,18 +41,20 @@ public class BaseService
         _navigationManager = navigationManager;
     }
 
-    protected async Task<HttpRequestMessage> generateRequestAsync(string endpointPath, HttpMethod httpMethod)
+    protected UriBuilder GenerateUriBuilder(string endpointPath) => new(_navigationManager.BaseUri + endpointPath);
+
+    protected async Task<HttpRequestMessage> GenerateRequestAsync(UriBuilder uriBuilder, HttpMethod httpMethod)
     {
-        var requestUri = new Uri(new Uri(_navigationManager.BaseUri),
-            endpointPath);
-
-        var uriBuilder = new UriBuilder(requestUri);
-
         var request = new HttpRequestMessage(httpMethod, uriBuilder.ToString());
-
         var token = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", "token");
-
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
         return request;
+    }
+
+    protected async Task<HttpRequestMessage> GenerateRequestAsync(string endpointPath, HttpMethod httpMethod)
+    {
+        var uriBuilder = GenerateUriBuilder(endpointPath);
+        return await GenerateRequestAsync(uriBuilder, httpMethod);
     }
 }

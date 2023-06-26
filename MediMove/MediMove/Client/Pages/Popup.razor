@@ -1,4 +1,5 @@
 ﻿@using ErrorOr;
+@using System.Text
 
 @if (IsVisible)
 {
@@ -38,18 +39,27 @@
         StateHasChanged();
     }
 
-
-    public void Show(List<Error> errors)
+    public void ShowErrors(List<Error> errors)
     {
-        Console.WriteLine(errors.Count);
-        Console.WriteLine(errors);
-        Message = "";
+        var sb = new StringBuilder();
+
         foreach (var error in errors)
-        {
-            Console.WriteLine(error);
-            Message += $"{error.Code}: {error.Description}\n";
-        }
+            sb.Append($"{error.Code}: {error.Description}\n");
+
+        Message = sb.ToString();
         IsVisible = true;
         StateHasChanged();
+    }
+
+    public void ShowErrorsOrMessage<T>(ErrorOr<T> result, string messageOnSuccess = "Changes saved successfully.") =>
+        result.Switch(
+            success => Show(messageOnSuccess),
+            errors => ShowErrors(errors)
+        );
+
+    public void ShowErrorsOrAssign<T>(ErrorOr<T> result, ref T values)
+    {
+        if (result.IsError) ShowErrors(result.Errors);   
+        else values = result.Value;
     }
 }

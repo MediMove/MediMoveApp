@@ -16,7 +16,7 @@ namespace MediMove.Client.Services
         {
         }
 
-        private string? ValidateEmployee(EmployeeDTO employee)
+        private static string? ValidateEmployee(EmployeeDTO employee)
         {
             if (!employee.FirstName.IsValidFirstName())
                 return "Invalid first name";
@@ -66,22 +66,23 @@ namespace MediMove.Client.Services
 
         public async Task<ErrorOr<EmployeeDTO[]>> GetAllEmployees()
         {
-            var request = await generateRequestAsync("/api/v1/Employee", HttpMethod.Get);
+            var request = await GenerateRequestAsync("api/v1/Employee", HttpMethod.Get);
 
             var response = await _httpClient.SendAsync(request);
-            response.EnsureSuccessStatusCode();
 
-            var result = await response.Content.ReadFromJsonAsync<GetAllEmployeesResponse>();
-            Console.WriteLine(result);
-            var paramedics = result.Paramedics;
-            var dispatchers = result.Dispatchers;
+            var result = await UnpackResponse<GetAllEmployeesResponse>(response);
+
+            if (result.IsError)
+                return result.Errors;
+
+
+            var paramedics = result.Value.Paramedics;
+            var dispatchers = result.Value.Dispatchers;
 
             // merge paramedics and dispatchers
             var toReturn = new EmployeeDTO[paramedics.Length + dispatchers.Length];
             paramedics.CopyTo(toReturn, 0);
             dispatchers.CopyTo(toReturn, paramedics.Length);
-            foreach (var employee in toReturn)
-                Console.WriteLine(employee);
 
             return toReturn;
         }
@@ -100,15 +101,13 @@ namespace MediMove.Client.Services
                     dispatchers.Add(dispatcher);
             }
 
-            var request = await generateRequestAsync("/api/v1/Employee", HttpMethod.Put);
+            var request = await GenerateRequestAsync("api/v1/Employee", HttpMethod.Put);
 
             string serializedRequest = JsonSerializer.Serialize(new PutEmployeesRequest(paramedics.ToArray(), dispatchers.ToArray()));
             request.Content = new StringContent(serializedRequest, Encoding.UTF8, "application/json");
             var response = await _httpClient.SendAsync(request);
-            if (response.IsSuccessStatusCode)
-                return new ErrorOr<Unit>();
 
-            return await DeserializeError(response);
+            return await UnpackResponse<Unit>(response);
         }
     }
 }
