@@ -3,6 +3,7 @@ using MediMove.Server.Application.Patients.Commands;
 using MediMove.Server.Application.Patients.Queries;
 using MediMove.Shared.Models.DTOs;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MediMove.Server.Controllers.V1
@@ -10,7 +11,7 @@ namespace MediMove.Server.Controllers.V1
     public class PatientController : BaseApiController
     {
         [HttpGet] // Wysyła same imiona i nazwiska
-        [Authorize(Roles = "Dispatcher")]
+        [Authorize(Roles = "Dispatcher,Admin")]
         public async Task<IActionResult> GetAllPatients()
         {
             var result = await Mediator.Send(new GetAllPatientsQuery());
@@ -52,8 +53,8 @@ namespace MediMove.Server.Controllers.V1
                 result => NoContent(),
                 errors => Problem(errors));
         }
-        [HttpGet("Raport")]
-       //[Authorize(Roles = "Admin")]
+        [HttpGet("Report")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetPatientsByDateAndPaymentsSum(
             [FromQuery] DateTime startTime,
             [FromQuery] DateTime endTime,

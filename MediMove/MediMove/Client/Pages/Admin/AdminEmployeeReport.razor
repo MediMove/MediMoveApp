@@ -1,0 +1,321 @@
+﻿@page "/admin/employeesreport"
+
+@using MediMove.Client.temp;
+@using MediMove.Shared.Models.DTOs
+@using MediMove.Client.Services
+@using System.Globalization
+@using Microsoft.AspNetCore.Components.Web
+@using System.ComponentModel.DataAnnotations;
+@using Radzen.Blazor
+@inject MediMoveAuthenticationStateProvider _stcateProvider
+@inject EmployeeService _employeeService
+@inject NavigationManager _navigationManager
+
+<h3>AdminEmployeeReport</h3>
+
+@*<form>
+    <label for="monthPicker">Select Month and Year:</label>
+    <input type="month" id="monthPicker" name="monthPicker" />
+    <input type="submit" value="Submit" />
+</form>*@
+
+@if (_popupIsVisible)
+{
+    <div class="modal fade show" style="display: block;" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Message</h5>
+                    <button type="button" class="btn-close" @onclick="ClosePopup"></button>
+                </div>
+                <div class="modal-body">
+                    <p>@_popupMessage</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="ClosePopup">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-backdrop fade show"></div>
+}
+<div class="form-group" style="display:flex">
+    <div class="input-group">
+        <RadzenLabel Text="Start Time" Associated="startTime" />
+        <RadzenDatePicker @bind-Value="@startTime" ShowTime="false" DateFormat="dd.MM.yyyy" />
+    </div>
+
+    <div class="input-group">
+        <RadzenLabel Text="End Time" Associated="endTime" />
+        <RadzenDatePicker @bind-Value="@endTime" ShowTime="false" DateFormat="dd.MM.yyyy" />
+    </div>
+
+    <div class="input-group">
+        <RadzenLabel Text="Start Payments Sum" />
+        <RadzenNumeric TValue="decimal" Format="0.00 zł" @bind-Value=@startPaymentsSum />
+    </div>
+
+    <div class="input-group">
+        <RadzenLabel Text="End Payments Sum" />
+        <RadzenNumeric TValue="decimal" Format="0.00 zł" @bind-Value="@endPaymentsSum" />
+    </div>
+
+    <div class="input-group">
+        <RadzenLabel Text="Start Payments Hours" />
+        <RadzenNumeric TValue="decimal" Format="0 h" @bind-Value="@startPaymentsHours" />
+    </div>
+
+    <div class="input-group">
+        <RadzenLabel Text="End Payments Hours" />
+        <RadzenNumeric TValue="decimal" Format="0 h" @bind-Value="@endPaymentsHours" />
+    </div>
+</div>
+<div>
+    <RadzenButton class="btn btn-primary" Text="Show Results" Click="@Refresh" />
+</div>
+
+@if (everythingSelected)
+{
+    <div style="display: flex; align-items: center; margin-bottom: 16px">
+        <RadzenButton Click="@ClearSelection" Text="Clear Selection" />
+        @if (selectedEmployee?.Any() == true)
+        {
+            <div style="margin-left: 16px">
+                Selected Employee: @selectedEmployee[0].FirstName @selectedEmployee[0].LastName
+            </div>
+        }
+    </div>
+    <div>
+        <RadzenDataGrid TItem="GetEmployeesInMonthByHoursAndSalaryDTO.GetEmployeesInMonthByHoursAndSalaryRow" Data="@allPatients?.Rows" AllowFiltering="true"
+                    AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" SelectionMode="DataGridSelectionMode.Single" @bind-Value="@selectedEmployee">
+            <Columns>
+                <RadzenDataGridColumn TItem="GetEmployeesInMonthByHoursAndSalaryDTO.GetEmployeesInMonthByHoursAndSalaryRow" Property="Id" Title="ID" />
+                <RadzenDataGridColumn TItem="GetEmployeesInMonthByHoursAndSalaryDTO.GetEmployeesInMonthByHoursAndSalaryRow" Property="FirstName" Title="First Name" />
+                <RadzenDataGridColumn TItem="GetEmployeesInMonthByHoursAndSalaryDTO.GetEmployeesInMonthByHoursAndSalaryRow" Property="LastName" Title="Last Name" />
+                <RadzenDataGridColumn TItem="GetEmployeesInMonthByHoursAndSalaryDTO.GetEmployeesInMonthByHoursAndSalaryRow" Property="PhoneNumber" Title="Phone Number" />
+                <RadzenDataGridColumn TItem="GetEmployeesInMonthByHoursAndSalaryDTO.GetEmployeesInMonthByHoursAndSalaryRow" Property="SalarySum" Title="Salary Sum" />
+              @* <Template Context="detail">
+                    <RadzenLabel Text="@detail.SalarySum.ToString("C", new System.Globalization.CultureInfo("pl-PL"))" />
+                </Template>*@
+            </Columns>
+        </RadzenDataGrid>
+    </div>
+}
+@if (selectedEmployee?.Any() == true)
+{
+    <div>
+        <RadzenButton class="btn btn-primary" Text="Show data" Click="@FetchData" />
+    </div>
+    @if(isFetched == true)
+    {
+        <div>
+            <RadzenDataGrid TItem="GetEmployeeRatesByIdAndDatesDTO.GetEmployeeRatesByIdAndDatesRow" Data="@currentParamedic?.Rows" AllowFiltering="true"
+            AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" SelectionMode="DataGridSelectionMode.Single" >
+                <Columns>
+                    <RadzenDataGridColumn TItem="GetEmployeeRatesByIdAndDatesDTO.GetEmployeeRatesByIdAndDatesRow" Property="Id" Title="ID" />
+                    <RadzenDataGridColumn TItem="GetEmployeeRatesByIdAndDatesDTO.GetEmployeeRatesByIdAndDatesRow" Property="FirstName" Title="First Name" />
+                    <RadzenDataGridColumn TItem="GetEmployeeRatesByIdAndDatesDTO.GetEmployeeRatesByIdAndDatesRow" Property="LastName" Title="Last Name" />
+                    <RadzenDataGridColumn TItem="GetEmployeeRatesByIdAndDatesDTO.GetEmployeeRatesByIdAndDatesRow" Property="Month" Title="Month" />
+                    <RadzenDataGridColumn TItem="GetEmployeeRatesByIdAndDatesDTO.GetEmployeeRatesByIdAndDatesRow" Property="Year" Title="Year" />
+                    <RadzenDataGridColumn TItem="GetEmployeeRatesByIdAndDatesDTO.GetEmployeeRatesByIdAndDatesRow" Property="SalarySum" Title="Salary Sum" />
+                    @* <Template Context="detail">
+            <RadzenLabel Text="@detail.SalarySum.ToString("C", new System.Globalization.CultureInfo("pl-PL"))" />
+            </Template>*@
+                </Columns>
+            </RadzenDataGrid>
+        </div>
+    }
+}
+@code {
+    private DateTime startTime = DateTime.Today;
+    private DateTime endTime = DateTime.Today;
+    private decimal startPaymentsSum = (decimal)0;
+    private decimal endPaymentsSum = (decimal)0;
+    private decimal startPaymentsHours = (decimal)0;
+    private decimal endPaymentsHours = (decimal)0;
+    private bool everythingSelected = false;
+    private bool isFetched = false;
+    IList<GetEmployeesInMonthByHoursAndSalaryDTO.GetEmployeesInMonthByHoursAndSalaryRow> selectedEmployee;
+
+    private GetEmployeesInMonthByHoursAndSalaryDTO allPatients;
+    private GetEmployeesInMonthByHoursAndSalaryDTO allEmployeesInMonthByHoursAndSalaryResponse;// Replace with the appropriate type and initialization
+                                                                                               //private CreatePatientRequest createPatientDTO = new CreatePatientRequest();
+    private GetEmployeeRatesByIdAndDatesDTO paramedicResponse;
+    private GetEmployeeRatesByIdAndDatesDTO currentParamedic;
+
+    private bool _popupIsVisible = false;
+    private string _popupMessage = "";
+
+    private string message = "";
+    void ClearSelection()
+    {
+        selectedEmployee = null;
+        isFetched = false;
+        StateHasChanged();
+    }
+    private void CheckSelection()
+    {
+        //if (!startTime.Equals("") && !endTime.Equals("") && startPaymentsHours != (decimal)0 && endPaymentsHours != (decimal)0 && startPaymentsSum != (decimal)0 && endPaymentsSum != (decimal)0)
+
+        if (endTime < startTime || endPaymentsHours < startPaymentsHours || endPaymentsSum < startPaymentsSum)
+        {
+            if (endTime < startTime)
+            {
+                everythingSelected = false;
+                message += "EndTime should be further in the future than StartTime";
+            }
+            if (endPaymentsHours < startPaymentsHours)
+            {
+                everythingSelected = false;
+                message += "EndPaymentHours should be bigger than StartPaymentHours";
+            }
+            if (endPaymentsSum < startPaymentsSum)
+            {
+                everythingSelected = false;
+                message+="EndPaymentSum should be bigger than StartPaymentSum";
+            }
+            ShowPopup(message);
+        }
+        else
+        {
+            everythingSelected = true;
+        }
+        //else
+        // everythingSelected = false;
+    }
+    //private void LoadData(LoadDataArgs args)
+    //{
+    //    //console.Log($"Skip: {args.Skip}, Top: {args.Top}");
+
+    //    var query = allPatients.Rows.AsQueryable();
+
+    //    if (!string.IsNullOrEmpty(args.Filter))
+    //    {
+    //        query = query.Where(args.Filter);
+    //        count = query.Count();
+    //    }
+    //    else
+    //    {
+    //        count = allPatients.Rows.Count();
+    //    }
+
+    //    if (!string.IsNullOrEmpty(args.OrderBy))
+    //    {
+    //        query = query.OrderBy(args.OrderBy);
+    //    }
+
+    //    orderDetails = query.Skip(args.Skip.Value).Take(args.Top.Value).ToList();
+    //}
+
+
+
+    private async void Refresh()
+    {
+        //CheckSelection();
+        CheckSelection();
+        //teamResponse = await _teamService.GetTeamsByDAyAndShift(DateTime.UtcNow.AddDays(-9));
+        allEmployeesInMonthByHoursAndSalaryResponse = await _employeeService.GetEmployeesReport(startTime, endTime, startPaymentsSum, endPaymentsSum, startPaymentsHours, endPaymentsHours);
+        allPatients = allEmployeesInMonthByHoursAndSalaryResponse;
+        //NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+        StateHasChanged();
+
+    }
+    private async void FetchData()
+    {
+        isFetched = true;
+        paramedicResponse = await _employeeService.GetParamedicReport(selectedEmployee[0].Id, startTime, endTime);
+        currentParamedic = paramedicResponse; 
+        StateHasChanged();
+    }
+    private void ShowPopup(string message)
+    {
+        _popupIsVisible = true;
+        _popupMessage = message;
+        StateHasChanged();
+    }
+
+    private void ClosePopup()
+    {
+        _popupIsVisible = false;
+        _popupMessage = "";
+        StateHasChanged();
+    }
+    //private async void OnSelectionChanged()
+    //{
+    //    isFetched = true;
+    //    paramedicResponse = await _employeeService.GetParamedicReport(selectedEmployee[0].Id, startTime, endTime);
+    //    currentParamedic = paramedicResponse;
+    //    StateHasChanged();
+    //}
+
+}
+
+
+
+
+@*
+@code{
+    private GetEmployeesInMonthByHoursAndSalaryResponse allPatients;
+    private GetEmployeesInMonthByHoursAndSalaryResponse allEmployeesInMonthByHoursAndSalaryResponse;// Replace with the appropriate type and initialization
+    //private CreatePatientRequest createPatientDTO = new CreatePatientRequest();
+    //private GetTeamsByDateAndShiftResponse teamResponse = new GetTeamsByDateAndShiftResponse();
+
+    protected override async Task OnInitializedAsync()
+    {
+        allEmployeesInMonthByHoursAndSalaryResponse = await _EmployeeService.GetEmployeesReport();
+        allPatients = allEmployeesInMonthByHoursAndSalaryResponse;
+        //createTransportDTO.StartTime = DateTime.Now;
+    }
+
+    //private async void HandleStartTimeInput(ChangeEventArgs e)
+    //{
+    //    teamResponse = await _TeamService.GetTeamsByDAyAndShift(createTransportDTO.StartTime);
+    //}
+
+    //private void SelectPatient(int patientId)
+    //{
+    //    if (_selectedPatientId == patientId)
+    //    {
+    //        _selectedPatientId = null; // Deselect if the same patient is clicked
+    //        createTransportDTO.PatientId = 0; // Update the Patient ID field to a default value
+    //    }
+    //    else
+    //    {
+    //        _selectedPatientId = patientId;
+    //        createTransportDTO.PatientId = patientId;
+    //    }
+    //}
+
+    //private void SelectTeam(int patientId)
+    //{
+    //    if (_selectedTeamId == patientId)
+    //    {
+    //        _selectedTeamId = null; // Deselect if the same patient is clicked
+    //        createTransportDTO.TeamId = 0; // Update the Patient ID field to a default value
+    //    }
+    //    else
+    //    {
+    //        _selectedTeamId = patientId;
+    //        createTransportDTO.TeamId = patientId;
+    //    }
+    //}
+
+    //private string GetPatientItemClass(int patientId)
+    //{
+    //    return patientId == _selectedPatientId ? "patient-item selected" : "patient-item";
+    //}
+
+    //private string GetTeamItemClass(int teamId)
+    //{
+    //    return teamId == _selectedTeamId ? "patient-item selected" : "patient-item";
+    //}
+
+
+    private async void Refresh()
+    {
+        allPatients = await _EmployeeService.GetEmployeesReport();
+    }
+
+
+
+}*@

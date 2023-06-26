@@ -34,8 +34,8 @@ namespace MediMove.Server.Application.Patients.Handlers
 
         public async Task<ErrorOr<GetPatientsByDateAndPaymentsSumDTO>> Handle(GetPatientsByDateAndPaymentsSumQuery request, CancellationToken cancellationToken)
         {
-            DateTime StartDate = DateTime.UtcNow.AddDays(-10);
-            DateTime EndDate = DateTime.UtcNow.AddDays(10);
+            //DateTime StartDate = DateTime.UtcNow.AddDays(-10);
+            //DateTime EndDate = DateTime.UtcNow.AddDays(10);
             var patients = await _dbContext.Transports
             //.Include(t => t.Billing)
             .Include(t => t.Patient)
@@ -54,27 +54,27 @@ namespace MediMove.Server.Application.Patients.Handlers
                 {
                     Id = patient.Id,
                     Weight = patient.Weight,
-                    PerosnalInfo = personalinfo,
+                    PersonalInfo = personalinfo,
                     Transport = patient.Transport,
                     Billing = patient.Billing,
                 })
 
                 
-            .GroupBy(joinResult => joinResult.PerosnalInfo)
+            .GroupBy(joinResult => joinResult.Id)
             .Select(patient => new GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow
             {
-                Id = patient.Key.Id,
+                Id = patient.Key,
                 Weight = patient.FirstOrDefault().Weight,
-                FirstName = patient.Key.FirstName,
-                LastName = patient.Key.LastName,
-                StreetAddress = patient.Key.StreetAddress,
-                HouseNumber = patient.Key.HouseNumber,
-                ApartmentNumber = patient.Key.ApartmentNumber,
-                City = patient.Key.City,
-                PostalCode = patient.Key.PostalCode,
-                StateProvince = patient.Key.StateProvince,
-                Country = patient.Key.Country,
-                PhoneNumber = patient.Key.PhoneNumber,
+                FirstName = patient.FirstOrDefault().PersonalInfo.FirstName,
+                LastName = patient.FirstOrDefault().PersonalInfo.LastName,
+                //StreetAddress = patient.Key.StreetAddress,
+                //HouseNumber = patient.Key.HouseNumber,
+                //ApartmentNumber = patient.Key.ApartmentNumber,
+                //City = patient.Key.City,
+                //PostalCode = patient.Key.PostalCode,
+                //StateProvince = patient.Key.StateProvince,
+                Country = patient.FirstOrDefault().PersonalInfo.Country,
+                PhoneNumber = patient.FirstOrDefault().PersonalInfo.PhoneNumber,
                 PaymentsSum = patient.Sum(t => t.Billing.Cost)
             })
             .Where(dto => dto.PaymentsSum >= request.StartAmount &&
