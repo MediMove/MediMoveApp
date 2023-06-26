@@ -193,53 +193,6 @@ else if (selectedUserType == AccountType.Dispatcher)
     </EditForm>
 }
 
-
-@if (statusCode is not null)
-{
-    <div>
-        @statusCode.statusCode.ToString();
-    </div>
-}
-@if(errorResponse is not null)
-{
-    <RadzenCard>
-        <h3>Errors</h3>
-        <div class="rz-text-align-left">
-            <div style="width: 100%; max-width: 400px;">
-                <div style="margin-bottom: 10px;">
-                    <p>Error type: @errorResponse.Type</p>
-                </div>
-                <div style="margin-bottom: 10px;">
-                    <p>Error Title: @errorResponse.Title</p>
-                </div>
-                <div style="margin-bottom: 10px;">
-                    <p>Error status: @errorResponse.Status</p>
-                </div>
-                <div style="margin-bottom: 10px;">
-                    <p>Error TraceId: @errorResponse.TraceId</p>
-                </div>
-            </div>
-        @foreach(var error in errorResponse.Errors)
-        {
-            <div>
-                <p>Key: @error.Key</p>
-            </div>
-            <div>
-                <p>ErrorList:</p>
-                @foreach( var message in error.Value)
-                {
-                    <div>
-                        <p>Message:</p>
-                        <p>@message</p>
-                    </div>
-                }
-            </div>
-        }
-        </div>
-
-    </RadzenCard>
-}
-
 @code {
     private AccountType selectedUserType;
     private StandardResponse? statusCode = null;
@@ -260,12 +213,6 @@ else if (selectedUserType == AccountType.Dispatcher)
     private async Task HandleDispatcherSubmit() =>
         popup.ShowErrorsOrMessage(await _employeeService.Register(dispatcherModel));
 
-    private  void CheckForErrors(MediMoveResponse<StandardResponse> response)
-    {    
-        statusCode = response.CorrectResponse;
-        errorResponse = response.ErrorResponse;
-    }
-
     public enum AccountType
     {
         [Display(Name = "Admin")]
@@ -278,6 +225,3 @@ else if (selectedUserType == AccountType.Dispatcher)
         Paramedic
     }
 }
-
-
-
