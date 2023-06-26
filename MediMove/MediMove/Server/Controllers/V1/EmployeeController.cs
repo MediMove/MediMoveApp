@@ -28,7 +28,7 @@ namespace MediMove.Server.Controllers.V1
                 errors => Problem(errors));
         }
 
-        [HttpGet("Report")]
+        [HttpGet("Report/Multiple")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetEmployeesInMonthByHoursAndSalary(
             [FromQuery] DateTime startTime,
@@ -39,6 +39,20 @@ namespace MediMove.Server.Controllers.V1
             [FromQuery] decimal endPaymentsSum)
         {
             var result = await Mediator.Send(new GetEmployeesInMonthByHoursAndSalaryQuery(startTime, endTime, startPaymentsHours, endPaymentsHours, startPaymentsSum, endPaymentsSum));
+
+            return result.Match(
+                success => Ok(success),
+                errors => Problem(errors));
+        }
+
+        [HttpGet("Report/Single")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetEmployeeRatesByIdAndSalary(
+            [FromQuery] int id,
+            [FromQuery] DateTime startTime,
+            [FromQuery] DateTime endTime)
+        {
+            var result = await Mediator.Send(new GetEmployeeRatesByIdAndDatesQuery(id, startTime, endTime));
 
             return result.Match(
                 success => Ok(success),

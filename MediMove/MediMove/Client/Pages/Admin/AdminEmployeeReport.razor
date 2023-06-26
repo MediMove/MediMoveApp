@@ -21,12 +21,22 @@
 <div class="form-group" style="display:flex">
     <div class="input-group">
         <RadzenLabel Text="Start Time" Associated="startTime" />
-        <RadzenDatePicker @bind-Value="@startTime" ShowTime="false" />
+        <RadzenDatePicker @bind-Value="@startTime" ShowTime="false" DateFormat="dd.MM.yyyy" />
+        <style>
+            .centered-text input{
+                text-align:center;
+            }
+        </style>
     </div>
 
     <div class="input-group">
         <RadzenLabel Text="End Time" Associated="endTime" />
-        <RadzenDatePicker @bind-Value="@endTime" ShowTime="false" />
+        <RadzenDatePicker @bind-Value="@endTime" ShowTime="false" DateFormat="dd.MM.yyyy" />
+        <style>
+            .centered-text input {
+                text-align: center;
+            }
+        </style>
     </div>
 
     <div class="input-group">
@@ -66,7 +76,7 @@
     </div>
     <div>
         <RadzenDataGrid TItem="GetEmployeesInMonthByHoursAndSalaryDTO.GetEmployeesInMonthByHoursAndSalaryRow" Data="@allPatients.Rows" AllowFiltering="true"
-                    AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" SelectionMode="DataGridSelectionMode.Single" @bind-Value=@selectedEmployee>
+                    AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" SelectionMode="DataGridSelectionMode.Single" @bind-Value="@selectedEmployee">
             <Columns>
                 <RadzenDataGridColumn TItem="GetEmployeesInMonthByHoursAndSalaryDTO.GetEmployeesInMonthByHoursAndSalaryRow" Property="Id" Title="ID" />
                 <RadzenDataGridColumn TItem="GetEmployeesInMonthByHoursAndSalaryDTO.GetEmployeesInMonthByHoursAndSalaryRow" Property="FirstName" Title="First Name" />
@@ -80,7 +90,31 @@
         </RadzenDataGrid>
     </div>
 }
-
+@if (selectedEmployee?.Any() == true)
+{
+    <div>
+        <RadzenButton class="btn btn-primary" Text="Show data" Click="@FetchData" />
+    </div>
+    @if(isFetched == true)
+    {
+        <div>
+            <RadzenDataGrid TItem="GetEmployeeRatesByIdAndDatesDTO.GetEmployeeRatesByIdAndDatesRow" Data="@currentParamedic.Rows" AllowFiltering="true"
+            AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" SelectionMode="DataGridSelectionMode.Single" >
+                <Columns>
+                    <RadzenDataGridColumn TItem="GetEmployeeRatesByIdAndDatesDTO.GetEmployeeRatesByIdAndDatesRow" Property="Id" Title="ID" />
+                    <RadzenDataGridColumn TItem="GetEmployeeRatesByIdAndDatesDTO.GetEmployeeRatesByIdAndDatesRow" Property="FirstName" Title="First Name" />
+                    <RadzenDataGridColumn TItem="GetEmployeeRatesByIdAndDatesDTO.GetEmployeeRatesByIdAndDatesRow" Property="LastName" Title="Last Name" />
+                    <RadzenDataGridColumn TItem="GetEmployeeRatesByIdAndDatesDTO.GetEmployeeRatesByIdAndDatesRow" Property="Month" Title="Month" />
+                    <RadzenDataGridColumn TItem="GetEmployeeRatesByIdAndDatesDTO.GetEmployeeRatesByIdAndDatesRow" Property="Year" Title="Year" />
+                    <RadzenDataGridColumn TItem="GetEmployeeRatesByIdAndDatesDTO.GetEmployeeRatesByIdAndDatesRow" Property="SalarySum" Title="Salary Sum" />
+                    @* <Template Context="detail">
+            <RadzenLabel Text="@detail.SalarySum.ToString("C", new System.Globalization.CultureInfo("pl-PL"))" />
+            </Template>*@
+                </Columns>
+            </RadzenDataGrid>
+        </div>
+    }
+}
 @code {
     private DateTime startTime = DateTime.Today;
     private DateTime endTime = DateTime.Today;
@@ -95,11 +129,13 @@
     private GetEmployeesInMonthByHoursAndSalaryDTO allPatients;
     private GetEmployeesInMonthByHoursAndSalaryDTO allEmployeesInMonthByHoursAndSalaryResponse;// Replace with the appropriate type and initialization
                                                                                                //private CreatePatientRequest createPatientDTO = new CreatePatientRequest();
-    private GetTeamsByDateAndShiftResponse teamResponse = new GetTeamsByDateAndShiftResponse();
- 
+    private GetEmployeeRatesByIdAndDatesDTO paramedicResponse;
+    private GetEmployeeRatesByIdAndDatesDTO currentParamedic;
     void ClearSelection()
     {
         selectedEmployee = null;
+        isFetched = false;
+        StateHasChanged();
     }
     private void CheckSelection()
     {
@@ -133,7 +169,7 @@
     //}
 
 
-   
+
     private async void Refresh()
     {
         //CheckSelection();
@@ -142,9 +178,24 @@
         allEmployeesInMonthByHoursAndSalaryResponse = await _employeeService.GetEmployeesReport(startTime, endTime, startPaymentsSum, endPaymentsSum, startPaymentsHours, endPaymentsHours);
         allPatients = allEmployeesInMonthByHoursAndSalaryResponse;
         //NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
-         StateHasChanged();
+        StateHasChanged();
 
     }
+    private async void FetchData()
+    {
+        isFetched = true;
+        paramedicResponse = await _employeeService.GetParamedicReport(selectedEmployee[0].Id, startTime, endTime);
+        currentParamedic = paramedicResponse; 
+        StateHasChanged();
+    }
+    //private async void OnSelectionChanged()
+    //{
+    //    isFetched = true;
+    //    paramedicResponse = await _employeeService.GetParamedicReport(selectedEmployee[0].Id, startTime, endTime);
+    //    currentParamedic = paramedicResponse;
+    //    StateHasChanged();
+    //}
+
 }
 
 

@@ -21,12 +21,12 @@
 <div class="form-group" style="display:flex">
     <div class="input-group">
         <RadzenLabel Text="Start Time" Associated="startTime" />
-        <RadzenDatePicker @bind-Value="@startTime" ShowTime="false" />
+        <RadzenDatePicker @bind-Value="@startTime" ShowTime="false" DateFormat="dd.MM.yyyy" />
     </div>
 
     <div class="input-group">
         <RadzenLabel Text="End Time" Associated="endTime" />
-        <RadzenDatePicker @bind-Value="@endTime" ShowTime="false" />
+        <RadzenDatePicker @bind-Value="@endTime" ShowTime="false" DateFormat="dd.MM.yyyy" />
     </div>
 
     <div class="input-group">
