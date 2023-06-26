@@ -19,14 +19,11 @@ namespace MediMove.Client.Services
 {
     public class TransportService: BaseService
     {
-        private readonly HttpClient _httpClient;
-        private readonly IJSRuntime _jsRuntime;
-        private readonly NavigationManager _navigationManager;
+      
 
         public TransportService(HttpClient httpClient, IJSRuntime jsRuntime, NavigationManager navigationManager) : base(httpClient, jsRuntime, navigationManager)
         {
         }
-
 
 
         public async Task<GetTransportsByParamedicAndDateRangeResponse.TransportInfo[]> GetTransportByDay(int day, int month, int year)
@@ -143,7 +140,7 @@ namespace MediMove.Client.Services
             return await DeserializeError(response);
         }
 
-        public async Task<string> AddTeamToTransport(AssignTeamsToTransportsRequest content)
+        public async Task<ErrorOr<string>> AddTeamToTransport(AssignTeamsToTransportsRequest content)
         {
             var baseUri = new Uri(_navigationManager.BaseUri);
             var requestUri = new Uri(baseUri, "/api/v1/Transport/AssignTeams");

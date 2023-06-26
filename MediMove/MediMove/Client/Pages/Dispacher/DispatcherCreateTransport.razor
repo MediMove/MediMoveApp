@@ -11,26 +11,7 @@
 
 <h3>Create Transport</h3>
 
-@if (_popupIsVisible)
-{
-    <div class="modal fade show" style="display: block;" tabindex="-1" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Message</h5>
-                    <button type="button" class="btn-close" @onclick="ClosePopup"></button>
-                </div>
-                <div class="modal-body">
-                    <p>@_popupMessage</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @onclick="ClosePopup">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal-backdrop fade show"></div>
-}
+<Popup @ref="popup" />
 
 <div class="container-fluid">
     <div class="row">
@@ -483,6 +464,7 @@
 
 
 @code {
+    private Popup popup;
     private string? phoneNumberSearch;
 
     private int? _selectedPatientId;
@@ -575,19 +557,7 @@
     }
 
 
-    private void ShowPopup(string message)
-    {
-        _popupIsVisible = true;
-        _popupMessage = message;
-        StateHasChanged();
-    }
-
-    private void ClosePopup()
-    {
-        _popupIsVisible = false;
-        _popupMessage = "";
-        StateHasChanged();
-    }
+    
 
 
     private void SearchByPhoneNumber()
@@ -608,28 +578,41 @@
 
     private async void AddPatient()
     {
-        var result = await _PatientService.PostPatient(createPatientDTO);
+        var response = await _PatientService.PostPatient(createPatientDTO);
 
-        if (!result.IsError)
+        if (!response.IsError)
         {
             allPatientsResponse = await _PatientService.GetPatients();
             allPatients = allPatientsResponse;
             createPatientDTO = new CreatePatientRequest();
         }
+        response.Switch(
+            success =>
+            {
+                popup.Show("Patient added.");
+            },
+            errors => popup.Show(errors)
+            );
         StateHasChanged();
-        ShowPopup(result.FirstError.Description);
     }
 
 
     private async void HandleValidSubmit()
     {
-        var message = "";
+        ErrorOr.ErrorOr<string> response;
         if (_isWithBilling)
-           message = (await _TransportService.PostTransportWithBilling(createTransportWithBillingDTO)).Value;
+            response = await _TransportService.PostTransportWithBilling(createTransportWithBillingDTO);
         else
-            message = (await _TransportService.PostTransport(createTransportDTO)).Value;
+            response = await _TransportService.PostTransport(createTransportDTO);
 
-        ShowPopup(message);
+        response.Switch(
+            success =>
+            {
+                popup.Show("Transport added.");
+            },
+            errors => popup.Show(errors)
+            );
+        
     }
 
     private void DisplayTabWithoutBilling()
