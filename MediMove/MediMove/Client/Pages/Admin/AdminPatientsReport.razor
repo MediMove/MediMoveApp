@@ -70,33 +70,58 @@
         @if (selectedPatient?.Any() == true)
         {
             <div style="margin-left: 16px">
-                Selected Employee: @selectedPatient[0].FirstName @selectedPatient[0].LastName
+                Selected Patient: @selectedPatient[0].FirstName @selectedPatient[0].LastName
             </div>
         }
-    </div>
-    <div>
-        <RadzenDataGrid TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Data="@allPatients.Rows" AllowFiltering="true"
-                    AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" SelectionMode="DataGridSelectionMode.Single" @bind-Value=@selectedPatient>
+    </div>    <div>
+        <RadzenDataGrid TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Data="@allPatients?.Rows" AllowFiltering="true"
+        AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" SelectionMode="DataGridSelectionMode.Single" @bind-Value=@selectedPatient>
             <Columns>
                 <RadzenDataGridColumn TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Property="Id" Title = "Id"/>
                 <RadzenDataGridColumn TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Property="Weight" Title = "Weight"/>
                 <RadzenDataGridColumn TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Property="FirstName" Title = "First Name"/>
                 <RadzenDataGridColumn TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Property="LastName" Title = "Last Name"/>
-                <RadzenDataGridColumn TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Property="StreetAddress" Title = "Street Adress"/>
-                <RadzenDataGridColumn TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Property="HouseNumber" Title = "House Number"/>
-                <RadzenDataGridColumn TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Property="ApartmentNumber" Title = "Apartment Number"/>
-                <RadzenDataGridColumn TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Property="City" Title = "City"/>
-                <RadzenDataGridColumn TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Property="PostalCode" Title = "Postal Code"/>
-                <RadzenDataGridColumn TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Property="StateProvince" Title = "State Province"/>
+                @*                <RadzenDataGridColumn TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Property="StreetAddress" Title = "Street Adress"/>*@
+                @*                <RadzenDataGridColumn TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Property="HouseNumber" Title = "House Number"/>*@
+                @*                <RadzenDataGridColumn TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Property="ApartmentNumber" Title = "Apartment Number"/>*@  
+                @*                <RadzenDataGridColumn TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Property="PostalCode" Title = "Postal Code"/>*@            
                 <RadzenDataGridColumn TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Property="Country" Title = "Country"/>
                 <RadzenDataGridColumn TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Property="PhoneNumber" Title = "Phone Number"/>
                 <RadzenDataGridColumn TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Property="PaymentsSum" Title = "Payments Sum"/>
-@* <Template Context="detail
+                @* <Template Context="detail
             <RadzenLabel Text="@detail.SalarySum.ToString("C", new System.Globalization.CultureInfo("pl-PL"))" />
             </Template>*@
             </Columns>
         </RadzenDataGrid>
     </div>
+}
+@if (selectedPatient?.Any() == true)
+{
+    <div>
+        <RadzenButton class="btn btn-primary" Text="Show data" Click="@FetchData" />
+    </div>
+    @if (isFetched == true)
+    {
+        <div>
+            <RadzenDataGrid TItem="PatientDTO" Data="@PatientDetails" AllowFiltering="true"
+            AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" SelectionMode="DataGridSelectionMode.Single" >
+                <Columns>
+                    <RadzenDataGridColumn TItem="PatientDTO" Property="City" Title="City" />
+                    <RadzenDataGridColumn TItem="PatientDTO" Property="StreetAddress" Title = "Street Adress"/>
+                    <RadzenDataGridColumn TItem="PatientDTO" Property="HouseNumber" Title="House Number" />
+                    <RadzenDataGridColumn TItem="PatientDTO" Property="ApartmentNumber" Title="Apartment Number" />
+                    <RadzenDataGridColumn TItem="PatientDTO" Property="PostalCode" Title="Postal Code" />
+                    <RadzenDataGridColumn TItem="PatientDTO" Property="StateProvince" Title="State Province" />
+                    @* <RadzenDataGridColumn TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Property="Country" Title="Country" />
+                    <RadzenDataGridColumn TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Property="PhoneNumber" Title="Phone Number" />
+                    <RadzenDataGridColumn TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Property="PaymentsSum" Title="Payments Sum" />
+                   *@ @* <Template Context="detail
+            <RadzenLabel Text="@detail.SalarySum.ToString("C", new System.Globalization.CultureInfo("pl-PL"))" />
+            </Template>*@
+                </Columns>
+            </RadzenDataGrid>
+        </div>
+    }
 }
 
 @code {
@@ -105,12 +130,14 @@
     private decimal startAmount = (decimal)0;
     private decimal endAmount = (decimal)0;
     private bool everythingSelected = false;
+    private bool isSelected = false;
     private bool isFetched = false;
     IList<GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow> selectedPatient;
 
+
     private GetPatientsByDateAndPaymentsSumDTO allPatients;
     private GetPatientsByDateAndPaymentsSumDTO allEmployeesInMonthByHoursAndSalaryResponse;// Replace with the appropriate type and initialization
-
+    private List<PatientDTO> PatientDetails = new List<PatientDTO>();
     private bool _popupIsVisible = false;
     private string _popupMessage = "";
     private string message = "";
@@ -118,7 +145,7 @@
     void ClearSelection()
     {
         selectedPatient = null;
-        isFetched = false;
+        isSelected = false;
         StateHasChanged();
     }
     private void CheckSelection()
@@ -176,6 +203,15 @@
         allEmployeesInMonthByHoursAndSalaryResponse = await _patientService.GetPatientsReport(startTime, endTime, startAmount , endAmount);
         allPatients = allEmployeesInMonthByHoursAndSalaryResponse;
         //NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+        StateHasChanged();
+
+    }
+    private async void FetchData()
+    {
+        var temp = await _patientService.GetPatients();
+        var det = temp.Patients.Where(p => p.Key == selectedPatient[0].Id).Select(p => p.Value).First();
+        PatientDetails.Add(det);
+        isFetched = true;
         StateHasChanged();
 
     }

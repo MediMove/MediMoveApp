@@ -109,7 +109,7 @@
     @if(isFetched == true)
     {
         <div>
-            <RadzenDataGrid TItem="GetEmployeeRatesByIdAndDatesDTO.GetEmployeeRatesByIdAndDatesRow" Data="@currentParamedic.Rows" AllowFiltering="true"
+            <RadzenDataGrid TItem="GetEmployeeRatesByIdAndDatesDTO.GetEmployeeRatesByIdAndDatesRow" Data="@currentParamedic?.Rows" AllowFiltering="true"
             AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" SelectionMode="DataGridSelectionMode.Single" >
                 <Columns>
                     <RadzenDataGridColumn TItem="GetEmployeeRatesByIdAndDatesDTO.GetEmployeeRatesByIdAndDatesRow" Property="Id" Title="ID" />
