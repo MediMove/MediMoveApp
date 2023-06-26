@@ -4,13 +4,7 @@
 @using static MediMove.Shared.Models.DTOs.GetAvailabilitiesForParamedicByDateRangeResponse;
 @inject AvailabilityService _availabilityService
 
-<div class="container-fluid">
-    <RadzenDatePicker @bind-Value=@value Inline="true" DateRender=@DateRenderSpecial />
-</div>
-
-
-
-
+<Popup @ref="popup" />
 
 <div class="container-fluid">
     <div class="row">
@@ -124,36 +118,34 @@
     private DateTime? value = DateTime.Now;
     private ShiftType? shiftType;
     private EditContext editContext;
+    private Popup popup = new();
 
 
     protected override async Task OnInitializedAsync()
     {
         var model = new Avability();
         editContext = new EditContext(model);
-        var AllAvailabilities = await _availabilityService.GetAvailabilities();
+        Dictionary<DateTime, DateInfo> AllAvailabilities = new();
+        if (popup.ShowErrorsOrAssign(await _availabilityService.GetAvailabilities(), ref AllAvailabilities))
+            return;
+
         foreach(var ava in AllAvailabilities)
         {
             DeclaredShifts[ava.Key] = ava.Value.DeclaredShift;
             if(ava.Value.AssignedTeamShift is not null)
-            {
                 AssignedTeams[ava.Key] = (ShiftType)ava.Value.AssignedTeamShift;
-
-            }
         }
-
     }
 
     public async Task Save()
     {
         //usunąć wszystkie z listy do usunięcia
-        if(AvailabilityToDelete.Any())
-        {
-            await _availabilityService.DeleteAvailabilities(AvailabilityToDelete);
-        }
-        if(availabilities.Any())
-        {
-            await _availabilityService.SaveAvailabilities(availabilities);
-        }
+        if(AvailabilityToDelete.Any() &&
+            popup.ShowErrorsOrMessage(await _availabilityService.DeleteAvailabilities(AvailabilityToDelete)))
+            return;
+
+        if (availabilities.Any())
+            popup.ShowErrorsOrMessage(await _availabilityService.SaveAvailabilities(availabilities));
     }
 
     private void HandleDelete()

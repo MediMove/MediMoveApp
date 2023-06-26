@@ -210,9 +210,9 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _transportResponse = await _TransportService.GetTransportByDayAndShift(_selectedDate, _selectedShift);
-        _teamResponse = await _TeamService.GetTeamsByDayAndShift(_selectedDate, _selectedShift);
-        _paramedicResponse = await _ParamedicService.GetParamedicsByDayAndShift(_selectedDate, _selectedShift);
+        _transportResponse = (await _TransportService.GetTransportByDayAndShift(_selectedDate, _selectedShift)).Value;
+        _teamResponse = (await _TeamService.GetTeamsByDayAndShift(_selectedDate, _selectedShift)).Value;
+        _paramedicResponse = (await _ParamedicService.GetParamedicsByDayAndShift(_selectedDate, _selectedShift)).Value;
     }
 
     private string MorningSelection()
@@ -247,12 +247,10 @@
     {
         if (_selectedTeamId is not null && _selectedTransportId is not null)
         {
-            
-            var teamAndTransport = new SortedDictionary<int, int>();
-            teamAndTransport.Add((int)_selectedTransportId, (int)_selectedTeamId);
+
             _assignRequest = new AssignTeamsToTransportsRequest
             {
-                TransportsToTeams = teamAndTransport
+                    TransportsToTeams = new SortedDictionary<int, int> { { (int)_selectedTransportId, (int)_selectedTeamId } }
             };
             var message = await _TransportService.AddTeamToTransport(_assignRequest);
 
@@ -267,14 +265,13 @@
     {
         if (_selectedDriverId is not null && _selectedParamedicId is not null)
         {
-            var teams = new HashSet<CreateTeamsRequest.TeamInfo>();
-            teams.Add(new CreateTeamsRequest.TeamInfo((int)_selectedDriverId, (int)_selectedParamedicId));
+            
 
             _createTeamRequest = new CreateTeamsRequest
             {
                 Date = _selectedDate,
                 Shift = _selectedShift,
-                Teams = teams
+                Teams = new HashSet<CreateTeamsRequest.TeamInfo> { new((int)_selectedDriverId, (int)_selectedParamedicId) }
             };
             var message = await _TeamService.PostTeam(_createTeamRequest);
             popup.ShowErrorsOrMessage(message, "Team added.");
@@ -376,9 +373,9 @@
 
     private async void UpdateChanges()
     {
-        _transportResponse = await _TransportService.GetTransportByDayAndShift(_selectedDate, _selectedShift);
-        _teamResponse = await _TeamService.GetTeamsByDayAndShift(_selectedDate, _selectedShift);
-        _paramedicResponse = await _ParamedicService.GetParamedicsByDayAndShift(_selectedDate, _selectedShift);
+        _transportResponse = (await _TransportService.GetTransportByDayAndShift(_selectedDate, _selectedShift)).Value;
+        _teamResponse = (await _TeamService.GetTeamsByDayAndShift(_selectedDate, _selectedShift)).Value;
+        _paramedicResponse = (await _ParamedicService.GetParamedicsByDayAndShift(_selectedDate, _selectedShift)).Value;
         DeselectDriver();
         DeselectParamedic();
         DeselectTransport();

@@ -7,8 +7,6 @@ using Microsoft.JSInterop;
 using System;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Text;
-using System.Text.Json;
 
 namespace MediMove.Client.Services
 {
@@ -68,15 +66,10 @@ namespace MediMove.Client.Services
 
         public async Task<ErrorOr<EmployeeDTO[]>> GetAllEmployees()
         {
-            var request = await GenerateRequestAsync("api/v1/Employee", HttpMethod.Get);
-
-            var response = await _httpClient.SendAsync(request);
-
-            var result = await UnpackResponse<GetAllEmployeesResponse>(response);
+            var result = await HandleRequestAsync<GetAllEmployeesResponse>("api/v1/Employee", HttpMethod.Get);
 
             if (result.IsError)
                 return result.Errors;
-
 
             var paramedics = result.Value.Paramedics;
             var dispatchers = result.Value.Dispatchers;
@@ -209,13 +202,17 @@ namespace MediMove.Client.Services
                     dispatchers.Add(dispatcher);
             }
 
-            var request = await GenerateRequestAsync("api/v1/Employee", HttpMethod.Put);
-
-            string serializedRequest = JsonSerializer.Serialize(new PutEmployeesRequest(paramedics.ToArray(), dispatchers.ToArray()));
-            request.Content = new StringContent(serializedRequest, Encoding.UTF8, "application/json");
-            var response = await _httpClient.SendAsync(request);
-
-            return await UnpackResponse<Unit>(response);
+            return await HandleRequestAsync<PutEmployeesRequest, Unit>("api/v1/Employee", HttpMethod.Put,
+                new PutEmployeesRequest(paramedics.ToArray(), dispatchers.ToArray()));
         }
+
+        public async Task<ErrorOr<Unit>> Register(RegisterAdminRequest content) =>
+            await HandleRequestAsync<RegisterAdminRequest, Unit>("api/v1/Accounts/Register/Admin", HttpMethod.Post, content);
+
+        public async Task<ErrorOr<Unit>> Register(RegisterParamedicRequest content) =>
+            await HandleRequestAsync<RegisterParamedicRequest, Unit>("api/v1/Accounts/Register/Paramedic", HttpMethod.Post, content);
+
+        public async Task<ErrorOr<Unit>> Register(RegisterDispatcherRequest content) =>
+            await HandleRequestAsync<RegisterDispatcherRequest, Unit>("api/v1/Accounts/Register/Dispatcher", HttpMethod.Post, content);
     }
 }
