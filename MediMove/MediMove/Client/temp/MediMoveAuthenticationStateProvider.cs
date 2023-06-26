@@ -32,65 +32,6 @@ namespace MediMove.Client.temp
             AuthenticationStateChanged += OnAuthenticationStateChanged;
         }
 
-        public async Task<MediMoveResponse<StandardResponse>> Register(RegisterAdminRequest content)
-        {
-            var baseUri = new Uri(_navigationManager.BaseUri);
-            var requestUri = new Uri(baseUri, "/api/v1/Accounts/Register/Admin");
-
-            var uriBuilder = new UriBuilder(requestUri);
-            Console.WriteLine("I'm here 1");
-            var token = await _jSRuntime.InvokeAsync<string>("localStorage.getItem", "token");
-
-            var request = new HttpRequestMessage(HttpMethod.Post, uriBuilder.ToString());
-            Console.WriteLine("I'm here 1");
-            Console.WriteLine($"{request}");
-
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            request.Content = new ObjectContent<RegisterAdminRequest>(content, new JsonMediaTypeFormatter());
-
-            Console.WriteLine("I'm here 2");
-            var httpResponse = await _httpClient.SendAsync(request);
-            Console.WriteLine("I'm here 3");
-
-
-            var response = await CheckStandardResponse(httpResponse);
-
-            Console.WriteLine($"{response.CorrectResponse}, {response.ErrorResponse}");
-            return response;
-        }
-        public async Task<MediMoveResponse<StandardResponse>> Register(RegisterParamedicRequest content)
-        {
-
-            var token = await _jSRuntime.InvokeAsync<string>("localStorage.getItem", "token");
-
-            var request = new HttpRequestMessage(HttpMethod.Post, "/api/v1/Accounts/Register/Paramedic");
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            request.Content = new ObjectContent<RegisterParamedicRequest>(content, new JsonMediaTypeFormatter());
-
-            var httpResponse = await _httpClient.SendAsync(request);
-
-
-            var response = await CheckStandardResponse(httpResponse);
-
-            return response;
-        }
-        public async Task<MediMoveResponse<StandardResponse>> Register(RegisterDispatcherRequest content)
-        {
-
-            var token = await _jSRuntime.InvokeAsync<string>("localStorage.getItem", "token");
-
-            var request = new HttpRequestMessage(HttpMethod.Post, "/api/v1/Accounts/Register/Dispatcher");
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            request.Content = new ObjectContent<RegisterDispatcherRequest>(content, new JsonMediaTypeFormatter());
-
-            var httpResponse = await _httpClient.SendAsync(request);
-           
-
-            var response = await CheckStandardResponse(httpResponse);
-
-            return response;
-        }
-
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             var tokenHandler = new JwtSecurityTokenHandler();

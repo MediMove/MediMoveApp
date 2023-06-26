@@ -6,13 +6,9 @@
 @using System.Globalization
 @using Microsoft.AspNetCore.Components.Web
 @using System.ComponentModel.DataAnnotations;
-@inject MediMoveAuthenticationStateProvider _stcateProvider
+@inject EmployeeService _employeeService
 
-
-
-
-
-
+<Popup @ref="popup" />
 
 
 <RadzenCard>
@@ -253,28 +249,16 @@ else if (selectedUserType == AccountType.Dispatcher)
     private RegisterDispatcherRequest dispatcherModel = new();
 
     IEnumerable<AccountType> accountTypes = Enum.GetValues(typeof(AccountType)).Cast<AccountType>();
+    private Popup popup = new();
 
+    private async Task HandleAdminSubmit() =>
+        popup.ShowErrorsOrMessage(await _employeeService.Register(adminModel));
 
+    private async Task HandleParamedicSubmit() =>
+        popup.ShowErrorsOrMessage(await _employeeService.Register(paramedicModel));
 
-    private async Task HandleAdminSubmit()
-    {
-        var response = await _stcateProvider.Register(adminModel);
-        CheckForErrors(response);
-
-
-    }
-
-    private async Task HandleParamedicSubmit()
-    {
-        var response = await _stcateProvider.Register(paramedicModel);
-        CheckForErrors(response);
-    }
-
-    private async Task HandleDispatcherSubmit()
-    {
-        var response = await _stcateProvider.Register(dispatcherModel);
-        CheckForErrors(response);
-    }
+    private async Task HandleDispatcherSubmit() =>
+        popup.ShowErrorsOrMessage(await _employeeService.Register(dispatcherModel));
 
     private  void CheckForErrors(MediMoveResponse<StandardResponse> response)
     {    

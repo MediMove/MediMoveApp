@@ -200,7 +200,7 @@
         //CheckSelection();
         CheckSelection();
         //teamResponse = await _teamService.GetTeamsByDAyAndShift(DateTime.UtcNow.AddDays(-9));
-        allEmployeesInMonthByHoursAndSalaryResponse = await _patientService.GetPatientsReport(startTime, endTime, startAmount , endAmount);
+        allEmployeesInMonthByHoursAndSalaryResponse = (await _patientService.GetPatientsReport(startTime, endTime, startAmount , endAmount)).Value;
         allPatients = allEmployeesInMonthByHoursAndSalaryResponse;
         //NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
         StateHasChanged();
@@ -208,7 +208,7 @@
     }
     private async void FetchData()
     {
-        var temp = await _patientService.GetPatients();
+        var temp = (await _patientService.GetPatients()).Value;
         var det = temp.Patients.Where(p => p.Key == selectedPatient[0].Id).Select(p => p.Value).First();
         PatientDetails.Add(det);
         isFetched = true;

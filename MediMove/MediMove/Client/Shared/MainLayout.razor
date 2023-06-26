@@ -4,7 +4,7 @@
 @inherits LayoutComponentBase
 
 
-<div class="page">
+<div class="page background">
    
     <AuthorizeView>
         <div class="sidebar">
@@ -19,6 +19,11 @@
     </main>
 </div>
 
+<style>
+    .background {
+        background: #fafafa; /*linear-gradient(135deg, #9b59b6, #e91e63);*/
+    }
+</style>
 @code {
     //private bool IsAuthorized = false;
 
