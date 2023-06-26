@@ -4,6 +4,9 @@
 @using static MediMove.Shared.Models.DTOs.GetAvailabilitiesForParamedicByDateRangeResponse;
 @inject AvailabilityService _availabilityService
 
+<div class="container-fluid">
+    <RadzenDatePicker @bind-Value=@value Inline="true" DateRender=@DateRenderSpecial />
+</div>
 
 
 
@@ -15,6 +18,8 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Availabilities</h5>
+
+
                       <div class="shift morning"></div>
                       <span class="shift-description">
                         <span class="morning"></span> Morning Shift

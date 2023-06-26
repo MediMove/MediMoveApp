@@ -1,22 +1,22 @@
-﻿using MediMove.Client.temp;
+﻿using ErrorOr;
+using MediatR;
 using MediMove.Shared.Models.DTOs;
 using MediMove.Shared.Validators;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 
 namespace MediMove.Client.Services
 {
-    public class EmployeeService
+    public class EmployeeService : BaseService
     {
-        private readonly HttpClient _httpClient;
-        private readonly IJSRuntime _jsRuntime;
-        private readonly NavigationManager _navigationManager;
+        public EmployeeService(HttpClient httpClient, IJSRuntime jsRuntime, NavigationManager navigationManager) : base(httpClient, jsRuntime, navigationManager)
+        {
+        }
 
-        private string ValidateEmployee(EmployeeDTO employee)
+        private static string? ValidateEmployee(EmployeeDTO employee)
         {
             if (!employee.FirstName.IsValidFirstName())
                 return "Invalid first name";
@@ -59,97 +59,55 @@ namespace MediMove.Client.Services
 
             if (employee is DispatcherDTO dispatcher && !dispatcher.Salary.IsValidSalary())
                 return "Invalid salary";
-
-            return "";
+            
+            return null;
         }
 
-        public EmployeeService(HttpClient httpClient, IJSRuntime jsRuntime, NavigationManager navigationManager)
+
+        public async Task<ErrorOr<EmployeeDTO[]>> GetAllEmployees()
         {
-            _httpClient = httpClient;
-            _jsRuntime = jsRuntime;
-            _navigationManager = navigationManager;
-        }
-
-        public async Task<EmployeeDTO[]> GetAllEmployees()
-        {
-            var baseUri = new Uri(_navigationManager.BaseUri);
-            var requestUri = new Uri(baseUri, "/api/v1/Employee");
-
-            var uriBuilder = new UriBuilder(requestUri);
-
-            var request = new HttpRequestMessage(HttpMethod.Get, uriBuilder.ToString());
-
-            var token = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", "token");
-
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var request = await GenerateRequestAsync("api/v1/Employee", HttpMethod.Get);
 
             var response = await _httpClient.SendAsync(request);
-            response.EnsureSuccessStatusCode();
 
-            var result = await response.Content.ReadFromJsonAsync<GetAllEmployeesResponse>();
-            Console.WriteLine(result);
-            var paramedics = result.Paramedics;
-            var dispatchers = result.Dispatchers;
+            var result = await UnpackResponse<GetAllEmployeesResponse>(response);
+
+            if (result.IsError)
+                return result.Errors;
+
+
+            var paramedics = result.Value.Paramedics;
+            var dispatchers = result.Value.Dispatchers;
 
             // merge paramedics and dispatchers
             var toReturn = new EmployeeDTO[paramedics.Length + dispatchers.Length];
             paramedics.CopyTo(toReturn, 0);
             dispatchers.CopyTo(toReturn, paramedics.Length);
-            foreach (var employee in toReturn)
-            {
-                Console.WriteLine(employee);
-            }
 
             return toReturn;
         }
 
-        public async Task<string> UpdateEmployees(List<EmployeeDTO> employees)
+        public async Task<ErrorOr<Unit>> UpdateEmployees(List<EmployeeDTO> employees)
         {
             var paramedics = new List<ParamedicDTO>();
             var dispatchers = new List<DispatcherDTO>();
             foreach (var employee in employees)
             {
-                //Console.WriteLine(employee);
                 var errorMessage = ValidateEmployee(employee);
-                if (errorMessage != "") return $"{errorMessage} for ID={employee.Id}";
+                if (errorMessage is not null) return Error.Failure(errorMessage);
                 if (employee is ParamedicDTO paramedic)
                     paramedics.Add(paramedic);
                 else if (employee is DispatcherDTO dispatcher)
                     dispatchers.Add(dispatcher);
             }
 
-            var baseUri = new Uri(_navigationManager.BaseUri);
-            var requestUri = new Uri(baseUri, "/api/v1/Employee");
-
-            var uriBuilder = new UriBuilder(requestUri);
-
-            var request = new HttpRequestMessage(HttpMethod.Put, uriBuilder.ToString());
-
-            var token = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", "token");
-
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var request = await GenerateRequestAsync("api/v1/Employee", HttpMethod.Put);
 
             string serializedRequest = JsonSerializer.Serialize(new PutEmployeesRequest(paramedics.ToArray(), dispatchers.ToArray()));
             request.Content = new StringContent(serializedRequest, Encoding.UTF8, "application/json");
             var response = await _httpClient.SendAsync(request);
-            if (!response.IsSuccessStatusCode)
-            {
-                //Console.WriteLine("Error updating data");
-                return "Error updating data";
-                /*
-                var responseContent = await response.Content.ReadAsStringAsync();
-                var errorResponse = JsonSerializer.Deserialize<ErrorResponse>(responseContent);
-                var errorMessage = "";
-                foreach (var field in errorResponse.Errors)
-                {
-                    errorMessage += field.Key + ": " + string.Join("; ", field.Value) + "\n";
-                }
 
-                return errorMessage;
-                */
-            }
-            //Console.WriteLine("OK updating data");
-            return "";
+            return await UnpackResponse<Unit>(response);
         }
     }
 }

@@ -7,6 +7,7 @@ using System.Threading;
 using MediMove.Server.Application.Transports.Commands;
 using MediMove.Server.Data;
 using MediMove.Shared.Extensions;
+using MediMove.Shared.Validators;
 
 namespace MediMove.Server.Application.Transports.Validators
 {
@@ -48,50 +49,51 @@ namespace MediMove.Server.Application.Transports.Validators
             RuleFor(x => x.Dto.StartTime)
                 .Must(startTime => startTime >= DateTime.Now).WithMessage("Date must be in the future");
 
-            RuleFor(x => x.Dto.Financing).NotEmpty()
+            RuleFor(x => x.Dto.Financing)
                 .Must(x => Enum.IsDefined(typeof(Financing), x)).WithMessage("Incorrect financing type"); ;
 
             RuleFor(x => x.Dto.Destination)
                 .NotEmpty()
                 .MaximumLength(70);
 
-            RuleFor(x => x.Dto.PatientPosition).NotEmpty()
+            RuleFor(x => x.Dto.PatientPosition)
                 .Must(x => Enum.IsDefined(typeof(PatientPosition), x)).WithMessage("Incorrect patient position");
 
-            RuleFor(x => x.Dto.TransportType).NotEmpty()
+            RuleFor(x => x.Dto.TransportType)
                 .Must(x => Enum.IsDefined(typeof(TransportType), x)).WithMessage("Incorrect transport type");
 
             RuleFor(x => x.Dto.FirstName).NotEmpty()
-                .Matches(@"^[a-zA-Z\s-]+$").Length(2,25);
+                .Must(x => x.IsValidFirstName());
 
             RuleFor(x => x.Dto.LastName).NotEmpty()
-                .Matches(@"^[a-zA-Z\s-]+$").Length(2, 25);
+                .Must(x => x.IsValidLastName());
 
             RuleFor(x => x.Dto.StreetAddress).NotEmpty()
-                .Matches(@"^[a-zA-Z\s-]+$").Length(2, 30);
+                .Must(x => x.IsValidStreetAddress());
 
             RuleFor(x => x.Dto.HouseNumber).NotEmpty()
-                .Matches(@"^[a-zA-Z0-9\s-]+$").Length(1, 10);
+                .Must(x => x.IsValidHouseNumber());
 
-            RuleFor(x => x.Dto.ApartmentNumber).LessThanOrEqualTo(200);
+            RuleFor(x => x.Dto.ApartmentNumber)
+                .Must(x => x.IsValidApartmentNumber());
 
             RuleFor(x => x.Dto.PostalCode).NotEmpty()
-                .Matches(@"^\d{2}-\d{3}(\d{2})?$");
+                .Must(x => x.IsValidPostalCode());
 
             RuleFor(x => x.Dto.StateProvince).NotEmpty()
-                .Matches(@"^[a-zA-Z\s-]+$").Length(2, 30);
+                .Must(x => x.IsValidStateProvince());
 
             RuleFor(x => x.Dto.City).NotEmpty()
-                .Matches(@"^[a-zA-Z\s-]+$").Length(2, 30);
+                .Must(x => x.IsValidCity());
 
             RuleFor(x => x.Dto.Country).NotEmpty()
-                .Matches(@"^[a-zA-Z\s-]+$").Length(2, 30);
+                .Must(x => x.IsValidCountry());
 
             RuleFor(x => x.Dto.PhoneNumber).NotEmpty()
-                .Matches(@"^[0-9]+([- ]?[0-9]+)*$").Length(2, 30);
+                .Must(x => x.IsValidPhoneNumber());
 
             RuleFor(x => x.Dto.BankAccountNumber).NotEmpty()
-                .Length(6, 60);
+                .Must(x => x.IsValidBankAccountNumber());
 
             RuleFor(x => x.Dto.InvoiceDate)
                 .Must(invoiceDate => invoiceDate >= DateTime.Now);
