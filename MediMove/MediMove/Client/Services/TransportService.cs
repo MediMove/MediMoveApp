@@ -13,6 +13,7 @@ using System;
 using MediMove.Shared.Extensions;
 
 using ErrorOr;
+using MediatR;
 
 
 namespace MediMove.Client.Services
@@ -140,7 +141,7 @@ namespace MediMove.Client.Services
             return await DeserializeError(response);
         }
 
-        public async Task<ErrorOr<string>> AddTeamToTransport(AssignTeamsToTransportsRequest content)
+        public async Task<ErrorOr<Unit>> AddTeamToTransport(AssignTeamsToTransportsRequest content)
         {
             var baseUri = new Uri(_navigationManager.BaseUri);
             var requestUri = new Uri(baseUri, "/api/v1/Transport/AssignTeams");
@@ -155,6 +156,9 @@ namespace MediMove.Client.Services
 
             Console.WriteLine("I'm here auth");
             var response = await _httpClient.SendAsync(request);
+            if (response.IsSuccessStatusCode)
+                return new ErrorOr<Unit>();
+
             return await DeserializeError(response);
         }
 

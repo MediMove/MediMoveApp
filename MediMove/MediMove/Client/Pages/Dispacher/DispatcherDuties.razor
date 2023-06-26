@@ -13,13 +13,13 @@
 <Popup @ref="popup" />
 <div class="card">
     <nav class="nav nav-pills nav-fill">
-        <div class=@MorningSelection() @onclick="() => { _selectedShift = ShiftType.Morning; DateChanged();}">Morning</div>
-        <div class=@EveningSelection() @onclick="() => { _selectedShift = ShiftType.Evening; DateChanged();}" >Evening</div>
+        <div class=@MorningSelection() @onclick="() => { _selectedShift = ShiftType.Morning; UpdateChanges();}">Morning</div>
+        <div class=@EveningSelection() @onclick="() => { _selectedShift = ShiftType.Evening; UpdateChanges();}" >Evening</div>
     </nav>
 </div>
 
 <div class="container-fluid">
-    <RadzenDatePicker @bind-Value=@_selectedDate Inline="true" Change="DateChanged"/>
+    <RadzenDatePicker @bind-Value=@_selectedDate Inline="true" Change="UpdateChanges"/>
 </div>
 
 
@@ -255,7 +255,15 @@
                 TransportsToTeams = teamAndTransport
             };
             var message = await _TransportService.AddTeamToTransport(_assignRequest);
-            popup.Show(message.Value);
+            message.Switch(
+                success =>
+                {
+                    popup.Show("Team assigned to transport.");
+
+                },
+                errors => popup.Show(errors)
+                );
+            UpdateChanges();
         }
         else 
             popup.Show("You must select transport and team to assign.");
@@ -275,7 +283,15 @@
                 Teams = teams
             };
             var message = await _TeamService.PostTeam(_createTeamRequest);
-            popup.Show(message.Value);
+            message.Switch(
+                success =>
+                {
+                    popup.Show("Team added.");
+                    
+                },
+                errors => popup.Show(errors)
+                );
+            UpdateChanges();
         }
         else
          popup.Show("You must select driver and paramedic to create team");
@@ -371,7 +387,7 @@
 
     
 
-    private async void DateChanged()
+    private async void UpdateChanges()
     {
         _transportResponse = await _TransportService.GetTransportByDayAndShift(_selectedDate, _selectedShift);
         _teamResponse = await _TeamService.GetTeamsByDayAndShift(_selectedDate, _selectedShift);

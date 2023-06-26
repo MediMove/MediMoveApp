@@ -10,6 +10,7 @@ using System.Net.Http.Formatting;
 using MediMove.Client.temp;
 using Newtonsoft.Json;
 using ErrorOr;
+using MediatR;
 
 namespace MediMove.Client.Services
 {
@@ -52,7 +53,7 @@ namespace MediMove.Client.Services
             return result;
         }
 
-        public async Task<ErrorOr<string>> PostTeam(CreateTeamsRequest content)
+        public async Task<ErrorOr<Unit>> PostTeam(CreateTeamsRequest content)
         {
 
             var baseUri = new Uri(_navigationManager.BaseUri);
@@ -68,6 +69,9 @@ namespace MediMove.Client.Services
 
             Console.WriteLine("I'm here auth");
             var response = await _httpClient.SendAsync(request);
+            if (response.IsSuccessStatusCode)
+                return new ErrorOr<Unit>();
+
             return await DeserializeError(response);
         }
 
