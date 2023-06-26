@@ -10,10 +10,6 @@ namespace MediMove.Client.Services
     public class ParamedicService : BaseService
     {
 
-        private readonly HttpClient _httpClient;
-        private readonly IJSRuntime _jsRuntime;
-        private readonly NavigationManager _navigationManager;
-
         public ParamedicService(HttpClient httpClient, IJSRuntime jsRuntime, NavigationManager navigationManager) : base(httpClient, jsRuntime, navigationManager)
         {
         }

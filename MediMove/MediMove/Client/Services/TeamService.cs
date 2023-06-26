@@ -15,10 +15,7 @@ namespace MediMove.Client.Services
 {
     public class TeamService : BaseService
     {
-        private readonly HttpClient _httpClient;
-        private readonly IJSRuntime _jsRuntime;
-        private readonly NavigationManager _navigationManager;
-
+        
         public TeamService(HttpClient httpClient, IJSRuntime jsRuntime, NavigationManager navigationManager) : base(httpClient, jsRuntime, navigationManager)
         {
         }

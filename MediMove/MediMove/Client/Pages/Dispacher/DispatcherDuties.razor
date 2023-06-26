@@ -10,26 +10,7 @@
 @inject ParamedicService _ParamedicService
 
 
-@if (_popupIsVisible)
-{
-    <div class="modal fade show" style="display: block;" tabindex="-1" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Message</h5>
-                    <button type="button" class="btn-close" @onclick="ClosePopup"></button>
-                </div>
-                <div class="modal-body">
-                    <p>@_popupMessage</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @onclick="ClosePopup">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal-backdrop fade show"></div>
-}
+<Popup @ref="popup" />
 <div class="card">
     <nav class="nav nav-pills nav-fill">
         <div class=@MorningSelection() @onclick="() => { _selectedShift = ShiftType.Morning; DateChanged();}">Morning</div>
@@ -211,6 +192,7 @@
 </style>
 
 @code {
+    private Popup popup;
     private AssignTeamsToTransportsRequest? _assignRequest;
     private GetTeamsByDateAndShiftResponse? _teamResponse;
     private GetTransportsByDayAndShiftResponse? _transportResponse;
@@ -273,10 +255,10 @@
                 TransportsToTeams = teamAndTransport
             };
             var message = await _TransportService.AddTeamToTransport(_assignRequest);
-            ShowPopup(message);
+            popup.Show(message.Value);
         }
         else 
-            ShowPopup("You must select transport and team to assign.");
+            popup.Show("You must select transport and team to assign.");
     }
 
     private async void CreateTeam()
@@ -293,10 +275,10 @@
                 Teams = teams
             };
             var message = await _TeamService.PostTeam(_createTeamRequest);
-            ShowPopup(message.Value);
+            popup.Show(message.Value);
         }
         else
-         ShowPopup("You must select driver and paramedic to create team");
+         popup.Show("You must select driver and paramedic to create team");
     }
 
     private string GetTeamItemClass(int teamId)
@@ -387,19 +369,7 @@
         }
     }
 
-    private void ShowPopup(string message)
-    {
-        _popupIsVisible = true;
-        _popupMessage = message;
-        StateHasChanged();
-    }
-
-    private void ClosePopup()
-    {
-        _popupIsVisible = false;
-        _popupMessage = "";
-        StateHasChanged();
-    }
+    
 
     private async void DateChanged()
     {
