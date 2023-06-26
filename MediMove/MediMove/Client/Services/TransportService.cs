@@ -11,24 +11,21 @@ using MediMove.Client.temp;
 using MediMove.Shared.Models.Enums;
 using System;
 using MediMove.Shared.Extensions;
-using System.Reflection.Metadata;
+
+using ErrorOr;
+using MediatR;
+
 
 namespace MediMove.Client.Services
 {
     public class TransportService: BaseService
     {
-        private readonly HttpClient _httpClient;
-        private readonly IJSRuntime _jsRuntime;
-        private readonly NavigationManager _navigationManager;
+      
 
-        public TransportService(HttpClient httpClient, IJSRuntime jsRuntime, NavigationManager navigationManager)
+        public TransportService(HttpClient httpClient, IJSRuntime jsRuntime, NavigationManager navigationManager) : base(httpClient, jsRuntime, navigationManager)
         {
-            _httpClient = httpClient;
-            _jsRuntime = jsRuntime;
-            _navigationManager = navigationManager;
         }
 
-        
 
         public async Task<GetTransportsByParamedicAndDateRangeResponse.TransportInfo[]> GetTransportByDay(int day, int month, int year)
         {
@@ -106,7 +103,7 @@ namespace MediMove.Client.Services
 
         }
 
-        public async Task<string> PostTransport(CreateTransportDTO content)
+        public async Task<ErrorOr<Unit>> PostTransport(CreateTransportDTO content)
         {
 
             var baseUri = new Uri(_navigationManager.BaseUri);
@@ -122,10 +119,10 @@ namespace MediMove.Client.Services
 
             Console.WriteLine("I'm here auth");
             var response = await _httpClient.SendAsync(request);
-            return await DeserializeError(response);
+            return await UnpackResponse<Unit>(response);
         }
 
-        public async Task<string> PostTransportWithBilling(CreateTransportWithBillingDTO content)
+        public async Task<ErrorOr<Unit>> PostTransportWithBilling(CreateTransportWithBillingDTO content)
         {
 
             var baseUri = new Uri(_navigationManager.BaseUri);
@@ -141,10 +138,10 @@ namespace MediMove.Client.Services
 
             Console.WriteLine("I'm here auth");
             var response = await _httpClient.SendAsync(request);
-            return await DeserializeError(response);
+            return await UnpackResponse<Unit>(response);
         }
 
-        public async Task<string> AddTeamToTransport(AssignTeamsToTransportsRequest content)
+        public async Task<ErrorOr<Unit>> AddTeamToTransport(AssignTeamsToTransportsRequest content)
         {
             var baseUri = new Uri(_navigationManager.BaseUri);
             var requestUri = new Uri(baseUri, "/api/v1/Transport/AssignTeams");
@@ -159,7 +156,8 @@ namespace MediMove.Client.Services
 
             Console.WriteLine("I'm here auth");
             var response = await _httpClient.SendAsync(request);
-            return await DeserializeError(response);
+
+            return await UnpackResponse<Unit>(response);
         }
 
     }

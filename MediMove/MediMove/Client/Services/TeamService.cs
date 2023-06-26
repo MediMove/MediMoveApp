@@ -9,20 +9,16 @@ using MediMove.Shared.Models.Enums;
 using System.Net.Http.Formatting;
 using MediMove.Client.temp;
 using Newtonsoft.Json;
+using ErrorOr;
+using MediatR;
 
 namespace MediMove.Client.Services
 {
     public class TeamService : BaseService
     {
-        private readonly HttpClient _httpClient;
-        private readonly IJSRuntime _jsRuntime;
-        private readonly NavigationManager _navigationManager;
-
-        public TeamService(HttpClient httpClient, IJSRuntime jsRuntime, NavigationManager navigationManager)
+        
+        public TeamService(HttpClient httpClient, IJSRuntime jsRuntime, NavigationManager navigationManager) : base(httpClient, jsRuntime, navigationManager)
         {
-            _httpClient = httpClient;
-            _jsRuntime = jsRuntime;
-            _navigationManager = navigationManager;
         }
         public async Task<GetTeamsByDateAndShiftResponse> GetTeamsByDayAndShift(DateTime dateTime, ShiftType shift)
         {
@@ -57,7 +53,7 @@ namespace MediMove.Client.Services
             return result;
         }
 
-        public async Task<string> PostTeam(CreateTeamsRequest content)
+        public async Task<ErrorOr<Unit>> PostTeam(CreateTeamsRequest content)
         {
 
             var baseUri = new Uri(_navigationManager.BaseUri);
@@ -73,7 +69,8 @@ namespace MediMove.Client.Services
 
             Console.WriteLine("I'm here auth");
             var response = await _httpClient.SendAsync(request);
-            return await DeserializeError(response);
+
+            return await UnpackResponse<Unit>(response);
         }
 
     }
