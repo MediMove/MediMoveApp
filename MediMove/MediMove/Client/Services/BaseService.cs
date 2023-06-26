@@ -4,6 +4,7 @@ using MediMove.Client.temp;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Newtonsoft.Json;
+using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 
 namespace MediMove.Client.Services;
@@ -56,5 +57,27 @@ public class BaseService
     {
         var uriBuilder = GenerateUriBuilder(endpointPath);
         return await GenerateRequestAsync(uriBuilder, httpMethod);
+    }
+
+    protected async Task<HttpRequestMessage> GenerateRequestAsync<T>(string endpointPath, HttpMethod httpMethod, T content)
+    {
+        var uriBuilder = GenerateUriBuilder(endpointPath);
+        var request = await GenerateRequestAsync(uriBuilder, httpMethod);
+        request.Content = new ObjectContent<T>(content, new JsonMediaTypeFormatter());
+        return request;
+    }
+
+    protected async Task<ErrorOr<T>> HandleRequestAsync<T>(string endpointPath, HttpMethod httpMethod)
+    {
+        var request = await GenerateRequestAsync(endpointPath, httpMethod);
+        var response = await _httpClient.SendAsync(request);
+        return await UnpackResponse<T>(response);
+    }
+
+    protected async Task<ErrorOr<N>> HandleRequestAsync<T, N>(string endpointPath, HttpMethod httpMethod, T content)
+    {
+        var request = await GenerateRequestAsync(endpointPath, httpMethod, content);
+        var response = await _httpClient.SendAsync(request);
+        return await UnpackResponse<N>(response);
     }
 }

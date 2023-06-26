@@ -4,7 +4,6 @@ using MediMove.Shared.Models.DTOs;
 using MediMove.Shared.Validators;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using System;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
@@ -195,9 +194,7 @@ namespace MediMove.Client.Services
             return paramedics;
         }
 
-
         public async Task<ErrorOr<Unit>> UpdateEmployees(List<EmployeeDTO> employees)
-
         {
             var paramedics = new List<ParamedicDTO>();
             var dispatchers = new List<DispatcherDTO>();
@@ -219,5 +216,14 @@ namespace MediMove.Client.Services
 
             return await UnpackResponse<Unit>(response);
         }
+
+        public async Task<ErrorOr<Unit>> Register(RegisterAdminRequest content) =>
+            await HandleRequestAsync<RegisterAdminRequest, Unit>("api/v1/Accounts/Register/Admin", HttpMethod.Post, content);
+
+        public async Task<ErrorOr<Unit>> Register(RegisterParamedicRequest content) =>
+            await HandleRequestAsync<RegisterParamedicRequest, Unit>("api/v1/Accounts/Register/Paramedic", HttpMethod.Post, content);
+
+        public async Task<ErrorOr<Unit>> Register(RegisterDispatcherRequest content) =>
+            await HandleRequestAsync<RegisterDispatcherRequest, Unit>("api/v1/Accounts/Register/Dispatcher", HttpMethod.Post, content);
     }
 }
