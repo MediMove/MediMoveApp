@@ -11,7 +11,7 @@
                     <button type="button" class="btn-close" @onclick="ClosePopup"></button>
                 </div>
                 <div class="modal-body">
-                    <p>@Message</p>
+                    <p>@((MarkupString)Message)</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" @onclick="ClosePopup">Close</button>
@@ -44,7 +44,7 @@
         var sb = new StringBuilder();
 
         foreach (var error in errors)
-            sb.Append($"{error.Code}: {error.Description}\n");
+            sb.Append($"{error.Description}<br/>");
 
         Message = sb.ToString();
         IsVisible = true;
