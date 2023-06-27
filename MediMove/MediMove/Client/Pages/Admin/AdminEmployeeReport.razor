@@ -142,20 +142,24 @@
         {
             if (endTime < startTime)
             {
+                selectedEmployee = null;
                 everythingSelected = false;
-                message += "EndTime should be further in the future than StartTime";
+                message += "EndTime should be further in the future than StartTime\n";
             }
             if (endPaymentsHours < startPaymentsHours)
             {
+                selectedEmployee = null;
                 everythingSelected = false;
-                message += "EndPaymentHours should be bigger than StartPaymentHours";
+                message += "EndPaymentHours should be bigger than StartPaymentHours\n";
             }
             if (endPaymentsSum < startPaymentsSum)
             {
+                selectedEmployee = null;
                 everythingSelected = false;
-                message+="EndPaymentSum should be bigger than StartPaymentSum";
+                message+="EndPaymentSum should be bigger than StartPaymentSum\n";
             }
             popup.Show(message);
+            message = "";
         }
         else
         {

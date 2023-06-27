@@ -58,7 +58,7 @@
         }
     </div>    <div>
         <RadzenDataGrid TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Data="@allPatients?.Rows" AllowFiltering="true"
-        AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" SelectionMode="DataGridSelectionMode.Single" @bind-Value=@selectedPatient>
+                        AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" SelectionMode="DataGridSelectionMode.Single" @bind-Value=@selectedPatient>
             <Columns>
                 <RadzenDataGridColumn TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Property="Id" Title = "Id"/>
                 <RadzenDataGridColumn TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Property="Weight" Title = "Weight"/>
@@ -136,15 +136,18 @@
         {
             if (endTime < startTime)
             {
+                selectedPatient = null;
                 everythingSelected = false;
                 message += "EndTime should be further in the future than StartTime\n";
             }
             if (endAmount < startAmount)
             {
+                selectedPatient = null;
                 everythingSelected = false;
                 message += "EndAmount should be bigger than StartAmount\n";
             }
             popup.Show(message);
+            message = "";
         }
         else
         {
