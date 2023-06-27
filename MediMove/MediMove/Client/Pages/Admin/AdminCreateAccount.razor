@@ -1,11 +1,12 @@
 ﻿@page "/admin/account/create"
 @using MediMove.Client.temp;
-@using MediMove.Shared.Models.DTOs
-@using MediMove.Shared.Models.Enums
-@using MediMove.Client.Services
-@using System.Globalization
-@using Microsoft.AspNetCore.Components.Web
+@using MediMove.Shared.Models.DTOs;
+@using MediMove.Shared.Models.Enums;
+@using MediMove.Client.Services;
+@using System.Globalization;
+@using Microsoft.AspNetCore.Components.Web;
 @using System.ComponentModel.DataAnnotations;
+@using Radzen.Blazor;
 @inject EmployeeService _employeeService
 
 <Popup @ref="popup" />
@@ -15,12 +16,12 @@
 <h3>Select User Type</h3>
 <div class="rz-text-align-left">
     <div style="width: 100%; max-width: 400px;">
-        <RadzenDropDown @bind-Value="@selectedUserType" TValue="AccountType" Data=@accountTypes />
+            <RadzenDropDown @bind-Value="@selectedUserType" Data=@accountTypes/>
     </div>
 </div>
 </RadzenCard>
 
-@if (selectedUserType == AccountType.Admin)
+@if (selectedUserType.Equals(AccountType.Admin.ToString()))
 {
 <div class="rz-text-align-left">
     <EditForm Model="adminModel" OnValidSubmit="HandleAdminSubmit">
@@ -44,7 +45,7 @@
 </div>
 
 }
-else if (selectedUserType == AccountType.Paramedic)
+else if (selectedUserType.Equals(AccountType.Paramedic.ToString()))
 {
     <EditForm Model="paramedicModel" OnValidSubmit="HandleParamedicSubmit">
         <RadzenCard>
@@ -120,7 +121,7 @@ else if (selectedUserType == AccountType.Paramedic)
         </RadzenCard>
     </EditForm>
 }
-else if (selectedUserType == AccountType.Dispatcher) 
+else if (selectedUserType.Equals(AccountType.Dispatcher.ToString())) 
 {
     <EditForm Model="dispatcherModel" OnValidSubmit="HandleDispatcherSubmit">
         <RadzenCard>
@@ -194,16 +195,20 @@ else if (selectedUserType == AccountType.Dispatcher)
 }
 
 @code {
-    private AccountType selectedUserType;
+    private string selectedUserType = "UserType";
     private StandardResponse? statusCode = null;
     private ErrorResponse? errorResponse = null;
     private RegisterAdminRequest adminModel = new();
     private RegisterParamedicRequest paramedicModel = new();
     private RegisterDispatcherRequest dispatcherModel = new();
 
-    IEnumerable<AccountType> accountTypes = Enum.GetValues(typeof(AccountType)).Cast<AccountType>();
+    private string[] accountTypes = null;
     private Popup popup = new();
 
+    protected override async Task OnInitializedAsync()
+    {
+       accountTypes = Enum.GetNames(typeof(AccountType));
+    }
     private async Task HandleAdminSubmit() =>
         popup.ShowErrorsOrMessage(await _employeeService.Register(adminModel));
 
@@ -217,10 +222,8 @@ else if (selectedUserType == AccountType.Dispatcher)
     {
         [Display(Name = "Admin")]
         Admin,
-
         [Display(Name = "Dispatcher")]
         Dispatcher,
-
         [Display(Name = "Paramedic")]
         Paramedic
     }
