@@ -97,7 +97,7 @@
     private Popup popup;
 
     private EmployeeDTO[] employees = new EmployeeDTO[0];
-    private HashSet<EmployeeDTO> modifiedEmployees = new HashSet<EmployeeDTO>();
+    private List<EmployeeDTO> modifiedEmployees = new List<EmployeeDTO>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -114,9 +114,13 @@
         }
 
         var updateResult = await _employeeService.UpdateEmployees(modifiedEmployees.ToList());
-        popup.ShowErrorsOrMessage(updateResult);
+        if (!popup.ShowErrorsOrMessage(updateResult))
+            modifiedEmployees.Clear();
     }
 
-    private void HandleInputChange(ChangeEventArgs e, EmployeeDTO employee) =>
-        modifiedEmployees.Add(employee);
+    private void HandleInputChange(ChangeEventArgs e, EmployeeDTO employee)
+    {
+        if (!modifiedEmployees.Any(e => e.Id == employee.Id))
+             modifiedEmployees.Add(employee);
+    }
 }
