@@ -57,7 +57,8 @@
             </div>
         }
     </div>    <div>
-        <RadzenDataGrid TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Data="@allPatients?.Rows" AllowFiltering="true"
+        <RadzenDataGrid TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow"
+                        Data="@allPatients?.Rows" AllowFiltering="true" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left"
                         AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" SelectionMode="DataGridSelectionMode.Single" @bind-Value=@selectedPatient>
             <Columns>
                 <RadzenDataGridColumn TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Property="Id" Title = "Id"/>
@@ -166,10 +167,12 @@
 
     private async void FetchData()
     {
+        isFetched = false;
         GetAllPatientsResponse temp = new(new Dictionary<int, PatientDTO>());
 
         popup.ShowErrorsOrAssign(await _patientService.GetPatients(), ref temp);
         var det = temp.Patients.Where(p => p.Key == selectedPatient[0].Id).Select(p => p.Value).First();
+        PatientDetails.Clear();
         PatientDetails.Add(det);
         isFetched = true;
         StateHasChanged();

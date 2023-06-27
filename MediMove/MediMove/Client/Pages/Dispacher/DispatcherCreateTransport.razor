@@ -6,6 +6,7 @@
 @using MediMove.Shared.Extensions
 @using MediMove.Shared.Validators
 @using MediatR
+@using Microsoft.IdentityModel.Tokens
 @inject PatientService _PatientService
 @inject TeamService _TeamService
 @inject TransportService _TransportService
@@ -560,15 +561,15 @@
 
     private void SearchByPhoneNumber()
     {
-        Dictionary<int, PatientDTO> filteredPatients = allPatients.Patients
-            .Where(p => p.Value.PhoneNumber == phoneNumberSearch) // Filter based on phone number
-            .ToDictionary(p => p.Key, p => p.Value); // Convert the result to a new dictionary
+        Dictionary<int, PatientDTO> filteredPatients = new Dictionary<int, PatientDTO>();
+        if (!phoneNumberSearch.IsNullOrEmpty())
+        {
+            filteredPatients = allPatientsResponse.Patients
+                .Where(p => p.Value.PhoneNumber.Contains(phoneNumberSearch))
+                .ToDictionary(p => p.Key, p => p.Value);
+        }
+        allPatients = filteredPatients.Count > 0 ? new GetAllPatientsResponse(filteredPatients) : allPatientsResponse;
 
-        // Create a new GetAllPatientsResponse with the filtered patients
-        if (filteredPatients.Count > 0)
-            allPatients = new GetAllPatientsResponse(filteredPatients);
-        else 
-            allPatients = allPatientsResponse;
         DeselectPatient();
         StateHasChanged();
     }

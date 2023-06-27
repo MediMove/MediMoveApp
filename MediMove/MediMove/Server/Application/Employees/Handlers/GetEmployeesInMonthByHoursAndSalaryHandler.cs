@@ -107,8 +107,8 @@ namespace MediMove.Server.Application.Employees.Handlers
             .ToArrayAsync(cancellationToken);
 
 
-            var employeeSums = teamsWithParamedic
-                .SelectMany(t => new[] { t.Driver.Id, t.Paramedic.Id })
+            var employeeSums = _dbContext.Paramedics.Select(p=>p.Id)
+                //.SelectMany(t => new[] { t.Driver.Id, t.Paramedic.Id })
                 .Distinct()
                 //.Where(t => t.)
                 .ToDictionary(key => key, value => Tuple.Create((decimal)0, (decimal)0));
@@ -123,10 +123,15 @@ namespace MediMove.Server.Application.Employees.Handlers
                                                                 employeeSums[team.Paramedic.Id].Item2 + 1);
             }
 
+            //employeeSums.Add(_dbContext.Paramedics.Select(p => p.Pa)
+
+            //var temp = employeeSums.Where(x => _dbContext.Rates.Where(p => p.Id == x.Key)
+            //                                .Any(r => r.PayPerHour >= request.StartAmount &&
+            //                                          r.PayPerHour <= request.EndAmount)).Select(z => new { Id = z.Key});
              var paramedics = employeeSums
                 .Where(x => x.Value.Item2 >= request.StartHours &&
                             x.Value.Item2 <= request.EndHours &&
-                            _dbContext.Rates.Where(p => p.Id == x.Key)
+                            _dbContext.Rates.Where(p => p.ParamedicId == x.Key)
                                             .Any(r => r.PayPerHour >= request.StartAmount &&
                                                       r.PayPerHour <= request.EndAmount))
                 .Select(kv => new GetEmployeesInMonthByHoursAndSalaryDTO.GetEmployeesInMonthByHoursAndSalaryRow

@@ -146,7 +146,9 @@
 
         if (availabilities.Any())
             popup.ShowErrorsOrMessage(await _availabilityService.SaveAvailabilities(availabilities));
+        Refresh();
     }
+
 
     private void HandleDelete()
     {
@@ -226,12 +228,27 @@
             }
         }
     }
+    private async void Refresh()
+    {
+        var model = new Avability();
+        editContext = new EditContext(model);
+        Dictionary<DateTime, DateInfo> AllAvailabilities = new();
+        if (popup.ShowErrorsOrAssign(await _availabilityService.GetAvailabilities(), ref AllAvailabilities))
+            return;
+
+        foreach (var ava in AllAvailabilities)
+        {
+            DeclaredShifts[ava.Key] = ava.Value.DeclaredShift;
+            if (ava.Value.AssignedTeamShift is not null)
+                AssignedTeams[ava.Key] = (ShiftType)ava.Value.AssignedTeamShift;
+        }
+        StateHasChanged();
+    }
 
     private class Avability
     {
         public ShiftType? ShiftType { get; set; }
     }
-
 
 }
 
