@@ -210,7 +210,7 @@
                 //args.Disabled = true;
             }                   
         }
-        else if(DeclaredShifts.ContainsKey(args.Date.Date))
+        else if(DeclaredShifts.ContainsKey(args.Date.Date) && !AvailabilityToDelete.Contains(args.Date.Date))
         {
             if (DeclaredShifts[args.Date.Date].HasValue is false)
             {
