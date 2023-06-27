@@ -29,10 +29,10 @@
                         <span class="wholeday"></span> Whole day shift
                       </span>
                     <div class="rz-p-12 rz-text-align-center">
-                        <RadzenDatePicker @bind-Value=@value Inline="true" DateRender=@DateRenderSpecial />
+                        <RadzenDatePicker @bind-Value=@value Inline="true" DateRender=@DateRenderSpecial Min="DateTime.Today" />
                     </div>
                     
-                    @if (value.Value > DateTime.Now)
+                    @if (value.Value >= DateTime.Today)
                     {
                         <EditForm EditContext="editContext" OnValidSubmit="HandleValidSubmit">
 
@@ -146,7 +146,9 @@
 
         if (availabilities.Any())
             popup.ShowErrorsOrMessage(await _availabilityService.SaveAvailabilities(availabilities));
+        Refresh();
     }
+
 
     private void HandleDelete()
     {
@@ -176,30 +178,9 @@
 
     void DateRenderSpecial(DateRenderEventArgs args)
     {
-        if (AvailabilityToDelete.Contains(args.Date.Date))
-        {
-            args.Attributes.Clear();
-            return;
-        }
-
         if(AssignedTeams.ContainsKey(args.Date.Date))
         {
             args.Disabled = true; 
-            if (DeclaredShifts[args.Date.Date].HasValue is false)
-            {
-                args.Attributes.Add("style", "background-color: limegreen;");
-            }
-            else if (DeclaredShifts[args.Date.Date].Value == ShiftType.Morning)
-            {
-                args.Attributes.Add("style", "background-color: cornflowerblue;");
-            }
-            else if (DeclaredShifts[args.Date.Date].Value == ShiftType.Evening)
-            {
-                args.Attributes.Add("style", "background-color: coral;");
-            }
-        }
-        else if(DeclaredShifts.ContainsKey(args.Date.Date))
-        {
             if (DeclaredShifts[args.Date.Date].HasValue is false)
             {
                 args.Attributes.Add("style", "background-color: limegreen;");
@@ -231,13 +212,43 @@
                 //args.Disabled = true;
             }                   
         }
+        else if(DeclaredShifts.ContainsKey(args.Date.Date))
+        {
+            if (DeclaredShifts[args.Date.Date].HasValue is false)
+            {
+                args.Attributes.Add("style", "background-color: limegreen;");
+            }
+            else if (DeclaredShifts[args.Date.Date].Value == ShiftType.Morning)
+            {
+                args.Attributes.Add("style", "background-color: cornflowerblue;");
+            }
+            else if (DeclaredShifts[args.Date.Date].Value == ShiftType.Evening)
+            {
+                args.Attributes.Add("style", "background-color: coral;");
+            }
+        }
+    }
+    private async void Refresh()
+    {
+        var model = new Avability();
+        editContext = new EditContext(model);
+        Dictionary<DateTime, DateInfo> AllAvailabilities = new();
+        if (popup.ShowErrorsOrAssign(await _availabilityService.GetAvailabilities(), ref AllAvailabilities))
+            return;
+
+        foreach (var ava in AllAvailabilities)
+        {
+            DeclaredShifts[ava.Key] = ava.Value.DeclaredShift;
+            if (ava.Value.AssignedTeamShift is not null)
+                AssignedTeams[ava.Key] = (ShiftType)ava.Value.AssignedTeamShift;
+        }
+        StateHasChanged();
     }
 
     private class Avability
     {
         public ShiftType? ShiftType { get; set; }
     }
-
 
 }
 
