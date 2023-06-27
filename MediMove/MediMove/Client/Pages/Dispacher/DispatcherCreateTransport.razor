@@ -306,7 +306,7 @@
 
                         <div class="patient-list-container">
                             <div class="scrollable-list">
-                                @if (teamResponse != null)
+                                @if (teamResponse.Teams != null)
                                 {
                                     foreach (var team in teamResponse.Teams)
                                     {
@@ -465,7 +465,7 @@
 
 
 @code {
-    private Popup popup;
+    private Popup popup = new();
     private string? phoneNumberSearch;
 
     private int? _selectedPatientId;
@@ -473,10 +473,10 @@
     private bool _isWithBilling = false;
 
     private CreateTransportDTO createTransportDTO = new CreateTransportDTO();
-    private GetAllPatientsResponse allPatients;
-    private GetAllPatientsResponse allPatientsResponse;// Replace with the appropriate type and initialization
+    private GetAllPatientsResponse allPatients = new(new Dictionary<int, PatientDTO>());
+    private GetAllPatientsResponse allPatientsResponse = new(new Dictionary<int, PatientDTO>());// Replace with the appropriate type and initialization
     private CreatePatientRequest createPatientDTO = new CreatePatientRequest();
-    private GetTeamsByDateAndShiftResponse teamResponse;
+    private GetTeamsByDateAndShiftResponse teamResponse = new();
     private CreateTransportWithBillingDTO createTransportWithBillingDTO = new CreateTransportWithBillingDTO();
 
     protected override async Task OnInitializedAsync()
@@ -488,7 +488,6 @@
         createTransportWithBillingDTO.StartTime = DateTime.Now;
         allPatients = allPatientsResponse;
     }
-
 
 
     private async void ChosenDateValueChanged()
