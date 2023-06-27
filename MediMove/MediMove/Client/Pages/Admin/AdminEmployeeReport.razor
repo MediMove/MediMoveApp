@@ -29,7 +29,7 @@
 
     <div class="input-group">
         <RadzenLabel Text="End Time" Associated="endTime" />
-        <RadzenDatePicker @bind-Value="@endTime" ShowTime="false" DateFormat="dd.MM.yyyy" />
+        <RadzenDatePicker @bind-Value="@endTime" ShowTime="false" DateFormat="dd.MM.yyyy" Max = "DateTime.Today" />
     </div>
 
     <div class="input-group">
@@ -68,7 +68,8 @@
         }
     </div>
     <div>
-        <RadzenDataGrid TItem="GetEmployeesInMonthByHoursAndSalaryDTO.GetEmployeesInMonthByHoursAndSalaryRow" Data="@allPatients?.Rows" AllowFiltering="true"
+        <RadzenDataGrid TItem="GetEmployeesInMonthByHoursAndSalaryDTO.GetEmployeesInMonthByHoursAndSalaryRow" 
+                    PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" Data="@allPatients?.Rows" AllowFiltering="true"
                     AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" SelectionMode="DataGridSelectionMode.Single" @bind-Value="@selectedEmployee">
             <Columns>
                 <RadzenDataGridColumn TItem="GetEmployeesInMonthByHoursAndSalaryDTO.GetEmployeesInMonthByHoursAndSalaryRow" Property="Id" Title="ID" />
@@ -91,7 +92,8 @@
     @if(isFetched == true)
     {
         <div>
-            <RadzenDataGrid TItem="GetEmployeeRatesByIdAndDatesDTO.GetEmployeeRatesByIdAndDatesRow" Data="@currentParamedic?.Rows" AllowFiltering="true"
+            <RadzenDataGrid TItem="GetEmployeeRatesByIdAndDatesDTO.GetEmployeeRatesByIdAndDatesRow"
+            Data="@currentParamedic?.Rows" AllowFiltering="true" PageSize="3" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left"
             AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" SelectionMode="DataGridSelectionMode.Single" >
                 <Columns>
                     <RadzenDataGridColumn TItem="GetEmployeeRatesByIdAndDatesDTO.GetEmployeeRatesByIdAndDatesRow" Property="Id" Title="ID" />

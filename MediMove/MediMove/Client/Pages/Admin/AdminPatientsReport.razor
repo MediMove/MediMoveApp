@@ -57,7 +57,8 @@
             </div>
         }
     </div>    <div>
-        <RadzenDataGrid TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Data="@allPatients?.Rows" AllowFiltering="true"
+        <RadzenDataGrid TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow"
+                        Data="@allPatients?.Rows" AllowFiltering="true" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left"
                         AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" SelectionMode="DataGridSelectionMode.Single" @bind-Value=@selectedPatient>
             <Columns>
                 <RadzenDataGridColumn TItem="GetPatientsByDateAndPaymentsSumDTO.GetPatientsByDateAndPaymentsSumRow" Property="Id" Title = "Id"/>

@@ -228,12 +228,6 @@
             }
         }
     }
-
-    private class Avability
-    {
-        public ShiftType? ShiftType { get; set; }
-    }
-
     private async void Refresh()
     {
         var model = new Avability();
@@ -250,5 +244,11 @@
         }
         StateHasChanged();
     }
+
+    private class Avability
+    {
+        public ShiftType? ShiftType { get; set; }
+    }
+
 }
 
