@@ -29,7 +29,7 @@
                         <span class="wholeday"></span> Whole day shift
                       </span>
                     <div class="rz-p-12 rz-text-align-center">
-                        <RadzenDatePicker @bind-Value=@value Inline="true" DateRender=@DateRenderSpecial />
+                        <RadzenDatePicker @bind-Value=@value Inline="true" DateRender=@DateRenderSpecial Min="DateTime.Today" />
                     </div>
                     
                     @if (value.Value > DateTime.Now)
