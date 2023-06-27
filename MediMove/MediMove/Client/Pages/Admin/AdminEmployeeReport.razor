@@ -11,6 +11,8 @@
 @inject EmployeeService _employeeService
 @inject NavigationManager _navigationManager
 
+<Popup @ref="popup" />
+
 <h3>AdminEmployeeReport</h3>
 
 @*<form>
@@ -19,26 +21,6 @@
     <input type="submit" value="Submit" />
 </form>*@
 
-@if (_popupIsVisible)
-{
-    <div class="modal fade show" style="display: block;" tabindex="-1" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Message</h5>
-                    <button type="button" class="btn-close" @onclick="ClosePopup"></button>
-                </div>
-                <div class="modal-body">
-                    <p>@_popupMessage</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @onclick="ClosePopup">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal-backdrop fade show"></div>
-}
 <div class="form-group" style="display:flex">
     <div class="input-group">
         <RadzenLabel Text="Start Time" Associated="startTime" />
@@ -143,8 +125,7 @@
     private GetEmployeeRatesByIdAndDatesDTO paramedicResponse;
     private GetEmployeeRatesByIdAndDatesDTO currentParamedic;
 
-    private bool _popupIsVisible = false;
-    private string _popupMessage = "";
+    private Popup popup = new();
 
     private string message = "";
     void ClearSelection()
@@ -174,48 +155,20 @@
                 everythingSelected = false;
                 message+="EndPaymentSum should be bigger than StartPaymentSum";
             }
-            ShowPopup(message);
+            popup.Show(message);
         }
         else
         {
             everythingSelected = true;
         }
-        //else
-        // everythingSelected = false;
     }
-    //private void LoadData(LoadDataArgs args)
-    //{
-    //    //console.Log($"Skip: {args.Skip}, Top: {args.Top}");
-
-    //    var query = allPatients.Rows.AsQueryable();
-
-    //    if (!string.IsNullOrEmpty(args.Filter))
-    //    {
-    //        query = query.Where(args.Filter);
-    //        count = query.Count();
-    //    }
-    //    else
-    //    {
-    //        count = allPatients.Rows.Count();
-    //    }
-
-    //    if (!string.IsNullOrEmpty(args.OrderBy))
-    //    {
-    //        query = query.OrderBy(args.OrderBy);
-    //    }
-
-    //    orderDetails = query.Skip(args.Skip.Value).Take(args.Top.Value).ToList();
-    //}
-
-
 
     private async void Refresh()
     {
         //CheckSelection();
         CheckSelection();
         //teamResponse = await _teamService.GetTeamsByDAyAndShift(DateTime.UtcNow.AddDays(-9));
-        allEmployeesInMonthByHoursAndSalaryResponse = (await _employeeService.GetEmployeesReport(startTime, endTime, startPaymentsSum, endPaymentsSum, startPaymentsHours, endPaymentsHours)).Value;
-        allPatients = allEmployeesInMonthByHoursAndSalaryResponse;
+        popup.ShowErrorsOrAssign(await _employeeService.GetEmployeesReport(startTime, endTime, startPaymentsSum, endPaymentsSum, startPaymentsHours, endPaymentsHours), ref allPatients);
         //NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
         StateHasChanged();
 
@@ -223,99 +176,7 @@
     private async void FetchData()
     {
         isFetched = true;
-        paramedicResponse = (await _employeeService.GetParamedicReport(selectedEmployee[0].Id, startTime, endTime)).Value;
-        currentParamedic = paramedicResponse; 
+        popup.ShowErrorsOrAssign(await _employeeService.GetParamedicReport(selectedEmployee[0].Id, startTime, endTime), ref currentParamedic);
         StateHasChanged();
     }
-    private void ShowPopup(string message)
-    {
-        _popupIsVisible = true;
-        _popupMessage = message;
-        StateHasChanged();
-    }
-
-    private void ClosePopup()
-    {
-        _popupIsVisible = false;
-        _popupMessage = "";
-        StateHasChanged();
-    }
-    //private async void OnSelectionChanged()
-    //{
-    //    isFetched = true;
-    //    paramedicResponse = await _employeeService.GetParamedicReport(selectedEmployee[0].Id, startTime, endTime);
-    //    currentParamedic = paramedicResponse;
-    //    StateHasChanged();
-    //}
-
 }
-
-
-
-
-@*
-@code{
-    private GetEmployeesInMonthByHoursAndSalaryResponse allPatients;
-    private GetEmployeesInMonthByHoursAndSalaryResponse allEmployeesInMonthByHoursAndSalaryResponse;// Replace with the appropriate type and initialization
-    //private CreatePatientRequest createPatientDTO = new CreatePatientRequest();
-    //private GetTeamsByDateAndShiftResponse teamResponse = new GetTeamsByDateAndShiftResponse();
-
-    protected override async Task OnInitializedAsync()
-    {
-        allEmployeesInMonthByHoursAndSalaryResponse = await _EmployeeService.GetEmployeesReport();
-        allPatients = allEmployeesInMonthByHoursAndSalaryResponse;
-        //createTransportDTO.StartTime = DateTime.Now;
-    }
-
-    //private async void HandleStartTimeInput(ChangeEventArgs e)
-    //{
-    //    teamResponse = await _TeamService.GetTeamsByDAyAndShift(createTransportDTO.StartTime);
-    //}
-
-    //private void SelectPatient(int patientId)
-    //{
-    //    if (_selectedPatientId == patientId)
-    //    {
-    //        _selectedPatientId = null; // Deselect if the same patient is clicked
-    //        createTransportDTO.PatientId = 0; // Update the Patient ID field to a default value
-    //    }
-    //    else
-    //    {
-    //        _selectedPatientId = patientId;
-    //        createTransportDTO.PatientId = patientId;
-    //    }
-    //}
-
-    //private void SelectTeam(int patientId)
-    //{
-    //    if (_selectedTeamId == patientId)
-    //    {
-    //        _selectedTeamId = null; // Deselect if the same patient is clicked
-    //        createTransportDTO.TeamId = 0; // Update the Patient ID field to a default value
-    //    }
-    //    else
-    //    {
-    //        _selectedTeamId = patientId;
-    //        createTransportDTO.TeamId = patientId;
-    //    }
-    //}
-
-    //private string GetPatientItemClass(int patientId)
-    //{
-    //    return patientId == _selectedPatientId ? "patient-item selected" : "patient-item";
-    //}
-
-    //private string GetTeamItemClass(int teamId)
-    //{
-    //    return teamId == _selectedTeamId ? "patient-item selected" : "patient-item";
-    //}
-
-
-    private async void Refresh()
-    {
-        allPatients = await _EmployeeService.GetEmployeesReport();
-    }
-
-
-
-}*@

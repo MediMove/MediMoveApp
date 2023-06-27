@@ -11,6 +11,8 @@
 @inject PatientService _patientService
 @inject NavigationManager _navigationManager
 
+<Popup @ref="popup" />
+
 <h3>AdminPatientsReport</h3>
 
 @*<form>
@@ -18,26 +20,7 @@
     <input type="month" id="monthPicker" name="monthPicker" />
     <input type="submit" value="Submit" />
 </form>*@
-@if (_popupIsVisible)
-{
-    <div class="modal fade show" style="display: block;" tabindex="-1" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Message</h5>
-                    <button type="button" class="btn-close" @onclick="ClosePopup"></button>
-                </div>
-                <div class="modal-body">
-                    <p>@_popupMessage</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @onclick="ClosePopup">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal-backdrop fade show"></div>
-}
+
 <div class="form-group" style="display:flex">
     <div class="input-group">
         <RadzenLabel Text="Start Time" Associated="startTime" />
@@ -138,9 +121,8 @@
     private GetPatientsByDateAndPaymentsSumDTO allPatients;
     private GetPatientsByDateAndPaymentsSumDTO allEmployeesInMonthByHoursAndSalaryResponse;// Replace with the appropriate type and initialization
     private List<PatientDTO> PatientDetails = new List<PatientDTO>();
-    private bool _popupIsVisible = false;
-    private string _popupMessage = "";
     private string message = "";
+    private Popup popup = new();
     //private CreatePatientRequest createPatientDTO = new CreatePatientRequest();
     void ClearSelection()
     {
@@ -162,140 +144,31 @@
                 everythingSelected = false;
                 message += "EndAmount should be bigger than StartAmount\n";
             }
-            ShowPopup(message);
+            popup.Show(message);
         }
         else
         {
             everythingSelected = true;
         }
     }
-    //private void LoadData(LoadDataArgs args)
-    //{
-    //    //console.Log($"Skip: {args.Skip}, Top: {args.Top}");
-
-    //    var query = allPatients.Rows.AsQueryable();
-
-    //    if (!string.IsNullOrEmpty(args.Filter))
-    //    {
-    //        query = query.Where(args.Filter);
-    //        count = query.Count();
-    //    }
-    //    else
-    //    {
-    //        count = allPatients.Rows.Count();
-    //    }
-
-    //    if (!string.IsNullOrEmpty(args.OrderBy))
-    //    {
-    //        query = query.OrderBy(args.OrderBy);
-    //    }
-
-    //    orderDetails = query.Skip(args.Skip.Value).Take(args.Top.Value).ToList();
-    //}
-
-
 
     private async void Refresh()
     {
         //CheckSelection();
         CheckSelection();
-        //teamResponse = await _teamService.GetTeamsByDAyAndShift(DateTime.UtcNow.AddDays(-9));
-        allEmployeesInMonthByHoursAndSalaryResponse = (await _patientService.GetPatientsReport(startTime, endTime, startAmount , endAmount)).Value;
-        allPatients = allEmployeesInMonthByHoursAndSalaryResponse;
+        popup.ShowErrorsOrAssign(await _patientService.GetPatientsReport(startTime, endTime, startAmount, endAmount), ref allPatients);
         //NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
         StateHasChanged();
-
     }
+
     private async void FetchData()
     {
-        var temp = (await _patientService.GetPatients()).Value;
+        GetAllPatientsResponse temp = new(new Dictionary<int, PatientDTO>());
+
+        popup.ShowErrorsOrAssign(await _patientService.GetPatients(), ref temp);
         var det = temp.Patients.Where(p => p.Key == selectedPatient[0].Id).Select(p => p.Value).First();
         PatientDetails.Add(det);
         isFetched = true;
         StateHasChanged();
-
-    }
-    private void ShowPopup(string message)
-    {
-        _popupIsVisible = true;
-        _popupMessage = message;
-        StateHasChanged();
-    }
-
-    private void ClosePopup()
-    {
-        _popupIsVisible = false;
-        _popupMessage = "";
-        StateHasChanged();
     }
 }
-
-
-
-
-@*
-@code{
-    private GetEmployeesInMonthByHoursAndSalaryResponse allPatients;
-    private GetEmployeesInMonthByHoursAndSalaryResponse allEmployeesInMonthByHoursAndSalaryResponse;// Replace with the appropriate type and initialization
-    //private CreatePatientRequest createPatientDTO = new CreatePatientRequest();
-    //private GetTeamsByDateAndShiftResponse teamResponse = new GetTeamsByDateAndShiftResponse();
-
-    protected override async Task OnInitializedAsync()
-    {
-        allEmployeesInMonthByHoursAndSalaryResponse = await _EmployeeService.GetEmployeesReport();
-        allPatients = allEmployeesInMonthByHoursAndSalaryResponse;
-        //createTransportDTO.StartTime = DateTime.Now;
-    }
-
-    //private async void HandleStartTimeInput(ChangeEventArgs e)
-    //{
-    //    teamResponse = await _TeamService.GetTeamsByDAyAndShift(createTransportDTO.StartTime);
-    //}
-
-    //private void SelectPatient(int patientId)
-    //{
-    //    if (_selectedPatientId == patientId)
-    //    {
-    //        _selectedPatientId = null; // Deselect if the same patient is clicked
-    //        createTransportDTO.PatientId = 0; // Update the Patient ID field to a default value
-    //    }
-    //    else
-    //    {
-    //        _selectedPatientId = patientId;
-    //        createTransportDTO.PatientId = patientId;
-    //    }
-    //}
-
-    //private void SelectTeam(int patientId)
-    //{
-    //    if (_selectedTeamId == patientId)
-    //    {
-    //        _selectedTeamId = null; // Deselect if the same patient is clicked
-    //        createTransportDTO.TeamId = 0; // Update the Patient ID field to a default value
-    //    }
-    //    else
-    //    {
-    //        _selectedTeamId = patientId;
-    //        createTransportDTO.TeamId = patientId;
-    //    }
-    //}
-
-    //private string GetPatientItemClass(int patientId)
-    //{
-    //    return patientId == _selectedPatientId ? "patient-item selected" : "patient-item";
-    //}
-
-    //private string GetTeamItemClass(int teamId)
-    //{
-    //    return teamId == _selectedTeamId ? "patient-item selected" : "patient-item";
-    //}
-
-
-    private async void Refresh()
-    {
-        allPatients = await _EmployeeService.GetEmployeesReport();
-    }
-
-
-
-}*@

@@ -204,15 +204,12 @@
     private int? _selectedTransportId;
     private int? _selectedParamedicId;
     private int? _selectedDriverId;
-    
-    private bool _popupIsVisible = false;
-    private string _popupMessage = "";
 
     protected override async Task OnInitializedAsync()
     {
-        _transportResponse = (await _TransportService.GetTransportByDayAndShift(_selectedDate, _selectedShift)).Value;
-        _teamResponse = (await _TeamService.GetTeamsByDayAndShift(_selectedDate, _selectedShift)).Value;
-        _paramedicResponse = (await _ParamedicService.GetParamedicsByDayAndShift(_selectedDate, _selectedShift)).Value;
+        popup.ShowErrorsOrAssign(await _TransportService.GetTransportByDayAndShift(_selectedDate, _selectedShift), ref _transportResponse);
+        popup.ShowErrorsOrAssign(await _TeamService.GetTeamsByDayAndShift(_selectedDate, _selectedShift), ref _teamResponse);
+        popup.ShowErrorsOrAssign(await _ParamedicService.GetParamedicsByDayAndShift(_selectedDate, _selectedShift), ref _paramedicResponse);
     }
 
     private string MorningSelection()
@@ -370,17 +367,15 @@
     }
 
     
-
     private async void UpdateChanges()
     {
-        _transportResponse = (await _TransportService.GetTransportByDayAndShift(_selectedDate, _selectedShift)).Value;
-        _teamResponse = (await _TeamService.GetTeamsByDayAndShift(_selectedDate, _selectedShift)).Value;
-        _paramedicResponse = (await _ParamedicService.GetParamedicsByDayAndShift(_selectedDate, _selectedShift)).Value;
+        popup.ShowErrorsOrAssign(await _TransportService.GetTransportByDayAndShift(_selectedDate, _selectedShift), ref _transportResponse);
+        popup.ShowErrorsOrAssign(await _TeamService.GetTeamsByDayAndShift(_selectedDate, _selectedShift), ref _teamResponse);
+        popup.ShowErrorsOrAssign(await _ParamedicService.GetParamedicsByDayAndShift(_selectedDate, _selectedShift), ref _paramedicResponse);
         DeselectDriver();
         DeselectParamedic();
         DeselectTransport();
         DeselectTeam();
         StateHasChanged();
     }
-
 }
