@@ -176,30 +176,9 @@
 
     void DateRenderSpecial(DateRenderEventArgs args)
     {
-        if (AvailabilityToDelete.Contains(args.Date.Date))
-        {
-            args.Attributes.Clear();
-            return;
-        }
-
         if(AssignedTeams.ContainsKey(args.Date.Date))
         {
             args.Disabled = true; 
-            if (DeclaredShifts[args.Date.Date].HasValue is false)
-            {
-                args.Attributes.Add("style", "background-color: limegreen;");
-            }
-            else if (DeclaredShifts[args.Date.Date].Value == ShiftType.Morning)
-            {
-                args.Attributes.Add("style", "background-color: cornflowerblue;");
-            }
-            else if (DeclaredShifts[args.Date.Date].Value == ShiftType.Evening)
-            {
-                args.Attributes.Add("style", "background-color: coral;");
-            }
-        }
-        else if(DeclaredShifts.ContainsKey(args.Date.Date))
-        {
             if (DeclaredShifts[args.Date.Date].HasValue is false)
             {
                 args.Attributes.Add("style", "background-color: limegreen;");
@@ -230,6 +209,21 @@
                 args.Attributes.Add("style", "background-color: coral;");
                 //args.Disabled = true;
             }                   
+        }
+        else if(DeclaredShifts.ContainsKey(args.Date.Date))
+        {
+            if (DeclaredShifts[args.Date.Date].HasValue is false)
+            {
+                args.Attributes.Add("style", "background-color: limegreen;");
+            }
+            else if (DeclaredShifts[args.Date.Date].Value == ShiftType.Morning)
+            {
+                args.Attributes.Add("style", "background-color: cornflowerblue;");
+            }
+            else if (DeclaredShifts[args.Date.Date].Value == ShiftType.Evening)
+            {
+                args.Attributes.Add("style", "background-color: coral;");
+            }
         }
     }
 
