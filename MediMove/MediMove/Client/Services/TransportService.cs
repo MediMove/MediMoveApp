@@ -58,5 +58,8 @@ namespace MediMove.Client.Services
 
         public async Task<ErrorOr<Unit>> AddTeamToTransport(AssignTeamsToTransportsRequest content) =>
             await HandleRequestAsync<AssignTeamsToTransportsRequest, Unit>("api/v1/Transport/AssignTeams", HttpMethod.Patch, content);
+
+        public async Task<ErrorOr<Unit>> CancelTransport(CancelTransportsRequest content) =>
+            await HandleRequestAsync<CancelTransportsRequest, Unit>("api/v1/Transport", HttpMethod.Patch, content);
     }
 }
