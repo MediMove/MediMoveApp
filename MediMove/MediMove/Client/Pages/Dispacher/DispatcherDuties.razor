@@ -32,7 +32,7 @@
 
                 <div class="patient-list-container">
                     <div class="scrollable-list">
-                        @if (_transportResponse != null)
+                        @if (_transportResponse.Transports != null)
                         {
                             foreach (var transport in _transportResponse.Transports)
                             {
@@ -62,7 +62,7 @@
 
                 <div class="patient-list-container">
                     <div class="scrollable-list">
-                        @if (_teamResponse != null)
+                        @if (_teamResponse.Teams != null)
                         {
                             foreach (var team in _teamResponse.Teams)
                             {
@@ -93,7 +93,7 @@
                             <h5 class="title">All paramedics:</h5>
                         <div class="patient-list-container">
                             <div class="scrollable-list">
-                                @if (_paramedicResponse != null)
+                                @if (_paramedicResponse.Paramedics != null)
                                 {
                                     foreach (var paramedic in _paramedicResponse.Paramedics)
                                     {
@@ -115,7 +115,7 @@
                             <h5 class="title">Drivers:</h5>
                         <div class="patient-list-container">
                             <div class="scrollable-list">
-                                @if (_paramedicResponse != null)
+                                @if (_paramedicResponse.Paramedics != null)
                                 {
                                     foreach (var driver in _paramedicResponse.Paramedics)
                                     {
@@ -192,12 +192,12 @@
 </style>
 
 @code {
-    private Popup popup;
-    private AssignTeamsToTransportsRequest? _assignRequest;
-    private GetTeamsByDateAndShiftResponse? _teamResponse;
-    private GetTransportsByDayAndShiftResponse? _transportResponse;
-    private GetAvailableParamedicsByDateAndShiftResponse? _paramedicResponse;
-    private CreateTeamsRequest? _createTeamRequest;
+    private Popup popup = new();
+    private AssignTeamsToTransportsRequest _assignRequest = new();
+    private GetTeamsByDateAndShiftResponse _teamResponse = new();
+    private GetTransportsByDayAndShiftResponse _transportResponse = new();
+    private GetAvailableParamedicsByDateAndShiftResponse _paramedicResponse = new();
+    private CreateTeamsRequest _createTeamRequest = new();
     private DateTime _selectedDate = DateTime.Now;
     private ShiftType _selectedShift = ShiftType.Morning;
     private int? _selectedTeamId;

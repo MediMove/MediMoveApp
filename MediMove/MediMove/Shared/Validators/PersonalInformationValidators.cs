@@ -10,7 +10,7 @@ public static class PersonalInformationValidators
     private static readonly Regex PhoneNumberRegex = new(@"^[0-9]+([- ]?[0-9]+)*$");
 
     public static bool IsValidFirstName(this string value) =>
-            !string.IsNullOrEmpty(value) && value.Length >= 2 && value.Length <= 25 && NameRegex.IsMatch(value);
+        !string.IsNullOrEmpty(value) && value.Length >= 2 && value.Length <= 25 && NameRegex.IsMatch(value);
 
     public static bool IsValidLastName(this string value) =>
         !string.IsNullOrEmpty(value) && value.Length >= 2 && value.Length <= 25 && NameRegex.IsMatch(value);
