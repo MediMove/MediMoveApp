@@ -3,14 +3,8 @@ using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.JSInterop;
-using Newtonsoft.Json.Linq;
-using Microsoft.AspNetCore.Components;
-using MediatR.NotificationPublishers;
 using MediMove.Shared.Models.DTOs;
 using System.Net.Http.Json;
-using System.Net.Http.Formatting;
-using System.Net.Http.Headers;
-using System.Reflection.Metadata.Ecma335;
 
 namespace MediMove.Client.temp
 {
@@ -18,17 +12,15 @@ namespace MediMove.Client.temp
     {
         private readonly HttpClient _httpClient;
         private readonly IJSRuntime _jSRuntime;
-        private readonly NavigationManager _navigationManager;
 
         public string Role { get; set; } = "";
         public string Name { get; set; } = "";
 
 
-        public MediMoveAuthenticationStateProvider( HttpClient httpClient, IJSRuntime jSRuntime, NavigationManager navigationManager)
+        public MediMoveAuthenticationStateProvider( HttpClient httpClient, IJSRuntime jSRuntime)
         {
             _httpClient = httpClient;
             _jSRuntime = jSRuntime;
-            _navigationManager = navigationManager;
             AuthenticationStateChanged += OnAuthenticationStateChanged;
         }
 
@@ -76,29 +68,6 @@ namespace MediMove.Client.temp
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
         }
 
-        private async Task<MediMoveResponse<StandardResponse>> CheckStandardResponse(HttpResponseMessage? httpResponse)
-        {
-            var responseContent = await httpResponse.Content.ReadAsStringAsync();
-            MediMoveResponse<StandardResponse> response = null;
-            if (httpResponse.IsSuccessStatusCode)
-            {
-                if (!string.IsNullOrEmpty(responseContent))
-                {
-
-                    var standardResponse = new StandardResponse(httpResponse.StatusCode);
-                    response = new(standardResponse);
-                }
-            }
-            else
-            {
-                var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(responseContent);
-                response = new(errorResponse);
-            }
-
-            return response;
-        }
-
-
         public async Task<MediMoveResponse<HttpResponseMessage>> LoginAsync(LoginUserDTO content)
         {
             
@@ -140,8 +109,6 @@ namespace MediMove.Client.temp
         {
             AuthenticationStateChanged -= OnAuthenticationStateChanged;
         }
-
     }
-
 }
 
