@@ -18,16 +18,8 @@ namespace MediMove.Client.Services
 
         public async Task<ErrorOr<GetPatientsByDateAndPaymentsSumDTO>> GetPatientsReport(DateTime start, DateTime end, decimal startAmount, decimal endAmount)
         {
-            var uriBuilder = GenerateUriBuilder("api/v1/Patient/Report");
-            var query = System.Web.HttpUtility.ParseQueryString(uriBuilder.Query);
-
-            query["startTime"] = start.ToString("yyyy-MM-dd");
-            query["endTime"] = end.ToString("yyyy-MM-dd");
-            query["startPaymentsSum"] = startAmount.ToString();
-            query["endPaymentsSum"] = endAmount.ToString();
-
-            uriBuilder.Query = query.ToString();
-            return await HandleQueryAsync<GetPatientsByDateAndPaymentsSumDTO>(uriBuilder, HttpMethod.Get);
+            var content = new GetPatientsByDateAndPaymentsSumRequest(start, end, startAmount, endAmount);
+            return await HandleRequestAsync<GetPatientsByDateAndPaymentsSumRequest, GetPatientsByDateAndPaymentsSumDTO>("api/v1/Patient/Report", HttpMethod.Post, content);
         }
 
         public async Task<ErrorOr<Unit>> PostPatient(CreatePatientRequest content) =>
