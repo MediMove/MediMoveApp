@@ -3,6 +3,8 @@
 @using MediMove.Shared.Models.DTOs;
 @inject TransportService _transportService
 
+<Popup @ref="popup" />
+
 <div class="container-fluid">
     <RadzenDatePicker @bind-Value=@value Inline="true" Change="Change" />
 </div>
@@ -43,18 +45,17 @@
 
 
 @code {
-    private IEnumerable<GetTransportsByParamedicAndDateRangeResponse.TransportInfo> transports;
+    private GetTransportsByParamedicAndDateRangeResponse.TransportInfo[] transports;
     DateTime? value = DateTime.Now;
+    private Popup popup = new();
 
     protected override async Task OnInitializedAsync()
     {
         await Change();
 
     }
-    private async Task Change()
-    {
-        transports = (await _transportService.GetTransportByDay(value.Value.Day, value.Value.Month, value.Value.Year)).Value;
-    }
+    private async Task Change() =>
+        popup.ShowErrorsOrAssign<GetTransportsByParamedicAndDateRangeResponse.TransportInfo[]>(await _transportService.GetTransportByDay(value.Value.Day, value.Value.Month, value.Value.Year), ref transports);
 
     // Przenieśc logout na NavMenu na dół a imie i nazwisko zamiast MediMove w rogu
 
