@@ -32,7 +32,7 @@
                         <RadzenDatePicker @bind-Value=@value Inline="true" DateRender=@DateRenderSpecial Min="DateTime.Today" />
                     </div>
                     
-                    @if (value.Value > DateTime.Now)
+                    @if (value.Value >= DateTime.Today)
                     {
                         <EditForm EditContext="editContext" OnValidSubmit="HandleValidSubmit">
 
