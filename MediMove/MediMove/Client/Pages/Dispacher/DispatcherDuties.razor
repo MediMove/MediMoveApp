@@ -51,6 +51,7 @@
                     </div>
                 </div>
             </div>
+                <button type="button" class="btn btn-danger" @onclick="CancelTransport">Cancel Transport</button>
                 <button type="button" class="btn btn-primary" @onclick="AddTeamToTransport">Add team to selected transport</button>
         </div>
             
@@ -80,6 +81,7 @@
                     </div>
                 </div>
             </div>
+                <button type="button" class="btn btn-danger" @onclick="DeleteTeam">DeleteTeam</button>
         </div>
     </div>
     <div class="col-md-4">
@@ -378,4 +380,23 @@
         DeselectTeam();
         StateHasChanged();
     }
+
+    private async void CancelTransport()
+    {
+        if (_selectedTransportId is null) return;
+        var message = await _TransportService.CancelTransport(new CancelTransportsRequest(new HashSet<int> { (int)_selectedTransportId }));
+        popup.ShowErrorsOrMessage( message, $"Transport canceled (ID: {_selectedTransportId})");
+        UpdateChanges();
+    }
+
+    private async void DeleteTeam()
+    {
+        if (_selectedTeamId is null) return;
+        var message = await _TeamService.DeleteTeam(new DeleteTeamsRequest(new HashSet<int> { (int)_selectedTeamId }));
+        popup.ShowErrorsOrMessage(message, $"Transport canceled (ID: {_selectedTeamId})");
+        UpdateChanges();
+    }
 }
+
+    
+

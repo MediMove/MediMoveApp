@@ -31,5 +31,8 @@ namespace MediMove.Client.Services
 
         public async Task<ErrorOr<Unit>> PostTeam(CreateTeamsRequest content) =>
             await HandleRequestAsync<CreateTeamsRequest, Unit>("api/v1/Team", HttpMethod.Post, content);
+
+        public async Task<ErrorOr<Unit>> DeleteTeam(DeleteTeamsRequest content) =>
+            await HandleRequestAsync<DeleteTeamsRequest, Unit>("api/v1/Team", HttpMethod.Delete, content);
     }
 }
