@@ -57,6 +57,6 @@ namespace MediMove.Client.Services
             await HandleRequestAsync<CreateTransportWithBillingDTO, Unit>("api/v1/Transport/WithBilling", HttpMethod.Post, content);
 
         public async Task<ErrorOr<Unit>> AddTeamToTransport(AssignTeamsToTransportsRequest content) =>
-            await HandleRequestAsync<AssignTeamsToTransportsRequest, Unit>("api/v1/Transport/AssignTeams", HttpMethod.Post, content);
+            await HandleRequestAsync<AssignTeamsToTransportsRequest, Unit>("api/v1/Transport/AssignTeams", HttpMethod.Patch, content);
     }
 }
