@@ -478,28 +478,26 @@
     private CreatePatientRequest createPatientDTO = new CreatePatientRequest();
     private GetTeamsByDateAndShiftResponse teamResponse;
     private CreateTransportWithBillingDTO createTransportWithBillingDTO = new CreateTransportWithBillingDTO();
-    private bool _popupIsVisible = false;
-    private string _popupMessage = "";
-    
+
     protected override async Task OnInitializedAsync()
     {
-        allPatientsResponse = (await _PatientService.GetPatients()).Value;
-        teamResponse = (await _TeamService.GetTeamsByDayAndShift(DateTime.Now, DateTime.Now.ToShiftType().Value)).Value;
+        popup.ShowErrorsOrAssign(await _PatientService.GetPatients(), ref allPatientsResponse);
+        popup.ShowErrorsOrAssign(await _TeamService.GetTeamsByDayAndShift(DateTime.Now, DateTime.Now.ToShiftType().Value), ref teamResponse);
         createTransportDTO.StartTime = DateTime.Now;
         createTransportWithBillingDTO.InvoiceDate = DateTime.Today;
         createTransportWithBillingDTO.StartTime = DateTime.Now;
         allPatients = allPatientsResponse;
     }
 
-    
+
 
     private async void ChosenDateValueChanged()
     {
-        
+
         if(_isWithBilling)
-            teamResponse =  (await _TeamService.GetTeamsByDayAndShift(createTransportWithBillingDTO.StartTime, createTransportWithBillingDTO.StartTime.ToShiftType().Value)).Value;
+            popup.ShowErrorsOrAssign(await _TeamService.GetTeamsByDayAndShift(createTransportWithBillingDTO.StartTime, createTransportWithBillingDTO.StartTime.ToShiftType().Value), ref teamResponse);
         else
-            teamResponse = (await _TeamService.GetTeamsByDayAndShift(createTransportDTO.StartTime,createTransportDTO.StartTime.ToShiftType().Value)).Value;
+            popup.ShowErrorsOrAssign(await _TeamService.GetTeamsByDayAndShift(createTransportDTO.StartTime,createTransportDTO.StartTime.ToShiftType().Value), ref teamResponse);
 
         DeselectTeam();
         StateHasChanged();
@@ -558,7 +556,7 @@
     }
 
 
-    
+
 
 
     private void SearchByPhoneNumber()
@@ -567,53 +565,35 @@
             .Where(p => p.Value.PhoneNumber == phoneNumberSearch) // Filter based on phone number
             .ToDictionary(p => p.Key, p => p.Value); // Convert the result to a new dictionary
 
-    // Create a new GetAllPatientsResponse with the filtered patients
+        // Create a new GetAllPatientsResponse with the filtered patients
         if (filteredPatients.Count > 0)
             allPatients = new GetAllPatientsResponse(filteredPatients);
         else 
             allPatients = allPatientsResponse;
-            DeselectPatient();
-            StateHasChanged();
+        DeselectPatient();
+        StateHasChanged();
     }
 
 
     private async void AddPatient()
     {
-        var response = await _PatientService.PostPatient(createPatientDTO);
-
-        if (!response.IsError)
+        if (!popup.ShowErrorsOrMessage(await _PatientService.PostPatient(createPatientDTO), "Patient added."))
         {
-            allPatientsResponse = (await _PatientService.GetPatients()).Value;
+            popup.ShowErrorsOrAssign(await _PatientService.GetPatients(), ref allPatientsResponse);
             allPatients = allPatientsResponse;
             createPatientDTO = new CreatePatientRequest();
         }
-        response.Switch(
-            success =>
-            {
-                popup.Show("Patient added.");
-            },
-            errors => popup.ShowErrors(errors)
-            );
+
         StateHasChanged();
     }
 
 
     private async void HandleValidSubmit()
     {
-        ErrorOr.ErrorOr<Unit> response;
         if (_isWithBilling)
-            response = await _TransportService.PostTransportWithBilling(createTransportWithBillingDTO);
+            popup.ShowErrorsOrMessage(await _TransportService.PostTransportWithBilling(createTransportWithBillingDTO), "Transport added.");
         else
-            response = await _TransportService.PostTransport(createTransportDTO);
-
-        response.Switch(
-            success =>
-            {
-                popup.Show("Transport added.");
-            },
-            errors => popup.ShowErrors(errors)
-            );
-        
+            popup.ShowErrorsOrMessage(await _TransportService.PostTransport(createTransportDTO), "Transport added.");
     }
 
     private void DisplayTabWithoutBilling()
@@ -629,6 +609,4 @@
         ChosenDateValueChanged();
         StateHasChanged();
     }
-
 }
-
