@@ -6,40 +6,50 @@
 
 <Popup @ref="popup" />
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-6">
+<div class="container-fluid margin">
+    
+    
+        <RadzenDatePicker @bind-Value=@value Inline="true" DateRender=@DateRenderSpecial Min="DateTime.Today" />
+    
+        <br/>
+
+        <div class="row">
+        
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Availabilities</h5>
 
+                <p class="text-center font-weight-bold date-font-size">@(value.HasValue ? value.Value.Date.ToString("dd.MM.yyyy") : "")</p>
 
-                      <div class="shift morning"></div>
-                      <span class="shift-description">
-                        <span class="morning"></span> Morning Shift
-                      </span>
-
-                      <div class="shift evening"></div>
-                      <span class="shift-description">
-                        <span class="evening"></span> Evening Shift
-                      </span>
-
-                      <div class="shift wholeday"></div>
-                      <span class="shift-description">
-                        <span class="wholeday"></span> Whole day shift
-                      </span>
-                    <div class="rz-p-12 rz-text-align-center">
-                        <RadzenDatePicker @bind-Value=@value Inline="true" DateRender=@DateRenderSpecial Min="DateTime.Today" />
+                    <div class="card">
+                        <div class="container-fluid margin">
+                            <div class="shift morning"></div>
+                            <span class="shift-description">
+                                <span class="morning"></span> Morning Shift
+                            </span>
+                        </div>
+                        <div class="container-fluid margin">
+                            <div class="shift evening"></div>
+                            <span class="shift-description">
+                                <span class="evening"></span> Evening Shift
+                            </span>
+                        </div>
+                        <div class="container-fluid margin">
+                            <div class="shift wholeday"></div>
+                            <span class="shift-description">
+                                <span class="wholeday"></span> Whole day shift
+                            </span>
+                        </div>
                     </div>
-                    
+                    <br/>
                     @if (value.Value >= DateTime.Today)
                     {
                         <EditForm EditContext="editContext" OnValidSubmit="HandleValidSubmit">
 
-                            <div class="form-group">
-                                <label>@(value.HasValue ? value.Value.Date.ToString("dd.MM.yyyy") : "")</label>
-                            </div>
 
+                        
+                            
+                        <br />
                             <div class="form-group">
                                 <label for="shiftType">Shift Type:</label>
                                 <InputSelect id="shiftType" class="form-control" @bind-Value="shiftType">
@@ -50,9 +60,10 @@
                                     }
                                 </InputSelect>
                             </div>
-
+                            <br />
+                            <p>
                             <div class="form-group">
-                                <button type="submit" class="btn btn-primary">Submit Shift Type</button>
+                                <button type="submit" class="btn btn-success">Submit Shift Type</button>
                                 @if (DeclaredShifts.ContainsKey(value.Value.Date))
                                 {
                                     @if (AssignedTeams.ContainsKey(value.Value.Date))
@@ -61,22 +72,20 @@
                                     }
                                     else
                                     {
-                                        <button type="button" class="btn btn-primary" @onclick="HandleDelete">Delete Declared Shift</button>
+                                        <button type="button" class="btn btn-danger" @onclick="HandleDelete">Delete Declared Shift</button>
                                     }
-                                }   
-                            </div>   
-
+                                }
+                            </div>
+                        </p>
                         </EditForm>
                         <div>
-                            <br />
-                            <br />
-
-                            <button type="button" class="btn btn-primary" @onclick="Save"> Submit avability</button>
+                            <br/>
+                            <button type="button" class="btn btn-primary" @onclick="Save"> Submit availability</button>
                         </div>
                     }
                 </div>
             </div>
-        </div>
+        
     </div>
 </div>
 
@@ -107,6 +116,13 @@
     .shift-description {
         display: inline-block;
         vertical-align: middle;
+    }
+
+    .margin {
+        margin: 10px;
+    }
+    .date-font-size {
+        font-size: 30px;
     }
 </style>
 

@@ -1,0 +1,62 @@
+﻿@page "/paramedic/transports"
+@using MediMove.Client.Services;
+@using MediMove.Shared.Models.DTOs;
+@inject TransportService _transportService
+
+<Popup @ref="popup" />
+
+<div class="container-fluid">
+    <RadzenDatePicker @bind-Value=@value Inline="true" Change="Change" />
+</div>
+
+<RadzenDataList WrapItems="true" Data="@transports" TItem="GetTransportsByParamedicAndDateRangeResponse.TransportInfo">
+    <Template Context="transport">
+        <RadzenCard Class="rz-my-12 rz-mx-auto" Style="max-width: 250px">
+           
+                
+                    <div>Patient: @transport.PatientFirstName @transport.PatientLastName</div>
+                    <div>PhoneNumber: @transport.PatientPhoneNumber</div>
+                    <br />
+                    <div>Destination: @transport.Destination</div>
+                    <div>Time: @transport.StartTime</div>
+                    <br />
+                    <div>
+                        Start Location: @transport.StartLocation
+                        @if (transport.ReturnLocation != null) {
+                            <div>Return location: @transport.ReturnLocation</div>
+                        }
+
+                    </div>
+                    <br />
+                    <div>Position: @transport.PatientPosition</div>
+                    <div>Weight: @transport.PatientWeight</div>
+                    <br />
+                    <div>Financing: @transport.Financing</div>
+
+                    
+                    
+                
+           
+
+        </RadzenCard>
+    </Template>
+</RadzenDataList>
+
+
+
+@code {
+    private GetTransportsByParamedicAndDateRangeResponse.TransportInfo[] transports;
+    DateTime? value = DateTime.Now;
+    private Popup popup = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Change();
+
+    }
+    private async Task Change() =>
+        popup.ShowErrorsOrAssign<GetTransportsByParamedicAndDateRangeResponse.TransportInfo[]>(await _transportService.GetTransportByDay(value.Value.Day, value.Value.Month, value.Value.Year), ref transports);
+
+    // Przenieśc logout na NavMenu na dół a imie i nazwisko zamiast MediMove w rogu
+
+}

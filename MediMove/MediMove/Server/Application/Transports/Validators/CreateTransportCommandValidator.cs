@@ -4,6 +4,7 @@ using MediMove.Server.Data;
 using MediMove.Shared.Extensions;
 using MediMove.Shared.Models.DTOs;
 using MediMove.Shared.Models.Enums;
+using MediMove.Shared.Validators;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.EntityFrameworkCore;
 
@@ -38,27 +39,28 @@ namespace MediMove.Server.Application.Transports.Validators
 
                         if (x.Dto.StartTime.ToShiftType() != team.ShiftType)
                         {
-                            context.AddFailure("TeamId", "Team is on different shift than transport");
+                            context.AddFailure("TeamId", "Team is on different shift than transport.");
                             return;
                         }
                     }
                 });
 
             RuleFor(x => x.Dto.StartTime)
-                .Must(startTime => startTime >= DateTime.Now).WithMessage("Date must be in the future");
+                .Must(startTime => AvailabilityValidatiors.CanExecuteCommands(startTime,startTime.ToShiftType().Value))
+                .WithMessage("Start time must be before current shift.");
 
             RuleFor(x => x.Dto.Financing)
-                .Must(x => Enum.IsDefined(typeof(Financing), x)).WithMessage("Incorrect financing type"); ;
+                .Must(x => Enum.IsDefined(typeof(Financing), x)).WithMessage("Incorrect financing type."); ;
 
             RuleFor(x => x.Dto.Destination)
                 .NotEmpty()
-                .MaximumLength(70);
+                .MaximumLength(100).WithMessage("Provide valid destination.");
 
             RuleFor(x => x.Dto.PatientPosition)
-                .Must(x => Enum.IsDefined(typeof(PatientPosition), x)).WithMessage("Incorrect patient position");
+                .Must(x => Enum.IsDefined(typeof(PatientPosition), x)).WithMessage("Incorrect patient position.");
 
             RuleFor(x => x.Dto.TransportType)
-                .Must(x => Enum.IsDefined(typeof(TransportType), x)).WithMessage("Incorrect transport type");
+                .Must(x => Enum.IsDefined(typeof(TransportType), x)).WithMessage("Incorrect transport type.");
         }
     }
 }
