@@ -47,7 +47,8 @@ namespace MediMove.Server.Application.Transports.Validators
                 });
 
             RuleFor(x => x.Dto.StartTime)
-                .Must(startTime => startTime >= DateTime.Now).WithMessage("Date must be in the future");
+                .Must(startTime => AvailabilityValidatiors.CanExecuteCommands(startTime, startTime.ToShiftType().Value))
+                .WithMessage("Start time must be before current shift.");
 
             RuleFor(x => x.Dto.Financing)
                 .Must(x => Enum.IsDefined(typeof(Financing), x)).WithMessage("Incorrect financing type"); ;
@@ -96,7 +97,7 @@ namespace MediMove.Server.Application.Transports.Validators
                 .Must(x => x.IsValidBankAccountNumber());
 
             RuleFor(x => x.Dto.InvoiceDate)
-                .Must(invoiceDate => invoiceDate >= DateTime.Now);
+                .Must(invoiceDate => invoiceDate >= DateTime.Today);
         }
     }
     
