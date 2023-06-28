@@ -81,7 +81,7 @@
                     </div>
                 </div>
             </div>
-                <button type="button" class="btn btn-danger" @onclick="DeleteTeam">DeleteTeam</button>
+                <button type="button" class="btn btn-danger" @onclick="DeleteTeam">Delete Team</button>
         </div>
     </div>
     <div class="col-md-4">
@@ -393,7 +393,7 @@
     {
         if (_selectedTeamId is null) return;
         var message = await _TeamService.DeleteTeam(new DeleteTeamsRequest(new HashSet<int> { (int)_selectedTeamId }));
-        popup.ShowErrorsOrMessage(message, $"Transport canceled (ID: {_selectedTeamId})");
+        popup.ShowErrorsOrMessage(message, $"Team deleted (ID: {_selectedTeamId})");
         UpdateChanges();
     }
 }
