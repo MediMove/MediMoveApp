@@ -4,9 +4,6 @@ using MediMove.Shared.Models.DTOs;
 using MediMove.Shared.Validators;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using System;
-using System.Net.Http.Headers;
-using System.Net.Http.Json;
 
 namespace MediMove.Client.Services
 {
@@ -84,19 +81,8 @@ namespace MediMove.Client.Services
 
         public async Task<ErrorOr<GetEmployeesInMonthByHoursAndSalaryDTO>> GetEmployeesReport(DateTime start, DateTime end, decimal startAmount, decimal endAmount, decimal startHours, decimal endHours)
         {
-            var uriBuilder = GenerateUriBuilder("api/v1/Employee/Report/Multiple");
-            var query = System.Web.HttpUtility.ParseQueryString(uriBuilder.Query);
-
-            query["startTime"] = start.ToString("yyyy-MM-dd");
-            query["endTime"] = end.ToString("yyyy-MM-dd");
-            query["startPaymentsSum"] = startAmount.ToString();
-            query["endPaymentsSum"] = endAmount.ToString();
-            query["startPaymentsHours"] = startHours.ToString();
-            query["endPaymentsHours"] = endHours.ToString();
-
-            uriBuilder.Query = query.ToString();
-
-          return await HandleQueryAsync<GetEmployeesInMonthByHoursAndSalaryDTO>(uriBuilder, HttpMethod.Get);
+            var content = new GetEmployeesInMonthByHoursAndSalaryRequest(start, end, startAmount, endAmount, startHours, endHours);
+            return await HandleRequestAsync<GetEmployeesInMonthByHoursAndSalaryRequest, GetEmployeesInMonthByHoursAndSalaryDTO>("api/v1/Employee/Report/Multiple", HttpMethod.Post, content);
         }
         public async Task<ErrorOr<GetEmployeeRatesByIdAndDatesDTO>> GetParamedicReport(int id, DateTime start, DateTime end)
         {
