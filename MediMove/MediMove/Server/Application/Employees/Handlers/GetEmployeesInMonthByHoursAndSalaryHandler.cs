@@ -93,8 +93,8 @@ namespace MediMove.Server.Application.Employees.Handlers
                 .ThenInclude(r => r.Rates)
             .Where(t => t.Day.Date >= request.StartDate.Date &&
                         t.Day.Date <= request.EndDate.Date &&
-                        (t.Paramedic.Rates.Any(r => r.Date.Date <= t.Day.Date && r.PayPerHour >= request.StartAmount && r.PayPerHour <= request.EndAmount) ||
-                        t.Driver.Rates.Any(r => r.Date.Date <= t.Day.Date && r.PayPerHour >= request.StartAmount && r.PayPerHour <= request.EndAmount)))
+                        (t.Paramedic.Rates.Any(r => r.Date.Date <= t.Day.Date && r.Date >= request.StartDate && r.PayPerHour >= request.StartAmount && r.PayPerHour <= request.EndAmount) ||
+                        t.Driver.Rates.Any(r => r.Date.Date <= t.Day.Date && r.Date >= request.StartDate && r.PayPerHour >= request.StartAmount && r.PayPerHour <= request.EndAmount)))
             .Select(x => new
             {
                 Id = x.Id,
@@ -118,9 +118,9 @@ namespace MediMove.Server.Application.Employees.Handlers
             foreach (var team in teamsWithParamedic)
             {
                 employeeSums[team.Driver.Id] = Tuple.Create(employeeSums[team.Driver.Id].Item1 + team.RateD,
-                                                            employeeSums[team.Driver.Id].Item2 + 1);
+                                                            employeeSums[team.Driver.Id].Item2 + 8);
                 employeeSums[team.Paramedic.Id] = Tuple.Create(employeeSums[team.Paramedic.Id].Item1 + team.RateP,
-                                                                employeeSums[team.Paramedic.Id].Item2 + 1);
+                                                                employeeSums[team.Paramedic.Id].Item2 + 8);
             }
 
             //employeeSums.Add(_dbContext.Paramedics.Select(p => p.Pa)
