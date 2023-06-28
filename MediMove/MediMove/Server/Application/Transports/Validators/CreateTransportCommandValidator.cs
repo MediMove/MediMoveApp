@@ -54,7 +54,7 @@ namespace MediMove.Server.Application.Transports.Validators
 
             RuleFor(x => x.Dto.Destination)
                 .NotEmpty()
-                .MaximumLength(70);
+                .MaximumLength(100).WithMessage("Provide valid destination.");
 
             RuleFor(x => x.Dto.PatientPosition)
                 .Must(x => Enum.IsDefined(typeof(PatientPosition), x)).WithMessage("Incorrect patient position.");

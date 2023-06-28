@@ -55,46 +55,46 @@ namespace MediMove.Server.Application.Transports.Validators
 
             RuleFor(x => x.Dto.Destination)
                 .NotEmpty()
-                .MaximumLength(70);
+                .MaximumLength(100).WithMessage("Provide valid destination.");
 
             RuleFor(x => x.Dto.PatientPosition)
-                .Must(x => Enum.IsDefined(typeof(PatientPosition), x)).WithMessage("Incorrect patient position");
+                .Must(x => Enum.IsDefined(typeof(PatientPosition), x)).WithMessage("Incorrect patient position.");
 
             RuleFor(x => x.Dto.TransportType)
-                .Must(x => Enum.IsDefined(typeof(TransportType), x)).WithMessage("Incorrect transport type");
+                .Must(x => Enum.IsDefined(typeof(TransportType), x)).WithMessage("Incorrect transport type.");
 
             RuleFor(x => x.Dto.FirstName).NotEmpty()
-                .Must(x => x.IsValidFirstName());
+                .Must(x => x.IsValidFirstName()).WithMessage("Provide valid first name.");
 
             RuleFor(x => x.Dto.LastName).NotEmpty()
-                .Must(x => x.IsValidLastName());
+                .Must(x => x.IsValidLastName()).WithMessage("Provide valid last name.");
 
             RuleFor(x => x.Dto.StreetAddress).NotEmpty()
-                .Must(x => x.IsValidStreetAddress());
+                .Must(x => x.IsValidStreetAddress()).WithMessage("Provide valid street address.");
 
             RuleFor(x => x.Dto.HouseNumber).NotEmpty()
-                .Must(x => x.IsValidHouseNumber());
+                .Must(x => x.IsValidHouseNumber()).WithMessage("Provide valid house number.");
 
             RuleFor(x => x.Dto.ApartmentNumber)
-                .Must(x => x.IsValidApartmentNumber());
+                .Must(x => x.IsValidApartmentNumber()).WithMessage("Provide valid apartment number.");
 
             RuleFor(x => x.Dto.PostalCode).NotEmpty()
-                .Must(x => x.IsValidPostalCode());
+                .Must(x => x.IsValidPostalCode()).WithMessage("Provide valid postal code.");
 
             RuleFor(x => x.Dto.StateProvince).NotEmpty()
-                .Must(x => x.IsValidStateProvince());
+                .Must(x => x.IsValidStateProvince()).WithMessage("Provide valid state/province.");
 
             RuleFor(x => x.Dto.City).NotEmpty()
-                .Must(x => x.IsValidCity());
+                .Must(x => x.IsValidCity()).WithMessage("Provide valid city.");
 
             RuleFor(x => x.Dto.Country).NotEmpty()
-                .Must(x => x.IsValidCountry());
+                .Must(x => x.IsValidCountry()).WithMessage("Provide valid country.");
 
             RuleFor(x => x.Dto.PhoneNumber).NotEmpty()
-                .Must(x => x.IsValidPhoneNumber());
+                .Must(x => x.IsValidPhoneNumber()).WithMessage("Provide valid phone number.");
 
             RuleFor(x => x.Dto.BankAccountNumber).NotEmpty()
-                .Must(x => x.IsValidBankAccountNumber());
+                .Must(x => x.IsValidBankAccountNumber()).WithMessage("Provide valid account number.");
 
             RuleFor(x => x.Dto.InvoiceDate)
                 .Must(invoiceDate => invoiceDate >= DateTime.Today);
